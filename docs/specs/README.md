@@ -8,7 +8,7 @@
 
 ## 2. 当前权威顺序
 
-本项目记录暂按 2026-07-13 Phase 0 任务明确给出的顺序：
+经 `IQ-016` 产品裁决，本项目采用以下权威工作顺序：
 
 1. Semantic Object Model SPEC
 2. Bitemporal & Evidence SPEC
@@ -20,7 +20,7 @@
 8. MCP Contract SPEC
 9. Ingestion & Migration SPEC
 
-PRD §27.2 的顺序不同。该差异记录为 `IQ-016`，不得通过静默修改 PRD 消除。产品负责人裁决前，以上顺序只作为项目工作顺序，不表示 PRD 已修订。
+PRD §27.2 的顺序不同。`IQ-016` 已于 2026-07-13 决定采用本文件顺序；PRD 原文保持不变，差异由决策记录显式解释。该决定不表示 PRD 已被静默修订。
 
 ## 3. 共同写作规则
 
@@ -96,7 +96,7 @@ Semantic Object Model
 
 目标：定义规范对象、派生对象、标识、引用、共同元数据和对象间不可跨越的语义边界，证明 Source、事实、观点、推断、预测和虚构不会被混为一类。依据为 PRD §6-§8、§13、§16。
 
-输入依赖：已批准 PRD；`BQ-001` 至 `BQ-005` 已裁决。
+输入依赖：PRD v0.4 基线；`BQ-001` 至 `BQ-005` 已裁决。当前正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md`。
 
 范围内：
 
@@ -292,6 +292,6 @@ Semantic Object Model
 
 ## 7. 阶段门禁
 
-当前状态：Phase 0 已建档，等待产品裁决。
+当前状态：Phase 1，Semantic Object Model SPEC v0.1 已形成 `Draft for Review`。
 
-下一步唯一建议动作：产品负责人裁决 `docs/decisions/OPEN_QUESTIONS.md` 中 `BQ-001` 至 `BQ-005`，并确认是否采用本文件记录的 SPEC 顺序。裁决前不编写第一份正式 SPEC。
+下一步唯一建议动作：产品负责人逐份审查并明确批准 `docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md`。批准前不开始第二份 SPEC 或实现代码。

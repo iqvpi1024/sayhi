@@ -71,9 +71,20 @@ relationship:
   relationship_id: rel_alpha_beta
   participants: [person_alpha, person_beta]
   origin: project_peer
-  role: peer
+relationship_role_state:
+  object_type: state
+  state_id: state_role_001
+  state_kind: relationship.role
+  subject_ref: rel_alpha_beta
+  value: peer
+  valid_from: 2030-01-01T00:00:00+08:00
+  valid_to: null
 relationship_state:
-  contact_state: active
+  object_type: state
+  state_id: state_contact_001
+  state_kind: relationship.contact
+  subject_ref: rel_alpha_beta
+  value: active
   valid_from: 2030-01-01T00:00:00+08:00
   valid_to: null
 protected_semantics:
@@ -89,14 +100,14 @@ core_views:
     current_contact_state: active
 ```
 
-`RelationshipState` 的最终对象形态受 `BQ-001` 阻塞。以上 fixture 描述可观察语义，不预先决定物理 Schema。
+`RelationshipState` 已根据 `BQ-001` 裁决为 `State(state_kind=relationship.contact)`；物理 Schema 仍由后续实现 ADR 决定。
 
 ### 3.4 允许与禁止变化
 
 允许 proposal 触达的语义：
 
 ```text
-relationship_state.contact_state
+state[relationship.contact].value
 relationship_state.valid_interval
 recorded_at
 trigger_sources
@@ -108,10 +119,10 @@ impact_set.relationship_timeline
 
 ```text
 relationship.origin
-relationship.role
-protected_semantics.trust
-protected_semantics.closeness
-protected_semantics.personality_hypotheses
+state[relationship.role].value
+state[relationship.trust].value
+state[relationship.closeness].value
+hypothesis[relationship.personality]
 entity identity
 unrelated canonical objects
 ```
@@ -134,7 +145,7 @@ Then：
 - Source 保留原文、语言、时区和稳定 locator。
 - 尚未生成用户确认前，不改变 `rev_010` 的 Relationship 当前状态。
 - 后续 proposal 的 `trigger_sources` 必须引用 `src_micro_001` 和同一 locator。
-- Source 是否自身通过 ChangeSet 写入由 `BQ-003` 裁决；两种实现都必须满足上述可观察结果。
+- Source Append 使用独立审计 receipt，不要求 ChangeSet；任何由 Source 产生的 Canonical 语义写入必须经过 ChangeSet。
 
 依据：PRD §7.2、§18.2、§20 FR-001/FR-002、§21.1、§25.2。
 
@@ -323,8 +334,8 @@ Then：
 
 在把本文转成实际测试前必须完成：
 
-- `BQ-001`：确定 `RelationshipState` 规范形态。
-- `BQ-003`：确定 Source append 与 ChangeSet 的关系。
+`BQ-001` 与 `BQ-003` 已于 2026-07-13 裁决，并由 Semantic Object Model SPEC 固化。剩余可执行化门禁：
+
 - `IQ-001`：确认 Micro Core View 最终封闭集合。
 - `IQ-002`：确认 L2 读取屏障与 SLO。
 - `IQ-008`：确认撤销 revision 语义。

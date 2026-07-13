@@ -12,9 +12,9 @@ PRD Requirement
   -> Verification Result
 ```
 
-当前处于 Phase 0，没有正式 SPEC 和实现代码。因此：
+当前处于 Phase 1。S1 已形成 `Draft for Review`，其余 SPEC 和实现代码尚未开始。因此：
 
-- `planned` 表示计划由对应 SPEC 负责，不表示 SPEC 已写完。
+- `planned` 表示计划由对应 SPEC 负责，不表示 SPEC 已写完；S1 的实际映射见 §9。
 - `TBD:<SPEC>` 表示验收测试必须由该 SPEC 定义，Phase 0 不伪造测试内容。
 - `TBD` 的 Implementation Module 表示尚未实现，不是缺陷豁免。
 - Verification Result 一律为 `not_executed`；依据 PRD §6.14、§22.1，不能标记为 passed。
@@ -91,7 +91,7 @@ PRD Requirement
 
 | SPEC | 主责 FR | 关键协作 FR | 当前状态 |
 |---|---|---|---|
-| S1 Semantic Object Model | FR-011、FR-104、FR-201、FR-202、FR-204 | FR-001-010、FR-103、FR-108、FR-205、FR-303 | `not_started`；受 `BQ-001..005` 阻塞 |
+| S1 Semantic Object Model | FR-011、FR-104、FR-201、FR-202、FR-204 | FR-001-010、FR-103、FR-108、FR-205、FR-303 | `draft_for_review`；`BQ-001..005` 已决定 |
 | S2 Bitemporal & Evidence | FR-008、FR-009、FR-010、FR-205 | FR-002/003/101/103/106/108/201/202/203/204 | `not_started` |
 | S3 ChangeSet & Consistency | FR-004、FR-005、FR-006、FR-007、FR-105、FR-106、FR-107 | FR-003/010/011/104/201/202/206/301/305 | `not_started` |
 | S4 Privacy & Access Policy | FR-012、FR-304、FR-305 | 所有涉及 Source、Derived View、外发、删除和 Agent 的 FR | `not_started` |
@@ -112,3 +112,25 @@ PRD Requirement
 - FR-009：只覆盖 Relationship State 的当前/历史查询。
 
 FR-008、FR-010、FR-011、FR-012 以及全部 P1-P3 均不是 Micro 通过门槛。把它们标为 deferred 不等于删除 PRD 要求。
+## 9. S1 实际追踪（Draft for Review）
+
+S1 正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md`。以下映射已经定义，但测试仍未执行，Implementation Module 仍为 `TBD`。
+
+| PRD Requirement | S1 实际章节 | Acceptance Test | Implementation Module | Verification Result |
+|---|---|---|---|---|
+| FR-001 文本输入的 Source 边界 | §5.1、§6.2、§14 | `SOM-AT-004`、`SOM-AT-020`、`MM-001` | `TBD` | `not_executed` |
+| FR-002 Source、定位和哈希语义 | §6.2、§11、§14 | `SOM-AT-004`、`SOM-AT-019`、`SOM-AT-020` | `TBD` | `not_executed` |
+| FR-003 Entity/Assertion/RelationshipState 候选边界 | §5.2、§6.3-§6.7、§8-§9 | `SOM-AT-002`、`SOM-AT-013`、`SOM-AT-014` | `TBD` | `not_executed` |
+| FR-004 Canonical 语义写入必须经过 ChangeSet | §6.7、§8、`SOM-INV-007` | `SOM-AT-005`、`SOM-AT-006` | `TBD` | `not_executed` |
+| FR-008 认知三轴与六态回答边界 | §3、§6.4、§7.3、§13 | `SOM-AT-007`、`SOM-AT-008`、`SOM-AT-018`、`SOM-AT-021` | `TBD` | `not_executed` |
+| FR-009 Historical State 对象边界 | §6.6、§8、§10 | `SOM-AT-015`、`MM-006` | `TBD` | `not_executed` |
+| FR-010 冲突对象并列语义 | §7.3、§13 | `SOM-AT-021` | `TBD` | `not_executed` |
+| FR-011 Entity merge/split identity 边界 | §6.3、§7.2、§8、§15 | `SOM-AT-017` | `TBD` | `not_executed` |
+| FR-103 Episode 对象边界 | §5.1、§6.9 | `TBD:S5`；S1 只定义边界 | `TBD` | `not_executed` |
+| FR-104 Commitment/Obligation 对象边界 | §5.2、§6.9 | `SOM-AT-003`；生命周期 `TBD:S3/S5` | `TBD` | `not_executed` |
+| FR-108 Source 语言与原文边界 | §6.2、§6.8、§16 | `SOM-AT-019`；完整对照 `TBD:S9` | `TBD` | `not_executed` |
+| FR-201 Hypothesis 隔离边界 | §5.1、§6.9、`SOM-INV-005` | `SOM-AT-010` | `TBD` | `not_executed` |
+| FR-202 Decision/Outcome/Calibration 边界 | §5.2、§6.9 | `SOM-AT-003`；闭环 `TBD:S2/S5` | `TBD` | `not_executed` |
+| FR-204 predicted/fictional 边界 | §6.4、§8、§11 | `SOM-AT-018` | `TBD` | `not_executed` |
+| FR-205 跨阶段对象可比较前提 | §6.1、§10、§16 | `SOM-AT-015`；比较规则 `TBD:S2` | `TBD` | `not_executed` |
+| FR-303 Context Pack 对象可移植前提 | §6.1、§16 | `SOM-AT-016`；完整包 `TBD:S7/S9` | `TBD` | `not_executed` |
