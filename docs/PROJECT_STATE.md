@@ -68,7 +68,7 @@ PRD 的产品方向、语义红线和 Micro-MVP 主链路已经足够明确，�
 | 开放问题 ID 一致性 | passed：33 个唯一 ID，定义与引用集合一致 |
 | 文档路径引用 | passed：6 个引用路径均存在 |
 | 禁止项扫描 | passed：无正式 SPEC、实现代码或数据库文件；未复制 PRD 合成人物名 |
-| GitHub SSH | passed：账号认证成功，远程仓库为空，可安全建立首次提交 |
+| GitHub 备份 | passed：SSH 认证成功，`main` 与 `phase-0-baseline` 已推送到私有远程仓库 |
 | Micro 测试套件 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
 | 实现/集成测试 | 未执行；没有实现代码 |
 
