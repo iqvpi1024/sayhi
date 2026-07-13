@@ -33,7 +33,7 @@
 | 测试状态 | 全部 `suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
 | 实现代码 | 无业务实现；仅有只读静态校验脚本 |
 | 依赖/数据库/最终技术栈 | 无、未选择 |
-| Git | `main`；远程 `ssh://git@ssh.github.com:443/iqvpi1024/sayhi.git`；本审计恢复标签计划为 `spec-suite-v0.2-audited` |
+| Git | 审计基线提交 `b497c2c` 与标签 `spec-suite-v0.2-audited` 已推送；最新状态以远程 `main` 为准 |
 
 ## 3. 当前结论
 
@@ -168,3 +168,4 @@
 | 2026-07-13 | GitHub Backup | 提交 `721838f` 和首次批准标签已推送；状态提交 `0b3908e` |
 | 2026-07-14 | Independent Audit | S1/S2 升 v0.3，S3-S9 升 v0.2；修复 16 类跨规范/追踪问题 |
 | 2026-07-14 | Static Validation | 257 SPEC tests、123 invariants、10 MM、32 FR 静态检查 passed；业务测试仍未执行 |
+| 2026-07-14 | GitHub Backup | 审计基线提交 `b497c2c` 与标签 `spec-suite-v0.2-audited` 已通过 SSH-over-443 推送 |
