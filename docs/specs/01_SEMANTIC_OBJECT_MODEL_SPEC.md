@@ -5,14 +5,15 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SOM-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md`，PRD v0.4 |
 | 产品裁决 | `BQ-001` 至 `BQ-005`，2026-07-13 已决定 |
 | 当前阶段 | Phase 1：Semantic Object Model |
 | 下一依赖 | Bitemporal & Evidence SPEC |
 | 实现状态 | 未开始 |
-| 测试状态 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
+| 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
+| 独立审计 | 2026-07-14；修复跨 SPEC 字段与 Source revision 边界，不新增产品能力 |
 
 本文定义语义合同，不选择数据库、编程语言、序列化框架、图引擎、事件溯源框架或模型供应商。
 
@@ -47,8 +48,8 @@
 
 | 术语 | 规范定义 |
 |---|---|
-| Source | 原始材料及其来源、完整性和定位信息；它是规范的来源层记录，但不是对世界的事实结论 |
-| Canonical Context | 用户可迁移、可修订的规范语义对象集合，不包含 Projection、Embedding、缓存和生成摘要 |
+| Source | 原始材料及其来源、完整性和定位信息；它是 Source Vault 中的规范来源记录，但不是对世界的事实结论，也不属于 `data_revision` 管理的 Canonical Context |
+| Canonical Context | 用户可迁移、可修订且由 `data_revision` 管理的规范语义对象集合；不包含 Source 原始载荷、Projection、Embedding、缓存和生成摘要 |
 | Canonical Object | 12 个核心对象之一，或其中明确声明的语义子类型 |
 | Derived View | 由 Canonical Context 计算出的 Projection、摘要、统计、索引、缓存或排序 |
 | Assertion | 带主体、谓词、值、视角、证据和审查状态的陈述 |
@@ -137,7 +138,7 @@ Assertion 是可选项，因为 PRD §24.1 的 Micro-MVP 要求联系状态变�
 
 ### 6.1 共同 Envelope
 
-除明确例外外，Canonical Object MUST 具备：
+除下述 Source/ChangeSet 例外外，Canonical Context Object MUST 具备：
 
 | 字段 | 类型语义 | 约束 |
 |---|---|---|
@@ -152,7 +153,9 @@ Assertion 是可选项，因为 PRD §24.1 的 Micro-MVP 要求联系状态变�
 | `compartments` | set of policy domains | 可多值；策略合并后置 |
 | `extensions` | namespaced object | 未知扩展字段往返时不得被静默丢弃 |
 
-对象专属字段 MUST NOT 被塞入 `extensions` 以绕过本 SPEC。
+本表中的 `object_id` 是抽象 ID 槽位；对象专属名称（例如 `entity_id`、`relationship_id`、`state_id`）是该槽位在相应类型中的序列化名称，MUST NOT 同时保存两个可能不同的 ID。`created_at` 是对象首次创建时间，`recorded_at` 是某次规范修订的记录时间；二者不得作为别名互换。
+
+Source 是 12 类语义对象之一，但初次 Source Append 位于 Source Vault，使用 §6.2 专属字段和 append receipt，不增加 `data_revision`。ChangeSet 是 Revision Ledger 中的变更记录，使用 §6.7 专属字段。Source 的规范化语义元数据被纠正、封存或删除，以及任何由 Source 产生的 Canonical Context 写入，仍必须经 ChangeSet。对象专属字段 MUST NOT 被塞入 `extensions` 以绕过本 SPEC。
 
 ### 6.2 Source
 
@@ -166,12 +169,14 @@ Assertion 是可选项，因为 PRD §24.1 的 Micro-MVP 要求联系状态变�
 | `source_created_at` | SHOULD | 来源自身产生时间；缺失必须显式 unknown |
 | `ingested_at` | MUST | 进入 Source Vault 的时间 |
 | `language` | MUST | 原文语言；翻译不能覆盖原文 |
-| `timezone` | SHOULD | 原始时区或显式 unknown |
-| `locator_scheme` | MUST | 定义 Source 片段如何稳定定位 |
+| `source_timezone` | SHOULD | 原始时区或显式 unknown |
+| `locator_scheme` | MUST | 定义 Source 片段如何稳定定位；Micro 固定为 `text_utf8_byte_range_v1` |
 | `coverage_window_ref` | MAY | 覆盖窗口引用；详细语义后置 S2/S9 |
 | `append_receipt_id` | MUST | Source Append 的审计回执 |
 
 Source Append MUST 在不等待语义处理的情况下返回 receipt。Source Append 成功 MUST NOT 自动产生或修改 Assertion、Relationship、State 或其他 Canonical Context 对象。
+
+`text_utf8_byte_range_v1` 使用原始 UTF-8 字节序列上的零基、尾端不含区间 `[start_byte,end_byte_exclusive)`，并绑定 `content_hash`。实现不得用字符、UTF-16 code unit 或渲染后文本偏移冒充该 scheme。
 
 ### 6.3 Entity
 
@@ -198,6 +203,7 @@ Source Append MUST 在不等待语义处理的情况下返回 receipt。Source A
 | `assertion_kind` | MUST | 内容来源/性质的八态枚举 |
 | `perspective_ref` | 条件 MUST | `reported`、`opinion`、`analysis` 等带主体视角时必需 |
 | `evidence_refs` | MUST | 可为空但必须显式；有证据时只能指向 Source locator |
+| `evidence_status` | MUST | `present|missing`；refs 非空时必须 present，refs 为空时必须 missing |
 | `review_status` | MUST | `unreviewed`、`confirmed`、`denied`、`in_dispute` |
 | `valid_time` | SHOULD | 现实有效时间占位；详细结构由 S2 定义 |
 | `recorded_at` | MUST | 系统记录时间 |
@@ -223,6 +229,7 @@ inferred | analysis | predicted | fictional
 | `participant_refs` | MUST | 至少两个互不相同的 Entity 引用 |
 | `origin` | SHOULD | 历史来源语义；未知必须显式，不从联系状态猜测 |
 | `evidence_refs` | MUST | 支持关系 identity/origin 的 Source 引用 |
+| `evidence_status` | MUST | `present|missing`，必须与 refs 是否为空一致 |
 | `narrative_context` | MAY | 无法被枚举压平的关系背景 |
 | `identity_status` | MUST | `active`、`merged`、`retired`；不等同于联系状态 |
 
@@ -239,6 +246,7 @@ inferred | analysis | predicted | fictional
 | `valid_time` | MUST | 状态有效区间占位；端点规则由 S2 定义 |
 | `recorded_at` | MUST | 系统得知/发布时间 |
 | `evidence_refs` | MUST | Source locator 引用集合 |
+| `evidence_status` | MUST | `present|missing`，必须与 refs 是否为空一致 |
 | `review_status` | MUST | 与 Assertion 相同的审查状态集合 |
 | `supersedes` | MAY | 纠正而非时间演化时引用被替代记录 |
 | `narrative_context` | MAY | 状态原话与背景引用 |
@@ -263,7 +271,7 @@ value: active | low_frequency | no_contact | blocked | unknown
 |---|---|---|
 | `changeset_id` | MUST | stable ID |
 | `base_revision` | MUST | proposal 基于的 Canonical revision |
-| `actor` | MUST | 提出者/确认者身份 |
+| `actor` | MUST | 发起 ChangeSet 的 actor；确认者必须记录在独立 review/approval event 中，不得覆盖发起者 |
 | `trigger_sources` | MUST | 触发 proposal 的 Source locator |
 | `proposals` | MUST | 一个或多个有类型的语义操作 |
 | `impact_set` | MUST | 受影响 Canonical 对象和 Derived View |
@@ -274,27 +282,28 @@ value: active | low_frequency | no_contact | blocked | unknown
 | `receipt` | 条件 MUST | 发布尝试后存在 |
 | `rollback_reference` | 条件 MUST | 可撤销发布成功后存在 |
 
-每个 proposal 至少包含：
+每个 proposal 至少包含以下与 S3 一致的字段：
 
 ```text
 proposal_id
 operation
-object_type
-object_id or new_object_id
-field_path
-before
-on_success
-source_evidence_refs
+target_ref
+before_digest
+after_value
+valid_time
+evidence_refs
 protected_paths
 ```
+
+`target_ref` MUST 同时表达目标 `object_type`、stable ID（或新对象 ID）和可选 field path；`before_digest=absent` 表示新增。`evidence_refs` 只能指向 Source locator。下游 SPEC 不得以 `before`、`on_success` 或 `source_evidence_refs` 创建第二套同义字段。
 
 Micro 联系状态 proposal 的 `protected_paths` MUST 至少包含：
 
 ```text
 relationship.origin
 state[relationship.role].value
-state[relationship.trust].value
-state[relationship.closeness].value
+assertion[relationship.trust].value
+assertion[relationship.closeness].value
 hypothesis[relationship.personality]
 entity identity
 unrelated canonical objects
@@ -414,6 +423,7 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 | `SOM-INV-012` | 所有自动操作必须能归因到 actor、时间、版本和结果 |
 | `SOM-INV-013` | 任何冲突处置都保留支持与反对证据 |
 | `SOM-INV-014` | 合成测试数据与真实个人数据严格隔离 |
+| `SOM-INV-015` | Canonical evidence 的 present/missing 状态与 Source refs 是否存在一致；receipt/Derived 不得填补该状态 |
 
 ## 10. 时间语义
 
@@ -426,7 +436,7 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 
 ## 11. 证据语义
 
-- 事实型 Assertion/State 的 `evidence_refs` MUST 直接指向 Source locator，或显式为空并标记 missing evidence。
+- Assertion/Relationship/State 的 `evidence_refs` MUST 直接指向 Source locator；非空时 `evidence_status=present`，空集合时 `evidence_status=missing`。receipt、View 或 Derived assessment 不能让 missing 变 present。
 - 同一 Source 的多次摘要、复制或模型重复 MUST NOT 被当作多个独立证据。
 - `assertion_kind=inferred|analysis|predicted` MUST 保留推断来源和距离，不因用户查看或重复而增强真值。
 - `assertion_kind=fictional` MUST 永远与真实世界 Assertion 隔离。
@@ -517,9 +527,10 @@ subject_ref:
   object_id: rel_alpha_beta
 value: no_contact
 review_status: confirmed
+evidence_status: present
 evidence_refs:
   - source_id: src_micro_001
-    locator: {start: 0, end: 35}
+    locator: {scheme: text_utf8_byte_range_v1, start_byte: 0, end_byte_exclusive: 58}
 ```
 
 ### 17.3 观点仍是观点
@@ -531,6 +542,8 @@ perspective_ref: person_alpha
 predicate: relationship.trust_assessment
 value: uncertain
 review_status: confirmed
+evidence_refs: []
+evidence_status: missing
 ```
 
 确认后 `assertion_kind` 仍为 `opinion`；查询是否 verified 由后续证据合同决定。
@@ -538,17 +551,36 @@ review_status: confirmed
 ### 17.4 联系状态变更保护无关语义
 
 ```yaml
-proposal:
-  operation: transition_state
-  state_kind: relationship.contact
-  before: active
-  on_success: no_contact
-  protected_paths:
-    - relationship.origin
-    - state[relationship.role].value
-    - state[relationship.trust].value
-    - state[relationship.closeness].value
-    - hypothesis[relationship.personality]
+proposals:
+  - proposal_id: end_contact_active
+    operation: end
+    target_ref: state_contact_001.valid_time.end
+    before_digest: digest_of_unbounded_end
+    after_value: transition_at
+    valid_time: {kind: interval, end: transition_at, bounds: "[)"}
+    evidence_refs:
+      - source_id: src_micro_001
+        locator: {scheme: text_utf8_byte_range_v1, start_byte: 0, end_byte_exclusive: 58}
+        stance: supports
+        claim_ref: end_contact_active
+    protected_paths: &contact_protected_paths
+      - relationship.origin
+      - state[relationship.role].value
+      - assertion[relationship.trust].value
+      - assertion[relationship.closeness].value
+      - hypothesis[relationship.personality]
+  - proposal_id: add_contact_no_contact
+    operation: add
+    target_ref: state_contact_002
+    before_digest: absent
+    after_value: {state_kind: relationship.contact, value: no_contact, evidence_status: present}
+    valid_time: {kind: interval, start: transition_at, end: unbounded, bounds: "[)"}
+    evidence_refs:
+      - source_id: src_micro_001
+        locator: {scheme: text_utf8_byte_range_v1, start_byte: 0, end_byte_exclusive: 58}
+        stance: supports
+        claim_ref: add_contact_no_contact
+    protected_paths: *contact_protected_paths
 ```
 
 ## 18. 反例
@@ -604,13 +636,14 @@ append_source:
 ### 19.1 测试状态
 
 ```yaml
-suite_id: semantic_object_model_v0_1
+suite_id: semantic_object_model_v0_3
 suite_defined: true
+suite_materialized: false
 suite_executed: false
 suite_passed: false
 ```
 
-本文只定义合同测试。没有测试运行器或实现模块，所有 Verification Result 均为 `not_executed`。
+本文只定义合同测试目录。尚无 fixture manifest、测试运行器或实现模块，因此 `suite_materialized=false`，所有 Verification Result 均为 `not_executed`。
 
 ### 19.2 测试清单
 
@@ -640,6 +673,7 @@ suite_passed: false
 | `SOM-AT-022` | 缺少 actor、time、revision 或 result 的自动操作记录 | 校验审计 Envelope | 拒绝记录并返回 audit metadata missing |
 | `SOM-AT-023` | 全部 SOM 与 Micro fixtures | 执行隐私静态扫描 | 仅含合成 ID/内容，不出现真实个人数据 |
 | `SOM-AT-024` | 2030 年补录一条 `valid_to=2029-04` 的合成 State（PRD §26 Case B 占位） | 分别读取现实有效时间与系统记录时间 | `valid_time != recorded_at`；可分别回答“何时成立”和“何时记录”；完整区间规则由 S2 验收 |
+| `SOM-AT-025` | evidence_refs 为空但 status=present，或 refs 非空但 status=missing | 校验 Canonical 对象 | 拒绝不一致；receipt/Derived ref 也不能把 evidence_status 设为 present |
 
 ### 19.3 与 Micro-MVP 的对应
 
@@ -669,6 +703,7 @@ suite_passed: false
 | `SOM-INV-012` | `SOM-AT-022` |
 | `SOM-INV-013` | `SOM-AT-021` |
 | `SOM-INV-014` | `SOM-AT-023` |
+| `SOM-INV-015` | `SOM-AT-009`、`SOM-AT-025` |
 ## 20. 未决问题
 
 以下问题不阻止本 SPEC 评审，但必须由对应后续 SPEC 处理：
@@ -700,4 +735,4 @@ suite_passed: false
 - 产品负责人逐份审查并明确批准本 SPEC。
 - 测试状态仍如实区分 defined、executed、passed；未执行不得称为通过。
 
-当前结论：Fable5 的 8 项评审意见已关闭，产品负责人已明确同意按推荐方案继续，本 SPEC v0.2 于 2026-07-13 标记为 `Approved`。这只批准语义合同，不表示测试已执行或实现已完成；允许开始第二份 Bitemporal & Evidence SPEC，仍不得开始实现代码。
+当前结论：本 SPEC v0.3 于 2026-07-14 完成独立基线审计并保持 `Approved`。本次修订只消除 Source/Canonical revision、ID 槽位、locator 和 proposal 字段歧义，不表示测试已物化、执行或通过，也不授权扩大 Micro-MVP。

@@ -5,12 +5,13 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SHP-001` |
-| 版本 | `0.1` |
+| 版本 | `0.2` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md` v0.4 |
 | 上游 | S1-S4 `Approved` |
 | 实现状态 | 未开始 |
-| 测试状态 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
+| 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
+| 独立审计 | 2026-07-14；拆分 risk/priority 并统一 confirmation policy |
 
 识灵是一个权限受限的协调内核，不是多 Agent 系统。本文不选择模型、Prompt、Reranker 或编排框架。
 
@@ -73,18 +74,23 @@ Micro 只允许从合成文本提出 `relationship.contact=no_contact` ChangeSet
 | `proposed_value` | MUST | 有类型候选值 |
 | `valid_time_candidate` | SHOULD | BTE 时间候选 |
 | `model_or_rule_version` | MUST | 产生者版本 |
-| `risk_level` | MUST | 风险 |
+| `risk_level` | MUST | 误改损害：`low|medium|high|critical`，与 S3 一致 |
+| `review_priority` | MUST | 打扰优先级：`low|normal|high|critical`，对应 PRD §15.3 |
 | `value_factors` | MUST | 排序原始因素，不只存总分 |
-| `required_confirmation` | MUST | 自动/事后/单次/二次/禁止自动 |
+| `confirmation_policy` | MUST | `automatic|posthoc_revertible|single_confirmation|double_confirmation|automatic_forbidden`；前四项与 S3 一致 |
 | `status` | MUST | §7 |
 | `expires_at` | MAY | 候选时效，不是真值失效 |
+| `changeset_ref` | 条件 MUST | `status=submitted` 时指向已创建 ChangeSet |
 
-### 6.2 Risk Policy
+### 6.2 Risk 与 Review Priority
 
-- `critical`：删除、封存、人物误合并、安全事件；立即提示并要求强确认。
-- `high`：重大关系、健康、财务、法律、人格/因果；默认禁止自动发布。
-- `normal`：进入周期摘要，单次确认。
-- `low`：可聚合、延后或静默保留；仅确定性机械事实可自动发布。
+`risk_level` 沿用 S3/PRD §11.2 的 `low|medium|high|critical`，衡量误改损害并约束确认政策。`review_priority` 沿用 PRD §15.3 的 `low|normal|high|critical`，只决定何时打扰。二者 MUST 独立保存，不得把用户暂不处理的高风险项降成低风险，也不得因高优先级提高事实置信度。
+
+- `risk_level=critical`：删除、封存、人物误合并、安全事件；要求强确认，不得自动发布。
+- `risk_level=high`：重大个人语义、人格/因果等；默认 `automatic_forbidden`。
+- `risk_level=medium`：默认单次确认；是否进入周期摘要由 `review_priority` 决定。
+- `risk_level=low`：仍须服从语义边界；只有确定性机器元数据或预授权无语义机械修复可 automatic/posthoc。
+- `review_priority=critical|high|normal|low` 分别对应立即、优先、周期摘要、静默聚合；它不改变 ChangeSet risk 或 confirmation policy。
 
 ### 6.3 Review Budget
 
@@ -101,8 +107,8 @@ allowed:
 forbidden:
   relationship.origin
   relationship.role
-  trust
-  closeness
+  assertion[relationship.trust]
+  assertion[relationship.closeness]
   sentiment inference
   personality/cause Hypothesis
   entity merge
@@ -124,11 +130,10 @@ forbidden:
 detected -> candidate
 candidate -> grouped | proposed | suppressed | expired | rejected
 grouped -> proposed | suppressed | expired
-proposed -> handed_to_changeset | rejected | expired
-handed_to_changeset -> terminal_reference
+proposed -> submitted | rejected | expired
 ```
 
-ChangeSet 状态由 S3 管理。Candidate rejected/suppressed 不能因重复出现自动恢复；新 Source 可创建新 candidate 并引用前项。
+`submitted` 表示 Candidate 已创建带 `changeset_ref` 的 ChangeSet，是 Candidate 自身终态；`automatic_forbidden` 在提交时必须解析为 `single_confirmation` 或 `double_confirmation`，不得写入 S3。后续 approved/published/rejected/reverted 只存在于 S3 ChangeSet，不回写伪造 Candidate 生命周期。Candidate rejected/suppressed 不能因重复出现自动恢复；新 Source 可创建新 candidate 并引用前项。
 
 ## 8. 允许与禁止的状态转换
 
@@ -152,6 +157,7 @@ ChangeSet 状态由 S3 管理。Candidate rejected/suppressed 不能因重复出
 | `SHP-INV-010` | 每个自动动作可归因到 actor/version/input/result |
 | `SHP-INV-011` | 失败、冲突、无覆盖必须使用诚实状态 |
 | `SHP-INV-012` | 一个协调内核，不扩建多 Agent/A2A |
+| `SHP-INV-013` | risk、review priority、confidence 与 truth status 四轴不得互相替代 |
 
 ## 10. 时间语义
 
@@ -223,8 +229,9 @@ ChangeSet 状态由 S3 管理。Candidate rejected/suppressed 不能因重复出
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: shiling_policy_v0_1
+suite_id: shiling_policy_v0_2
 suite_defined: true
+suite_materialized: false
 suite_executed: false
 suite_passed: false
 ```
@@ -262,8 +269,10 @@ suite_passed: false
 | `SHP-AT-029` | 建议行动 | 显示现实约束，未经授权不执行 |
 | `SHP-AT-030` | Hypothesis 遇到反例 | evidence_against 增加，历史保留，不升级 Fact |
 | `SHP-AT-031` | Decision 后记录实际结果 | Outcome/Calibration 分离，预测不自动成为结果 |
+| `SHP-AT-032` | high risk 但 low review priority，或 low risk 但 critical priority | risk 不被降级、priority 不改变真值；confirmation policy 分别按 risk/授权求值 |
+| `SHP-AT-033` | 检查运行时角色/消息边界清单 | 仅一个协调内核；不存在 Agent 间辩论、A2A 或绕过统一 policy 的写路径 |
 
-不变量覆盖：001→AT001/002/025/027；002→001/008；003→003/013/028；004→004；005→005/007/026；006→015/016/029；007→017；008→011-013；009→008-010/029；010→023；011→018-022；012→静态架构检查；Hypothesis/Decision 边界→AT030/031。
+不变量覆盖：001→AT001/002/025/027；002→001/008；003→003/013/028/032；004→004；005→005/007/026；006→015/016/029；007→017；008→011-013；009→008-010/029/032；010→023；011→018-022；012→AT033；013→AT032；Hypothesis/Decision 边界→AT030/031。
 
 ## 20. 未决问题
 
@@ -273,8 +282,8 @@ suite_passed: false
 
 - 七职责边界、候选状态、风险、确认、预算和诚实降级可测试。
 - Micro allowlist 与 forbidden paths 封闭。
-- 12 条不变量、31 个测试有映射。
+- 13 条不变量、33 个测试有映射。
 - FR-003/101/102/103/107/203/206 进入追踪；非 Micro 实现仍 deferred。
 - 未选择模型/Prompt；测试未执行。
 
-当前结论：本 SPEC v0.1 经整体授权于 2026-07-13 标记 `Approved`。允许进入 S6，不授权多 Agent 或广域智能实现。
+当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。risk、review priority、confirmation 与 truth 已分轴，Candidate/ChangeSet 生命周期不再互相回写；测试尚未物化、执行或通过，不授权多 Agent 或广域智能实现。

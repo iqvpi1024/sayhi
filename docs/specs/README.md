@@ -68,11 +68,11 @@ PRD §27.2 的顺序不同。`IQ-016` 已于 2026-07-13 决定采用本文件顺
 - 对象、字段、状态机、允许/禁止转换、前置条件和后置条件可被测试观察。
 - 正常路径、冲突、权限拒绝、失败、降级、撤销和迁移行为均有结果语义。
 - 每条系统不变量至少对应一个正例和一个反例或失败测试。
-- 测试明确区分 `suite_defined`、`suite_executed`、`suite_passed`，符合 PRD §22.1。
+- 测试明确区分 `suite_defined`、`suite_materialized`、`suite_executed`、`suite_passed`；Markdown 合同目录不能单独成为可运行 suite。
 - 未决产品问题已裁决，或该能力被明确移出当前版本；不得在正文中暗设默认值。
 - 与已确认上游 SPEC 不冲突；若冲突，先走变更门禁，不直接覆盖。
 - 不包含数据库、框架或供应商的最终选择；需要技术取舍时创建 ADR 候选，但不得在本阶段提前选择。
-- 产品负责人完成逐份审查和确认；未确认不得开始下一份 SPEC。
+- 产品负责人完成逐份审查和确认；已批准 SPEC 的语义修订必须升版、记录依据并重新做跨 SPEC 静态审计。
 
 ## 5. 依赖关系
 
@@ -96,7 +96,7 @@ Semantic Object Model
 
 目标：定义规范对象、派生对象、标识、引用、共同元数据和对象间不可跨越的语义边界，证明 Source、事实、观点、推断、预测和虚构不会被混为一类。依据为 PRD §6-§8、§13、§16。
 
-输入依赖：PRD v0.4 基线；`BQ-001` 至 `BQ-005` 已裁决。已批准正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.2。
+输入依赖：PRD v0.4 基线；`BQ-001` 至 `BQ-005` 已裁决。已批准正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.3。
 
 范围内：
 
@@ -119,11 +119,11 @@ Semantic Object Model
 
 目标：定义有效时间、记录时间、来源时间、摄取时间、CoverageWindow、证据引用和认知状态的语义。依据为 PRD §6、§9、§12、§13、§18.5、§26 Cases A/B/E/F/G。
 
-输入依赖：已确认 Semantic Object Model SPEC。已批准正文：`docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md` v0.2。
+输入依赖：已确认 Semantic Object Model SPEC。已批准正文：`docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md` v0.3。
 
 范围内：
 
-- `valid_from`、`valid_to`、`recorded_at`、`source_created_at`、`ingested_at`。
+- `valid_time.start`、`valid_time.end`、`recorded_at`、`source_created_at`、`ingested_at`。
 - 精确、模糊、未知时间和区间端点规则。
 - 证据的 proximity、integrity、corroboration、perspective、inference_distance、review_status、freshness。
 - 事实型回答状态、`unknown`、`not_covered`、`stale` 与冲突的正交关系。
@@ -141,7 +141,7 @@ Semantic Object Model
 
 目标：定义所有规范语义变更的唯一受控路径、原子发布、冲突、影响传播、回执、撤销和一致性等级。依据为 PRD §6.9、§10-§12、§20 FR-004/005/006/007/010、§21、§25.2、§26。
 
-输入依赖：已确认 Semantic Object Model 与 Bitemporal & Evidence SPEC。已批准正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.1。
+输入依赖：已确认 Semantic Object Model 与 Bitemporal & Evidence SPEC。已批准正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.2。
 
 范围内：
 
@@ -163,7 +163,7 @@ Semantic Object Model
 
 目标：定义主体、舱室、敏感度、动作、目的、时间、字段裁剪、封存、删除和导出的授权策略。依据为 PRD §6.10、§6.13、§12.4、§17、§19、§21.4、§25、§26 Case D。
 
-输入依赖：前三份 SPEC，尤其是对象引用、ChangeSet 和 Derived View 传播语义。已批准正文：`docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md` v0.1。
+输入依赖：前三份 SPEC，尤其是对象引用、ChangeSet 和 Derived View 传播语义。已批准正文：`docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md` v0.2。
 
 范围内：
 
@@ -185,7 +185,7 @@ Semantic Object Model
 
 目标：定义识灵可以观察、提出、排序、自动处理和声明什么，以及绝对禁止什么。依据为 PRD §6、§11.4、§14-§15、§19.3、§20 FR-003/101/102/107、§22.4、§25。
 
-输入依赖：对象、证据、ChangeSet、一致性和权限合同已确认。已批准正文：`docs/specs/05_SHILING_POLICY_SPEC.md` v0.1。
+输入依赖：对象、证据、ChangeSet、一致性和权限合同已确认。已批准正文：`docs/specs/05_SHILING_POLICY_SPEC.md` v0.2。
 
 范围内：
 
@@ -207,14 +207,14 @@ Semantic Object Model
 
 目标：定义用初始规范状态、Source、ChangeSet、预期状态、影响视图和禁止变化证明语义合同的方法。依据为 PRD §6.14、§22、§23.3、§24、§26。
 
-输入依赖：前五份语义与政策 SPEC 已确认，作为测试 oracle。已批准正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.1。
+输入依赖：前五份语义与政策 SPEC 已确认，作为测试 oracle。已批准正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.2。
 
 范围内：
 
 - fixture 包结构、确定性时钟、合成数据规则和版本标识。
-- `suite_defined`、`suite_executed`、`suite_passed` 状态机。
+- `suite_defined`、`suite_materialized`、`suite_executed`、`suite_passed` 状态机。
 - 正常、反例、冲突、权限、失败、撤销、重放和迁移测试合同。
-- PRD Requirement -> SPEC Section -> Acceptance Test -> Implementation Module -> Verification Result 的机器可检查追踪。
+- PRD Requirement -> SPEC Section -> Acceptance Test -> Implementation Module -> Verification Result 的机器可检查追踪，并标记 `coverage_level`。
 - Micro-MVP 场景作为第一套必须可执行的合同测试。
 
 范围外：
@@ -229,7 +229,7 @@ Semantic Object Model
 
 目标：定义 Source Vault、Canonical Context、Revision Ledger、Derived Index 和 Context Pack 的持久性、重建与独立可读合同。依据为 PRD §1、§7、§8、§16、§21、§25。
 
-输入依赖：前六份 SPEC，尤其是可执行语义测试和删除合同。已批准正文：`docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md` v0.1。
+输入依赖：前六份 SPEC，尤其是可执行语义测试和删除合同。已批准正文：`docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md` v0.2。
 
 范围内：
 
@@ -251,7 +251,7 @@ Semantic Object Model
 
 目标：定义外部调用者读取、提出和执行受控动作时的最小能力接口、权限结果、revision、新鲜度和错误合同。依据为 PRD §7.3、§10.2、§19、§20 FR-304/306。
 
-输入依赖：对象、ChangeSet、权限、存储和新鲜度合同已确认。已批准正文：`docs/specs/08_MCP_CONTRACT_SPEC.md` v0.1。
+输入依赖：对象、ChangeSet、权限、存储和新鲜度合同已确认。已批准正文：`docs/specs/08_MCP_CONTRACT_SPEC.md` v0.2。
 
 范围内：
 
@@ -272,7 +272,7 @@ Semantic Object Model
 
 目标：定义外部材料进入 Source 层、解析产物进入候选层，以及旧版本规范包迁移的合同。依据为 PRD §7.2-§7.3、§19.4、§20 FR-001/002/108/302/303、§22.4、§25.2。
 
-输入依赖：前八份 SPEC 全部确认。已批准正文：`docs/specs/09_INGESTION_MIGRATION_SPEC.md` v0.1。
+输入依赖：前八份 SPEC 全部确认。已批准正文：`docs/specs/09_INGESTION_MIGRATION_SPEC.md` v0.2。
 
 范围内：
 
@@ -292,6 +292,6 @@ Semantic Object Model
 
 ## 7. 阶段门禁
 
-当前状态：Specification Baseline Complete。S1-S9 均已按顺序完成、自审并标记 `Approved`；实现代码仍为零，所有合同测试均未执行、未通过。
+当前状态：Audited Specification Baseline。S1/S2 为 v0.3，S3-S9 为 v0.2，均保持 `Approved`；实现代码仍为零，所有合同 suite 均未物化、未执行、未通过。
 
 下一步唯一建议动作：在开始 Micro-MVP 实现前，基于九份已批准 SPEC 建立最小实现计划与必要 ADR，只选择满足合成链路的技术，不扩展业务范围。

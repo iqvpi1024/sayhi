@@ -4,8 +4,9 @@
 
 | 字段 | 值 |
 |---|---|
-| `suite_id` | `micro_mvp_relationship_state_v0` |
+| `suite_id` | `micro_mvp_relationship_state_v1` |
 | `suite_defined` | `true` |
+| `suite_materialized` | `false` |
 | `suite_executed` | `false` |
 | `suite_passed` | `false` |
 | 数据类型 | 全合成 fixture |
@@ -47,16 +48,57 @@ transition_at = 2031-09-01T00:00:00+08:00
 ### 3.2 Source
 
 ```yaml
-source_id: src_micro_001
-source_type: synthetic_text
-language: zh-CN
-text: "从2031年9月1日起，我不再与 person_beta 联系。"
-locator:
-  start: 0
-  end: 35
+intake_request:
+  intake_id: intake_micro_001
+  source_kind: synthetic_text
+  source_system: synthetic_fixture
+  inline_content: "从2031年9月1日起，我不再与 person_beta 联系。"
+  source_created_at: unknown
+  language: zh-CN
+  source_timezone: Asia/Shanghai
+  declared_media_type: text/plain; charset=utf-8
+  content_hash: 53bbc4541a77a435f5401b459d1d3e2c21af7a343931341c6db498c28880013c
+  owner_ref: person_alpha
+  sensitivity_hint: private
+expected_append_receipt:
+  receipt_id: receipt_micro_001
+  intake_id: intake_micro_001
+  source_id: src_micro_001
+  status: stored
+  hash_algorithm: sha256
+  byte_length: 58
+  media_type: text/plain; charset=utf-8
+  ingested_at: 2031-10-15T02:00:00Z
+  locator_scheme: text_utf8_byte_range_v1
+  coverage_raw_status: absent
+  failure: null
+  actor: user
+expected_source:
+  source_id: src_micro_001
+  source_kind: synthetic_text
+  source_system: synthetic_fixture
+  content_ref: fixture://micro/src_micro_001.txt
+  content_hash: 53bbc4541a77a435f5401b459d1d3e2c21af7a343931341c6db498c28880013c
+  source_created_at: unknown
+  ingested_at: 2031-10-15T02:00:00Z
+  language: zh-CN
+  source_timezone: Asia/Shanghai
+  locator_scheme: text_utf8_byte_range_v1
+  append_receipt_id: receipt_micro_001
+  owner_ref: person_alpha
+  subject_refs: [person_alpha, person_beta]
+  recorder_ref: person_alpha
+  sensitivity: private
+  compartments: [personal]
+  third_party_present: true
+  retention_policy_ref: user_controlled_v1
+  retention_state: active
+  locator:
+    start_byte: 0
+    end_byte_exclusive: 58
 ```
 
-`locator.end` 的最终计数单位由 Ingestion & Migration SPEC 定义；Micro 测试只要求 proposal 能回指同一 Source 片段，不能用 Derived View 作为证据。依据 PRD §6.2-§6.3、§7.2、§19.4。
+locator 是原始 UTF-8 字节序列上的零基半开区间并绑定上述 hash；字符数、UTF-16 code unit 或渲染后文本偏移均不是本 fixture 的 locator。proposal 必须回指同一 Source 片段，不能用 Derived View 作为证据。依据 PRD §6.2-§6.3、§7.2、§19.4；S1 v0.3 §6.2；S9 v0.2 §6.1。
 
 ### 3.3 初始 Canonical State
 
@@ -64,38 +106,129 @@ locator:
 data_revision: rev_010
 entities:
   - entity_id: person_alpha
-    entity_type: person
+    object_type: entity
+    entity_kind: person
+    schema_version: noetide.semantic.v1
+    object_revision: rev_001
+    owner_ref: person_alpha
+    created_at: 2030-01-01T00:00:00+08:00
+    created_by: user
+    sensitivity: private
+    compartments: [personal]
+    subject_refs: [person_alpha]
+    third_party_present: false
+    recorder_ref: person_alpha
+    retention_policy_ref: user_controlled_v1
+    retention_state: active
+    extensions: {}
+    identity_status: active
   - entity_id: person_beta
-    entity_type: person
+    object_type: entity
+    entity_kind: person
+    schema_version: noetide.semantic.v1
+    object_revision: rev_002
+    owner_ref: person_alpha
+    created_at: 2030-01-01T00:00:00+08:00
+    created_by: user
+    sensitivity: private
+    compartments: [personal]
+    subject_refs: [person_beta]
+    third_party_present: true
+    recorder_ref: person_alpha
+    retention_policy_ref: user_controlled_v1
+    retention_state: active
+    extensions: {}
+    identity_status: active
 relationship:
   relationship_id: rel_alpha_beta
-  participants: [person_alpha, person_beta]
+  object_type: relationship
+  schema_version: noetide.semantic.v1
+  object_revision: rev_003
+  owner_ref: person_alpha
+  created_at: 2030-01-01T00:00:00+08:00
+  created_by: user
+  sensitivity: private
+  compartments: [personal]
+  subject_refs: [person_alpha, person_beta]
+  third_party_present: true
+  recorder_ref: person_alpha
+  retention_policy_ref: user_controlled_v1
+  retention_state: active
+  extensions: {}
+  participant_refs: [person_alpha, person_beta]
   origin: project_peer
+  evidence_refs: []
+  evidence_status: missing
+  identity_status: active
 relationship_role_state:
   object_type: state
   state_id: state_role_001
+  schema_version: noetide.semantic.v1
+  object_revision: rev_004
+  owner_ref: person_alpha
+  created_at: 2030-01-01T00:00:00+08:00
+  created_by: user
+  sensitivity: private
+  compartments: [personal]
+  subject_refs: [person_alpha, person_beta]
+  third_party_present: true
+  recorder_ref: person_alpha
+  retention_policy_ref: user_controlled_v1
+  retention_state: active
+  extensions: {}
   state_kind: relationship.role
   subject_ref: rel_alpha_beta
   value: peer
-  valid_from: 2030-01-01T00:00:00+08:00
-  valid_to: null
+  valid_time:
+    kind: interval
+    start: {boundary_kind: known, value: 2030-01-01T00:00:00+08:00, precision: instant, certainty: exact, timezone: Asia/Shanghai, resolution_status: confirmed}
+    end: {boundary_kind: unbounded, value: null, precision: unknown, certainty: unknown, timezone: not_applicable, resolution_status: confirmed}
+    bounds: "[)"
+  recorded_at: 2030-01-01T00:00:00+08:00
+  recorded_by: user
+  evidence_refs: []
+  evidence_status: missing
+  review_status: confirmed
 relationship_state:
   object_type: state
   state_id: state_contact_001
+  schema_version: noetide.semantic.v1
+  object_revision: rev_005
+  owner_ref: person_alpha
+  created_at: 2030-01-01T00:00:00+08:00
+  created_by: user
+  sensitivity: private
+  compartments: [personal]
+  subject_refs: [person_alpha, person_beta]
+  third_party_present: true
+  recorder_ref: person_alpha
+  retention_policy_ref: user_controlled_v1
+  retention_state: active
+  extensions: {}
   state_kind: relationship.contact
   subject_ref: rel_alpha_beta
   value: active
-  valid_from: 2030-01-01T00:00:00+08:00
-  valid_to: null
+  valid_time:
+    kind: interval
+    start: {boundary_kind: known, value: 2030-01-01T00:00:00+08:00, precision: instant, certainty: exact, timezone: Asia/Shanghai, resolution_status: confirmed}
+    end: {boundary_kind: unbounded, value: null, precision: unknown, certainty: unknown, timezone: not_applicable, resolution_status: confirmed}
+    bounds: "[)"
+  recorded_at: 2030-01-01T00:00:00+08:00
+  recorded_by: user
+  evidence_refs: []
+  evidence_status: missing
+  review_status: confirmed
 protected_semantics:
-  trust: unknown
-  closeness: unknown
+  trust_assertions: []
+  closeness_assertions: []
   personality_hypotheses: []
 core_views:
   person_card:
+    data_revision: rev_010
     view_revision: rev_010
     contact_state: active
   relationship_timeline:
+    data_revision: rev_010
     view_revision: rev_010
     current_contact_state: active
 ```
@@ -108,7 +241,7 @@ core_views:
 
 ```text
 state[relationship.contact].value
-relationship_state.valid_interval
+state[relationship.contact].valid_time
 recorded_at
 trigger_sources
 impact_set.person_card
@@ -120,8 +253,8 @@ impact_set.relationship_timeline
 ```text
 relationship.origin
 state[relationship.role].value
-state[relationship.trust].value
-state[relationship.closeness].value
+assertion[relationship.trust].value
+assertion[relationship.closeness].value
 hypothesis[relationship.personality]
 entity identity
 unrelated canonical objects
@@ -163,7 +296,8 @@ Then：
 - proposal 表达从 `transition_at` 起查询当前联系状态应为 `no_contact`。
 - proposal 保留此前 `active` 状态的历史有效期，不执行 in-place overwrite。
 - `trigger_sources` 只包含原始 Source 证据，不引用人物卡、关系时间线、摘要或缓存作为事实证据。
-- `impact_set` 至少且仅针对 Micro 必需视图列出人物卡和关系时间线；是否允许额外视图受 `IQ-001` 裁决。
+- 新 `no_contact` State 的 `evidence_status=present`，且其 `evidence_refs` 只指向上述 58-byte Source locator。
+- `impact_set` 的 Derived View 子集必须且只能列出人物卡和关系时间线；Canonical contact State 目标另行完整列出。
 - 影响预览明确列出所有“允许变化”和“禁止变化”。
 - `trust`、`closeness`、`origin`、`role` 和人格 Hypothesis 不出现在写 proposal 中。
 
@@ -219,7 +353,7 @@ Then：
 - 人物卡当前联系状态为 `no_contact`。
 - 关系时间线当前联系状态为 `no_contact`，并保留之前 `active` 的历史段。
 - 不允许一个视图返回 `rev_011`、另一个把 `rev_010` 冒充当前值。
-- 精确读取屏障和 5 秒 SLO 的关系受 `IQ-002` 裁决；安全断言不受该问题影响。
+- 发布响应构成同会话 Publish Barrier；5 秒是单独测量的 SLO，不允许在窗口内把旧值标成 current。
 
 依据：PRD §6.9、§10.1-§10.3、§21.2、§24.1、§26 Case A。
 
@@ -235,7 +369,7 @@ Then：
 
 - `transition_at` 之前的查询返回 `active`。
 - `transition_at` 及之后的当前查询返回 `no_contact`。
-- 两次查询都能回到对应状态的 revision 与 Source/ChangeSet 证据链。
+- 两次查询都能回到对应 State revision 与 Source evidence；ChangeSet 只提供发布审计链，不能充当事实 Evidence Ref。
 - 历史 `origin=project_peer` 和 `role=peer` 始终保留。
 - 不允许用 `no_contact` 覆盖或删除旧 `active` 记录。
 
@@ -251,7 +385,7 @@ When：完成 MM-004 和 MM-005。
 
 Then：
 
-- `origin`、`role`、`trust`、`closeness`、`personality_hypotheses` 与发布前语义相等。
+- `origin`、`role`、trust/closeness opinion Assertion 集合、`personality_hypotheses` 与发布前语义相等。
 - 不新增“低信任”“关系疏远”“回避型人格”等 Assertion/Hypothesis。
 - 不修改两个 Entity 的 identity。
 - 不修改任何无依赖对象的 revision；若系统采用全局 revision，必须证明其语义 payload 未变。
@@ -270,7 +404,7 @@ Then：
 
 - 撤销通过审计可见的修订表达，不擦除 `rev_011` 和原 ChangeSet 历史。
 - 当前 Canonical 的联系状态恢复为发布前等价语义 `active`。
-- 产生一个可区分于 `rev_010` 和 `rev_011` 的撤销后 revision；最终编号方案由 ChangeSet SPEC 定义。
+- 补偿 ChangeSet 以 `rev_011` 为 base，成功时产生可区分的 `rev_012`；不得把全局 revision 指针退回 `rev_010`。
 - 人物卡和关系时间线都读取同一撤销后 revision，并显示当前 `active`。
 - 默认关系时间线不得继续把已撤销的 `no_contact` 当作有效事实；审计入口仍可查看该发布与撤销。
 - `origin`、`role`、`trust`、`closeness` 和人格 Hypothesis 继续不变。
@@ -326,19 +460,17 @@ Then：
 | INV-005 | Hypothesis 不因重复或传播自动升级为 Fact | §6.4、§6.7 |
 | INV-006 | 两个 Micro Core View 不得把不同 revision 同时冒充当前 | §10.1-§10.3 |
 | INV-007 | 撤销不擦除审计历史 | §12.3 |
-| INV-008 | `trust`、`closeness`、`origin`、`role`、人格判断不被联系状态输入连带修改 | §13.3、§24.1 |
+| INV-008 | trust/closeness opinion Assertion、`origin`、`role`、人格判断不被联系状态输入连带修改 | §13.3、§24.1 |
 | INV-009 | 失败时旧 Canonical 安全可读，旧 L2 不冒充最新 | §21.1、§25.2 |
 | INV-010 | 所有 fixture 和输出不含真实个人数据 | PRD 隐私说明、§24.1、§26 |
 
 ## 6. 可执行化门禁
 
-在把本文转成实际测试前必须完成：
+`BQ-001`、`BQ-003`、`IQ-001`、`IQ-002`、`IQ-008`、`IQ-010` 均已裁决并由 S1-S3 固化，不再是门禁。当前可执行化门禁只有：
 
-`BQ-001` 与 `BQ-003` 已于 2026-07-13 裁决，并由 Semantic Object Model SPEC 固化。剩余可执行化门禁：
+- 建立机器可读 suite manifest、上述固定 fixture 和字段级 forbidden-change oracle，使 `suite_materialized=true`。
+- 实现受测模块与离线 runner；不得接入真实数据、外部网络或在线非确定模型。
+- 对每个 MM 场景记录实际命令、开始/结束时间、环境、退出码、失败断言和 artifact digest。
+- 同一次适用 run 中 MM-001 至 MM-010 全部 required 且 passed 后，才可设置 `suite_executed=true/suite_passed=true`。
 
-- `IQ-001`：确认 Micro Core View 最终封闭集合。
-- `IQ-002`：确认 L2 读取屏障与 SLO。
-- `IQ-008`：确认撤销 revision 语义。
-- `IQ-010`：确认区间端点规则。
-
-测试实现完成后，验证结果必须记录实际命令、开始/结束时间、环境、退出码、失败用例和产物路径；只更新 `suite_passed=true` 是不充分的。
+当前状态仍是合同场景已定义，但 suite 未物化、未执行、未通过。

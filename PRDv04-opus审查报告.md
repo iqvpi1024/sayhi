@@ -1,5 +1,7 @@
 # 识海 Noetide PRD v0.4 — 只读审查报告
 
+> 历史外部审查：本文保留原始评审上下文，但包含“34 条 FR”等已确认错误，也早于全部产品裁决和 S1-S9 审计基线。当前恢复入口以 `docs/PROJECT_STATE.md`、`docs/decisions/OPEN_QUESTIONS.md` 和 `docs/reviews/INDEPENDENT_BASELINE_AUDIT_2026-07-14.md` 为准；不得从本文重新打开已裁决门禁。
+
 > 审查模式：只读 · 本轮不写代码、不修改 PRD
 > 审查对象：`PRDv04.md`（识海 Noetide 产品需求文档 v0.4）
 > 审查日期：2026-07-13
@@ -344,7 +346,6 @@ SPEC-1 语义对象模型
 ---
 
 *报告结束。*
-
 
 
 

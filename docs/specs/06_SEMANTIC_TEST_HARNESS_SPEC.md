@@ -5,13 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-HTH-001` |
-| 版本 | `0.1` |
+| 版本 | `0.2` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md` v0.4 |
 | 上游 | S1-S5 `Approved` |
 | 产品裁决 | `IQ-014`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
-| 测试状态 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
+| 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
+| 独立审计 | 2026-07-14；区分合同目录、可运行套件与执行结果 |
 
 本文定义如何证明 SPEC，不实现测试运行器、不选择测试框架，也不把文档场景当成已执行结果。
 
@@ -69,11 +70,13 @@ spec_refs: [SPEC section]
 prd_refs: [FR/NFR]
 fixture_refs: [fixture pack]
 suite_defined: true|false
+suite_materialized: true|false
 suite_executed: true|false
 suite_passed: true|false
+latest_run_result: not_executed | passed | failed | errored | partial | superseded
 ```
 
-`suite_passed=true` 仅在 `suite_executed=true` 且全部 required test 为 passed 时合法。
+`suite_defined=true` 只表示合同用例、oracle 和追踪已写清。`suite_materialized=true` 还要求存在可被 runner 读取的 manifest、fixture、断言和 required/optional 标记。`suite_passed=true` 仅在 materialized/executed 均为 true，且同一次适用 run 中全部 required test 为 passed 时合法。Markdown 用例目录不得单独令 `suite_materialized=true`。
 
 ### 6.2 Fixture Pack
 
@@ -89,20 +92,20 @@ suite_passed: true|false
 PRD Requirement -> SPEC Section -> Acceptance Test -> Implementation Module -> Verification Result
 ```
 
-任何 `TBD` 必须显式；不存在模块时不得填虚构名称。
+每条 Trace Row 还必须声明 `coverage_level=micro_required_slice|specified_not_implemented|boundary_only_deferred`。任何 `TBD` 必须显式；不存在模块时不得填虚构名称。`micro_required_slice` 只覆盖该 FR 进入 Micro 的切片，不代表整条 FR 已实现；`boundary_only_deferred` 只能证明范围和旁路被锁定，不能声称对应 FR 功能合同已完整或已验证。
 
 ## 7. 状态机
 
+三个生命周期分开：
+
 ```text
-undefined -> defined
-defined -> executing
-executing -> passed | failed | errored
-failed | errored -> executing (新 run_id)
-defined -> superseded
-passed -> superseded (SPEC/fixture/implementation 改变)
+contract: undefined -> defined -> superseded
+suite artifact: absent -> materialized -> superseded
+test run: queued -> executing -> passed | failed | errored | partial
+individual test: queued -> executing -> passed | failed | errored | skipped_with_reason
 ```
 
-Manifest flags由最新适用 run 派生；历史 run 不覆盖。
+失败或错误后重跑必须创建新 `run_id`。SPEC、fixture 或 implementation 改变会使旧 artifact/run `superseded`，但不覆盖历史。任一 required test 被 skip、未运行或来自另一 run，suite run 只能 `partial`，不能 passed。
 
 ## 8. 允许与禁止的状态转换
 
@@ -124,6 +127,7 @@ Manifest flags由最新适用 run 派生；历史 run 不覆盖。
 | `HTH-INV-008` | 追踪链缺一环即不得声称需求已验证 |
 | `HTH-INV-009` | SLO 结果只对声明的 Reference Profile 有效 |
 | `HTH-INV-010` | 历史 run 与产物不被新结果覆盖 |
+| `HTH-INV-011` | 合同已定义不等于 suite 已物化；required 测试必须在同一适用 run 全部通过 |
 
 ## 10. 时间语义
 
@@ -190,8 +194,9 @@ Micro fixture 固定 `now`，执行确认、原子发布、两个 View、历史�
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: semantic_harness_contract_v0_1
+suite_id: semantic_harness_contract_v0_2
 suite_defined: true
+suite_materialized: false
 suite_executed: false
 suite_passed: false
 ```
@@ -218,8 +223,11 @@ suite_passed: false
 | `HTH-AT-018` | 重跑失败 suite | 新 run，旧结果保留 |
 | `HTH-AT-019` | artifact 写失败 | 不发布 pass |
 | `HTH-AT-020` | 失败日志含敏感模式 | 隔离并 fail |
+| `HTH-AT-021` | 静态读取全部 invariant/test/trace 引用 | 每个 required invariant 至少映射一个存在的 Test ID，未知或重复 ID 使检查失败 |
+| `HTH-AT-022` | 只有 Markdown 合同用例、无 runner manifest/fixture/assertion | `suite_defined=true` 且 `suite_materialized=false`、`suite_executed=false` |
+| `HTH-AT-023` | 同一 run 中一个 required test skipped 或未运行 | run=partial，`suite_passed=false` |
 
-不变量覆盖：001→AT001-003；002→015/017；003→006-008；004→009；005→010-012；006→003-005；007→静态映射；008→013/014；009→015/016；010→017/018。
+不变量覆盖：001→AT001-003/022/023；002→015/017；003→006-008；004→009；005→010-012；006→003-005/023；007→AT021；008→013/014/021；009→015/016；010→017/018；011→022/023。
 
 ## 20. 未决问题
 
@@ -228,8 +236,8 @@ suite_passed: false
 ## 21. 完成定义
 
 - 三态测试、fixture、result、trace、SLO 和隐私合同完整。
-- 10 条不变量、20 个测试有映射。
+- 11 条不变量、23 个测试有映射。
 - Micro suite 被指定为首套 required，但仍未执行。
 - 未选择测试框架；没有伪造 Implementation Module。
 
-当前结论：本 SPEC v0.1 经整体授权于 2026-07-13 标记 `Approved`。允许进入 S7；所有 suite 仍是未执行、未通过。
+当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。合同目录、可运行 artifact 和 run result 已严格分离；所有 suite 仍未物化、未执行、未通过。

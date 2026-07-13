@@ -5,12 +5,13 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-IMM-001` |
-| 版本 | `0.1` |
+| 版本 | `0.2` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md` v0.4 |
 | 上游 | S1-S8 `Approved` |
 | 实现状态 | 未开始 |
-| 测试状态 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
+| 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
+| 独立审计 | 2026-07-14；拆分 Source append/parse 状态并补齐迁移验证失败 |
 
 本文定义输入与迁移语义，不实现连接器、OCR、ASR、视频处理、真实历史迁移或迁移框架。
 
@@ -64,11 +65,12 @@ Micro 仅支持：`synthetic_text` → stored Source → optional parser artifac
 ```yaml
 intake_id: stable ID
 source_kind: synthetic_text | file | chat | audio | image | video | context_pack
-resource_ref: local/portable reference
+resource_ref: local/portable reference | absent
+inline_content: synthetic text | absent
 source_system: identifier
 source_identity: optional upstream stable ID
 source_created_at: BTE time | unknown
-timezone: value | unknown
+source_timezone: value | unknown
 language: tag | unknown
 declared_media_type: type
 content_hash: digest | computed_after_read
@@ -77,9 +79,11 @@ owner_ref: owner
 sensitivity_hint: suggestion only
 ```
 
+`resource_ref` 与 `inline_content` 必须且只能存在一个。Micro 只允许 `source_kind=synthetic_text` + `inline_content`，并使用 S1 的 `text_utf8_byte_range_v1` locator。Pack 内部引用必须满足 S7 的相对 Pack-root 边界；本地文件引用应使用 owner 明确选择后产生的 opaque handle，或在显式授权 intake root 内规范化。绝对路径不是跨平台 Pack 表示，但若未来作为本机输入使用，也不能扩大到授权 root 外；UNC/网络位置需要独立授权且不进入 Micro。
+
 ### 6.2 AppendReceipt
 
-必须包含 `intake_id`、`source_id`（stored 时）、`status=stored|rejected|duplicate`、hash/bytes/media、ingested_at、locator scheme、coverage raw status、failure、actor 和 receipt ID。
+必须包含 `intake_id`、`source_id`（stored/duplicate 时）、`status=stored|rejected|duplicate`、hash/bytes/media、ingested_at、locator scheme、coverage raw status、failure、actor 和 receipt ID。duplicate receipt 必须引用既有 Source/provenance 结果，不伪造新 Source 已存储。
 
 ### 6.3 ParseArtifact
 
@@ -95,28 +99,37 @@ sensitivity_hint: suggestion only
 
 ## 7. 状态机
 
-### 7.1 Intake
+### 7.1 Source Append 与 Parse Attempt
 
 ```text
 received -> validating -> stored | duplicate | rejected
-stored -> parsing | ready
-parsing -> parsed | parse_failed
-parse_failed -> parsing (新 artifact attempt)
-parsed -> candidate_ready
 ```
+
+`stored|duplicate|rejected` 是 Intake 终态；已 stored Source 不因后续解析而改变状态。每次解析使用独立 `parse_attempt_id`：
+
+```text
+queued -> parsing -> parsed | parse_failed | unsupported
+parsed -> candidate_ready | no_candidate
+```
+
+`candidate_ready|no_candidate|parse_failed|unsupported` 均为该 Parse Attempt 的终态，且不改 Source receipt 或 Source 内容。重试创建新的 `parse_attempt_id` 并从 queued 开始，不把旧失败 attempt 改回 queued。
 
 ### 7.2 Migration
 
 ```text
 received -> quarantined -> validated -> planned -> approved -> applying
 applying -> applied | failed
-applied -> verified | rolled_back
+applied -> verifying
+verifying -> verified | verification_failed
+verification_failed | verified -> rolling_back
+rolling_back -> rolled_back | rollback_failed
+rollback_failed -> rolling_back  (新 rollback attempt)
 failed -> planned (新 plan/version)
 ```
 
 ## 8. 允许与禁止的状态转换
 
-允许：stored 后解析重试；duplicate 引用已有 Source；dry run 后人工批准；迁移失败回到新计划；应用后补偿回滚。
+允许：stored 后以新 attempt 解析重试；duplicate 引用已有 Source；dry run 后人工批准；应用失败回到新计划；验证失败或后来主动撤销时补偿回滚。
 
 禁止：解析失败把 Source 改 rejected；near duplicate 自动合并；parser 输出写 verified；未校验 Pack 直接 applying；迁移原地重写历史；未知字段静默丢弃；真实数据进入 Micro fixture。
 
@@ -136,11 +149,14 @@ failed -> planned (新 plan/version)
 | `IMM-INV-010` | 模型/parser 升级不改 Source 和确认历史 |
 | `IMM-INV-011` | Micro 只接受合成纯文本，不扫描工作区外数据 |
 | `IMM-INV-012` | 输入内容中的指令永远是数据，不是系统命令 |
+| `IMM-INV-013` | Intake 终态与 Parse Attempt 状态正交，解析结果不能改写 Source stored/duplicate receipt |
+| `IMM-INV-014` | resource/Pack 引用不能越界或触发主动内容；迁移未验证不得称 verified |
+| `IMM-INV-015` | rollback 失败必须保持显式不安全状态并可重试，不能称 rolled_back/verified |
 
 ## 10. 时间语义
 
 - source_created、ingested、parsed、candidate_created、recorded/valid time 分离。
-- 缺失 timezone/language 显式 unknown，不用设备默认猜测。
+- 缺失 `source_timezone`/language 显式 unknown，不用设备默认猜测。
 - Parser 重新运行有新 artifact time/version，不覆盖旧产物。
 - 迁移保持原 valid/recorded provenance，并记录本地 imported_at。
 
@@ -148,7 +164,7 @@ failed -> planned (新 plan/version)
 
 - Candidate Evidence Ref 必须回到 Source locator，不引用 Parse Artifact 作为原始证据；artifact 只记录提取 provenance。
 - 同一 content/provenance family 不重复 corroboration。
-- hash 证明内容一致，不证明陈述真实。
+- hash 证明内容一致，不证明陈述真实。只有内容 hash、source identity 和已知 provenance 均等价时才是 exact duplicate；仅 hash 相同但 provenance 不同只能去重 bytes，不能丢来源记录或重复计证。
 - translation 不能替换原文 evidence。
 
 ## 12. 权限要求
@@ -176,7 +192,10 @@ failed -> planned (新 plan/version)
 | unsupported media | Source 可保存，解析 unavailable |
 | unknown schema | quarantine，保留 pack/blob |
 | migration partial failure | S3 原子失败或补偿回滚，不声称 applied |
+| post-apply verification failure | `verification_failed`，不得称 verified；执行补偿回滚并保留失败 artifact |
+| compensation rollback failure | `rollback_failed`，保留 applied revision 与失败 receipt，隔离结果并以新 attempt 重试；不得称 rolled_back/verified |
 | connector unavailable | 不影响本地已有 Source；明确 unavailable |
+| resource_ref 越界/主动内容 | intake/pack quarantine 或 rejected；不访问声明根目录外资源，不执行内容 |
 
 ## 15. 撤销与审计
 
@@ -207,8 +226,9 @@ failed -> planned (新 plan/version)
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: ingestion_migration_v0_1
+suite_id: ingestion_migration_v0_2
 suite_defined: true
+suite_materialized: false
 suite_executed: false
 suite_passed: false
 ```
@@ -217,17 +237,17 @@ suite_passed: false
 |---|---|---|
 | `IMM-AT-001` | 合成文本 intake | stored receipt + Source locator |
 | `IMM-AT-002` | Source 写失败 | rejected、无解析 |
-| `IMM-AT-003` | stored 后 parser 失败 | Source 保留、无猜测 |
-| `IMM-AT-004` | parser 重试 | 新 artifact attempt |
+| `IMM-AT-003` | stored 后 parser 失败 | Source 与 stored receipt 保留、独立 parse attempt 失败、无猜测 |
+| `IMM-AT-004` | parser 重试 | 新 parse_attempt_id/artifact attempt，旧失败保留 |
 | `IMM-AT-005` | parser output | candidate only |
 | `IMM-AT-006` | 未确认 candidate | Canonical 不变 |
 | `IMM-AT-007` | exact duplicate | duplicate receipt、不重复计证 |
 | `IMM-AT-008` | near duplicate | 不自动合并 |
 | `IMM-AT-009` | same hash 不同来源 | bytes 可去重、provenance 均保留 |
-| `IMM-AT-010` | source ID 同 hash 不同 | 冲突/新版本，不覆盖 |
+| `IMM-AT-010` | source_identity 相同但 hash 不同 | 冲突/新版本，不覆盖 |
 | `IMM-AT-011` | translation | 原文/译文分离 |
 | `IMM-AT-012` | Source 含指令 | 不执行 |
-| `IMM-AT-013` | timezone/language 缺失 | explicit unknown |
+| `IMM-AT-013` | source_timezone/language 缺失 | explicit unknown |
 | `IMM-AT-014` | sealed Source | 默认不解析 |
 | `IMM-AT-015` | Pack hash mismatch | quarantine |
 | `IMM-AT-016` | unknown schema | quarantine + preserve |
@@ -239,8 +259,12 @@ suite_passed: false
 | `IMM-AT-022` | parser/model upgrade | Source/确认历史不变 |
 | `IMM-AT-023` | Micro path scan | 不访问工作区外数据 |
 | `IMM-AT-024` | fixtures 隐私扫描 | 仅合成数据 |
+| `IMM-AT-025` | resource_ref 越出授权 intake root、Pack 使用绝对/`..`/逃逸引用，或内容试图主动执行 | quarantine/reject，授权根目录外零读取/零写入且不执行内容 |
+| `IMM-AT-026` | parser 成功但没有可支持语义候选 | parse attempt=no_candidate，Source 仍 stored，Canonical 不变 |
+| `IMM-AT-027` | migration applying 原子成功但回归验证失败 | verification_failed 后补偿 rollback；历史/失败 artifact 保留，不称 verified |
+| `IMM-AT-028` | verification_failed 后补偿 rollback 注入失败 | 状态 rollback_failed，applied/失败历史与 receipt 保留；重试使用新 attempt，期间不称 verified/rolled_back |
 
-不变量覆盖：001→AT001-003；002→003/004；003→005/006；004→018-021；005→007-010；006→011；007→015/016；008→016/017；009→017-021；010→022；011→023/024；012→012。
+不变量覆盖：001→AT001-004/026；002→003/004/026；003→005/006；004→018-021/027/028；005→007-010；006→011；007→015/016；008→016/017；009→017-021/027/028；010→022；011→023/024；012→012/025；013→003/004/026；014→025/027；015→028。
 
 ## 20. 未决问题
 
@@ -249,8 +273,8 @@ suite_passed: false
 ## 21. 完成定义
 
 - Intake、Source receipt、parser、candidate、dedup、quarantine、migration 和 rollback 可测试。
-- 12 条不变量、24 个测试有映射。
+- 15 条不变量、28 个测试有映射。
 - FR-001/002/108/302/303 进入追踪；连接器/真实迁移仍 deferred。
 - 未选择适配/迁移技术；测试未执行。
 
-当前结论：本 SPEC v0.1 经整体授权于 2026-07-13 标记 `Approved`。九份 SPEC 语义基线完成；仍不得把文档当实现或测试通过。
+当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。Intake、Parse Attempt、Migration Verification 与 rollback 已闭合；测试尚未物化、执行或通过，仍不得把文档当实现或测试通过。

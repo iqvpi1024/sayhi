@@ -5,15 +5,16 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-BTE-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md`，PRD v0.4 |
-| 上游基线 | `SPEC-SOM-001` v0.2，`Approved` |
+| 上游基线 | `SPEC-SOM-001` v0.3，`Approved` |
 | 当前阶段 | Phase 2：Bitemporal & Evidence |
 | 下一依赖 | ChangeSet & Consistency SPEC |
 | 实现状态 | 未开始 |
-| 测试状态 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
+| 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
 | 产品裁决 | `IQ-003`、`IQ-004`、`IQ-007`、`IQ-009`、`IQ-010` 均于 2026-07-13 决定，见 `OPEN_QUESTIONS.md` |
+| 独立审计 | 2026-07-14；拆分 Canonical Evidence Ref 与 Derived Evidence Assessment |
 
 本文定义语义合同，不选择数据库时间类型、查询引擎、证据评分模型、编程语言、序列化框架或模型供应商。
 
@@ -204,30 +205,43 @@ export_completeness: complete | partial | unknown
 timezone: IANA zone | offset | unknown
 language: BCP-47-like tag | unknown
 declared_at: recorded timestamp
-evidence_refs: [Source locator or export receipt]
+evidence_refs: [Source locator]
+declaration_receipt_ref: Source Append/export receipt | null
 ```
 
 - CoverageWindow 是”系统对可见材料范围的声明”，不是事件不存在的证据。
+- `declaration_receipt_ref` 只证明声明/导入动作及其完整性结果，不能进入 Assertion/State 的 `evidence_refs`，也不能单独证明任何个人事实。
 - CoverageWindow 附属于其宿主 Source 对象，不是独立核心对象，也不直接接受独立 ChangeSet proposal。原始覆盖声明可随 Source Append receipt 保存；只有参与 Canonical 查询/`not_covered` 判定的规范化 CoverageWindow 及其纠正，才通过引用宿主 Source 的 ChangeSet 发布。`coverage_window_id` 是稳定引用标识，其持久化机制由 S7 定义。
 - 多个窗口 MAY 重叠；查询必须保留各自来源和完整性，不能未经规则合并成”完整覆盖”。
 - `continuity=unknown` 或 `export_completeness!=complete` 时，缺少搜索结果 MUST NOT 支持否定事实。
 - 查询跨越 gap 或窗口外区间时 MUST 返回缺口范围。
 
-### 6.6 EvidenceRef 扩展
+### 6.6 CanonicalEvidenceRef 与 EvidenceAssessment
 
 ```yaml
 evidence_ref:
   source_id: stable Source ID
   locator: stable source locator
-  evidence_family_id: provenance family reference
   stance: supports | contradicts | contextual
   claim_ref: Canonical claim or proposal reference
-  dimensions: EvidenceDimensions
 ```
 
 `stance` 只表示该证据如何被当前 claim 使用，不等于证据真实、独立或足以 Verify。
 
-`evidence_family_id` 是通过 provenance 推算的稳定引用标识，不是 Canonical 核心对象的主键；Evidence Family 没有独立写入口，其 ID 由 Source provenance 关系推导，持久化和查询索引机制后置 S7/ADR。
+Canonical `evidence_ref` MUST 只保存稳定 Source locator、stance 和 claim 绑定。查询时会随权限、policy、时间或谱系规则改变的 `evidence_family_id` 与 `dimensions` MUST NOT 嵌入 Canonical Evidence Ref。
+
+```yaml
+evidence_assessment:
+  assessment_id: stable derived result ID
+  evidence_refs: [CanonicalEvidenceRef]
+  evidence_family_refs: [derived provenance family reference]
+  dimensions: EvidenceDimensions
+  assessment_policy_ref: versioned policy
+  evaluated_at: timestamp
+  data_revision: canonical revision used
+```
+
+EvidenceAssessment 是可删除、可重算的 Derived 结果，不是第 13 个核心对象，也没有独立事实写入口。Evidence Family ID 由 Source provenance 关系和版本化规则推导；持久化与查询索引机制后置 S7/ADR。该拆分防止一次旧 assessment 随 Canonical 记录永久化，并阻止其反向成为事实证据。
 
 ### 6.7 EvidenceDimensions
 
@@ -639,13 +653,14 @@ reason: evidence_is_old
 ### 19.1 测试状态
 
 ```yaml
-suite_id: bitemporal_evidence_v0_1
+suite_id: bitemporal_evidence_v0_3
 suite_defined: true
+suite_materialized: false
 suite_executed: false
 suite_passed: false
 ```
 
-本文只定义合同测试。没有测试运行器或实现模块，全部 Verification Result 为 `not_executed`。
+本文只定义合同测试目录。没有 fixture manifest、测试运行器或实现模块，全部 Verification Result 为 `not_executed`。
 
 ### 19.2 测试清单
 
@@ -687,6 +702,7 @@ suite_passed: false
 | `BTE-AT-034` | Derived View 作为 Evidence Ref | 校验 assessment | 返回 `derived_evidence_forbidden` |
 | `BTE-AT-035` | 无权限 evidence 会影响结论 | 生成低权限回答 | fail closed 且不通过状态、计数或 reason 泄露隐藏证据 |
 | `BTE-AT-036` | 全部 S2 fixture | 执行隐私静态扫描 | 仅含合成 ID/内容，不出现真实个人数据 |
+| `BTE-AT-037` | Canonical Evidence Ref 带 `dimensions`、`evidence_family_id` 或 export receipt | 校验规范写入 | 拒绝派生/receipt 字段进入事实 evidence；assessment 只能进入 Derived EvidenceAssessment，receipt 只能进入 Coverage declaration/审计引用 |
 
 ### 19.3 PRD Case 覆盖
 
@@ -717,8 +733,8 @@ suite_passed: false
 | `BTE-INV-003` | `BTE-AT-006`、`BTE-AT-008`、`BTE-AT-009` |
 | `BTE-INV-004` | `BTE-AT-020`、`BTE-AT-024`、`BTE-AT-025`、`BTE-AT-026`、`BTE-AT-030` |
 | `BTE-INV-005` | `BTE-AT-012`、`BTE-AT-024`、`BTE-AT-025`、`BTE-AT-026`、`BTE-AT-030` |
-| `BTE-INV-006` | `BTE-AT-016`、`BTE-AT-019`、`BTE-AT-023` |
-| `BTE-INV-007` | `BTE-AT-017`、`BTE-AT-018` |
+| `BTE-INV-006` | `BTE-AT-016`、`BTE-AT-019`、`BTE-AT-023`、`BTE-AT-037` |
+| `BTE-INV-007` | `BTE-AT-017`、`BTE-AT-018`、`BTE-AT-037` |
 | `BTE-INV-008` | `BTE-AT-020`、`BTE-AT-021`、`BTE-AT-022` |
 | `BTE-INV-009` | `BTE-AT-030`、`BTE-AT-031`、`BTE-AT-032` |
 | `BTE-INV-010` | `BTE-AT-017`、`BTE-AT-034` |
@@ -752,7 +768,7 @@ suite_passed: false
 
 本 SPEC 批准须满足以下条件，已全部达成：
 
-- 上游 `SPEC-SOM-001` v0.2 保持 Approved，且本 SPEC 不反向改变对象边界。✓
+- 上游 `SPEC-SOM-001` v0.3 保持 Approved，且本 SPEC 不反向改变对象边界。✓
 - `IQ-003`、`IQ-004`、`IQ-007`、`IQ-009`、`IQ-010` 已由产品负责人明确决定并记录（见 §20 与 `OPEN_QUESTIONS.md`）。✓
 - 四类时间、unknown/unbounded、粗粒度、时区和事后补录均有唯一语义（见 §5-§10）。✓
 - State 区间端点、相邻、重叠和 current/historical 查询可穷尽测试（见 §10.1、BTE-AT-005/006/009/032）。✓
@@ -765,4 +781,4 @@ suite_passed: false
 - 产品负责人已明确批准本 SPEC。✓
 - 测试状态继续如实区分 defined、executed、passed；未执行不得称为通过。✓
 
-当前结论：`IQ-003`、`IQ-004`、`IQ-007`、`IQ-009`、`IQ-010` 均已决定，上游 S1 v0.2 已批准，本 SPEC v0.2 于 2026-07-13 标记为 `Approved`。这只批准语义合同，不表示测试已执行或实现已完成；允许开始第三份 ChangeSet & Consistency SPEC，仍不得开始实现代码。
+当前结论：本 SPEC v0.3 于 2026-07-14 完成独立基线审计并保持 `Approved`。本次修订将 Canonical Evidence Ref 与可重算 assessment 分离；不表示测试已物化、执行或通过，也不授权扩大 Micro-MVP。

@@ -5,13 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SIP-001` |
-| 版本 | `0.1` |
+| 版本 | `0.2` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md` v0.4 |
 | 上游 | S1-S6 `Approved` |
 | 产品裁决 | `IQ-006`、`IQ-011`、`IQ-012`、`IQ-015`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
-| 测试状态 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
+| 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
+| 独立审计 | 2026-07-14；补齐 Pack 快照、路径安全与策略感知重建合同 |
 
 本文定义逻辑持久与可移植合同，不选择数据库、对象存储、向量库、图数据库、文件系统布局或云服务。
 
@@ -74,9 +75,15 @@ hash_algorithm: named algorithm
 content_hash: digest
 owner_ref: owner
 sensitivity: policy label
+pre_seal_sensitivity: normal | private | restricted | not_applicable
+compartments: [policy domain]
+retention_state: policy lifecycle state
+policy_revision: version
 dependencies: [entry_id]
 created_at: timestamp
 ```
+
+`content_ref` MUST 是以 Pack 根目录为边界的规范化相对引用；绝对路径、盘符、UNC、`..` 越界、符号链接/重解析点逃逸或解包后指向 Pack 外的引用均不得进入 validated。Manifest 中的 policy 字段不得低于实际内容限制。
 
 ### 6.2 Context Pack
 
@@ -101,8 +108,9 @@ created_at: timestamp
 ```text
 requested -> assembling -> validated -> exported
 assembling | validated -> failed
-exported -> superseded
 ```
+
+`exported` Pack 是某个 `data_revision` 的不可变快照，不因后续导出而 supersede 或失效。与当前 Canonical 的关系由查询时 `pack_relation=current|historical|unknown` 派生；不得改写旧 Pack。
 
 ### 7.2 Import Validation
 
@@ -143,6 +151,8 @@ failed -> rebuilding
 | `SIP-INV-010` | 原文与翻译分离，翻译不覆盖 Source |
 | `SIP-INV-011` | Pack 权限不低于所含最敏感内容 |
 | `SIP-INV-012` | 容量/SLO 结果只适用于声明 workload/profile |
+| `SIP-INV-013` | Pack 引用和解包结果不能逃逸 Pack 根目录或触发主动内容执行 |
+| `SIP-INV-014` | Derived rebuild 只读取当前获授权且未 sealed/删除的输入，并对排除项诚实记账 |
 
 ## 10. 时间语义
 
@@ -164,6 +174,7 @@ failed -> rebuilding
 - sealed 默认不进入任何导出，除非 owner 对该次私有导出明确解封/包含。
 - Pack manifest 本身也需裁剪，不能泄露隐藏条目名称/计数。
 - 导入 Pack 不能扩大原 policy/Grant。
+- 导入内容一律视为 inert data；manifest、Markdown、扩展字段或文件名不能触发命令、脚本、网络访问或权限变更。
 
 ## 13. 冲突行为
 
@@ -183,12 +194,13 @@ failed -> rebuilding
 | Markdown 生成失败 | structured pack 可失败/部分结果，但不得称完整导出 |
 | unknown extension 不可解析 | opaque 保留或拒绝，不丢弃 |
 | rebuild 失败 | 旧 View stale 或 unavailable，不影响 Canonical |
+| content_ref 越界/主动内容 | 整包 quarantine/reject，不解析或执行目标内容 |
 
 ## 15. 撤销与审计
 
 - 导出不改变 Canonical，无需撤销，但记录范围、policy、revision 和 receipt。
 - 导入/迁移通过 ChangeSet 可撤销。
-- Pack supersede 不删除用户已有副本。
+- 新 Pack 不删除、覆盖或使用户已有 Pack 失效；每个 Pack 保持其 snapshot revision 与 hash。
 - 删除 receipt 按层记录；hard-deleted 正文不留在审计。
 
 ## 16. 兼容与迁移
@@ -213,8 +225,9 @@ failed -> rebuilding
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: storage_portability_v0_1
+suite_id: storage_portability_v0_2
 suite_defined: true
+suite_materialized: false
 suite_executed: false
 suite_passed: false
 ```
@@ -245,8 +258,11 @@ suite_passed: false
 | `SIP-AT-022` | 容量 workload | 结果绑定 profile |
 | `SIP-AT-023` | Pack manifest 隐私扫描 | 不泄露 excluded entries |
 | `SIP-AT-024` | fixture 扫描 | 仅合成数据 |
+| `SIP-AT-025` | manifest 含绝对路径、`..`、UNC 或解包逃逸链接 | pack quarantine/reject，Pack 外文件零读取/零写入 |
+| `SIP-AT-026` | 新导出完成后读取旧 Pack | 旧 Pack hash/revision/内容不变，关系只显示 historical |
+| `SIP-AT-027` | Derived rebuild 输入含 sealed、soft/hard deleted 或无权限条目 | 不读取/不重建这些条目，receipt 只给非泄露 skip 结果，Derived 不残留旧 payload |
 
-不变量覆盖：001→AT001/005；002→005/019；003→006；004→001-004；005→007/008；006→009/013；007→003/004；008→010；009→017/018；010→011；011→014-016/023；012→022。
+不变量覆盖：001→AT001/005；002→005/019；003→006；004→001-004/026；005→007/008；006→009/013；007→003/004；008→010；009→017/018/027；010→011；011→014-016/023；012→022；013→025；014→027。
 
 ## 20. 未决问题
 
@@ -262,8 +278,8 @@ suite_passed: false
 ## 21. 完成定义
 
 - 四逻辑层、Pack、round-trip、rebuild、删除和权限合同可测试。
-- 12 条不变量、24 个测试有映射。
+- 14 条不变量、27 个测试有映射。
 - FR-002/301/303 进入追踪；FR-301 实现仍 deferred。
 - 未选择存储技术；测试未执行。
 
-当前结论：本 SPEC v0.1 经整体授权于 2026-07-13 标记 `Approved`。允许进入 S8，不授权多设备同步或物理存储选型。
+当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。Pack 快照不可变、引用不越界、导入内容惰性和策略感知重建已闭合；测试尚未物化、执行或通过，不授权多设备同步或物理存储选型。

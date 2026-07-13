@@ -5,13 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-CS-001` |
-| 版本 | `0.1` |
+| 版本 | `0.2` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md`，PRD v0.4 |
-| 上游基线 | `SPEC-SOM-001` v0.2、`SPEC-BTE-001` v0.2，均 `Approved` |
+| 上游基线 | `SPEC-SOM-001` v0.3、`SPEC-BTE-001` v0.3，均 `Approved` |
 | 产品裁决 | `IQ-001`、`IQ-002`、`IQ-005`、`IQ-008`、`IQ-017`、`IQ-018`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
-| 测试状态 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
+| 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
+| 独立审计 | 2026-07-14；统一枚举、收紧发布回执与并发撤销语义 |
 
 本文只定义变更和一致性语义，不选择数据库事务、消息系统、锁、队列或事件框架。用户已授权按保守推荐方案完成全部 SPEC；批准不代表实现或测试通过。
 
@@ -83,19 +84,22 @@ PRD §10.3 的其余四类是 MVP 后续白名单，不是 Micro 发布门槛。
 | `changeset_id` | MUST | stable ID，不复用 |
 | `schema_version` | MUST | ChangeSet 解释版本 |
 | `base_revision` | MUST | 全局 Canonical revision |
-| `actor` | MUST | user、shiling、external_agent、importer、migration |
+| `actor` | MUST | 发起 actor：user、shiling、external_agent、importer、migration；审批 actor 另存 review event |
 | `requested_at` | MUST | 创建提案时间，不是发布时间 |
 | `trigger_sources` | MUST | Source locator 集合，可为空但必须说明原因 |
 | `proposals` | MUST | 至少一个原子 proposal |
 | `impact_set` | MUST | Canonical、L2、L3、提醒/缓存影响预览 |
 | `risk_level` | MUST | `low|medium|high|critical` |
-| `confirmation_policy` | MUST | `automatic|posthoc_revertible|single_confirm|double_confirm` |
+| `confirmation_policy` | MUST | `automatic|posthoc_revertible|single_confirmation|double_confirmation` |
 | `status` | MUST | §7 状态 |
 | `idempotency_key` | MUST | 同一逻辑请求的稳定去重键 |
 | `published_revision` | 条件 MUST | published/reverted 相关 revision |
 | `receipt` | 条件 MUST | terminal/published 结果 |
-| `rollback_reference` | published MUST | 整包补偿所需引用 |
+| `reversibility` | MUST | `reversible|irreversible`；不可逆只允许经 S4 强授权的 destructive operation |
+| `rollback_reference` | reversible published MUST | 整包补偿所需引用；不可逆操作 MUST 显式为空并在预览中警告 |
 | `retry_of` | MAY | failed/stale-base 后新 ChangeSet 引用 |
+
+review/approval event MUST 记录 `review_actor`、决定、时间、policy/revision 和确认界面摘要 digest。`actor` 不得在批准时被确认者覆盖，否则无法区分“谁提出”和“谁批准”。
 
 ### 6.2 Proposal
 
@@ -118,15 +122,15 @@ Micro 只允许 `end` 旧 State 与 `add` 新 State 两个不可分 proposal。
 
 ### 6.4 Impact Set
 
-每项必须包含 `dependency_rule_id`、目标、预计动作 `update|invalidate|rebuild|none`、一致性等级和原因。Micro 必须且只能列出两个 Core View；禁止把“可能影响”伪装成确定依赖。
+每项必须包含 `dependency_rule_id`、目标、预计动作 `update|invalidate|rebuild|none`、一致性等级和原因。Micro 的 Derived View 子集必须且只能列出 `person_card` 与 `relationship_timeline`；Canonical proposal 目标仍须完整列出。禁止把“可能影响”伪装成确定依赖。
 
 ### 6.5 Receipt
 
-Receipt MUST 包含：`changeset_id`、旧/新 revision、Canonical 原子结果、每个 View 的目标/实际 revision、`freshness_status`、失败/等待/跳过原因、审计时间和可重试性。
+Receipt MUST 包含：`changeset_id`、旧/新 revision、Canonical 原子结果、每个 View 的目标/实际 revision、`freshness_status`、失败/等待/跳过原因、审计时间和可重试性。L1 发布的 durable outcome 至少包含 ChangeSet terminal/published 状态、revision 绑定和 receipt summary；三者必须与 Canonical 原子结果在同一恢复边界内持久化。详细 L2/L3 项可随后追加，但不得改写 L1 结果。
 
 ### 6.6 Review Preview
 
-面向用户必须用自然语言列出：会改变什么、不会改变什么、依据、影响 View、风险、确认政策和撤销能力。高级字段可展开，但技术术语不得成为确认前提。
+面向用户必须用自然语言列出：会改变什么、不会改变什么、依据、影响 View、风险、确认政策和撤销能力。`reversibility=irreversible` 时必须在确认前明确说明不可撤销及分层删除边界。高级字段可展开，但技术术语不得成为确认前提。
 
 ### 6.7 自动与事后撤销
 
@@ -141,7 +145,7 @@ proposed -> reviewing
 reviewing -> approved | rejected
 approved -> publishing
 publishing -> published | failed
-published -> reverted
+published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 ```
 
 `rejected`、`failed`、`reverted` 为终态。重试必须创建新 `changeset_id` 并使用 `retry_of`；不得执行 `failed -> publishing`。
@@ -154,7 +158,7 @@ published -> reverted
 
 ### 7.3 撤销
 
-经 `IQ-008` 裁决，`published -> reverted` 通过新的 Compensation Revision 恢复发布前等价语义。原 revision、原 ChangeSet 和中间可见历史不得删除。
+经 `IQ-008` 裁决，`published -> reverted` 通过新的 Compensation ChangeSet/Revision 恢复发布前等价语义。补偿必须以执行时 current revision 为 `base_revision` 并重新计算 impact/protected paths；若原发布后存在触达相同语义的后续变更，必须进入 conflict/review，不得覆盖后续变更。只有补偿发布成功后，原 ChangeSet 才可标 `reverted`。原 revision、原 ChangeSet 和中间可见历史不得删除；`reversibility=irreversible` 不允许此转换。
 
 ## 8. 允许与禁止的状态转换
 
@@ -178,6 +182,8 @@ published -> reverted
 | `CS-INV-010` | 幂等重放不重复发布 |
 | `CS-INV-011` | Receipt 完整反映成功、等待、失败与跳过项 |
 | `CS-INV-012` | protected paths 在发布与撤销后保持语义不变 |
+| `CS-INV-013` | 补偿撤销基于执行时 current revision，不能覆盖介入变更；不可逆操作不能伪造 rollback |
+| `CS-INV-014` | Canonical L1 结果、revision、ChangeSet outcome 与 receipt summary 具有同一恢复边界 |
 
 ## 10. 时间语义
 
@@ -215,7 +221,8 @@ published -> reverted
 | L1 成功、L2 失败 | 返回新 Canonical fallback 或无旧 payload 的 `updating/unavailable` |
 | L3 失败 | 旧 payload 可读但立即 `stale`，加入重建队列 |
 | stale base | 拒绝并返回 current revision，不自动覆盖 |
-| Receipt 写入失败 | 发布不得声称成功；恢复策略由实现 ADR，但语义必须可审计 |
+| L1 outcome/revision/receipt summary 任一不能持久化 | 整个 L1 不得提交；不得声称成功或产生不可审计 revision |
+| 详细 L2/L3 receipt 追加失败 | L1 结果不回滚；返回 receipt incomplete，View 使用实际 revision/freshness，并进入可恢复对账 |
 | 幂等键同、payload 不同 | 拒绝 `idempotency_mismatch` |
 | 模型不可用 | 允许手动 proposal、审查、发布与撤销 |
 
@@ -223,8 +230,9 @@ published -> reverted
 
 ## 15. 撤销与审计
 
-- 原 ChangeSet、确认 actor、published revision 和补偿 revision 永久可审计，受硬删除正文规则限制。
+- 原 ChangeSet、发起/确认 actor、published revision 和补偿 revision在审计生命周期内可追踪；硬删除后只保留 S4 允许的 content-free proof，不以“永久”承诺正文保留。
 - 整包撤销重新计算所有影响，不复用旧 View payload 作为事实源。
+- 原发布后若有相同路径的介入变更，撤销必须拒绝自动补偿并提供非破坏性 conflict preview；用户可据此创建新的显式 ChangeSet。
 - Semantic Diff 必须区分新增、结束、纠正、撤销、后来补录和纯 View 重建。
 - 单 proposal 撤销后置，不得由 Micro 实现。
 
@@ -242,7 +250,10 @@ changeset_id: cs_micro_001
 base_revision: rev_010
 proposals: [end_state_contact_001, add_state_contact_002]
 impact_set: [person_card, relationship_timeline]
-protected_paths: [relationship.origin, relationship.trust, relationship.closeness]
+protected_paths:
+  - relationship.origin
+  - assertion[relationship.trust]
+  - assertion[relationship.closeness]
 status: published
 published_revision: rev_011
 ```
@@ -260,8 +271,9 @@ published_revision: rev_011
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: changeset_consistency_v0_1
+suite_id: changeset_consistency_v0_2
 suite_defined: true
+suite_materialized: false
 suite_executed: false
 suite_passed: false
 ```
@@ -294,8 +306,11 @@ suite_passed: false
 | `CS-AT-024` | failed ChangeSet 重试 | 新 ID + retry_of，原记录终态 |
 | `CS-AT-025` | Source Append | receipt 成功、Canonical revision 不变 |
 | `CS-AT-026` | 全部 fixture 隐私扫描 | 仅合成数据 |
+| `CS-AT-027` | 原发布后同一路径已有介入变更，再撤销原 ChangeSet | 补偿按 current revision 检测 conflict，不覆盖介入变更，原 ChangeSet 仍 published |
+| `CS-AT-028` | `reversibility=irreversible` 的已发布 destructive ChangeSet | 拒绝 revert，预览与 receipt 均不声称存在 rollback |
+| `CS-AT-029` | 注入 outcome/revision/receipt summary 任一持久化失败 | L1 全部不提交、revision 不增加；详细传播 receipt 失败则保留已提交 L1 并标 incomplete |
 
-不变量覆盖：001→AT001/025；002→003/004；003→008；004→011/012；005→002；006→003/013；007→013/014；008→015/022；009→017-019；010→009/010；011→016；012→005/020。
+不变量覆盖：001→AT001/025；002→003/004；003→008；004→011/012；005→002；006→003/013；007→013/014；008→015/022；009→017-019；010→009/010；011→016/029；012→005/020；013→027/028；014→029。
 
 ## 20. 未决问题
 
@@ -315,8 +330,8 @@ suite_passed: false
 - 上游 S1/S2 已批准。
 - 六项产品问题已 decided。
 - Micro 发布、两个 View、撤销和两个失败场景有确定 oracle。
-- 12 条不变量与 26 个测试均有映射。
+- 14 条不变量与 29 个测试均有映射。
 - FR-004/005/006/007/105/106/107 已进入追踪。
 - 未选择技术栈；测试仍未执行。
 
-当前结论：本 SPEC v0.1 经产品负责人整体授权于 2026-07-13 标记 `Approved`。允许进入 S4；不得据此声称实现存在或测试通过。
+当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。本次修订消除枚举别名，补齐可恢复发布、介入变更撤销和不可逆操作边界；测试尚未物化、执行或通过。

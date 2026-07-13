@@ -143,7 +143,7 @@
 - PRD 依据：§14.3、§21.1、§25.2。
 - 处理 SPEC：ChangeSet & Consistency、Storage, Index & Portability。
 - 需要明确：Canonical、L2 和 L3 分别可返回什么，以及必须附带何种 freshness 信息。
-- 决定：发布前/L1 失败继续读取旧 Canonical；L1 成功后旧 L2 不得作为 current，只能新 Canonical fallback 或 unavailable；L3 可返回旧 payload 但必须 stale。所有层返回实际 revision。
+- 决定：发布前/L1 失败继续读取旧 Canonical；L1 成功后旧 L2 不得作为 current，只能新 Canonical fallback 或 unavailable；L3 可返回旧 payload 但必须 stale。所有获授权响应返回实际 revision；拒绝响应按最小披露可返回 `withheld`，不能借全局 revision 泄露活动。
 - 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
 - 影响：S3、S7、S8；无需新 PRD 基线。
 

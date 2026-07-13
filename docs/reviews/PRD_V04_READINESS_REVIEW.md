@@ -1,5 +1,7 @@
 # PRD v0.4 就绪审查
 
+> 历史 Phase 0 产物：本报告保留 PRD 就绪审查原貌。开放问题的当前状态、SPEC 版本、测试数量和进入实现建议，以 `docs/PROJECT_STATE.md` 与 `docs/reviews/INDEPENDENT_BASELINE_AUDIT_2026-07-14.md` 为准。
+
 ## 1. 文档信息
 
 | 项目 | 值 |
