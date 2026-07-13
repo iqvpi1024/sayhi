@@ -30,7 +30,7 @@
 | 依赖/数据库/最终技术栈 | 无、未选择 |
 | 测试 | 245 个合同/场景 ID 已定义；0 个已执行，0 个已通过 |
 | Git | `main`，远程 SSH-over-443：`ssh://git@ssh.github.com:443/iqvpi1024/sayhi.git` |
-| GitHub 本轮备份 | 待完成最终提交与推送验证 |
+| GitHub 本轮备份 | passed：九份 SPEC 基线提交 `721838f` 与三个批准标签已推送；最新状态以远程 `main` 为准 |
 
 ## 3. 当前结论
 
@@ -149,3 +149,4 @@
 | 2026-07-13 | S1/S2 | 外部评审关闭，v0.2 Approved |
 | 2026-07-13 | S3-S9 | 逐份完成、自审、裁决并 Approved；未写实现 |
 | 2026-07-13 | Spec Suite | 9/9 SPEC、32/32 FR、245 test IDs 静态验证完成 |
+| 2026-07-13 | GitHub Backup | 提交 `721838f` 与 `spec-som-v0.2-approved`、`spec-bte-v0.2-approved`、`spec-suite-v0.1-approved` 已通过 SSH-over-443 推送 |
