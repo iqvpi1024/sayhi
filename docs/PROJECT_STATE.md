@@ -27,7 +27,8 @@
 | 实现代码 | 无 |
 | 已安装依赖 | 无 |
 | 数据库/技术栈决定 | 无 |
-| Git 状态 | 工作区不是 Git 仓库；本轮未提交 |
+| Git 状态 | 已初始化；分支 `main`；SSH 远程 `git@github.com:iqvpi1024/sayhi.git` |
+| GitHub 备份 | 私有仓库；SSH 身份已验证；回滚标签 `phase-0-baseline` |
 
 ## 3. 当前阶段结论
 
@@ -67,6 +68,7 @@ PRD 的产品方向、语义红线和 Micro-MVP 主链路已经足够明确，�
 | 开放问题 ID 一致性 | passed：33 个唯一 ID，定义与引用集合一致 |
 | 文档路径引用 | passed：6 个引用路径均存在 |
 | 禁止项扫描 | passed：无正式 SPEC、实现代码或数据库文件；未复制 PRD 合成人物名 |
+| GitHub SSH | passed：账号认证成功，远程仓库为空，可安全建立首次提交 |
 | Micro 测试套件 | `suite_defined=true`、`suite_executed=false`、`suite_passed=false` |
 | 实现/集成测试 | 未执行；没有实现代码 |
 
@@ -117,3 +119,4 @@ PRD 的产品方向、语义红线和 Micro-MVP 主链路已经足够明确，�
 | 日期 | 阶段 | 记录 |
 |---|---|---|
 | 2026-07-13 | Phase 0 | 建立 PRD 就绪审查、开放问题、需求矩阵、SPEC 计划、Micro 验收和持久状态；未改 PRD、未写代码、未选技术栈 |
+| 2026-07-13 | Git 基线 | 初始化 `main`，配置私有 GitHub SSH 远程和 `phase-0-baseline` 回滚标签 |

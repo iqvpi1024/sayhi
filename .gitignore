@@ -1,0 +1,35 @@
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
+
+# Secrets and machine-local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs, caches, dependencies, and build output
+*.log
+.cache/
+tmp/
+temp/
+node_modules/
+dist/
+build/
+coverage/
+
+# Local runtime stores and exports
+.local/
+local-data/
+runtime/
+exports/
+*.db
+*.sqlite
+*.sqlite3
+
