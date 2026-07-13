@@ -94,105 +94,163 @@
 
 ### IQ-001：Micro-MVP 的 Core View 封闭集合是什么？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§10.3 列 6 个；§24.2 列 3 个；§24.1 和本轮链路只要求人物卡与关系时间线。
 - 处理 SPEC：ChangeSet & Consistency、Semantic Test Harness。
 - 当前限制：验收文件只把人物卡和关系时间线作为 Micro 必需视图，不据此修改 PRD 白名单。
+- 决定：Micro Core View 封闭集合仅为 `person_card` 与 `relationship_timeline`；PRD §10.3 其他 View 保持后续 MVP 白名单，不进入 Micro 门禁。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权按保守方案完成全部 SPEC）。
+- 影响：S3、S6、`MM-005`/`MM-008`/`MM-010`；无需新 PRD 基线。
 
 ### IQ-002：L2 “同一会话”与“5 秒内”如何共同成立？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§10.2、§21.2、§26 Case A。
 - 处理 SPEC：ChangeSet & Consistency。
 - 需要明确：发布响应是否构成读取屏障；超时期间返回 `updating`、直接读 Canonical，还是允许带标识旧视图。
+- 决定：发布响应构成同会话 Publish Barrier。L1 成功后 L2 只能返回新 revision、直接 Canonical fallback，或无旧 payload 的 `updating/unavailable`；5 秒是测量 SLO，不是返回旧值许可。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S3、S6、S8、`MM-005`/`MM-010`；无需新 PRD 基线。
 
-### IQ-003：用户确认和“强直接证据”分别如何产生 `verified`？
+### IQ-003：用户确认和”强直接证据”分别如何产生 `verified`？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§6.1、§6.7、§9.3-§9.4、§11.4、§19.3。
 - 处理 SPEC：Bitemporal & Evidence、Shiling Policy。
-- 需要明确：用户确认的是“记录了该陈述”“该陈述为用户观点”还是“客观事实成立”。
+- 需要明确：用户确认的是”记录了该陈述””该陈述为用户观点”还是”客观事实成立”。
+- 决定：使用 `verification_scope` 封闭枚举：`record_accuracy | statement_occurrence | viewpoint | world_claim`。确认记录/陈述/观点不得自动扩大为对 world claim 的验证。强直接证据规则必须按 claim/source kind 显式批准并版本化；外部 Agent 无权设置个人语义事实为 `verified`；实现 MUST 拒绝枚举外 scope 值。
+- 决定日期：2026-07-13。
+- 决策人：产品负责人（用户明确确认推荐方案）。
+- 理由：防止模型或 Agent 因用户确认一层语义而自动扩大验证范围；枚举封闭后各层 claim 边界可测试。
+- 影响的 PRD/SPEC/测试：PRD §6.1、§9.4；SPEC-BTE-001 §6.9、§11.2；BTE-AT-020 至 022。
+- 是否需要新 PRD 基线：no。
 
 ### IQ-004：证据来源何时算相互独立？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§9.3。
 - 处理 SPEC：Bitemporal & Evidence。
-- 需要明确：同一原始内容的转发、截图、摘要和多次模型提取不得被重复计数。
+- 决定：Evidence independence 按共同上游 provenance 判定。同一 Source 的 excerpt/OCR/截图/摘要/模型提取只计一个 evidence family；依赖关系 unknown 时不得默认 independent。Evidence Family 没有独立写入口，由系统从 provenance 推算；持久化机制后置 S7/ADR。
+- 决定日期：2026-07-13。
+- 决策人：产品负责人（用户明确确认推荐方案）。
+- 理由：防止同一内容经多次转换后被重复计数为独立证据，造成虚假高置信度。
+- 影响的 PRD/SPEC/测试：PRD §9.3；SPEC-BTE-001 §6.6、§11.1；BTE-AT-017、018。
+- 是否需要新 PRD 基线：no。
 
 ### IQ-005：失败时“旧安全版本”的可读边界是什么？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§14.3、§21.1、§25.2。
 - 处理 SPEC：ChangeSet & Consistency、Storage, Index & Portability。
 - 需要明确：Canonical、L2 和 L3 分别可返回什么，以及必须附带何种 freshness 信息。
+- 决定：发布前/L1 失败继续读取旧 Canonical；L1 成功后旧 L2 不得作为 current，只能新 Canonical fallback 或 unavailable；L3 可返回旧 payload 但必须 stale。所有层返回实际 revision。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S3、S7、S8；无需新 PRD 基线。
 
 ### IQ-006：`narrative_context` 保存内容还是 Source 引用？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§6.12、§13.2、§16.2。
 - 处理 SPEC：Semantic Object Model、Storage, Index & Portability。
 - 需要明确：避免复制敏感原文与满足独立可读之间的边界。
+- 决定：Canonical 默认保存 Source locator 与可选最小用户自写 note，不复制原始敏感正文；owner 私有导出可按 policy 内联相应 Source，分享导出继续裁剪。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S1、S4、S7、S9；无需新 PRD 基线。
 
 ### IQ-007：回答 `stale` 与 View `freshness_status=stale` 是否同一状态？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§9.4、§10.2、§20 FR-105。
 - 处理 SPEC：Bitemporal & Evidence、ChangeSet & Consistency。
+- 决定：两者分轴。Answer `stale` 说明证据不满足查询的当前性要求；View freshness 说明 Projection 是否对齐 Canonical revision。fresh View 仍可能包含 stale evidence；stale View 不得把旧 answer 冒充当前 verified。传播行为由 S3 定义。
+- 决定日期：2026-07-13。
+- 决策人：产品负责人（用户明确确认推荐方案）。
+- 理由：两个轴混用会导致 View 刷新就自动提升事实置信度，破坏证据独立原则。
+- 影响的 PRD/SPEC/测试：PRD §9.4、§10.2；SPEC-BTE-001 §6.9；BTE-AT-028、029。
+- 是否需要新 PRD 基线：no。
 
 ### IQ-008：撤销是否发布补偿 revision？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§11.3、§12.3、§24.1、§26 Case A。
 - 处理 SPEC：ChangeSet & Consistency。
 - 当前验收只要求：当前语义与撤销前基线等价、修订历史不被擦除、所有 Micro Core View 对齐同一新 revision。
+- 决定：撤销整个已发布 ChangeSet 必须产生新的 Compensation Revision；当前语义恢复等价，但原发布、确认和中间 revision 全部保留。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S3、S6、`MM-008`；无需新 PRD 基线。
 
 ### IQ-009：模糊有效时间如何表达和确认？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§9.1、§26 Case A。
 - 处理 SPEC：Bitemporal & Evidence。
-- 当前限制：Micro fixture 使用明确时间，不实现“去年秋天”的解析。
+- 当前限制：Micro fixture 使用明确时间，不实现”去年秋天”的解析。
+- 决定：保留 `lexical_locator`（指向原文的 Source locator）、候选范围、`precision` 和 `certainty`；用户可确认粗粒度/近似范围，不必虚构精确日期；解析结果在确认前仅为 `resolution_status=proposed`；候选经用户确认后才进入 Canonical。
+- 决定日期：2026-07-13。
+- 决策人：产品负责人（用户明确确认推荐方案）。
+- 理由：防止系统把”去年秋天”自动映射为任意精确日期，保留原始模糊语义并可追溯到原文。
+- 影响的 PRD/SPEC/测试：PRD §9.1、§26 Case A；SPEC-BTE-001 §6.1、§10.2；BTE-AT-007、008、009。
+- 是否需要新 PRD 基线：no。
 
 ### IQ-010：相邻 Relationship State 区间的端点规则是什么？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§9.1、§12.2、§13.2-§13.3。
 - 处理 SPEC：Bitemporal & Evidence。
-- 需要明确：区间开闭、同一时刻切换、未知端点和重叠冲突。
+- 决定：State 使用半开区间 `[start,end)`；`transition_at` 前一瞬旧 State 有效，从 `transition_at` 起新 State 有效；相邻区间首尾相接不构成冲突。`unknown` 端点与 `unbounded` 端点严格分离：unknown 表示边界存在但不知道，unbounded 表示语义上无该侧边界。instant 事件单独建模，不得用 start=end 空区间伪装。
+- 决定日期：2026-07-13。
+- 决策人：产品负责人（用户明确确认推荐方案）。
+- 理由：半开区间保证同一时刻切换时不存在重叠或空隙，简化历史查询和冲突判定。
+- 影响的 PRD/SPEC/测试：PRD §9.1、§13.2；SPEC-BTE-001 §6.1、§6.2、§10.1；BTE-AT-005、006、009、032。
+- 是否需要新 PRD 基线：no。
 
 ### IQ-011：硬删除的范围、时限、证明和失败状态是什么？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§6.13、§12.4、§21.4。
 - 处理 SPEC：Privacy & Access Policy、Storage, Index & Portability、ChangeSet & Consistency。
 - 需要覆盖：Source、Canonical、Ledger 正文、索引、缓存、备份、导出副本。
+- 决定：按 `live_source`、`canonical_payload`、`ledger_payload`、`derived_index`、`cache`、`backup`、`export_copy`、`minimal_audit_proof` 分层回执。系统控制内完成才算 deleted；备份可 `pending_expiry`，外部副本 `out_of_control`，失败为 partial failure；无 retention policy 不承诺时限；审计不留正文。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S3、S4、S7；无需新 PRD 基线。
 
 ### IQ-012：私有完整导出与对外分享导出是否采用不同策略？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§17.5、§19.2、§21.4。
 - 处理 SPEC：Privacy & Access Policy、Storage, Index & Portability、MCP Contract。
+- 决定：两者是不同动作。owner 私有导出按明确范围提供可移植完整包；外部分享默认最小披露、第三方脱敏和字段裁剪，不能复用全量导出权限。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S4、S7、S8；无需新 PRD 基线。
 
 ### IQ-013：多舱室策略冲突如何合并？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§17.2-§17.4。
 - 处理 SPEC：Privacy & Access Policy。
 - 需要明确：默认拒绝、策略交集、字段裁剪，以及 Derived View 的权限继承。
+- 决定：所有适用策略取最严格交集；字段 allow 取交集、deny 取并集，无法求交默认 deny。Derived View 继承依赖 compartments 合集和最高 sensitivity。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S4、S5、S8；无需新 PRD 基线。
 
 ### IQ-014：MVP SLO 的测量环境和计时边界是什么？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§21.2。
 - 处理 SPEC：Semantic Test Harness；具体环境由后续 ADR 记录。
+- 决定：SLO 使用版本化 Reference Profile；计时从本地核心接受请求开始，到满足合同的响应可供调用者读取结束，后台工作另记。具体硬件、OS 和 runner 由 ADR 记录，结果不得跨 profile 外推。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S3、S6、S7；无需新 PRD 基线。
 
 ### IQ-015：未知扩展字段往返的语义保真边界是什么？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§21.4。
 - 处理 SPEC：Storage, Index & Portability、Ingestion & Migration。
 - 需要明确：字段名、类型、顺序、原始字节和不可识别枚举分别保证什么。
+- 决定：结构化未知字段保留命名空间、字段名、类型、嵌套和值语义，不保证 JSON 键顺序、空白或原始字节；需要字节保真的未知格式作为 opaque Source blob + media type/hash 保存；未知 required enum fail closed。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S7、S9；无需新 PRD 基线。
 
 ### IQ-016：九份 SPEC 的权威顺序采用哪一版？
 
@@ -210,15 +268,21 @@
 
 ### IQ-017：删除、封存、归档和降权是否都必须形成 ChangeSet？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§11.2、§12.4、§19.2。
 - 处理 SPEC：ChangeSet & Consistency、Privacy & Access Policy。
+- 决定：archive、seal、soft/hard delete 等 Canonical 状态或权限语义必须经 ChangeSet；纯 Derived 清缓存/重建不经；降权若只改变派生 retrieval activation 不经，若持久为 Canonical policy 则经。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S3、S4、S7；无需新 PRD 基线。
 
 ### IQ-018：`base_revision` 是全局 revision 还是对象级 revision？
 
-- 状态：`open`
+- 状态：`decided`
 - PRD 依据：§2.2 #39、§10.2、§11.2、§19.2。
 - 处理 SPEC：ChangeSet & Consistency；实现机制另立 ADR。
+- 决定：`base_revision` 使用全局 Canonical `data_revision`；`object_revision` 记录对象最后一次语义变化对应的全局 revision。成功 ChangeSet 产生一个新全局 revision，未变化对象 revision 不变。
+- 决定日期：2026-07-13；决策人：产品负责人（整体授权）。
+- 影响：S1、S2、S3、S7、S8；无需新 PRD 基线。
 
 ## 4. Deferred
 

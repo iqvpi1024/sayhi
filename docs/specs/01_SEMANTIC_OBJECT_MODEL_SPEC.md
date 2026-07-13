@@ -5,8 +5,8 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SOM-001` |
-| 版本 | `0.1` |
-| 状态 | `Draft for Review` |
+| 版本 | `0.2` |
+| 状态 | `Approved` |
 | 产品基线 | `PRDv04.md`，PRD v0.4 |
 | 产品裁决 | `BQ-001` 至 `BQ-005`，2026-07-13 已决定 |
 | 当前阶段 | Phase 1：Semantic Object Model |
@@ -57,7 +57,7 @@
 | State | 某主体在有效时间内的可变化值；历史 State 不因当前值变化而被覆盖 |
 | RelationshipState | `State` 的语义配置，`subject_ref` 指向 `Relationship`；不是独立核心对象 |
 | Review Status | 某条 Assertion/State 的审查处置状态，不等同于内容类型或查询回答状态 |
-| Answer Status | 事实型回答的六态结果：`verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown` |
+| Answer Status | 事实型回答的六态结果：`verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown`；这是对 PRD §9.4 “五态 + 必要时 unknown”的规范化，`unknown` 在本 SPEC 中是正式第六态 |
 | Evidence Ref | 指向 Source 及其稳定 locator 的引用；Derived View 不能成为直接证据 |
 | narrative_context | 结构化枚举无法表达的原话、背景或用户说明的可追溯容器 |
 | supersede | 以新修订替代当前解释，同时保留旧记录、证据和审计历史 |
@@ -89,6 +89,8 @@ ChangeSet
 
 人物卡和关系时间线是 Derived View，不属于规范对象闭包。
 
+Assertion 是可选项，因为 PRD §24.1 的 Micro-MVP 要求联系状态变化不能连带修改信任和人格判断，而 PRD §13.2-§13.4 又要求主观判断与关系状态分离。只有输入或变更需要保留陈述、观点或视角时才创建 Assertion；单纯发布 `relationship.contact` State 不得为凑齐对象而创建 Assertion。
+
 ## 5. 对象与边界
 
 ### 5.1 12 个核心对象
@@ -115,8 +117,10 @@ ChangeSet
 | PRD 用词 | 规范映射 | 约束 |
 |---|---|---|
 | `RelationshipState` | `State`，且 `subject_ref.type=relationship` | 不是新对象 |
+| `contact_state` | `State(state_kind=relationship.contact)` | 不作为 Relationship identity 的可覆盖字段 |
 | `Obligation` | `Commitment` 的语义配置 | 不建立独立表意类型 |
 | `viewpoint` | `Assertion(assertion_kind=opinion)`，必须有 `perspective_ref` | 不等同于客观事实 |
+| `sentiment` | `Assertion(assertion_kind=opinion)`，必须有表达该感受主体的 `perspective_ref`；证据不足的解释进入 `Hypothesis` | 不建立独立字段或独立对象 |
 | `Calibration` | `Outcome` 的校准字段/子结构 | 不建立独立对象 |
 | `Snapshot` | Derived `Projection` | 过期只影响 freshness，不成为事实证据 |
 | `Verified Context` | 查询层对规范对象、证据和策略的结果集合 | 不是持久核心对象 |
@@ -209,6 +213,8 @@ inferred | analysis | predicted | fictional
 
 `disputed` 和 `unknown` MUST NOT 作为 `assertion_kind`。用户确认 MUST NOT 把 `opinion`、`inferred`、`analysis`、`predicted` 或 `fictional` 改写为 `observed`。
 
+上述八态是对 PRD §8.1 “Assertion 类型”的规范精化：PRD 表中混列的 `disputed` 被移到 `review_status`/`answer_status`，`unknown` 被移到 `answer_status` 或有类型的 State value；二者不再描述 Assertion 的内容来源或性质。依据：`BQ-002` 与 `SOM-INV-004`。
+
 ### 6.5 Relationship
 
 | 字段 | 必需 | 语义 |
@@ -220,7 +226,7 @@ inferred | analysis | predicted | fictional
 | `narrative_context` | MAY | 无法被枚举压平的关系背景 |
 | `identity_status` | MUST | `active`、`merged`、`retired`；不等同于联系状态 |
 
-`contact_state`、时变 `role`、`trust`、`closeness`、`sentiment` MUST NOT 作为 Relationship identity 的可覆盖当前字段。它们必须由 State 或带 perspective 的 Assertion/Hypothesis 表达。
+`contact_state`、时变 `role`、`trust`、`closeness`、`sentiment` MUST NOT 作为 Relationship identity 的可覆盖当前字段。`contact_state` 与 `role` 由 State 表达；`trust`、`closeness` 和 `sentiment` 属于带主体视角的 `opinion` Assertion，证据不足的解释只能进入 Hypothesis。
 
 ### 6.6 State 与 RelationshipState
 
@@ -363,7 +369,7 @@ publishing -> published | failed
 published -> reverted
 ```
 
-本 SPEC 只固定状态名称和方向。重试、并发冲突、补偿 revision 和原子发布条件由 S3 定义。
+本 SPEC 只固定状态名称和方向。`failed` 在本状态机中是终态；重试必须创建新尝试还是复用原 ChangeSet、并发冲突、补偿 revision 和原子发布条件均由 S3 定义，当前实现不得自行添加 `failed -> publishing` 转换。
 
 ### 7.5 无线性状态机的对象
 
@@ -425,7 +431,8 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 - `assertion_kind=inferred|analysis|predicted` MUST 保留推断来源和距离，不因用户查看或重复而增强真值。
 - `assertion_kind=fictional` MUST 永远与真实世界 Assertion 隔离。
 - 用户确认只能说明用户完成了审查；它是否足以产生 `answer_status=verified` 由 S2/S5 依据视角和证据定义。
-- Evidence score MAY 后续计算，但 MUST NOT 替代原始证据维度。
+- PRD §9.3 的原始证据维度固定为：`proximity`、`integrity`、`corroboration`、`perspective`、`inference_distance`、`review_status`、`freshness`。本 SPEC 只锁定名称与正交边界，字段结构和计算规则由 S2 定义。
+- Evidence score MAY 后续计算，但 MUST NOT 替代上述七个原始证据维度，也不得单独决定事实真伪。
 
 ## 12. 权限要求
 
@@ -632,6 +639,7 @@ suite_passed: false
 | `SOM-AT-021` | 同 subject/predicate/time 的两个不兼容 Assertion | 校验冲突集合 | 两者并列保留并进入 in_dispute，不自动选胜者 |
 | `SOM-AT-022` | 缺少 actor、time、revision 或 result 的自动操作记录 | 校验审计 Envelope | 拒绝记录并返回 audit metadata missing |
 | `SOM-AT-023` | 全部 SOM 与 Micro fixtures | 执行隐私静态扫描 | 仅含合成 ID/内容，不出现真实个人数据 |
+| `SOM-AT-024` | 2030 年补录一条 `valid_to=2029-04` 的合成 State（PRD §26 Case B 占位） | 分别读取现实有效时间与系统记录时间 | `valid_time != recorded_at`；可分别回答“何时成立”和“何时记录”；完整区间规则由 S2 验收 |
 
 ### 19.3 与 Micro-MVP 的对应
 
@@ -652,7 +660,7 @@ suite_passed: false
 | `SOM-INV-003` | `SOM-AT-009` |
 | `SOM-INV-004` | `SOM-AT-007`、`SOM-AT-008`、`SOM-AT-018` |
 | `SOM-INV-005` | `SOM-AT-010` |
-| `SOM-INV-006` | `SOM-AT-015` |
+| `SOM-INV-006` | `SOM-AT-015`、`SOM-AT-024` |
 | `SOM-INV-007` | `SOM-AT-004`、`SOM-AT-006` |
 | `SOM-INV-008` | `SOM-AT-011`、`SOM-AT-012` |
 | `SOM-INV-009` | `SOM-AT-013`、`SOM-AT-014` |
@@ -692,4 +700,4 @@ suite_passed: false
 - 产品负责人逐份审查并明确批准本 SPEC。
 - 测试状态仍如实区分 defined、executed、passed；未执行不得称为通过。
 
-当前结论：文档可进入产品评审，但尚未 Approved，且不得开始第二份 SPEC 或实现代码。
+当前结论：Fable5 的 8 项评审意见已关闭，产品负责人已明确同意按推荐方案继续，本 SPEC v0.2 于 2026-07-13 标记为 `Approved`。这只批准语义合同，不表示测试已执行或实现已完成；允许开始第二份 Bitemporal & Evidence SPEC，仍不得开始实现代码。
