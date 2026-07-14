@@ -292,6 +292,6 @@ Semantic Object Model
 
 ## 7. 阶段门禁
 
-当前状态：Micro Gate Corrective Revision。S1 v0.4；S2 v0.3；S3-S6 v0.3；S7-S8 v0.2；S9 v0.3，均保持 `Approved`。实现代码仍为零，所有合同 suite 均未物化、未执行、未通过。产品基线已由 `DEC-MICRO-GATE-001` 绑定；业务实现门禁在关闭性复审完成前保持 closed。
+当前状态：Micro Gate Corrective Revision 已通过关闭性复审，结论 `yes_with_conditions`，P0=0、P1=0。S1 v0.4；S2 v0.3；S3-S6 v0.3；S7-S8 v0.2；S9 v0.3，均保持 `Approved`。实现代码仍为零，所有合同 suite 均未物化、未执行、未通过。产品基线由 `DEC-MICRO-GATE-001` 绑定；当前切片处于 `traceable`，尚未达到 `architecture_decided`。
 
-下一步唯一建议动作：完成本轮 LF/CRLF 静态复验和 P1 关闭性复审；在复审结论写入仓库前不得开始 Micro-MVP 业务实现或技术选型。
+下一步唯一建议动作：只为 `SLICE-MICRO-RELATIONSHIP-001` 编制必要的最小 ADR；ADR Accepted 后依次物化 exact required suite、编制 Implementation Plan，再进入业务实现。不得借 ADR 选择长期数据库、扩展 Micro 范围或提前编码。

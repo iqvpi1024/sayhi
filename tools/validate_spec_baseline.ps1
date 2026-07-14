@@ -113,6 +113,38 @@ foreach ($requiredAttribute in @('.gitattributes text eol=lf', '*.md text eol=lf
 }
 Add-Check 'Repository text EOL policy is explicit'
 
+$workflowRequiredFiles = @(
+    'AGENTS.md',
+    'docs/process/README.md',
+    'docs/process/CHANGE_CONTROL.md',
+    'docs/architecture/README.md',
+    'docs/adrs/README.md',
+    'docs/adrs/ADR_TEMPLATE.md',
+    'docs/planning/README.md',
+    'docs/planning/IMPLEMENTATION_PLAN_TEMPLATE.md',
+    'docs/testing/README.md',
+    'docs/testing/SUITE_MATERIALIZATION_CHECKLIST.md',
+    'docs/testing/VERIFICATION_RESULT_TEMPLATE.md',
+    'docs/testing/results/README.md',
+    'docs/reviews/README.md',
+    'docs/reviews/GATE_REVIEW_TEMPLATE.md',
+    'docs/releases/README.md',
+    'docs/releases/RECOVERY_POINT_TEMPLATE.md',
+    'tests/README.md',
+    'tests/fixtures/README.md',
+    'tests/semantic/README.md',
+    'tests/integration/README.md'
+)
+$workflowErrorsBefore = $errors.Count
+foreach ($relativePath in $workflowRequiredFiles) {
+    if (-not (Test-Path -LiteralPath (Join-Path $root $relativePath) -PathType Leaf)) {
+        Add-Error "Missing workflow foundation file: $relativePath"
+    }
+}
+if ($errors.Count -eq $workflowErrorsBefore) {
+    Add-Check "$($workflowRequiredFiles.Count) workflow foundation files are present"
+}
+
 $specs = [ordered]@{
     SOM = @{ Path = 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'; Version = '0.4'; Tests = 27; Invariants = 16 }
     BTE = @{ Path = 'docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md'; Version = '0.3'; Tests = 37; Invariants = 15 }
@@ -376,8 +408,9 @@ Assert-ClosedEnum 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md' 'applicability_s
 Assert-ClosedEnum 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md' 'verification_result_values' @('not_executed', 'passed', 'failed', 'errored', 'partial')
 Assert-ClosedEnum 'docs/specs/09_INGESTION_MIGRATION_SPEC.md' 'intake_status_values' @('received', 'validating', 'stored', 'duplicate', 'rejected')
 Assert-ClosedEnum 'docs/specs/09_INGESTION_MIGRATION_SPEC.md' 'parse_attempt_status_values' @('queued', 'parsing', 'parsed', 'candidate_ready', 'no_candidate', 'parse_failed', 'unsupported')
+Assert-ClosedEnum 'docs/process/README.md' 'delivery_phase_values' @('product_defined', 'product_decided', 'spec_approved', 'traceable', 'architecture_decided', 'suite_materialized', 'implementation_planned', 'implementing', 'verified', 'review_passed', 'recovery_point_published')
 if ($errors.Count -eq $enumErrorsBefore) {
-    Add-Check '12 closed enums match positive machine-readable value sets'
+    Add-Check '13 closed enums match positive machine-readable value sets'
 }
 
 $knownAliasChecks = [ordered]@{
@@ -394,11 +427,18 @@ $knownAliasChecks = [ordered]@{
     'traceability must use micro_required_slice' = '\bmicro_required\b'
 }
 $authoritativePaths = @(
+    'AGENTS.md',
     'docs/specs',
     'docs/testing/MICRO_MVP_ACCEPTANCE.md',
+    'docs/process',
+    'docs/architecture',
+    'docs/adrs',
+    'docs/planning',
+    'docs/releases',
     'docs/traceability/REQUIREMENTS_MATRIX.md',
     'docs/decisions/OPEN_QUESTIONS.md',
-    'docs/PROJECT_STATE.md'
+    'docs/PROJECT_STATE.md',
+    'tests'
 )
 $authoritativeDocs = foreach ($relativePath in $authoritativePaths) {
     $fullPath = Join-Path $root $relativePath
@@ -419,11 +459,18 @@ if ($errors.Count -eq $aliasErrorsBefore) {
 }
 
 $privacyFiles = @(
+    Get-Item -LiteralPath (Join-Path $root 'AGENTS.md')
     Get-Item -LiteralPath (Join-Path $root 'PRDv04.md')
     Get-ChildItem -LiteralPath (Join-Path $root 'docs/specs') -Recurse -File -Filter '*.md'
     Get-ChildItem -LiteralPath (Join-Path $root 'docs/testing') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/process') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/architecture') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/adrs') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/planning') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/releases') -Recurse -File -Filter '*.md'
     Get-ChildItem -LiteralPath (Join-Path $root 'docs/traceability') -Recurse -File -Filter '*.md'
     Get-ChildItem -LiteralPath (Join-Path $root 'docs/decisions') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'tests') -Recurse -File -Filter '*.md'
     Get-Item -LiteralPath (Join-Path $root 'docs/PROJECT_STATE.md')
 )
 $privacyPatterns = [ordered]@{
