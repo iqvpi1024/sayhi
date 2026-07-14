@@ -5,7 +5,7 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SOM-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md`，PRD v0.4 |
 | 产品裁决 | `BQ-001` 至 `BQ-005`，2026-07-13 已决定 |
@@ -13,7 +13,7 @@
 | 下一依赖 | Bitemporal & Evidence SPEC |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 独立审计 | 2026-07-14；修复跨 SPEC 字段与 Source revision 边界，不新增产品能力 |
+| 纠偏复审 | 2026-07-14；闭合 Source policy 初始化与只读 protected sentinel，不新增产品能力 |
 
 本文定义语义合同，不选择数据库、编程语言、序列化框架、图引擎、事件溯源框架或模型供应商。
 
@@ -89,6 +89,8 @@ ChangeSet
 ```
 
 人物卡和关系时间线是 Derived View，不属于规范对象闭包。
+
+本闭包描述 Micro 的创建与修改能力。固定初始 fixture MAY 预置一个只读、全合成的 `Hypothesis` sentinel，只用于证明联系状态发布和撤销不会修改人格判断。实现只需把该对象当作受保护的 Canonical payload 比较 digest；MUST NOT 因此实现 Hypothesis 生成、编辑、检索、状态转换或推理工作流。
 
 Assertion 是可选项，因为 PRD §24.1 的 Micro-MVP 要求联系状态变化不能连带修改信任和人格判断，而 PRD §13.2-§13.4 又要求主观判断与关系状态分离。只有输入或变更需要保留陈述、观点或视角时才创建 Assertion；单纯发布 `relationship.contact` State 不得为凑齐对象而创建 Assertion。
 
@@ -173,8 +175,22 @@ Source 是 12 类语义对象之一，但初次 Source Append 位于 Source Vaul
 | `locator_scheme` | MUST | 定义 Source 片段如何稳定定位；Micro 固定为 `text_utf8_byte_range_v1` |
 | `coverage_window_ref` | MAY | 覆盖窗口引用；详细语义后置 S2/S9 |
 | `append_receipt_id` | MUST | Source Append 的审计回执 |
+| `policy_profile_ref` | MUST | append 时使用的版本化 Source policy 初始化配置；不得来自 Source 正文 |
+| `owner_ref` | MUST | 来自已授权 intake context 的 owner |
+| `subject_refs` | MUST | 调用者显式声明且已验证的主体集合；未声明时为空集合，不得从正文同步猜测 |
+| `recorder_ref` | MUST | 显式 recorder；仅 direct owner intake 可由 profile 确定性回落为 `owner_ref` |
+| `sensitivity` | MUST | 不低于 profile floor；hint 只能升高，不能降低 |
+| `compartments` | MUST | 已声明集合，或 profile 的保守默认集合 |
+| `third_party_present` | MUST | `true|false|unknown`；缺少完整主体声明时必须为 unknown |
+| `retention_policy_ref` | MUST | 来自已授权 profile 的版本化 policy，不由正文或模型选择 |
+| `retention_state` | MUST | 初次成功 append 固定为 `active` |
+| `policy_resolution_status` | MUST | `declared|provisional|confirmed`；见 S4/S9 |
 
 Source Append MUST 在不等待语义处理的情况下返回 receipt。Source Append 成功 MUST NOT 自动产生或修改 Assertion、Relationship、State 或其他 Canonical Context 对象。
+
+Source policy 初始化 MUST 是 `IntakeRequest` 中获授权的显式声明与 `policy_profile_ref` 的确定性函数，不得读取正文后再猜字段。显式 `subject_refs`、第三方声明和 compartment 声明完整且通过引用校验时可写 `policy_resolution_status=declared`；缺失时必须使用 profile 的保守默认：`sensitivity>=private`、`compartments=[personal]`、`subject_refs=[]`、`third_party_present=unknown`、`policy_resolution_status=provisional`。provisional Source 对非 owner/非 intake purpose 必须 fail closed。后续解析只能提出受控的 Source policy metadata 修订，不能静默扩大访问、降低 sensitivity 或把 Candidate 当已确认主体。
+
+上述初始化合同只闭合 Source append schema，不要求 Micro 实现通用权限运行时。S4 定义字段与 fail-closed 语义，S9 定义输入来源和 receipt 映射。
 
 `text_utf8_byte_range_v1` 使用原始 UTF-8 字节序列上的零基、尾端不含区间 `[start_byte,end_byte_exclusive)`，并绑定 `content_hash`。实现不得用字符、UTF-16 code unit 或渲染后文本偏移冒充该 scheme。
 
@@ -370,15 +386,19 @@ in_dispute -> confirmed | denied
 
 ### 7.4 ChangeSet Status
 
+```yaml
+changeset_status_values: [proposed, reviewing, approved, rejected, publishing, published, conflicted, failed, reverted]
+```
+
 ```text
 proposed -> reviewing
 reviewing -> approved | rejected
-approved -> publishing
+approved -> publishing | conflicted | failed
 publishing -> published | failed
 published -> reverted
 ```
 
-本 SPEC 只固定状态名称和方向。`failed` 在本状态机中是终态；重试必须创建新尝试还是复用原 ChangeSet、并发冲突、补偿 revision 和原子发布条件均由 S3 定义，当前实现不得自行添加 `failed -> publishing` 转换。
+本 SPEC 只固定状态名称和方向。`conflicted` 与 `failed` 均为终态；前者表示发布前复检发现 revision/target conflict，后者表示非冲突性复检或发布失败。重试必须创建新 ChangeSet 并引用原项；preflight attempt、receipt、并发冲突、补偿 revision 和原子发布条件由 S3 定义，当前实现不得自行添加 `conflicted|failed -> publishing` 转换。
 
 ### 7.5 无线性状态机的对象
 
@@ -389,6 +409,7 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 ### 8.1 允许
 
 - Source receipt 从 `received` 到 `stored` 或 `rejected`。
+- Source policy metadata 经受控修订从 `provisional -> declared|confirmed` 或 `declared -> confirmed`；不改变原 append receipt。
 - 未审查 Assertion 经用户审查进入 `confirmed`、`denied` 或 `in_dispute`。
 - 新证据使已确认 Assertion 进入 `in_dispute`，反证不得被删除。
 - Relationship contact 经已批准 ChangeSet 从旧 State 演化为新 State，同时保留旧有效区间。
@@ -403,6 +424,7 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 - Current State 通过原地覆盖删除 Historical State。
 - Derived View、摘要、Embedding 或 Snapshot 被写入 `evidence_refs`。
 - Source Append 隐式修改 Canonical Context。
+- parser/model 把 provisional Source 直接标为 declared/confirmed，或通过 metadata 修订降低 sensitivity/移除适用 compartment。
 - 未知 `object_type` 被默认为最相近的核心对象。
 
 ## 9. 系统不变量
@@ -424,6 +446,7 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 | `SOM-INV-013` | 任何冲突处置都保留支持与反对证据 |
 | `SOM-INV-014` | 合成测试数据与真实个人数据严格隔离 |
 | `SOM-INV-015` | Canonical evidence 的 present/missing 状态与 Source refs 是否存在一致；receipt/Derived 不得填补该状态 |
+| `SOM-INV-016` | Source policy 字段只能由获授权 Intake 声明与版本化 profile 确定性初始化；缺失时使用 provisional 保守默认，不解析正文猜测 |
 
 ## 10. 时间语义
 
@@ -470,6 +493,8 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 |---|---|
 | Source 保存失败 | 返回 rejected receipt，不生成语义候选，不声称已保存 |
 | Source 已保存但解析失败 | 保留 Source，记录解析失败，不生成猜测 |
+| Source policy 声明缺失 | 仍可按保守 profile 保存；标 `provisional`、第三方状态 unknown，并对非 owner/非 intake purpose fail closed |
+| Source policy 声明非法或试图降低 profile floor | 拒绝该声明；不得降级 sensitivity 或扩大访问，Source append 按 S9 返回明确结果 |
 | 未知 object_type | 拒绝 Canonical 写入并返回 `unsupported_object_type` |
 | 字段类型不匹配 | 拒绝整个 proposal，不做部分写入 |
 | dangling reference | 拒绝整个 Canonical 发布 |
@@ -511,6 +536,16 @@ source:
   language: zh-CN
   content_ref: fixtures/src_micro_001.txt
   content_hash: hash_placeholder
+  policy_profile_ref: owner_intake_private_v1
+  owner_ref: person_alpha
+  subject_refs: [person_alpha, person_beta]
+  recorder_ref: person_alpha
+  sensitivity: private
+  compartments: [personal]
+  third_party_present: true
+  retention_policy_ref: user_controlled_v1
+  retention_state: active
+  policy_resolution_status: declared
 append_receipt:
   status: stored
 canonical_mutations: []
@@ -636,7 +671,7 @@ append_source:
 ### 19.1 测试状态
 
 ```yaml
-suite_id: semantic_object_model_v0_3
+suite_id: semantic_object_model_v0_4
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -674,6 +709,8 @@ suite_passed: false
 | `SOM-AT-023` | 全部 SOM 与 Micro fixtures | 执行隐私静态扫描 | 仅含合成 ID/内容，不出现真实个人数据 |
 | `SOM-AT-024` | 2030 年补录一条 `valid_to=2029-04` 的合成 State（PRD §26 Case B 占位） | 分别读取现实有效时间与系统记录时间 | `valid_time != recorded_at`；可分别回答“何时成立”和“何时记录”；完整区间规则由 S2 验收 |
 | `SOM-AT-025` | evidence_refs 为空但 status=present，或 refs 非空但 status=missing | 校验 Canonical 对象 | 拒绝不一致；receipt/Derived ref 也不能把 evidence_status 设为 present |
+| `SOM-AT-026` | 获授权 Intake 显式声明 recorder、subjects、third-party 和 compartments，并引用固定 policy profile | 初始化 Source | 每个 expected policy 字段由 request/profile 唯一产生；不读取正文推断 |
+| `SOM-AT-027` | Intake 缺少 subject/compartment 声明且 hint 低于 profile floor | 初始化 Source | Source 为 private/personal/provisional，subjects 为空、third-party=unknown；非 owner/非 intake purpose fail closed，hint 不降低保护 |
 
 ### 19.3 与 Micro-MVP 的对应
 
@@ -704,6 +741,7 @@ suite_passed: false
 | `SOM-INV-013` | `SOM-AT-021` |
 | `SOM-INV-014` | `SOM-AT-023` |
 | `SOM-INV-015` | `SOM-AT-009`、`SOM-AT-025` |
+| `SOM-INV-016` | `SOM-AT-026`、`SOM-AT-027` |
 ## 20. 未决问题
 
 以下问题不阻止本 SPEC 评审，但必须由对应后续 SPEC 处理：
@@ -735,4 +773,4 @@ suite_passed: false
 - 产品负责人逐份审查并明确批准本 SPEC。
 - 测试状态仍如实区分 defined、executed、passed；未执行不得称为通过。
 
-当前结论：本 SPEC v0.3 于 2026-07-14 完成独立基线审计并保持 `Approved`。本次修订只消除 Source/Canonical revision、ID 槽位、locator 和 proposal 字段歧义，不表示测试已物化、执行或通过，也不授权扩大 Micro-MVP。
+当前结论：本 SPEC v0.4 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。本次修订闭合 Source policy 初始化和只读 protected sentinel 边界；不表示测试已物化、执行或通过，也不授权扩大 Micro-MVP 或实现 Hypothesis 工作流。

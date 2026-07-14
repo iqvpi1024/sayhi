@@ -5,14 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-CS-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md`，PRD v0.4 |
-| 上游基线 | `SPEC-SOM-001` v0.3、`SPEC-BTE-001` v0.3，均 `Approved` |
+| 上游基线 | `SPEC-SOM-001` v0.4、`SPEC-BTE-001` v0.3，均 `Approved` |
 | 产品裁决 | `IQ-001`、`IQ-002`、`IQ-005`、`IQ-008`、`IQ-017`、`IQ-018`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 独立审计 | 2026-07-14；统一枚举、收紧发布回执与并发撤销语义 |
+| 纠偏复审 | 2026-07-14；闭合 preflight attempt、合法终态、回执与重试语义 |
 
 本文只定义变更和一致性语义，不选择数据库事务、消息系统、锁、队列或事件框架。用户已授权按保守推荐方案完成全部 SPEC；批准不代表实现或测试通过。
 
@@ -47,6 +47,7 @@
 | Publish Barrier | 发布响应与后续同会话读取之间的最小一致性屏障 |
 | Impact Rule | 由规范 predicate/object 到受影响 View 的声明式依赖规则 |
 | Receipt | 对规范发布、传播、等待、失败和跳过项的逐项结果 |
+| Publish Attempt | 接受一次发布命令后持久化的尝试记录；包含观察到的 revision、preflight 结果、幂等绑定和 receipt，不等同于 ChangeSet 重试 |
 | Compensation Revision | 撤销已发布 ChangeSet 时恢复先前等价语义的新 revision |
 | Semantic Diff | 两个 revision 间规范语义与派生影响的可追踪差异 |
 
@@ -93,11 +94,12 @@ PRD §10.3 的其余四类是 MVP 后续白名单，不是 Micro 发布门槛。
 | `confirmation_policy` | MUST | `automatic|posthoc_revertible|single_confirmation|double_confirmation` |
 | `status` | MUST | §7 状态 |
 | `idempotency_key` | MUST | 同一逻辑请求的稳定去重键 |
-| `published_revision` | 条件 MUST | published/reverted 相关 revision |
-| `receipt` | 条件 MUST | terminal/published 结果 |
+| `published_revision` | 条件 MUST | 仅 published/reverted 相关 revision；conflicted/failed 必须为空 |
+| `receipt` | 条件 MUST | 接受首次发布命令后必须存在；覆盖 preflight、publishing 和终态结果 |
+| `publish_attempt_refs` | 条件 MUST | 接受发布命令后至少一个；只追加不覆盖 |
 | `reversibility` | MUST | `reversible|irreversible`；不可逆只允许经 S4 强授权的 destructive operation |
 | `rollback_reference` | reversible published MUST | 整包补偿所需引用；不可逆操作 MUST 显式为空并在预览中警告 |
-| `retry_of` | MAY | failed/stale-base 后新 ChangeSet 引用 |
+| `retry_of` | MAY | conflicted/failed 后新 ChangeSet 引用；重试不得复用原 `changeset_id` |
 
 review/approval event MUST 记录 `review_actor`、决定、时间、policy/revision 和确认界面摘要 digest。`actor` 不得在批准时被确认者覆盖，否则无法区分“谁提出”和“谁批准”。
 
@@ -126,7 +128,9 @@ Micro 只允许 `end` 旧 State 与 `add` 新 State 两个不可分 proposal。
 
 ### 6.5 Receipt
 
-Receipt MUST 包含：`changeset_id`、旧/新 revision、Canonical 原子结果、每个 View 的目标/实际 revision、`freshness_status`、失败/等待/跳过原因、审计时间和可重试性。L1 发布的 durable outcome 至少包含 ChangeSet terminal/published 状态、revision 绑定和 receipt summary；三者必须与 Canonical 原子结果在同一恢复边界内持久化。详细 L2/L3 项可随后追加，但不得改写 L1 结果。
+每个 Publish Attempt MUST 包含：`publish_attempt_id`、`changeset_id`、`idempotency_key`、`observed_data_revision`、`started_at`、`preflight_result=passed|conflict|failed`、`failure_stage`、稳定 `reason_code`、`retryable` 和 `receipt_ref`。同一 idempotency key + 同一 payload 的重放返回同一 attempt/receipt；相同 key + 不同 payload 返回 `idempotency_mismatch`。
+
+Receipt MUST 包含：`changeset_id`、`publish_attempt_id`、旧/新 revision、preflight 结果、Canonical 原子结果、每个 View 的目标/实际 revision、`freshness_status`、失败/等待/跳过原因、审计时间和可重试性。L1 发布的 durable outcome 至少包含 ChangeSet terminal/published 状态、revision 绑定和 receipt summary；三者必须与 Canonical 原子结果在同一恢复边界内持久化。详细 L2/L3 项可随后追加，但不得改写 preflight 或 L1 结果。
 
 ### 6.6 Review Preview
 
@@ -140,20 +144,29 @@ Receipt MUST 包含：`changeset_id`、旧/新 revision、Canonical 原子结果
 
 ### 7.1 生命周期
 
+```yaml
+changeset_status_values: [proposed, reviewing, approved, rejected, publishing, published, conflicted, failed, reverted]
+preflight_result_values: [passed, conflict, failed]
+```
+
 ```text
 proposed -> reviewing
 reviewing -> approved | rejected
-approved -> publishing
+approved -> publishing | conflicted | failed
 publishing -> published | failed
 published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 ```
 
-`rejected`、`failed`、`reverted` 为终态。重试必须创建新 `changeset_id` 并使用 `retry_of`；不得执行 `failed -> publishing`。
+`rejected`、`conflicted`、`failed`、`reverted` 为终态。`conflicted` 专用于 preflight 的 revision/target conflict；权限失效、引用非法或其他非冲突 preflight failure 进入 `failed`。重试必须创建新 `changeset_id` 并使用 `retry_of`；不得执行 `conflicted|failed -> publishing`。
 
 ### 7.2 前置条件
 
 - `reviewing -> approved` 必须满足 confirmation policy、权限与完整预览。
-- `approved -> publishing` 必须重新检查权限、`base_revision`、引用和 protected paths。
+- 发布命令被接受时 MUST 先持久化 Publish Attempt；attempt 与 idempotency key 的绑定不得等待到 L1 写入后才记录。
+- preflight 必须重新检查权限、`base_revision`、`before_digest`、引用和 protected paths。
+- preflight 全部通过时，attempt 的 `preflight_result=passed` 与 `approved -> publishing` 必须处于同一恢复边界。
+- stale `base_revision` 或 `before_digest` 不匹配时，attempt 记录 `conflict`，ChangeSet 执行 `approved -> conflicted`，产生无 `published_revision` 的终态 receipt。
+- 权限失效、dangling/type-incompatible reference 或 protected path 校验失败时，attempt 记录 `failed`，ChangeSet 执行 `approved -> failed`，产生无 `published_revision` 的终态 receipt。
 - `publishing -> published` 必须完成全部 L1 proposal；任何 L1 失败导致整包 failed 且不增加 revision。
 
 ### 7.3 撤销
@@ -162,9 +175,9 @@ published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 
 ## 8. 允许与禁止的状态转换
 
-允许：用户确认后发布；stale base 拒绝后创建新 ChangeSet；L1 成功后异步重建 L3；整包撤销产生补偿 revision。
+允许：用户确认后发布；preflight conflict/failure 形成可审计终态 receipt；终态后创建带 `retry_of` 的新 ChangeSet；L1 成功后异步重建 L3；整包撤销产生补偿 revision。
 
-禁止：跳过 reviewing；部分 L1 发布；原地修改 published ChangeSet；重用旧 `published_revision`；用 View 写回 Canonical；把旧 L2 标为 current；自动修改 protected paths。
+禁止：跳过 reviewing；preflight 未通过仍进入 publishing；从 conflicted/failed 原地重试；部分 L1 发布；原地修改 published ChangeSet；重用旧 `published_revision`；用 View 写回 Canonical；把旧 L2 标为 current；自动修改 protected paths。
 
 ## 9. 系统不变量
 
@@ -184,6 +197,7 @@ published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 | `CS-INV-012` | protected paths 在发布与撤销后保持语义不变 |
 | `CS-INV-013` | 补偿撤销基于执行时 current revision，不能覆盖介入变更；不可逆操作不能伪造 rollback |
 | `CS-INV-014` | Canonical L1 结果、revision、ChangeSet outcome 与 receipt summary 具有同一恢复边界 |
+| `CS-INV-015` | 每次发布命令先产生幂等绑定的 durable Publish Attempt；preflight conflict/failure 有合法终态、无 revision 且可由 receipt 唯一解释 |
 
 ## 10. 时间语义
 
@@ -202,14 +216,14 @@ published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 ## 12. 权限要求
 
 - 创建、审查、批准、发布、撤销和 destructive operation 分别授权。
-- 权限在 publishing 前重新检查；批准后权限失效则 failed，不部分发布。
+- 权限在 preflight 重新检查；批准后权限失效则从 approved 合法进入 failed，不进入 publishing、不部分发布。
 - Receipt 和 Diff 必须按调用者权限裁剪，不能泄露隐藏路径。
 - S4 定义具体策略；本 SPEC fail closed。
 
 ## 13. 冲突行为
 
-- stale base 返回 revision conflict，不自动 rebase。
-- `before_digest` 不匹配返回 target conflict。
+- stale base 返回 revision conflict，ChangeSet 终态为 `conflicted`，不自动 rebase。
+- `before_digest` 不匹配返回 target conflict，ChangeSet 终态为 `conflicted`。
 - BTE 语义冲突可并列发布为 disputed，但不得被一致性层静默选胜者。
 - 两个 ChangeSet 触达同一路径时，后发布者必须基于当前 revision 重新审查。
 
@@ -221,6 +235,8 @@ published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 | L1 成功、L2 失败 | 返回新 Canonical fallback 或无旧 payload 的 `updating/unavailable` |
 | L3 失败 | 旧 payload 可读但立即 `stale`，加入重建队列 |
 | stale base | 拒绝并返回 current revision，不自动覆盖 |
+| preflight target conflict | `approved -> conflicted`，receipt 记录 observed revision/digest、无 `published_revision`、不修改 Canonical/View |
+| preflight 权限/引用/protected 校验失败 | `approved -> failed`，receipt 记录具体非泄露 reason、无 `published_revision`、不进入 publishing |
 | L1 outcome/revision/receipt summary 任一不能持久化 | 整个 L1 不得提交；不得声称成功或产生不可审计 revision |
 | 详细 L2/L3 receipt 追加失败 | L1 结果不回滚；返回 receipt incomplete，View 使用实际 revision/freshness，并进入可恢复对账 |
 | 幂等键同、payload 不同 | 拒绝 `idempotency_mismatch` |
@@ -271,7 +287,7 @@ published_revision: rev_011
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: changeset_consistency_v0_2
+suite_id: changeset_consistency_v0_3
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -287,7 +303,7 @@ suite_passed: false
 | `CS-AT-005` | dangling ref/protected path 变化 | 整包拒绝 |
 | `CS-AT-006` | 查看 review preview | 改变/不变/影响/风险/撤销完整 |
 | `CS-AT-007` | 未授权语义使用 automatic | 拒绝或转人工确认 |
-| `CS-AT-008` | stale base 发布 | conflict，无部分写 |
+| `CS-AT-008` | stale base 发布 | preflight conflict，ChangeSet=`conflicted`，无部分写/新 revision |
 | `CS-AT-009` | 同幂等键同 payload 重放 | 返回原 receipt，不新增 revision |
 | `CS-AT-010` | 同幂等键不同 payload | `idempotency_mismatch` |
 | `CS-AT-011` | L1 发布成功 | changed object_revision=新 data_revision |
@@ -302,15 +318,17 @@ suite_passed: false
 | `CS-AT-020` | 比较 rev_010/rev_011 | Diff 区分状态演化与 protected 不变 |
 | `CS-AT-021` | 写后对账发现 L2 不一致 | 隔离并记录，不改 L1 |
 | `CS-AT-022` | 日常对账发现 stale/orphan | 进入失败队列和可重建状态 |
-| `CS-AT-023` | 权限批准后发布前失效 | failed，无部分发布 |
-| `CS-AT-024` | failed ChangeSet 重试 | 新 ID + retry_of，原记录终态 |
+| `CS-AT-023` | 权限批准后 preflight 失效 | 从 approved 进入 failed，attempt/receipt 完整且无部分发布 |
+| `CS-AT-024` | conflicted/failed ChangeSet 重试 | 新 ID + retry_of，原记录终态 |
 | `CS-AT-025` | Source Append | receipt 成功、Canonical revision 不变 |
 | `CS-AT-026` | 全部 fixture 隐私扫描 | 仅合成数据 |
 | `CS-AT-027` | 原发布后同一路径已有介入变更，再撤销原 ChangeSet | 补偿按 current revision 检测 conflict，不覆盖介入变更，原 ChangeSet 仍 published |
 | `CS-AT-028` | `reversibility=irreversible` 的已发布 destructive ChangeSet | 拒绝 revert，预览与 receipt 均不声称存在 rollback |
 | `CS-AT-029` | 注入 outcome/revision/receipt summary 任一持久化失败 | L1 全部不提交、revision 不增加；详细传播 receipt 失败则保留已提交 L1 并标 incomplete |
+| `CS-AT-030` | stale base 的同一 publish 命令和 payload 按同一 idempotency key 重放 | 返回同一 conflict attempt/receipt；原 ChangeSet 保持 conflicted，不新增 revision/attempt |
+| `CS-AT-031` | preflight 分别注入 before_digest mismatch、dangling ref、protected path change | mismatch 为 conflicted；引用/protected failure 为 failed；均有唯一 receipt、无 publishing/部分写，重试只能新 ChangeSet + retry_of |
 
-不变量覆盖：001→AT001/025；002→003/004；003→008；004→011/012；005→002；006→003/013；007→013/014；008→015/022；009→017-019；010→009/010；011→016/029；012→005/020；013→027/028；014→029。
+不变量覆盖：001→AT001/025；002→003/004；003→008/030；004→011/012；005→002；006→003/013；007→013/014；008→015/022；009→017-019；010→009/010/030；011→016/029-031；012→005/020/031；013→027/028；014→029；015→008/023/024/030/031。
 
 ## 20. 未决问题
 
@@ -334,4 +352,4 @@ suite_passed: false
 - FR-004/005/006/007/105/106/107 已进入追踪。
 - 未选择技术栈；测试仍未执行。
 
-当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。本次修订消除枚举别名，补齐可恢复发布、介入变更撤销和不可逆操作边界；测试尚未物化、执行或通过。
+当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。preflight attempt、conflicted/failed 终态、幂等 receipt 和 retry_of 已闭合；测试尚未物化、执行或通过。

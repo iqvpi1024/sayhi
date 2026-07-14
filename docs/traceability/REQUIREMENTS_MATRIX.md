@@ -20,7 +20,7 @@ PRD Requirement
 | `specified_not_implemented` | 语义合同已足以指导后续实现，但不属于 Micro | 可声称已规范，不可声称已实现或验证 |
 | `boundary_only_deferred` | 当前只锁定不变量、旁路禁止或对象边界，完整能力明确后置 | 不可声称该 FR 已完成规范闭环 |
 
-当前所有 Implementation Module 均为 `TBD`，所有 suite 均 `suite_materialized=false`，所有 Verification Result 均为 `not_executed`。`TBD` 是诚实缺口，不是豁免。依据：PRD §6.14、§22.1；S6 v0.2。
+当前所有 Implementation Module 均为 `TBD`，所有 suite 均 `suite_materialized=false`，所有 Verification Result 均为 `not_executed`，当前适用性为 `current`。`TBD` 是诚实缺口，不是豁免。依据：PRD §6.14、§22.1；S6 v0.3。
 
 Test Ref 简写采用固定语法：`PREFIX-AT-001/004/009` 表示同 prefix 的离散集合，`PREFIX-AT-001-009` 表示含首尾的连续范围，“`PREFIX-AT-001` 至 `PREFIX-AT-009`”与连续范围等价。静态校验必须展开简写并确认每个 ID 存在；不得使用无法解析的自然语言代替 Test Ref。
 
@@ -28,15 +28,15 @@ Test Ref 简写采用固定语法：`PREFIX-AT-001/004/009` 表示同 prefix 的
 
 | 代号 | SPEC | 版本 | 状态 |
 |---|---|---|---|
-| S1 | Semantic Object Model | v0.3 | `Approved` |
+| S1 | Semantic Object Model | v0.4 | `Approved` |
 | S2 | Bitemporal & Evidence | v0.3 | `Approved` |
-| S3 | ChangeSet & Consistency | v0.2 | `Approved` |
-| S4 | Privacy & Access Policy | v0.2 | `Approved` |
-| S5 | Shiling Policy | v0.2 | `Approved` |
-| S6 | Semantic Test Harness | v0.2 | `Approved` |
+| S3 | ChangeSet & Consistency | v0.3 | `Approved` |
+| S4 | Privacy & Access Policy | v0.3 | `Approved` |
+| S5 | Shiling Policy | v0.3 | `Approved` |
+| S6 | Semantic Test Harness | v0.3 | `Approved` |
 | S7 | Storage, Index & Portability | v0.2 | `Approved` |
 | S8 | MCP Contract | v0.2 | `Approved` |
-| S9 | Ingestion & Migration | v0.2 | `Approved` |
+| S9 | Ingestion & Migration | v0.3 | `Approved` |
 
 批准表示语义合同经审查，不表示 suite 已物化、执行或通过。
 
@@ -61,10 +61,10 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 
 | PRD Requirement | Coverage Level | SPEC Section | Acceptance Test | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| FR-001 | `micro_required_slice` | S9 §4-§7、§14 | `IMM-AT-001` 至 `IMM-AT-006`、`MM-001` | `TBD` | `not_executed` |
-| FR-002 | `micro_required_slice` | S1 §6.2；S2 §6.4-§6.7；S7 §6；S9 §6 | `SOM-AT-004/019/020`、`BTE-AT-011` 至 `BTE-AT-019`、`BTE-AT-037`、`SIP-AT-001/003/010`、`IMM-AT-001/007-010`、`MM-001/002` | `TBD` | `not_executed` |
+| FR-001 | `micro_required_slice` | S1 §6.2；S4 §6.6；S9 §4-§7、§14 | `SOM-AT-026/027`、`PAP-AT-029/030`、`IMM-AT-001` 至 `IMM-AT-006`、`IMM-AT-029/030`、`MM-001` | `TBD` | `not_executed` |
+| FR-002 | `micro_required_slice` | S1 §6.2；S2 §6.4-§6.7；S4 §6.6；S7 §6；S9 §6 | `SOM-AT-004/019/020/026/027`、`BTE-AT-011` 至 `BTE-AT-019`、`BTE-AT-037`、`PAP-AT-029/030`、`SIP-AT-001/003/010`、`IMM-AT-001`、`IMM-AT-007` 至 `IMM-AT-010`、`IMM-AT-029/030`、`MM-001/002` | `TBD` | `not_executed` |
 | FR-003 | `micro_required_slice` | S1 §5-§6；S5 §4-§7 | `SOM-AT-002/013/014/025`、`SHP-AT-001/002/004/005`、`MM-002/007` | `TBD` | `not_executed` |
-| FR-004 | `micro_required_slice` | S3 §5-§9、§14 | `CS-AT-001` 至 `CS-AT-005`、`CS-AT-008/025/029`、`MM-003/004/009` | `TBD` | `not_executed` |
+| FR-004 | `micro_required_slice` | S3 §5-§9、§14 | `CS-AT-001` 至 `CS-AT-005`、`CS-AT-008/025`、`CS-AT-029` 至 `CS-AT-031`、`MM-003/004/009` | `TBD` | `not_executed` |
 | FR-005 | `micro_required_slice` | S3 §6.4-§6.7；S5 §6 | `CS-AT-006/007`、`SHP-AT-004/005/032`、`MM-002/003` | `TBD` | `not_executed` |
 | FR-006 | `micro_required_slice` | S3 §6.4-§6.5、§8-§14 | `CS-AT-013` 至 `CS-AT-016`、`MM-005/010` | `TBD` | `not_executed` |
 | FR-007 | `micro_required_slice` | S3 §6.5、§7.3、§14-§15 | `CS-AT-016` 至 `CS-AT-019`、`CS-AT-027` 至 `CS-AT-029`、`MM-004/008` | `TBD` | `not_executed` |
@@ -96,6 +96,7 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 
 ## 5. 验证结果语义
 
+- Matrix 的 `Verification Result` 使用 `not_executed|passed|failed|errored|partial`；`skipped_with_reason` 只属于 individual test，`superseded` 只属于 artifact/result applicability。当前每行的 applicability 均为 `current`；未来旧 run superseded 时保留历史 artifact，并把当前合同切片恢复为新的 `not_executed/current`，不得把 `superseded` 填进执行结果。
 - 32/32 条 FR 已登记且有责任归属，不等于 32/32 已完成规范闭环。
 - `micro_required_slice` 共 9 条 FR；每条只代表进入 Micro 的部分，FR-105 只覆盖传播失败切片。
 - `specified_not_implemented` 共 8 条 FR。
@@ -105,4 +106,4 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 
 ## 6. 下一门禁
 
-进入 Micro 实现前只需物化 `MM-001..010` 及其直接依赖的 SOM/BTE/CS/SHP 合同切片。任何 `boundary_only_deferred` FR 都不得借“完善架构”提前进入实现。
+`MICRO_MVP_ACCEPTANCE.md` §6 的 `micro_required_contract_slices` 是唯一 required upstream Test Ref 映射：10 个 MM 场景与 39 个去重后的 SOM/BTE/CS/PAP/SHP/IMM tests。Matrix 的长期 FR Test Ref 不是 Micro runner required 清单。进入 Micro 实现前只物化该映射；任何未列测试和 `boundary_only_deferred` FR 都不得借“完善架构”被隐式提升。

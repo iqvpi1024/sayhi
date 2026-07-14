@@ -96,7 +96,7 @@ Semantic Object Model
 
 目标：定义规范对象、派生对象、标识、引用、共同元数据和对象间不可跨越的语义边界，证明 Source、事实、观点、推断、预测和虚构不会被混为一类。依据为 PRD §6-§8、§13、§16。
 
-输入依赖：PRD v0.4 基线；`BQ-001` 至 `BQ-005` 已裁决。已批准正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.3。
+输入依赖：PRD v0.4 基线；`BQ-001` 至 `BQ-005` 已裁决。已批准正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.4。
 
 范围内：
 
@@ -141,7 +141,7 @@ Semantic Object Model
 
 目标：定义所有规范语义变更的唯一受控路径、原子发布、冲突、影响传播、回执、撤销和一致性等级。依据为 PRD §6.9、§10-§12、§20 FR-004/005/006/007/010、§21、§25.2、§26。
 
-输入依赖：已确认 Semantic Object Model 与 Bitemporal & Evidence SPEC。已批准正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.2。
+输入依赖：已确认 Semantic Object Model 与 Bitemporal & Evidence SPEC。已批准正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.3。
 
 范围内：
 
@@ -163,7 +163,7 @@ Semantic Object Model
 
 目标：定义主体、舱室、敏感度、动作、目的、时间、字段裁剪、封存、删除和导出的授权策略。依据为 PRD §6.10、§6.13、§12.4、§17、§19、§21.4、§25、§26 Case D。
 
-输入依赖：前三份 SPEC，尤其是对象引用、ChangeSet 和 Derived View 传播语义。已批准正文：`docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md` v0.2。
+输入依赖：前三份 SPEC，尤其是对象引用、ChangeSet 和 Derived View 传播语义。已批准正文：`docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md` v0.3。
 
 范围内：
 
@@ -185,7 +185,7 @@ Semantic Object Model
 
 目标：定义识灵可以观察、提出、排序、自动处理和声明什么，以及绝对禁止什么。依据为 PRD §6、§11.4、§14-§15、§19.3、§20 FR-003/101/102/107、§22.4、§25。
 
-输入依赖：对象、证据、ChangeSet、一致性和权限合同已确认。已批准正文：`docs/specs/05_SHILING_POLICY_SPEC.md` v0.2。
+输入依赖：对象、证据、ChangeSet、一致性和权限合同已确认。已批准正文：`docs/specs/05_SHILING_POLICY_SPEC.md` v0.3。
 
 范围内：
 
@@ -207,7 +207,7 @@ Semantic Object Model
 
 目标：定义用初始规范状态、Source、ChangeSet、预期状态、影响视图和禁止变化证明语义合同的方法。依据为 PRD §6.14、§22、§23.3、§24、§26。
 
-输入依赖：前五份语义与政策 SPEC 已确认，作为测试 oracle。已批准正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.2。
+输入依赖：前五份语义与政策 SPEC 已确认，作为测试 oracle。已批准正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.3。
 
 范围内：
 
@@ -272,7 +272,7 @@ Semantic Object Model
 
 目标：定义外部材料进入 Source 层、解析产物进入候选层，以及旧版本规范包迁移的合同。依据为 PRD §7.2-§7.3、§19.4、§20 FR-001/002/108/302/303、§22.4、§25.2。
 
-输入依赖：前八份 SPEC 全部确认。已批准正文：`docs/specs/09_INGESTION_MIGRATION_SPEC.md` v0.2。
+输入依赖：前八份 SPEC 全部确认。已批准正文：`docs/specs/09_INGESTION_MIGRATION_SPEC.md` v0.3。
 
 范围内：
 
@@ -292,6 +292,6 @@ Semantic Object Model
 
 ## 7. 阶段门禁
 
-当前状态：Audited Specification Baseline。S1/S2 为 v0.3，S3-S9 为 v0.2，均保持 `Approved`；实现代码仍为零，所有合同 suite 均未物化、未执行、未通过。
+当前状态：Micro Gate Corrective Revision。S1 v0.4；S2 v0.3；S3-S6 v0.3；S7-S8 v0.2；S9 v0.3，均保持 `Approved`。实现代码仍为零，所有合同 suite 均未物化、未执行、未通过。产品基线已由 `DEC-MICRO-GATE-001` 绑定；业务实现门禁在关闭性复审完成前保持 closed。
 
-下一步唯一建议动作：在开始 Micro-MVP 实现前，基于九份已批准 SPEC 建立最小实现计划与必要 ADR，只选择满足合成链路的技术，不扩展业务范围。
+下一步唯一建议动作：完成本轮 LF/CRLF 静态复验和 P1 关闭性复审；在复审结论写入仓库前不得开始 Micro-MVP 业务实现或技术选型。

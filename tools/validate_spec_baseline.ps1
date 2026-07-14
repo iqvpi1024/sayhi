@@ -13,28 +13,116 @@ function Add-Error([string]$message) {
     $script:errors.Add($message)
 }
 
+function Normalize-Newlines([string]$content) {
+    return $content.Replace("`r`n", "`n").Replace("`r", "`n")
+}
+
 function Read-RepoFile([string]$relativePath) {
-    return Get-Content -LiteralPath (Join-Path $root $relativePath) -Raw -Encoding UTF8
+    $content = Get-Content -LiteralPath (Join-Path $root $relativePath) -Raw -Encoding UTF8
+    return Normalize-Newlines $content
+}
+
+function Get-Sha256Hex([byte[]]$bytes) {
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        return ([BitConverter]::ToString($sha256.ComputeHash($bytes))).Replace('-', '').ToUpperInvariant()
+    } finally {
+        $sha256.Dispose()
+    }
+}
+
+function Get-CanonicalTextHash([string]$relativePath) {
+    $encoding = [System.Text.UTF8Encoding]::new($false)
+    return Get-Sha256Hex $encoding.GetBytes((Read-RepoFile $relativePath))
+}
+
+function Expand-LocalTestRefs([string]$text, [string]$prefix) {
+    $refs = [System.Collections.Generic.HashSet[string]]::new()
+
+    foreach ($match in [regex]::Matches($text, "\b$prefix-AT-[0-9]{3}\b")) {
+        $null = $refs.Add($match.Value)
+    }
+
+    foreach ($match in [regex]::Matches($text, '\bAT(?<list>[0-9]{3}(?:-[0-9]{3})?(?:/[0-9]{3}(?:-[0-9]{3})?)*)\b')) {
+        foreach ($segment in $match.Groups['list'].Value.Split('/')) {
+            if ($segment -match '^([0-9]{3})-([0-9]{3})$') {
+                $start = [int]$Matches[1]
+                $end = [int]$Matches[2]
+                if ($end -lt $start) {
+                    Add-Error "Descending invariant coverage range for ${prefix}: AT$segment"
+                    continue
+                }
+                foreach ($number in $start..$end) {
+                    $null = $refs.Add(('{0}-AT-{1:D3}' -f $prefix, $number))
+                }
+            } else {
+                $null = $refs.Add("$prefix-AT-$segment")
+            }
+        }
+    }
+
+    return $refs
+}
+
+function Assert-ClosedEnum([string]$relativePath, [string]$fieldName, [string[]]$expectedValues) {
+    $content = Read-RepoFile $relativePath
+    $pattern = '(?m)^\s*' + [regex]::Escape($fieldName) + ':\s*\[([^\]]*)\]\s*$'
+    $matches = [regex]::Matches($content, $pattern)
+    if ($matches.Count -ne 1) {
+        Add-Error "Closed enum $fieldName must have exactly one machine-readable declaration in $relativePath"
+        return
+    }
+
+    $actualValues = @($matches[0].Groups[1].Value.Split(',') | ForEach-Object { $_.Trim() })
+    $actualUnique = @($actualValues | Sort-Object -Unique)
+    $expectedUnique = @($expectedValues | Sort-Object -Unique)
+    if ($actualValues.Count -ne $actualUnique.Count -or (Compare-Object -ReferenceObject $expectedUnique -DifferenceObject $actualUnique)) {
+        Add-Error "Closed enum $fieldName differs from its expected positive set in $relativePath"
+    }
+}
+
+function Validate-MicroTextBlock([string]$label, [string]$block) {
+    $inlineMatch = [regex]::Match($block, '(?m)^\s+inline_content: "([^"]*)"$')
+    if (-not $inlineMatch.Success) {
+        Add-Error "$label inline_content is missing or not parseable"
+        return
+    }
+
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($inlineMatch.Groups[1].Value)
+    $hash = (Get-Sha256Hex $bytes).ToLowerInvariant()
+    if (-not $block.Contains("content_hash: $hash")) { Add-Error "$label content_hash does not match inline_content" }
+    if (-not $block.Contains("byte_length: $($bytes.Length)")) { Add-Error "$label byte_length does not match inline_content" }
+    if (-not $block.Contains("end_byte_exclusive: $($bytes.Length)")) { Add-Error "$label locator does not cover the full UTF-8 content" }
+    Add-Check "$label UTF-8 locator/hash agree on $($bytes.Length) bytes"
 }
 
 $expectedPrdHash = 'F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC'
-$actualPrdHash = (Get-FileHash -LiteralPath (Join-Path $root 'PRDv04.md') -Algorithm SHA256).Hash
+$actualPrdHash = Get-CanonicalTextHash 'PRDv04.md'
 if ($actualPrdHash -ne $expectedPrdHash) {
-    Add-Error "PRD hash mismatch: $actualPrdHash"
+    $rawHash = (Get-FileHash -LiteralPath (Join-Path $root 'PRDv04.md') -Algorithm SHA256).Hash
+    Add-Error "PRD canonical LF hash mismatch: canonical=$actualPrdHash raw=$rawHash"
 } else {
-    Add-Check 'PRD hash matches the immutable v0.4 baseline'
+    Add-Check 'PRD canonical LF hash matches the immutable v0.4 baseline'
 }
 
+$attributes = Read-RepoFile '.gitattributes'
+foreach ($requiredAttribute in @('.gitattributes text eol=lf', '*.md text eol=lf', '*.ps1 text eol=lf', '*.yaml text eol=lf', '*.yml text eol=lf')) {
+    if (-not ($attributes -split "`n" | Where-Object { $_ -eq $requiredAttribute })) {
+        Add-Error ".gitattributes missing: $requiredAttribute"
+    }
+}
+Add-Check 'Repository text EOL policy is explicit'
+
 $specs = [ordered]@{
-    SOM = @{ Path = 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'; Version = '0.3'; Tests = 25; Invariants = 15 }
+    SOM = @{ Path = 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'; Version = '0.4'; Tests = 27; Invariants = 16 }
     BTE = @{ Path = 'docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md'; Version = '0.3'; Tests = 37; Invariants = 15 }
-    CS  = @{ Path = 'docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md'; Version = '0.2'; Tests = 29; Invariants = 14 }
-    PAP = @{ Path = 'docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md'; Version = '0.2'; Tests = 28; Invariants = 14 }
-    SHP = @{ Path = 'docs/specs/05_SHILING_POLICY_SPEC.md'; Version = '0.2'; Tests = 33; Invariants = 13 }
-    HTH = @{ Path = 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md'; Version = '0.2'; Tests = 23; Invariants = 11 }
+    CS  = @{ Path = 'docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md'; Version = '0.3'; Tests = 31; Invariants = 15 }
+    PAP = @{ Path = 'docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md'; Version = '0.3'; Tests = 30; Invariants = 15 }
+    SHP = @{ Path = 'docs/specs/05_SHILING_POLICY_SPEC.md'; Version = '0.3'; Tests = 33; Invariants = 13 }
+    HTH = @{ Path = 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md'; Version = '0.3'; Tests = 27; Invariants = 12 }
     SIP = @{ Path = 'docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md'; Version = '0.2'; Tests = 27; Invariants = 14 }
     MCP = @{ Path = 'docs/specs/08_MCP_CONTRACT_SPEC.md'; Version = '0.2'; Tests = 27; Invariants = 12 }
-    IMM = @{ Path = 'docs/specs/09_INGESTION_MIGRATION_SPEC.md'; Version = '0.2'; Tests = 28; Invariants = 15 }
+    IMM = @{ Path = 'docs/specs/09_INGESTION_MIGRATION_SPEC.md'; Version = '0.3'; Tests = 30; Invariants = 16 }
 }
 
 $allTestIds = [System.Collections.Generic.HashSet[string]]::new()
@@ -49,17 +137,16 @@ foreach ($prefix in $specs.Keys) {
     }
 
     $content = Read-RepoFile $metadata.Path
-    $sections = [regex]::Matches($content, '(?m)^## ([0-9]+)\.') | ForEach-Object { [int]$_.Groups[1].Value }
-    $sectionDiff = Compare-Object -ReferenceObject (0..21) -DifferenceObject $sections
-    if ($sectionDiff) {
+    $sections = @([regex]::Matches($content, '(?m)^## ([0-9]+)\.') | ForEach-Object { [int]$_.Groups[1].Value })
+    if ($sections.Count -ne 22 -or (Compare-Object -ReferenceObject (0..21) -DifferenceObject $sections)) {
         Add-Error "$prefix sections are not exactly 0..21"
     }
 
-    $expectedVersionToken = '| `' + $metadata.Version + '` |'
-    if (-not $content.Contains($expectedVersionToken)) {
+    $versionPattern = '(?m)^\| [^|\r\n]+ \| `' + [regex]::Escape([string]$metadata.Version) + '` \|$'
+    if (-not [regex]::IsMatch($content, $versionPattern)) {
         Add-Error "$prefix version is not $($metadata.Version)"
     }
-    if (-not $content.Contains('| `Approved` |')) {
+    if (-not [regex]::IsMatch($content, '(?m)^\| [^|\r\n]+ \| `Approved` \|$')) {
         Add-Error "$prefix is not Approved"
     }
     foreach ($flag in @('suite_defined=true', 'suite_materialized=false', 'suite_executed=false', 'suite_passed=false')) {
@@ -74,8 +161,8 @@ foreach ($prefix in $specs.Keys) {
     }
 
     $testPattern = "\b$prefix-AT-[0-9]{3}\b"
-    $testIds = [regex]::Matches($content, $testPattern) | ForEach-Object { $_.Value } | Sort-Object -Unique
-    $expectedTestIds = 1..$metadata.Tests | ForEach-Object { '{0}-AT-{1:D3}' -f $prefix, $_ }
+    $testIds = @([regex]::Matches($content, $testPattern) | ForEach-Object { $_.Value } | Sort-Object -Unique)
+    $expectedTestIds = @(1..$metadata.Tests | ForEach-Object { '{0}-AT-{1:D3}' -f $prefix, $_ })
     if (Compare-Object -ReferenceObject $expectedTestIds -DifferenceObject $testIds) {
         Add-Error "$prefix test IDs are not contiguous 001..$('{0:D3}' -f $metadata.Tests)"
     }
@@ -84,36 +171,78 @@ foreach ($prefix in $specs.Keys) {
     }
 
     $invariantPattern = "\b$prefix-INV-[0-9]{3}\b"
-    $invariantIds = [regex]::Matches($content, $invariantPattern) | ForEach-Object { $_.Value } | Sort-Object -Unique
-    $expectedInvariantIds = 1..$metadata.Invariants | ForEach-Object { '{0}-INV-{1:D3}' -f $prefix, $_ }
+    $invariantIds = @([regex]::Matches($content, $invariantPattern) | ForEach-Object { $_.Value } | Sort-Object -Unique)
+    $expectedInvariantIds = @(1..$metadata.Invariants | ForEach-Object { '{0}-INV-{1:D3}' -f $prefix, $_ })
     if (Compare-Object -ReferenceObject $expectedInvariantIds -DifferenceObject $invariantIds) {
         Add-Error "$prefix invariant IDs are not contiguous 001..$('{0:D3}' -f $metadata.Invariants)"
     }
     foreach ($id in $invariantIds) {
         if (-not $allInvariantIds.Add($id)) { Add-Error "Duplicate cross-suite invariant ID: $id" }
-        $occurrences = [regex]::Matches($content, "\b$([regex]::Escape($id))\b").Count
-        $suffix = $id.Substring($id.Length - 3)
-        $hasCompactCoverage = [regex]::IsMatch($content, "(?:^|[^A-Z0-9-])$suffix(?:[^0-9]|$)")
-        if ($occurrences -lt 2 -and -not $hasCompactCoverage) {
-            Add-Error "$id has no visible coverage reference"
+    }
+
+    $section19Match = [regex]::Match($content, '(?ms)^## 19\..*?(?=^## 20\.)')
+    if (-not $section19Match.Success) {
+        Add-Error "$prefix has no parseable section 19 coverage region"
+        continue
+    }
+    $coverageRegion = $section19Match.Value
+    $knownLocalTests = [System.Collections.Generic.HashSet[string]]::new()
+    foreach ($testId in $testIds) { $null = $knownLocalTests.Add($testId) }
+
+    $coverageMap = @{}
+    $tableCoveragePattern = '(?m)^\|\s*`?(?<id>' + $prefix + '-INV-[0-9]{3})`?\s*\|\s*(?<refs>.*?)\s*\|$'
+    foreach ($mapping in [regex]::Matches($coverageRegion, $tableCoveragePattern)) {
+        $coverageMap[$mapping.Groups['id'].Value] = $mapping.Groups['refs'].Value
+    }
+    $compactCoverageLine = [regex]::Match($coverageRegion, '(?m)^(?<body>[^\r\n]*001\s*\u2192\s*AT[^\r\n]*)$')
+    if ($compactCoverageLine.Success) {
+        foreach ($segment in $compactCoverageLine.Groups['body'].Value.Split([char]0xFF1B)) {
+            $trimmedSegment = $segment.Trim().TrimEnd([char]0x3002, [char]0x002E)
+            $segmentMatch = [regex]::Match($trimmedSegment, '^[^0-9]*(?<suffix>[0-9]{3})\s*\u2192\s*(?<refs>.+)$')
+            if ($segmentMatch.Success) {
+                $coverageMap[('{0}-INV-{1}' -f $prefix, $segmentMatch.Groups['suffix'].Value)] = $segmentMatch.Groups['refs'].Value
+            }
+        }
+    }
+
+    foreach ($id in $invariantIds) {
+        if (-not $coverageMap.ContainsKey($id) -or [string]::IsNullOrWhiteSpace([string]$coverageMap[$id])) {
+            Add-Error "$id has no structured coverage mapping in section 19"
+            continue
+        }
+
+        $mappingText = [string]$coverageMap[$id]
+        if ($mappingText -notmatch '(?:^|[^A-Z])(?:[A-Z]+-)?AT') {
+            $mappingText = 'AT' + $mappingText
+        }
+
+        $mappedTests = @(Expand-LocalTestRefs $mappingText $prefix)
+        if ($mappedTests.Count -eq 0) {
+            Add-Error "$id coverage mapping contains no acceptance-test reference"
+            continue
+        }
+        foreach ($mappedTest in $mappedTests) {
+            if (-not $knownLocalTests.Contains($mappedTest)) {
+                Add-Error "$id maps to unknown local test: $mappedTest"
+            }
         }
     }
 }
 
-if ($allTestIds.Count -eq 257) {
-    Add-Check '257 SPEC acceptance-test IDs are contiguous and unique'
+if ($allTestIds.Count -eq 269) {
+    Add-Check '269 SPEC acceptance-test IDs are contiguous and unique'
 } else {
-    Add-Error "Expected 257 unique SPEC test IDs, found $($allTestIds.Count)"
+    Add-Error "Expected 269 unique SPEC test IDs, found $($allTestIds.Count)"
 }
-if ($allInvariantIds.Count -eq 123) {
-    Add-Check '123 invariant IDs are contiguous and have coverage references'
+if ($allInvariantIds.Count -eq 128) {
+    Add-Check '128 invariant IDs are contiguous and structurally mapped to existing tests'
 } else {
-    Add-Error "Expected 123 unique invariant IDs, found $($allInvariantIds.Count)"
+    Add-Error "Expected 128 unique invariant IDs, found $($allInvariantIds.Count)"
 }
 
 $micro = Read-RepoFile 'docs/testing/MICRO_MVP_ACCEPTANCE.md'
-$microIds = [regex]::Matches($micro, '\bMM-[0-9]{3}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique
-$expectedMicroIds = 1..10 | ForEach-Object { 'MM-{0:D3}' -f $_ }
+$microIds = @([regex]::Matches($micro, '\bMM-[0-9]{3}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+$expectedMicroIds = @(1..10 | ForEach-Object { 'MM-{0:D3}' -f $_ })
 if (Compare-Object -ReferenceObject $expectedMicroIds -DifferenceObject $microIds) {
     Add-Error 'Micro test IDs are not exactly MM-001..MM-010'
 } else {
@@ -123,31 +252,54 @@ foreach ($flag in @('| `suite_materialized` | `false` |', '| `suite_executed` | 
     if (-not $micro.Contains($flag)) { Add-Error "Micro status missing: $flag" }
 }
 
-$inlineContentMatch = [regex]::Match($micro, '(?m)^\s+inline_content: "([^"]*)"$')
-if (-not $inlineContentMatch.Success) {
-    Add-Error 'Micro inline_content is missing or not uniquely parseable'
+$primarySourceMatch = [regex]::Match($micro, '(?ms)^intake_request:.*?(?=^historical_source_fixture:)')
+$historicalSourceMatch = [regex]::Match($micro, '(?ms)^historical_source_fixture:.*?(?=^```\s*$)')
+if (-not $primarySourceMatch.Success) {
+    Add-Error 'Micro primary Source block is missing'
 } else {
-    $microBytes = [System.Text.Encoding]::UTF8.GetBytes($inlineContentMatch.Groups[1].Value)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create()
-    try {
-        $microHash = ([BitConverter]::ToString($sha256.ComputeHash($microBytes))).Replace('-', '').ToLowerInvariant()
-    } finally {
-        $sha256.Dispose()
-    }
-    if (-not $micro.Contains("content_hash: $microHash")) { Add-Error 'Micro content_hash does not match inline_content' }
-    if (-not $micro.Contains("byte_length: $($microBytes.Length)")) { Add-Error 'Micro byte_length does not match inline_content' }
-    if (-not $micro.Contains("end_byte_exclusive: $($microBytes.Length)")) { Add-Error 'Micro locator does not cover the full UTF-8 content' }
-    Add-Check "Micro UTF-8 locator/hash agree on $($microBytes.Length) bytes"
+    Validate-MicroTextBlock 'Micro primary Source' $primarySourceMatch.Value
+}
+if (-not $historicalSourceMatch.Success) {
+    Add-Error 'Micro historical Source block is missing'
+} else {
+    Validate-MicroTextBlock 'Micro historical Source' $historicalSourceMatch.Value
 }
 
 $knownTestIds = [System.Collections.Generic.HashSet[string]]::new()
 foreach ($id in $allTestIds) { $null = $knownTestIds.Add($id) }
 foreach ($id in $microIds) { $null = $knownTestIds.Add($id) }
 
+$requiredBlock = [regex]::Match($micro, '(?ms)^micro_required_contract_slices:\s*\n(?<rows>.*?)(?=^```\s*$)')
+if (-not $requiredBlock.Success) {
+    Add-Error 'Micro required contract-slice mapping is missing or not parseable'
+} else {
+    $requiredRows = [regex]::Matches($requiredBlock.Groups['rows'].Value, '(?m)^\s{2}(MM-[0-9]{3}):\s*\[([^\]]+)\]\s*$')
+    $requiredKeys = @($requiredRows | ForEach-Object { $_.Groups[1].Value })
+    if ($requiredRows.Count -ne 10 -or (Compare-Object -ReferenceObject $expectedMicroIds -DifferenceObject ($requiredKeys | Sort-Object -Unique))) {
+        Add-Error 'Micro required contract-slice mapping must contain MM-001..MM-010 exactly once'
+    }
+
+    $requiredUpstreamRefs = [System.Collections.Generic.HashSet[string]]::new()
+    foreach ($row in $requiredRows) {
+        $refs = @($row.Groups[2].Value.Split(',') | ForEach-Object { $_.Trim() })
+        if ($refs.Count -eq 0) { Add-Error "$($row.Groups[1].Value) has no required upstream test" }
+        foreach ($ref in $refs) {
+            if ($ref -notmatch '^(SOM|BTE|CS|PAP|SHP|IMM)-AT-[0-9]{3}$') {
+                Add-Error "Invalid or deferred Micro upstream test reference: $ref"
+                continue
+            }
+            if (-not $knownTestIds.Contains($ref)) { Add-Error "Unknown Micro upstream test reference: $ref" }
+            $null = $requiredUpstreamRefs.Add($ref)
+        }
+    }
+    Add-Check "Micro required mapping covers 10 scenarios and $($requiredUpstreamRefs.Count) unique upstream tests"
+}
+
 $prd = Read-RepoFile 'PRDv04.md'
 $matrix = Read-RepoFile 'docs/traceability/REQUIREMENTS_MATRIX.md'
-$prdFrs = [regex]::Matches($prd, '\bFR-[0-9]{3}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique
-$matrixRows = [regex]::Matches($matrix, '(?m)^\| (FR-[0-9]{3}) \|') | ForEach-Object { $_.Groups[1].Value }
+$prdFrs = @([regex]::Matches($prd, '\bFR-[0-9]{3}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+$matrixRowMatches = [regex]::Matches($matrix, '(?m)^\| (FR-[0-9]{3}) \|')
+$matrixRows = @($matrixRowMatches | ForEach-Object { $_.Groups[1].Value })
 if ($prdFrs.Count -ne 32) { Add-Error "PRD unique FR count is $($prdFrs.Count), expected 32" }
 if ($matrixRows.Count -ne 32 -or (Compare-Object -ReferenceObject $prdFrs -DifferenceObject ($matrixRows | Sort-Object -Unique))) {
     Add-Error 'Authoritative matrix rows do not match the 32 PRD FR IDs'
@@ -197,10 +349,36 @@ foreach ($match in [regex]::Matches($matrix, '\b((?:SOM|BTE|CS|PAP|SHP|HTH|SIP|M
         foreach ($number in $start..$end) { $null = $matrixTestRefs.Add($match.Groups[1].Value + ('{0:D3}' -f $number)) }
     }
 }
+foreach ($match in [regex]::Matches($matrix, '`?((?:SOM|BTE|CS|PAP|SHP|HTH|SIP|MCP|IMM)-AT-)([0-9]{3})`?\s*\u81F3\s*`?(?:(?:SOM|BTE|CS|PAP|SHP|HTH|SIP|MCP|IMM)-AT-)?([0-9]{3})`?')) {
+    $start = [int]$match.Groups[2].Value
+    $end = [int]$match.Groups[3].Value
+    if ($end -lt $start) {
+        Add-Error "Descending matrix Chinese test range: $($match.Value)"
+    } else {
+        foreach ($number in $start..$end) { $null = $matrixTestRefs.Add($match.Groups[1].Value + ('{0:D3}' -f $number)) }
+    }
+}
 foreach ($id in $matrixTestRefs) {
     if (-not $knownTestIds.Contains($id)) { Add-Error "Unknown matrix test reference: $id" }
 }
 Add-Check "$($matrixTestRefs.Count) unique matrix test references resolve"
+
+$enumErrorsBefore = $errors.Count
+Assert-ClosedEnum 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md' 'changeset_status_values' @('proposed', 'reviewing', 'approved', 'rejected', 'publishing', 'published', 'conflicted', 'failed', 'reverted')
+Assert-ClosedEnum 'docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md' 'changeset_status_values' @('proposed', 'reviewing', 'approved', 'rejected', 'publishing', 'published', 'conflicted', 'failed', 'reverted')
+Assert-ClosedEnum 'docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md' 'preflight_result_values' @('passed', 'conflict', 'failed')
+Assert-ClosedEnum 'docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md' 'third_party_present_values' @('true', 'false', 'unknown')
+Assert-ClosedEnum 'docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md' 'source_policy_resolution_status_values' @('declared', 'provisional', 'confirmed')
+Assert-ClosedEnum 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md' 'individual_test_result_values' @('passed', 'failed', 'errored', 'skipped_with_reason')
+Assert-ClosedEnum 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md' 'run_result_values' @('passed', 'failed', 'errored', 'partial')
+Assert-ClosedEnum 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md' 'suite_artifact_state_values' @('absent', 'materialized', 'superseded')
+Assert-ClosedEnum 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md' 'applicability_status_values' @('current', 'superseded', 'not_applicable')
+Assert-ClosedEnum 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md' 'verification_result_values' @('not_executed', 'passed', 'failed', 'errored', 'partial')
+Assert-ClosedEnum 'docs/specs/09_INGESTION_MIGRATION_SPEC.md' 'intake_status_values' @('received', 'validating', 'stored', 'duplicate', 'rejected')
+Assert-ClosedEnum 'docs/specs/09_INGESTION_MIGRATION_SPEC.md' 'parse_attempt_status_values' @('queued', 'parsing', 'parsed', 'candidate_ready', 'no_candidate', 'parse_failed', 'unsupported')
+if ($errors.Count -eq $enumErrorsBefore) {
+    Add-Check '12 closed enums match positive machine-readable value sets'
+}
 
 $knownAliasChecks = [ordered]@{
     'docs must not use source_type' = '\bsource_type\b'
@@ -230,19 +408,47 @@ $authoritativeDocs = foreach ($relativePath in $authoritativePaths) {
         Get-Item -LiteralPath $fullPath
     }
 }
+$aliasErrorsBefore = $errors.Count
 foreach ($checkName in $knownAliasChecks.Keys) {
     $pattern = $knownAliasChecks[$checkName]
     $matches = $authoritativeDocs | Select-String -Pattern $pattern -CaseSensitive
     if ($matches) { Add-Error $checkName }
 }
-if (-not ($knownAliasChecks.Keys | Where-Object { $errors.Contains($_) })) {
+if ($errors.Count -eq $aliasErrorsBefore) {
     Add-Check 'Known cross-SPEC aliases and conflated state transitions are absent'
+}
+
+$privacyFiles = @(
+    Get-Item -LiteralPath (Join-Path $root 'PRDv04.md')
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/specs') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/testing') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/traceability') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path $root 'docs/decisions') -Recurse -File -Filter '*.md'
+    Get-Item -LiteralPath (Join-Path $root 'docs/PROJECT_STATE.md')
+)
+$privacyPatterns = [ordered]@{
+    'mainland mobile-like number' = '(?<![0-9])1[3-9][0-9]{9}(?![0-9])'
+    'email-like address' = '(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b'
+    'local user-directory path' = '(?i)(?:[A-Z]:\\Users\\[^\\\s]+|/home/[^/\s]+|/Users/[^/\s]+)'
+}
+$privacyErrorsBefore = $errors.Count
+foreach ($file in $privacyFiles | Sort-Object -Property FullName -Unique) {
+    $content = Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8
+    foreach ($patternName in $privacyPatterns.Keys) {
+        if ([regex]::IsMatch($content, $privacyPatterns[$patternName])) {
+            $relative = $file.FullName.Substring($root.Length).TrimStart('\', '/')
+            Add-Error "Privacy heuristic '$patternName' matched in $relative"
+        }
+    }
+}
+if ($errors.Count -eq $privacyErrorsBefore) {
+    Add-Check "Privacy heuristic scanned $($privacyFiles.Count) authoritative contract/test files"
 }
 
 $markdownFiles = Get-ChildItem -LiteralPath $root -Recurse -File -Filter '*.md' |
     Where-Object { $_.FullName -notmatch '[\\/](\.git|node_modules)[\\/]' }
 foreach ($file in $markdownFiles) {
-    $content = Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8
+    $content = Normalize-Newlines (Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8)
     $fenceCount = [regex]::Matches($content, '(?m)^```').Count
     if (($fenceCount % 2) -ne 0) { Add-Error "Unpaired Markdown fence: $($file.FullName)" }
 }

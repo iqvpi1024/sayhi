@@ -5,14 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-PAP-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md` v0.4 |
 | 上游 | S1-S3 `Approved` |
 | 产品裁决 | `IQ-011`、`IQ-012`、`IQ-013`、`IQ-017`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 独立审计 | 2026-07-14；拆分 seal/retention 状态并补齐删除后的证据失效 |
+| 纠偏复审 | 2026-07-14；闭合 Source policy 初始化、unknown subject 与保守默认 |
 
 本文定义授权、封存、删除和导出语义，不选择身份供应商、加密算法、密钥库或云服务。
 
@@ -78,10 +78,12 @@
 | `recorder_ref` | MUST | 内容提供者/记录者 |
 | `sensitivity` | MUST | 四级枚举 |
 | `compartments` | MUST | 一项或多项策略域 |
-| `third_party_present` | MUST | 是否含第三方语义 |
+| `third_party_present` | MUST | `true|false|unknown`；未完成主体声明/解析时不得猜 false |
 | `retention_policy_ref` | MUST | 保留/删除策略版本 |
 | `retention_state` | MUST | 保留/删除生命周期；见 §7 |
 | `pre_seal_sensitivity` | 条件 MUST | `sensitivity=sealed` 时保存解封后恢复的 `normal|private|restricted`；不得保存正文 |
+| `policy_profile_ref` | Source MUST | append 时使用的版本化初始化 profile |
+| `policy_resolution_status` | Source MUST | `declared|provisional|confirmed`；不代表事实验证状态 |
 
 `retrieval_activation` 默认是按任务计算的 Derived 值，不是本表的 Canonical Policy Subject 字段。若未来持久化用户设定的 Canonical activation policy，则修改必须经 ChangeSet；无论哪种形式，降权都不得改变真值、sensitivity 或 retention state。
 
@@ -118,7 +120,28 @@ Grant MUST 绑定 caller、purpose、actions、resource/field scope、开始/到
 
 必须逐层报告 `live_source`、`canonical_payload`、`ledger_payload`、`derived_index`、`cache`、`backup`、`export_copy`、`minimal_audit_proof` 的 `deleted|pending_expiry|not_present|not_applicable|out_of_control|failed`，并带 policy、时间和失败原因。`minimal_audit_proof` 只能为 `retained_content_free|not_present|failed`，不得把 proof 自身写成“正文已删除”的替代副本。
 
+### 6.6 Source Policy Initialization Profile
+
+Source Append 使用的版本化 profile MUST 至少声明：`policy_profile_ref`、`sensitivity_floor`、`default_compartments`、`retention_policy_ref`、direct-owner recorder fallback 和 unresolved subject 的 fail-closed 行为。profile 来自已授权 intake context，不得来自 Source 正文、parser、模型或 `sensitivity_hint`。
+
+初始化规则是封闭的：
+
+1. `owner_ref` 来自已授权 intake context。
+2. `recorder_ref` 必须显式提供；仅 direct owner intake 可按 profile 回落为 `owner_ref`。
+3. 完整、已校验的 `declared_subject_refs` 和 `declared_third_party_present` 写为 `policy_resolution_status=declared`。
+4. 主体声明缺失时写 `subject_refs=[]`、`third_party_present=unknown`、`policy_resolution_status=provisional`；不得解析正文同步猜测。
+5. compartment 声明缺失时使用 profile 的 `default_compartments`；Micro profile 固定为 `[personal]`。
+6. effective sensitivity 取 profile floor 与合法 hint 中更严格者；hint 不能降低保护。
+7. 初次成功 append 的 `retention_state=active`，`retention_policy_ref` 来自 profile。
+
+provisional Source 仅允许已授权 owner/intake purpose 继续保存、查看或产生候选；任何外部/跨 purpose 读取 fail closed。后续主体、compartment 或 sensitivity 修订必须走受控操作，且不得因模型推断自动扩大访问或降低保护。该合同不要求 Micro 建设通用权限 runtime。
+
 ## 7. 状态机
+
+```yaml
+third_party_present_values: [true, false, unknown]
+source_policy_resolution_status_values: [declared, provisional, confirmed]
+```
 
 Retention 与封存敏感度使用两个独立状态机：
 
@@ -134,15 +157,19 @@ retention_state:
 sensitivity seal transition:
   normal | private | restricted -> sealed
   sealed -> pre_seal_sensitivity  (仅 owner 主动 unseal)
+
+source policy resolution:
+  provisional -> declared | confirmed  (仅受控 metadata revision)
+  declared -> confirmed                (仅 owner 明确确认)
 ```
 
-`hard_deleted` 为正文不可恢复终态，此时正文 sensitivity 不再可恢复。在 hard delete 完成前，原有 sealed 限制继续生效。降权只改变 `retrieval_activation`，不属于上述状态机，也不改变真值。
+`hard_deleted` 为正文不可恢复终态，此时正文 sensitivity 不再可恢复。在 hard delete 完成前，原有 sealed 限制继续生效。降权只改变 `retrieval_activation`，不属于上述状态机，也不改变真值。Source policy resolution 不回写 append receipt；新歧义需要纠正时创建新的 provisional metadata revision 并维持或提高保护，不能用原地倒退扩大访问。
 
 ## 8. 允许与禁止的状态转换
 
-允许：owner 主动解封且不改变 retention；软删除窗口内恢复到删除前的 active/archived 状态；硬删除失败后重试未完成层；临时 Grant 到期自动失效。
+允许：owner 主动解封且不改变 retention；软删除窗口内恢复到删除前的 active/archived 状态；硬删除失败后重试未完成层；临时 Grant 到期自动失效；provisional Source 经受控修订补充声明或由 owner 确认。
 
-禁止：Agent 自动解封；sealed 内容进入检索/摘要/候选；权限不足时用相关关系猜测；把 archive 当删除；把 unseal 当 restore；删除失败仍返回 completed；分享动作复用 owner 全量导出权限。
+禁止：Agent 自动解封；sealed 内容进入检索/摘要/候选；权限不足时用相关关系猜测；把 archive 当删除；把 unseal 当 restore；删除失败仍返回 completed；分享动作复用 owner 全量导出权限；parser/model 直接把 provisional 改为 declared/confirmed 或降低 Source 保护。
 
 ## 9. 系统不变量
 
@@ -162,6 +189,7 @@ sensitivity seal transition:
 | `PAP-INV-012` | 频繁访问/降权不改变真值或 sensitivity |
 | `PAP-INV-013` | sealed sensitivity、retention 与 retrieval activation 正交，任一轴转换不得隐式修改另两轴 |
 | `PAP-INV-014` | 被硬删除 Source/正文不能继续支撑 verified 回答；依赖对象与 View 必须失效并重评估 |
+| `PAP-INV-015` | Source policy 由获授权声明与 profile 确定性初始化；未解析主体使用 provisional/unknown 保守默认，hint 不得降低保护 |
 
 ## 10. 时间语义
 
@@ -202,6 +230,8 @@ destructive action 必须 owner 明确授权并重新认证（具体机制后置
 | hard delete 部分失败 | `delete_partial_failure` + 分层 receipt |
 | backup 不可即时清除 | `pending_expiry`，列政策期限，不称已删除 |
 | 外部导出副本 | `out_of_control`，不得声称召回 |
+| Source 主体/compartment 声明缺失 | 使用 profile 保守默认并标 provisional；非 owner/非 intake purpose fail closed，不为完成 append 解析正文 |
+| hint/profile 冲突 | 采用更严格值；非法枚举或试图降低 floor 的声明不得生效 |
 
 ## 15. 撤销与审计
 
@@ -214,6 +244,7 @@ destructive action 必须 owner 明确授权并重新认证（具体机制后置
 
 - 未知 sensitivity/compartment/action 必须 fail closed 并保留扩展。
 - 旧数据缺权限标签时默认 `private`，不得默认 normal。
+- 旧 Source 缺主体解析状态时迁移为 `policy_resolution_status=provisional`、`third_party_present=unknown`，不得根据正文批量猜测。
 - 迁移不得扩大 Grant 或解封 sealed。
 - 导出/导入必须保留策略版本与未知扩展语义。
 
@@ -231,7 +262,7 @@ destructive action 必须 owner 明确授权并重新认证（具体机制后置
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: privacy_access_policy_v0_2
+suite_id: privacy_access_policy_v0_3
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -268,8 +299,10 @@ suite_passed: false
 | `PAP-AT-026` | archived 对象被 seal 后再 unseal | 仍为 archived，不因轴切换回 active |
 | `PAP-AT-027` | 支撑 verified 回答的唯一 Source 被 hard delete | Source 正文不可恢复；依赖 Answer/View 失效并降级为剩余证据对应状态 |
 | `PAP-AT-028` | policy engine 不可用且存在旧 allow decision | 不返回缓存 payload，明确 unavailable/deny 且不泄露资源 |
+| `PAP-AT-029` | direct owner Intake 显式声明 subjects、third-party 和 compartments，并引用固定 profile | Source policy 字段由声明/profile 唯一产生，状态 declared；正文内容不参与初始化 |
+| `PAP-AT-030` | Intake 缺少 subject/compartment 声明且给出 `normal` hint，profile floor 为 private/personal；parser 后来提出 subject | Source 先为 private/personal/provisional、subjects=[]、third-party=unknown；非 owner/非 intake purpose deny；parser 只产生 metadata proposal，owner 确认后新 revision 才为 confirmed |
 
-不变量覆盖：001→AT001/022/025/028；002→003/004；003→005；004→006/007；005→010/028；006→008/009；007→012/025；008→011/012；009→016-019；010→016；011→020；012→021；013→013-015/026；014→027。
+不变量覆盖：001→AT001/022/025/028/030；002→003/004；003→005；004→006/007；005→010/028；006→008/009；007→012/025；008→011/012；009→016-019；010→016；011→020；012→021；013→013-015/026；014→027；015→029/030。
 
 ## 20. 未决问题
 
@@ -286,8 +319,8 @@ suite_passed: false
 
 - 默认拒绝、字段裁剪、sealed、防旁路和 destructive action 可测试。
 - 删除不作虚假承诺，私有/分享导出分离。
-- 14 条不变量与 28 个测试有映射。
+- 15 条不变量与 30 个测试有映射。
 - FR-012/304/305 进入追踪，但后两者实现仍按路线图 deferred。
 - 测试未执行、未选择安全技术栈。
 
-当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。seal/retention/retrieval 三轴、policy engine fail-closed 和删除后证据失效已闭合；测试尚未物化、执行或通过，不授权家庭协作、数字遗产或外部 Agent 实现。
+当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。Source policy 初始化、unknown subject 和保守 fail-closed 默认已闭合；测试尚未物化、执行或通过，不授权权限 runtime、家庭协作、数字遗产或外部 Agent 实现。

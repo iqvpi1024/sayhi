@@ -13,7 +13,9 @@
 7. `docs/testing/LATEST_STATIC_VALIDATION.md`
 8. 最近适用的业务 Verification Result（当前不存在）
 
-除用户明确指定的评审附件外，不使用工作区外或历史知识库作为产品事实来源。测试和示例只允许合成数据。`PRDv04-opus审查报告.md` 与 `docs/reviews/SPEC_SUITE_COMPLETION_REVIEW.md` 是历史材料，不能覆盖当前状态。
+产品门禁先读 `docs/decisions/MICRO_GATE_DECISION_2026-07-14.md`；纠偏依据与结论分别读 `docs/reviews/MULTI_MODEL_FINAL_AUDIT.md` 和 `docs/reviews/MICRO_GATE_CORRECTIVE_REVIEW_2026-07-14.md`。历史报告不能覆盖当前状态。
+
+除用户明确指定的评审附件外，不使用工作区外或历史知识库作为产品事实来源。测试、示例和 fixture 只允许合成数据。
 
 ## 2. 当前快照
 
@@ -21,73 +23,34 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 日期 | 2026-07-14 |
-| 当前阶段 | Audited Specification Baseline |
-| 阶段状态 | `approved_contracts_suites_not_materialized` |
-| PRD | `PRDv04.md` v0.4，`Draft for Review`，未修改 |
-| PRD SHA-256 | `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
-| 正式 SPEC | 9/9 `Approved`：S1/S2 v0.3；S3-S9 v0.2 |
-| 产品问题 | `BQ-001..005`、`IQ-001..018` decided；新增 blocking=0、important=0 |
-| Deferred | `DQ-001..010` 保持 deferred |
-| 追踪 | 32/32 FR 已登记；9 `micro_required_slice`、8 `specified_not_implemented`、15 `boundary_only_deferred` |
-| 测试目录 | 257 个 SPEC Test ID + 10 个 MM = 267；123 条 invariant |
+| 当前阶段 | Micro Gate Corrective Revision 完成并通过关闭性复审 |
+| 阶段状态 | `corrective_review_passed_ready_for_micro_planning` |
+| PRD | `PRDv04.md` v0.4；文件仍显示 `Draft for Review`，原文未修改；产品基线批准见 `DEC-MICRO-GATE-001` |
+| PRD canonical LF SHA-256 | `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
+| 正式 SPEC | 9/9 `Approved`：S1 v0.4；S2 v0.3；S3-S6 v0.3；S7-S8 v0.2；S9 v0.3 |
+| 原审计 | P0=0、P1=7、P2=9、P3=1；结论 `no` |
+| 关闭性复审 | P0=0、P1=0、P2=7、P3=1；结论 `yes_with_conditions` |
+| 产品问题 | 原 BQ/IQ 保持 decided；本轮新增 blocking=0、important=0；DQ-001..010 保持 deferred |
+| 追踪 | 32/32 FR 登记；9 `micro_required_slice`、8 `specified_not_implemented`、15 `boundary_only_deferred` |
+| 测试目录 | 269 个 SPEC Test ID + 10 个 MM；128 条 invariant；39 个去重 Micro required upstream Test Ref |
 | 测试状态 | 全部 `suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 实现代码 | 无业务实现；仅有只读静态校验脚本 |
+| 实现代码 | 无业务实现；只有只读静态合同校验脚本 |
 | 依赖/数据库/最终技术栈 | 无、未选择 |
-| Git | 审计基线提交 `b497c2c` 与标签 `spec-suite-v0.2-audited` 已推送；最新状态以远程 `main` 为准 |
+| Git | 审计报告提交 `0c7e2d2` 已推送到 `codex/multi-model-audit`；纠偏分支为 `codex/micro-gate-corrective-revision` |
 
-## 3. 当前结论
+## 3. 本轮完成内容
 
-2026-07-13 的九份 SPEC 首次基线文件齐全，但跨规范审计发现字段、状态轴、撤销、删除、MCP 响应、测试状态和 FR 追踪存在实质漂移。2026-07-14 已完成独立修订：
+1. 保存多模型 Finding 台账和最终审计报告，不改写审计快照。
+2. 建立 hash/commit 绑定的 `DEC-MICRO-GATE-001`，明确纠偏授权、实现门禁和 personality sentinel 裁决。
+3. S1/S4/S9 闭合 Source policy/subject 初始化：授权声明 + profile 唯一映射；缺失为 private/personal/provisional/unknown。
+4. S3 闭合 Publish Attempt、preflight `conflicted|failed` 终态、receipt、幂等重放和 `retry_of`。
+5. Micro 为旧 active State 增加独立 historical Source evidence；trust/closeness opinion 改为非空；加入只读 synthetic Hypothesis sentinel。
+6. S6 分离 individual test、run、suite artifact、applicability 和 verification result；Micro §6 锁定 exact required refs。
+7. 校验器改为 canonical LF hash、§19 结构化 invariant mapping、12 项正向 enum、真实隐私启发式扫描和 exact Micro mapping。
+8. 添加 `.gitattributes`，并在 LF/CRLF 隔离副本中复现相同静态结果。
+9. 生成关闭性复审，P1 从 7 降为 0；未开始业务代码或技术选型。
 
-1. Semantic Object Model v0.3
-2. Bitemporal & Evidence v0.3
-3. ChangeSet & Consistency v0.2
-4. Privacy & Access Policy v0.2
-5. Shiling Policy v0.2
-6. Semantic Test Harness v0.2
-7. Storage, Index & Portability v0.2
-8. MCP Contract v0.2
-9. Ingestion & Migration v0.2
-
-批准只表示语义合同完成独立审计。没有机器 suite、业务实现、数据库或运行结果，任何 suite 都不得称为通过。
-
-## 4. 本轮完成内容
-
-- 完整重审 PRD、S1-S9、Micro、开放问题、追踪矩阵、历史评审和项目状态。
-- 统一 ChangeSet confirmation/proposal 字段，明确 Source Vault 与 Canonical `data_revision` 边界。
-- 分离 Canonical Evidence Ref 与 Derived EvidenceAssessment。
-- 补齐 L1 outcome/revision/receipt 恢复边界、介入变更撤销和不可逆操作。
-- 分离 seal/retention/retrieval、risk/review priority、execution/answer/freshness、Intake/Parse Attempt 等正交状态。
-- 补齐 hard delete 后证据失效、Pack 路径逃逸、惰性导入和 migration verification failure。
-- 修正 Micro fixture 的字段、半开区间、UTF-8 byte locator/hash 及 trust/closeness 语义。
-- 将追踪矩阵合并为单一权威表，移除“32/32 已闭环”的过度结论。
-- 新增零依赖静态校验器和独立审计报告。
-
-详细依据：`docs/reviews/INDEPENDENT_BASELINE_AUDIT_2026-07-14.md`。
-
-## 5. 权威产物
-
-| 文件 | 当前职责 |
-|---|---|
-| `PRDv04.md` | 唯一产品需求基线，只读 |
-| `docs/reviews/INDEPENDENT_BASELINE_AUDIT_2026-07-14.md` | 当前独立审计结论 |
-| `docs/decisions/OPEN_QUESTIONS.md` | 产品裁决与 deferred 队列 |
-| `docs/traceability/REQUIREMENTS_MATRIX.md` | 32 条 FR 的唯一权威追踪表 |
-| `docs/testing/MICRO_MVP_ACCEPTANCE.md` | 10 个 Micro 合同场景与固定合成 fixture |
-| `docs/testing/LATEST_STATIC_VALIDATION.md` | 最近一次静态验证结果及限制 |
-| `docs/specs/README.md` | 九份 SPEC 顺序、边界与阶段门禁 |
-| `docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` | Approved v0.3 |
-| `docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md` | Approved v0.3 |
-| `docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` | Approved v0.2 |
-| `docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md` | Approved v0.2 |
-| `docs/specs/05_SHILING_POLICY_SPEC.md` | Approved v0.2 |
-| `docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` | Approved v0.2 |
-| `docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md` | Approved v0.2 |
-| `docs/specs/08_MCP_CONTRACT_SPEC.md` | Approved v0.2 |
-| `docs/specs/09_INGESTION_MIGRATION_SPEC.md` | Approved v0.2 |
-| `tools/validate_spec_baseline.ps1` | 只读静态合同校验，不是业务测试 |
-
-## 6. 最近验证结果
+## 4. 验证结果
 
 实际执行：
 
@@ -95,77 +58,70 @@
 & .\tools\validate_spec_baseline.ps1
 ```
 
-结果：`PASSED`，只代表静态合同检查。
+结果：exit code 0，`PASSED (static contract checks only; no business test was executed)`。
 
 | 检查 | 结果 |
 |---|---|
-| PRD SHA-256 | passed：基线未变 |
-| SPEC 章节/版本/状态 | passed：9/9 为 §0-§21 且版本匹配 |
-| SPEC Test ID | passed：257 个连续且唯一 |
-| Micro 场景 | passed：`MM-001..010` 存在 |
-| Micro locator/hash | passed：UTF-8 58 bytes、SHA-256 与 locator 一致 |
-| Invariant | passed：123 条连续且有覆盖引用 |
-| FR 追踪 | passed：32 行与 PRD 32 个唯一 FR 完全一致 |
-| Coverage Level | passed：9 micro slices / 8 specified / 15 deferred boundaries |
-| Matrix Test Ref | passed：103 个唯一引用展开后全部存在 |
-| 已知字段/状态漂移 | passed：未检出 |
-| Markdown 围栏 | passed：20 个文件成对 |
-| 隐私启发式扫描 | 未发现电话/本机用户目录；仅命中已知 Git SSH endpoint |
+| PRD canonical LF hash | passed；raw CRLF checkout 差异不再误判语义变化 |
+| EOL portability | passed；LF 与 CRLF 隔离副本 exit code 均为 0，去 Root 输出一致 |
+| SPEC/Test/Invariant | passed；9 份 SPEC、269 tests、128 invariants |
+| Micro | passed；10 个 MM、两个 58-byte Source、39 个 exact upstream refs |
+| 追踪 | passed；32 FR、9/8/15 Coverage Level、全部矩阵 Test Ref 可解析 |
+| Enum | passed；12 个机器可读封闭枚举与正向集合一致 |
+| 隐私启发式 | passed；权威合同/测试语料未命中 phone-like、email-like、本机 user-directory path |
 | 业务合同执行 | `not_executed` |
 
-静态 passed 不证明原子性、权限、撤销、删除、性能或任何业务行为。
+静态 passed 不证明原子性、权限、撤销、删除、性能或任何业务行为。准确命令、环境与 artifact digest 见 `docs/testing/LATEST_STATIC_VALIDATION.md`。
 
-## 7. 核心合同摘要
+## 5. 权威产物
 
-- Source Append 独立进入 Source Vault；由 Source 产生或修改 Canonical 语义仍只经 ChangeSet。
-- Current State 不覆盖 Historical State；valid/recorded/source/ingested time 分离。
-- Canonical Evidence Ref 只指向 Source；EvidenceAssessment 是可重算 Derived 结果。
-- ChangeSet 发布的 L1、revision、outcome 与 receipt summary 处于同一恢复边界。
-- 撤销产生基于 current revision 的补偿修订，不覆盖介入变更；hard delete 不伪装可撤销。
-- seal、retention、retrieval activation 正交；删除证据后依赖答案和 View 必须失效重评。
-- risk、review priority、confidence、truth 正交；识灵仍是一个协调内核。
-- MCP execution、Answer、View freshness、authorization 正交；拒绝响应不泄露 revision。
-- exported Pack 是不可变 snapshot；导入引用不得逃逸根目录，内容不得执行。
-- Intake receipt 与 Parse Attempt 正交；parser 失败不改 Source stored 状态。
+| 文件 | 当前职责 |
+|---|---|
+| `PRDv04.md` | 唯一产品需求基线，只读 |
+| `docs/decisions/MICRO_GATE_DECISION_2026-07-14.md` | 当前产品门禁批准与范围 |
+| `docs/decisions/OPEN_QUESTIONS.md` | BQ/IQ 裁决与 deferred 队列 |
+| `docs/reviews/MULTI_MODEL_FINDINGS_LEDGER.md` | 纠偏前 Finding 快照 |
+| `docs/reviews/MULTI_MODEL_FINAL_AUDIT.md` | 纠偏前 `no` 结论 |
+| `docs/reviews/MICRO_GATE_CORRECTIVE_REVIEW_2026-07-14.md` | 纠偏关闭台账与 `yes_with_conditions` 结论 |
+| `docs/traceability/REQUIREMENTS_MATRIX.md` | 32 条 FR 的权威追踪表 |
+| `docs/testing/MICRO_MVP_ACCEPTANCE.md` | 10 个 Micro 场景、固定合成 fixture 和 exact required refs |
+| `docs/testing/LATEST_STATIC_VALIDATION.md` | 最近静态验证、环境、exit code 和 digest |
+| `docs/specs/README.md` | 九份 SPEC 顺序、版本、边界和阶段门禁 |
+| `tools/validate_spec_baseline.ps1` | 只读静态合同校验，不是业务测试 |
 
-完整产品裁决见 `docs/decisions/OPEN_QUESTIONS.md`。
+## 6. 未决问题与后置项
 
-## 8. 范围锁
+- 当前 Micro 规范门禁 blocking=0、important=0。
+- `MMF-009..015` 保持 P2，分别在 MCP、ingestion/migration、privacy mutate、MVP-B/query semantics 阶段处理；不得带入首轮 Micro。
+- `MMF-017` 保持 P3：合同目录仍需按阶段物化，不能把 Markdown 数量当可运行测试数量。
+- DQ-001..010 状态不变；本轮没有替产品负责人裁决 deferred 问题。
 
-在 Micro-MVP 的真实 suite 物化并通过前，禁止：
+## 7. 范围锁与风险
 
-- 财务、健康、决策和成长业务实现。
-- 多设备同步、连接器、真实历史迁移。
-- 多租户、多 Agent、A2A、数字遗产。
-- 通用图数据库平台和全量依赖语言。
-- 导入任何真实个人数据。
-
-15 条 `boundary_only_deferred` FR 只用于防止未来旁路，不是当前建设授权。
-
-## 9. 风险
+在 Micro required suite 真实物化并通过前，禁止：财务、健康、决策、成长、多设备、连接器、真实迁移、多租户、多 Agent、A2A、数字遗产、通用图数据库平台和真实个人数据。
 
 | 风险 | 当前控制 |
 |---|---|
-| 把 Approved 当成已实现 | `suite_materialized/executed/passed=false` 四态明示 |
-| 长期 FR 拉大 Micro | 追踪矩阵 `coverage_level` + 范围锁 |
-| 跨 SPEC 再次漂移 | `tools/validate_spec_baseline.ps1` 必须随每次规范修改运行 |
-| 静态 pass 被误报业务 pass | 最近验证文件明确未证明项 |
-| 删除/权限作虚假承诺 | 分层 receipt、fail closed、evidence invalidation |
-| 历史审查覆盖当前状态 | 两份历史报告已标记 superseded/历史基线 |
+| 把静态 passed 当业务 passed | suite 四态与 `not_executed` 明示 |
+| personality sentinel 导致范围扩张 | 只读 digest oracle；禁止 Hypothesis workflow |
+| 权限字段导致建设权限 runtime | Source 初始化合同明确不授权 runtime |
+| 长期 FR 扩大 runner | Micro §6 exact mapping 是唯一 required 集合 |
+| P2 被遗忘 | 关闭性复审与本文件保留 `MMF-009..015` 队列 |
+| 换行再次导致假失败 | `.gitattributes` + validator canonical LF + 双 EOL 复验 |
 
-## 10. 下一步唯一建议动作
+## 8. 下一步唯一建议动作
 
-**建立 Micro-MVP 最小实现计划与必要 ADR，只物化 `MM-001..010` 的 manifest、fixture、forbidden-change oracle 和离线 runner，然后实现这一条合成 RelationshipState 链路。**
+**在新的明确任务中编制 Micro-MVP 最小实现计划与必要 ADR，然后只物化并实现 `MICRO_MVP_ACCEPTANCE.md` §6 的 exact required 合成链路。**
 
-技术选择必须服务于这条链路，不得把 deferred FR 带入首轮。尚未开始业务代码或最终技术选型。
+本轮到此停止。尚未开始业务代码、技术选型、依赖安装或数据库工作。
 
-## 11. 变更日志
+## 9. 变更日志
 
 | 日期 | 阶段 | 记录 |
 |---|---|---|
 | 2026-07-13 | Phase 0 | PRD 审查、追踪、SPEC 计划、Micro 验收、Git 基线 |
 | 2026-07-13 | Initial Spec Suite | S1-S9 首次 Approved；测试未执行 |
-| 2026-07-13 | GitHub Backup | 提交 `721838f` 和首次批准标签已推送；状态提交 `0b3908e` |
-| 2026-07-14 | Independent Audit | S1/S2 升 v0.3，S3-S9 升 v0.2；修复 16 类跨规范/追踪问题 |
-| 2026-07-14 | Static Validation | 257 SPEC tests、123 invariants、10 MM、32 FR 静态检查 passed；业务测试仍未执行 |
-| 2026-07-14 | GitHub Backup | 审计基线提交 `b497c2c` 与标签 `spec-suite-v0.2-audited` 已通过 SSH-over-443 推送 |
+| 2026-07-14 | Independent Audit | 审计基线 `spec-suite-v0.2-audited`；业务测试未执行 |
+| 2026-07-14 | Multi-model Synthesis | P1=7，结论 `no`；报告提交 `0c7e2d2` 已推送 |
+| 2026-07-14 | Micro Gate Corrective Revision | 关闭 P1 与直接耦合 P2；九份 SPEC 保持独立版本 |
+| 2026-07-14 | Corrective Review | P1=0，结论 `yes_with_conditions`；业务测试仍未执行 |

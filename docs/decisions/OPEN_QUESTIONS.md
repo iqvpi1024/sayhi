@@ -12,6 +12,12 @@
 - `important`：不阻止第一份 SPEC 起草，但对应正式 SPEC 必须处理。
 - `deferred`：不影响 Micro-MVP，不在当前门禁内裁决。
 
+### 1.1 当前 Micro Gate 决定
+
+`DEC-MICRO-GATE-001` 已于 2026-07-14 由产品负责人决定并单独记录在 `MICRO_GATE_DECISION_2026-07-14.md`：PRD v0.4 canonical LF hash 获批准；只授权 Micro Gate 纠偏；personality oracle 使用只读 synthetic Hypothesis sentinel；P1 关闭性复审前业务实现门禁保持 closed。
+
+该决定关闭 `MMF-001` 和 `MMF-005` 中必须由产品负责人裁决的部分，不改变本文件原有 BQ/IQ/DQ 状态，也不裁决多模型审计列出的 deferred 产品问题。本轮未新增 blocking/important open question。
+
 ## 2. Blocking
 
 ### BQ-001：`RelationshipState` 的规范对象归属是什么？

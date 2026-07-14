@@ -5,13 +5,13 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-IMM-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md` v0.4 |
 | 上游 | S1-S8 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 独立审计 | 2026-07-14；拆分 Source append/parse 状态并补齐迁移验证失败 |
+| 纠偏复审 | 2026-07-14；闭合 Intake 到 Source policy/subject 的确定性初始化合同 |
 
 本文定义输入与迁移语义，不实现连接器、OCR、ASR、视频处理、真实历史迁移或迁移框架。
 
@@ -76,14 +76,31 @@ declared_media_type: type
 content_hash: digest | computed_after_read
 coverage_declaration: optional raw declaration
 owner_ref: owner
+policy_profile_ref: authorized Source initialization profile
+recorder_ref: explicit actor | direct-owner fallback
+declared_subject_refs: optional authorized Canonical refs
+declared_third_party_present: true | false | omitted
+declared_compartments: optional policy domains
 sensitivity_hint: suggestion only
 ```
 
 `resource_ref` 与 `inline_content` 必须且只能存在一个。Micro 只允许 `source_kind=synthetic_text` + `inline_content`，并使用 S1 的 `text_utf8_byte_range_v1` locator。Pack 内部引用必须满足 S7 的相对 Pack-root 边界；本地文件引用应使用 owner 明确选择后产生的 opaque handle，或在显式授权 intake root 内规范化。绝对路径不是跨平台 Pack 表示，但若未来作为本机输入使用，也不能扩大到授权 root 外；UNC/网络位置需要独立授权且不进入 Micro。
 
+`policy_profile_ref` MUST 来自已授权 intake context，并按 S4 §6.6 提供 sensitivity floor、default compartments、retention policy 和 unresolved-subject 行为。Intake 不得从 `inline_content`/resource 正文推导 policy 字段。direct owner intake 可由 profile 把缺失 `recorder_ref` 确定性回落为 `owner_ref`；其他 actor 缺 recorder 必须拒绝。显式 subject/third-party/compartment 声明在写 Source 前必须做引用与枚举校验。
+
+初始化映射固定为：
+
+- 完整合法声明：Source 使用声明值并标 `policy_resolution_status=declared`。
+- subject/third-party 声明不完整：`subject_refs=[]`、`third_party_present=unknown`、`policy_resolution_status=provisional`。
+- compartment 声明缺失：使用 profile default；Micro profile 固定 `[personal]`。
+- sensitivity：取 profile floor 与合法 hint 中更严格者；hint 不得降低保护。
+- retention：`retention_policy_ref` 来自 profile，首次 stored 的 `retention_state=active`。
+
+解析后发现的 subject/compartment 只能形成受控 metadata revision proposal，不得回写原 receipt、静默扩大访问或把 parser confidence 当确认。
+
 ### 6.2 AppendReceipt
 
-必须包含 `intake_id`、`source_id`（stored/duplicate 时）、`status=stored|rejected|duplicate`、hash/bytes/media、ingested_at、locator scheme、coverage raw status、failure、actor 和 receipt ID。duplicate receipt 必须引用既有 Source/provenance 结果，不伪造新 Source 已存储。
+必须包含 `intake_id`、`source_id`（stored/duplicate 时）、`status=stored|rejected|duplicate`、hash/bytes/media、ingested_at、locator scheme、coverage raw status、`policy_profile_ref`、`policy_resolution_status`、effective policy 摘要、failure、actor 和 receipt ID。duplicate receipt 必须引用既有 Source/provenance 结果，不伪造新 Source 已存储，也不得用本次较宽 hint 改写既有 Source policy。
 
 ### 6.3 ParseArtifact
 
@@ -100,6 +117,11 @@ sensitivity_hint: suggestion only
 ## 7. 状态机
 
 ### 7.1 Source Append 与 Parse Attempt
+
+```yaml
+intake_status_values: [received, validating, stored, duplicate, rejected]
+parse_attempt_status_values: [queued, parsing, parsed, candidate_ready, no_candidate, parse_failed, unsupported]
+```
 
 ```text
 received -> validating -> stored | duplicate | rejected
@@ -152,6 +174,7 @@ failed -> planned (新 plan/version)
 | `IMM-INV-013` | Intake 终态与 Parse Attempt 状态正交，解析结果不能改写 Source stored/duplicate receipt |
 | `IMM-INV-014` | resource/Pack 引用不能越界或触发主动内容；迁移未验证不得称 verified |
 | `IMM-INV-015` | rollback 失败必须保持显式不安全状态并可重试，不能称 rolled_back/verified |
+| `IMM-INV-016` | Intake 到 Source policy/subject 字段是授权声明与 profile 的确定性映射；不得依赖正文解析，缺失时使用 provisional 保守默认 |
 
 ## 10. 时间语义
 
@@ -169,7 +192,8 @@ failed -> planned (新 plan/version)
 
 ## 12. 权限要求
 
-- Intake 先应用 owner、sensitivity 与 compartment 策略；hint 不能自动降低敏感度。
+- Intake 先按授权 `policy_profile_ref` 和显式声明初始化 owner、subject、recorder、sensitivity、compartment、third-party 与 retention；hint 不能自动降低敏感度。
+- provisional Source 对非 owner/非 intake purpose fail closed；该边界不要求 Micro 实现通用权限 runtime。
 - Parser/迁移只读取获授权 Source/Pack scope。
 - sealed 默认不解析、不迁移、不生成 candidate，除非 owner 明确解封该任务。
 - 导入不能扩大 Pack 内 Grant 或 policy。
@@ -186,6 +210,9 @@ failed -> planned (新 plan/version)
 | 失败 | 行为 |
 |---|---|
 | Source 写失败 | rejected receipt，不解析 |
+| Source policy profile 缺失/未知 | fail closed；不使用正文或设备默认补齐，返回 rejected/明确 failure |
+| subject/compartment 声明缺失 | 按 profile 保存为 private/personal/provisional、third-party unknown；不得阻塞原始材料保存或同步解析正文 |
+| hint 试图降低 profile floor | 忽略降级并记录 effective floor；非法 enum 返回明确 validation failure |
 | parser 失败 | Source stored，parse_failed 可见 |
 | model 不可用 | Source intake/手动 candidate 继续 |
 | hash mismatch | quarantine/reject，不静默修复 |
@@ -226,7 +253,7 @@ failed -> planned (新 plan/version)
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: ingestion_migration_v0_2
+suite_id: ingestion_migration_v0_3
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -263,8 +290,10 @@ suite_passed: false
 | `IMM-AT-026` | parser 成功但没有可支持语义候选 | parse attempt=no_candidate，Source 仍 stored，Canonical 不变 |
 | `IMM-AT-027` | migration applying 原子成功但回归验证失败 | verification_failed 后补偿 rollback；历史/失败 artifact 保留，不称 verified |
 | `IMM-AT-028` | verification_failed 后补偿 rollback 注入失败 | 状态 rollback_failed，applied/失败历史与 receipt 保留；重试使用新 attempt，期间不称 verified/rolled_back |
+| `IMM-AT-029` | Micro direct-owner Intake 显式声明 subjects/third-party，引用 private/personal profile | expected Source 的 owner/recorder/subjects/sensitivity/compartments/retention 字段唯一确定且 status=declared；正文零参与 |
+| `IMM-AT-030` | Intake 未声明 subjects/compartments，hint=normal，profile floor=private/default personal | Source stored 为 private/personal/provisional、subjects=[]、third-party=unknown；后续解析只生成受控 metadata proposal |
 
-不变量覆盖：001→AT001-004/026；002→003/004/026；003→005/006；004→018-021/027/028；005→007-010；006→011；007→015/016；008→016/017；009→017-021/027/028；010→022；011→023/024；012→012/025；013→003/004/026；014→025/027；015→028。
+不变量覆盖：001→AT001-004/026；002→003/004/026；003→005/006；004→018-021/027/028；005→007-010；006→011；007→015/016；008→016/017；009→017-021/027/028；010→022；011→023/024；012→012/025；013→003/004/026；014→025/027；015→028；016→029/030。
 
 ## 20. 未决问题
 
@@ -273,8 +302,8 @@ suite_passed: false
 ## 21. 完成定义
 
 - Intake、Source receipt、parser、candidate、dedup、quarantine、migration 和 rollback 可测试。
-- 15 条不变量、28 个测试有映射。
+- 16 条不变量、30 个测试有映射。
 - FR-001/002/108/302/303 进入追踪；连接器/真实迁移仍 deferred。
 - 未选择适配/迁移技术；测试未执行。
 
-当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。Intake、Parse Attempt、Migration Verification 与 rollback 已闭合；测试尚未物化、执行或通过，仍不得把文档当实现或测试通过。
+当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。Intake 到 Source policy/subject 的确定性映射已闭合；测试尚未物化、执行或通过，仍不得把文档当实现、权限 runtime 或测试通过。

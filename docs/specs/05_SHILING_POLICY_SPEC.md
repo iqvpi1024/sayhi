@@ -5,13 +5,13 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SHP-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv04.md` v0.4 |
 | 上游 | S1-S4 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 独立审计 | 2026-07-14；拆分 risk/priority 并统一 confirmation policy |
+| 纠偏复审 | 2026-07-14；强化非空 protected semantics 与只读 personality sentinel oracle |
 
 识灵是一个权限受限的协调内核，不是多 Agent 系统。本文不选择模型、Prompt、Reranker 或编排框架。
 
@@ -50,7 +50,7 @@
 
 七类职责仍是一个协调内核的政策视图：Observer、Interpreter、Integrator、Impact Analyst、Curator、Guardian、Reconciler。每项动作必须有单一 actor 身份、权限、输入、输出和审计记录。
 
-Micro 只允许从合成文本提出 `relationship.contact=no_contact` ChangeSet；实体已经存在且无歧义。
+Micro 只允许从合成文本提出 `relationship.contact=no_contact` ChangeSet；实体已经存在且无歧义。初始 fixture 含非空 trust/closeness opinion 和一个只读 synthetic personality `Hypothesis` sentinel；识灵不得创建、修改或删除它们。
 
 ## 5. 对象与边界
 
@@ -113,6 +113,8 @@ forbidden:
   personality/cause Hypothesis
   entity merge
 ```
+
+forbidden 集合在 Micro fixture 中 MUST 非空：至少各含一条 trust opinion、closeness opinion 和 personality Hypothesis sentinel。测试在 proposal、publish 和 compensation 后比较对象集合、stable ID、`object_revision` 与规范 payload digest；空集合比较不构成 protected-change 通过证据。sentinel 仅为读保护 oracle，不授权 Hypothesis 工作流。
 
 ### 6.5 非 Micro 对象的政策边界
 
@@ -216,7 +218,7 @@ proposed -> submitted | rejected | expired
 
 ## 17. 正例
 
-合成 Source 明确给出联系结束时间。识灵只提出 `relationship.contact=no_contact`，列出人物卡和关系时间线影响，并明确 origin/trust/closeness/personality 不变，等待单次确认。
+合成 Source 明确给出联系结束时间。识灵只提出 `relationship.contact=no_contact`，列出人物卡和关系时间线影响，并对非空 trust/closeness opinion 与只读 personality sentinel 保持 digest 不变，等待单次确认。
 
 ## 18. 反例
 
@@ -229,7 +231,7 @@ proposed -> submitted | rejected | expired
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: shiling_policy_v0_2
+suite_id: shiling_policy_v0_3
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -242,7 +244,7 @@ suite_passed: false
 | `SHP-AT-002` | candidate 未确认 | Canonical 不变 |
 | `SHP-AT-003` | 100 次同源推断 | 不提升真值 |
 | `SHP-AT-004` | Micro 合成 Source | 只提出 contact State |
-| `SHP-AT-005` | 比较 protected paths | 全部不变 |
+| `SHP-AT-005` | 比较含非空 trust/closeness opinion 与只读 personality sentinel 的 protected paths | proposal/publish/revert 后对象集合、ID、revision 与 payload digest 全部不变；空集合不得通过 |
 | `SHP-AT-006` | 长期无消息 | low_frequency/coverage 提示，不自动 no_contact |
 | `SHP-AT-007` | 一次争吵 | 不改永久 trust/人格 |
 | `SHP-AT-008` | high 风险 personal semantics | 强制确认 |
@@ -286,4 +288,4 @@ suite_passed: false
 - FR-003/101/102/103/107/203/206 进入追踪；非 Micro 实现仍 deferred。
 - 未选择模型/Prompt；测试未执行。
 
-当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。risk、review priority、confirmation 与 truth 已分轴，Candidate/ChangeSet 生命周期不再互相回写；测试尚未物化、执行或通过，不授权多 Agent 或广域智能实现。
+当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。protected semantics oracle 已改为非空对象与只读 personality sentinel digest；测试尚未物化、执行或通过，不授权 Hypothesis 工作流、多 Agent 或广域智能实现。
