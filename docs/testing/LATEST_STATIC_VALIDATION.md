@@ -14,7 +14,7 @@
 | 产品校验器 SHA-256 | `a596ede5e91f493b9836795902ecf653605f4c9d050ea0ff95b23110e25820a2` |
 | SPEC 校验器 SHA-256 | `b071a6da451c91176a425a615ab58b6a2fa9d9d16d7f245f175bf9fafecceda6` |
 | 当前产品输出 digest | `92f46bd4f05ea824fd612eab5344614e88690e44ce9fd9706c5d61430fd48ee4` |
-| 当前 SPEC 输出 digest | `8600188298ffcaa6a78a35c1f68644a1872d86ec480685ee7d8fc19758ab2606` |
+| 当前 SPEC 输出 digest | `d071fa3889f72f7b3b50d73ba344033b7bf14213ba85b5871a010ee0bfe81dfa` |
 | 业务测试 | `not_executed` |
 
 输出 digest 使用 UTF-8 + canonical LF，包含当前工作树 `Root` 行；隔离副本 digest 在去除各自 `Root` 行后比较。
@@ -30,20 +30,20 @@
 | Micro | passed：10 个场景、两个 58-byte Source、39 个去重 required upstream tests |
 | FR / Matrix | passed：32 条 FR、9/8/15 Coverage Level、174 个唯一 Test Ref |
 | Closed enum | passed：20 个机器可读正向闭集 |
-| Privacy heuristic | passed：42 份权威合同/测试文件未命中 phone-like、email-like、本机 user-directory path |
-| Markdown | passed：55 个 Markdown 文件 fence parity 成对 |
+| Privacy heuristic | passed：43 份权威合同/测试文件未命中 phone-like、email-like、本机 user-directory path |
+| Markdown | passed：56 个 Markdown 文件 fence parity 成对 |
 | 兼容 Gate | `PRD_V05_SPEC_COMPATIBILITY_REVIEW.md` 结论 `yes`，P0=0、P1=0、P2=0、P3=1 accepted debt |
 
 ## 3. LF/CRLF 隔离复验
 
-最终复验在 `C:\tmp\noetide-spec-eol-final-0c70c8a36ed649808d6badcbc0c89d49` 的两个临时副本运行，完成后已验证路径并删除。
+最终复验在 `C:\tmp\noetide-recovery-eol-8f9943a14784411e95a6c1e448b54df3` 的两个临时副本运行，完成后已验证路径并删除。
 
 | 校验器 | LF exit | CRLF exit | 共同输出 digest |
 |---|---:|---:|---|
 | Product | 0 | 0 | `9879e2661244494616691b1b1883b606b1058e7a3367059d320d9e9ba4db6278` |
-| SPEC | 0 | 0 | `78852fbba3b24451935dac3233db9a8167ddc9b19c43a88fe7e5cfe12f3ec9b0` |
+| SPEC | 0 | 0 | `0a729d52d0c1b408335589cfd0259f5e217ee5ef4aa083223a6d7485a4ab113d` |
 
-中间诊断曾产生一次真实失败：首次换行转换把原本带 UTF-8 BOM 的 `validate_product_baseline.ps1` 改为无 BOM，Windows PowerShell 5 将中文字符串按 ANSI 解析并在 parse 阶段 exit code 1。随后隔离转换改为保留每个文件原始 BOM 属性，产品与 SPEC 的 LF/CRLF 四次运行全部 exit code 0。该失败不是业务测试失败，也没有从记录中删除。
+中间诊断曾产生一次真实 validator 失败：首次换行转换把原本带 UTF-8 BOM 的 `validate_product_baseline.ps1` 改为无 BOM，Windows PowerShell 5 将中文字符串按 ANSI 解析并在 parse 阶段 exit code 1。另一次缩写版编排命令因 `Remove-Item` 参数缺少空格而在清理阶段 exit code 1，临时路径随后经边界校验后清理。最终隔离转换保留每个文件原始 BOM 属性，产品与 SPEC 的 LF/CRLF 四次运行全部 exit code 0。两次中间失败都不是业务测试失败，也没有被描述为通过。
 
 ## 4. 未证明
 

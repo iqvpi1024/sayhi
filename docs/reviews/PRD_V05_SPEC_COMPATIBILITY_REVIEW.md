@@ -79,7 +79,7 @@ business_verification: not_executed
 | 追踪 | 32 个 FR；174 个唯一 Test Ref 全部可解析；Coverage Level 仍为 9/8/15 |
 | 闭集 | 20 个机器可读正向枚举通过 |
 | Micro | `MM-001..010`；39 个去重 required upstream tests，集合未扩张 |
-| 隐私 | 42 份权威合同/测试文件未命中配置的 phone/email/local-user-path 启发式 |
+| 隐私 | 43 份权威合同/测试文件未命中配置的 phone/email/local-user-path 启发式 |
 | LF/CRLF | 产品与 SPEC 校验器在两个隔离副本均 exit code 0；同类输出 digest 一致 |
 
 详细环境、校验器 hash、输出 digest 和中间诊断失败见 `docs/testing/LATEST_STATIC_VALIDATION.md`。

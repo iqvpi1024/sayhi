@@ -39,7 +39,7 @@
 | 实现代码 | 无业务实现；只有静态校验脚本 |
 | ADR / Implementation Plan | `absent` / `absent` |
 | 依赖/数据库/最终技术栈 | 无、未选择 |
-| Git | 分支 `codex/spec-v05-compatibility`；SPEC 兼容 Recovery Point 待本轮最终发布 |
+| Git | 分支 `codex/spec-v05-compatibility`；内容提交 `066d0ef55279bfe91e9bc13568c6de269460d085`；Recovery tag `spec-v05-compatibility-v0.1-approved` 已推送并验证 |
 
 ## 3. 本轮完成内容
 
@@ -69,7 +69,7 @@ powershell -ExecutionPolicy Bypass -File .\tools\validate_spec_baseline.ps1
 | Traceability | 32 FR；174 唯一 Test Ref；9/8/15 Coverage passed |
 | Closed enum | 20 个正向闭集 passed |
 | Micro | 10 场景、两个 58-byte Source、39 required tests passed（仅静态引用） |
-| Privacy / Markdown | 42 份权威文件启发式未命中；55 份 Markdown fence parity passed |
+| Privacy / Markdown | 43 份权威文件启发式未命中；56 份 Markdown fence parity passed |
 | EOL portability | Product 与 SPEC 的 LF/CRLF 四次隔离运行均 exit code 0，同类输出 digest 一致 |
 | Business tests | `not_executed` |
 
@@ -89,6 +89,7 @@ powershell -ExecutionPolicy Bypass -File .\tools\validate_spec_baseline.ps1
 | `docs/testing/LATEST_STATIC_VALIDATION.md` | 最近产品/SPEC/EOL 静态验证 |
 | `tools/validate_product_baseline.ps1` | 产品基线静态校验 |
 | `tools/validate_spec_baseline.ps1` | PRD v0.5/SPEC/Matrix/Micro 静态校验 |
+| `docs/releases/SPEC_V05_COMPATIBILITY_V0.1_RECOVERY_POINT.md` | 本轮 Git 定位、验证和恢复步骤 |
 
 ## 6. 未决问题与后置项
 
