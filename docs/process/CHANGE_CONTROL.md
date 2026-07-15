@@ -46,7 +46,8 @@
 
 ## 5. PRD 保护
 
-- `PRDv04.md` 当前只读；任何字节变化必须有产品负责人明确授权和新基线决定。
+- 当前 PRD 由 `docs/product/CURRENT_PRODUCT_BASELINE.md` 唯一指向；改变产品语义必须创建新版本、Product Decision 和 canonical LF hash。
+- `PRDv04.md` 及所有 superseded PRD 永久只读，不得覆盖旧文件伪造历史。
 - 换行差异使用 canonical LF hash 识别，不得误判为语义修订。
 - SPEC/ADR/代码不能用“实现需要”静默补充产品规则。
 - PRD 中无法唯一推导的行为进入 OPEN_QUESTIONS。

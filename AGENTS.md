@@ -6,20 +6,21 @@
 
 严格按以下顺序恢复项目状态：
 
-1. `PRDv04.md`
-2. `docs/PROJECT_STATE.md`
-3. `docs/decisions/OPEN_QUESTIONS.md`
-4. `docs/process/README.md`
-5. 当前切片适用的 Approved SPEC
-6. `docs/traceability/REQUIREMENTS_MATRIX.md`
-7. 当前 suite/verification 记录
-8. 当前 ADR、Implementation Plan 和 Gate Review（存在时）
+1. `docs/product/CURRENT_PRODUCT_BASELINE.md`
+2. 读取其中 `current_prd_path` 指向的完整 PRD
+3. `docs/PROJECT_STATE.md`
+4. `docs/decisions/OPEN_QUESTIONS.md`
+5. `docs/process/README.md`
+6. 当前切片适用的 Approved SPEC
+7. `docs/traceability/REQUIREMENTS_MATRIX.md`
+8. 当前 suite/verification 记录
+9. 当前 ADR、Implementation Plan 和 Gate Review（存在时）
 
 以 `docs/PROJECT_STATE.md` 的“下一步唯一建议动作”为默认工作入口；用户的新明确指令优先，但不得静默跨过产品或实现门禁。
 
 ## 不可违反
 
-- `PRDv04.md` 是只读产品基线；没有产品负责人明确授权不得修改。
+- 当前产品基线由 `docs/product/CURRENT_PRODUCT_BASELINE.md` 唯一指向；`PRDv04.md` 等历史 PRD 永久只读，新产品语义必须发布新版本和 Decision。
 - 不扫描、引用、导入或推断工作区外个人数据。
 - 示例、fixture、测试和演示只使用显式合成数据。
 - 不在仓库新增真实姓名、地址、组织、电话、邮箱、凭据、债务、健康或亲密关系资料。
@@ -43,7 +44,7 @@ TODO 不能代替 ADR、suite/oracle 或验收合同。技术选择只在当前�
 ## 每次结束
 
 - 更新 `docs/PROJECT_STATE.md`：阶段、完成内容、真实验证、未决问题、风险和下一步唯一动作。
-- 检查 PRD 未被意外修改，检查没有引入真实个人数据。
+- 校验当前 PRD hash 与产品基线索引一致，并检查历史 PRD 未被修改、没有引入真实个人数据。
 - 运行与变更相称的检查并记录命令、环境、exit code 和结果。
 - 上游变化时按 Change Control 标记下游 `superseded` 或重新审查。
 - 只提交当前任务范围；达到门禁后才创建并推送可验证 Git Recovery Point。

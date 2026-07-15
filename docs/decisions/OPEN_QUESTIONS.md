@@ -16,7 +16,11 @@
 
 `DEC-MICRO-GATE-001` 已于 2026-07-14 由产品负责人决定并单独记录在 `MICRO_GATE_DECISION_2026-07-14.md`：PRD v0.4 canonical LF hash 获批准；只授权 Micro Gate 纠偏；personality oracle 使用只读 synthetic Hypothesis sentinel；P1 关闭性复审前业务实现门禁保持 closed。
 
-该决定关闭 `MMF-001` 和 `MMF-005` 中必须由产品负责人裁决的部分，不改变本文件原有 BQ/IQ/DQ 状态，也不裁决多模型审计列出的 deferred 产品问题。本轮未新增 blocking/important open question。
+该决定关闭 `MMF-001` 和 `MMF-005` 中必须由产品负责人裁决的部分，不改变本文件原有 BQ/IQ/DQ 状态，也不裁决多模型审计列出的 deferred 产品问题。
+
+### 1.2 当前 PRD v0.5 基线决定
+
+`DEC-PRD-V05-001` 于 2026-07-15 批准 `PRDv05.md` 为当前产品基线，并将 v0.4 的已确认裁决整合回 PRD。当前 blocking=0、important=0；`DQ-001..013` 保持 deferred。S1-S9 在完成 v0.5 兼容复核前不得被当作 current-compatible，也不得开始业务实现。
 
 ## 2. Blocking
 
@@ -304,6 +308,9 @@
 | DQ-008 | 连接器优先级与适配范围 | §20 FR-302、§24.5 | Year 2 规划门禁 |
 | DQ-009 | 家庭授权、托管人和数字遗产工作流 | §20 FR-305、§24.5-§24.6 | 法律/伦理验证完成后 |
 | DQ-010 | A2A 或其他 Agent 协议选择 | §20 FR-306、§24.6 | 生态阶段，不影响 MCP 最小合同 |
+| DQ-011 | 用户预授权自动处理的最大范围 | §11.4、§27.1 | MVP-B / FR-107 前；Micro 不扩大自动权限 |
+| DQ-012 | Canonical `value=unknown` 与 Answer Status 的组合 | §9.4、§27.1 | 引入 unknown State 查询前 |
+| DQ-013 | MCP 不可逆动作是否存在非 verified 例外 | §19.3、§27.1 | MCP runtime 前；未裁决时采用最保守拒绝 |
 
 ## 5. 决策记录模板
 

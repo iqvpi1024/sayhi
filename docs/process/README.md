@@ -30,18 +30,21 @@ PRD
 
 `TODO` 只是实施计划中的施工清单，不能代替产品裁决、SPEC、ADR、测试 oracle 或 Verification Result。
 
+当 SPEC、测试或实现发现会改变用户可见行为的产品歧义时，必须回到 Product Decision；需要改变当前 PRD 时发布新版本，再对全部下游做 compatibility/applicability 复核。不得把 Decision 永久堆在旧 PRD 旁边形成语义补丁链。
+
 ## 3. 每次任务恢复顺序
 
 必须依次读取：
 
-1. `PRDv04.md`
-2. `docs/PROJECT_STATE.md`
-3. `docs/decisions/OPEN_QUESTIONS.md`
-4. `docs/process/README.md`
-5. 当前切片适用的 Approved SPEC
-6. `docs/traceability/REQUIREMENTS_MATRIX.md`
-7. 当前 suite 合同、manifest 和最近 Verification Result
-8. 当前适用 ADR、Implementation Plan 和最近 Gate Review
+1. `docs/product/CURRENT_PRODUCT_BASELINE.md`
+2. 读取其中 `current_prd_path` 指向的完整 PRD
+3. `docs/PROJECT_STATE.md`
+4. `docs/decisions/OPEN_QUESTIONS.md`
+5. `docs/process/README.md`
+6. 当前切片适用的 Approved SPEC
+7. `docs/traceability/REQUIREMENTS_MATRIX.md`
+8. 当前 suite 合同、manifest 和最近 Verification Result
+9. 当前适用 ADR、Implementation Plan 和最近 Gate Review
 
 没有对应文件时，必须明确写 `absent` 或 `not_executed`，不得用记忆补齐。
 
@@ -51,7 +54,7 @@ PRD
 
 1. 更新 `docs/PROJECT_STATE.md` 的当前阶段、已完成内容、验证结果、未决问题、风险和下一步唯一建议动作。
 2. 运行与变更范围相称的检查，并记录真实命令、环境、exit code 和结果。
-3. 检查 `PRDv04.md` 是否被意外修改，检查是否引入真实个人数据。
+3. 校验当前 PRD hash 与产品基线索引一致，检查所有历史 PRD 未被修改，并检查是否引入真实个人数据。
 4. 对上游语义变化执行下游失效分析；需要时标记旧 ADR、suite、plan 或 result 为 `superseded`。
 5. 只提交本任务范围文件；不得混入其他工作树或用户未跟踪资料。
 6. 达到恢复点条件时创建 commit、annotated tag 并推送；未达到时不得伪造 release/recovery 状态。
@@ -121,7 +124,7 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 
 | 产物 | 回答的问题 | 不得回答的问题 | 路径 |
 |---|---|---|---|
-| PRD | 为什么做、为谁做、必须表现成什么样 | 数据库/框架怎么选 | `PRDv04.md` |
+| PRD | 为什么做、为谁做、必须表现成什么样 | 数据库/框架怎么选 | `docs/product/CURRENT_PRODUCT_BASELINE.md` 指向的当前 PRD |
 | Decision | 开放产品问题如何裁决 | 用代码事实替代产品决定 | `docs/decisions/` |
 | SPEC | 语义合同、状态机、不变量、失败和验收 | 最终技术实现选择 | `docs/specs/` |
 | Traceability | 要求如何到测试和结果 | 证明未执行测试通过 | `docs/traceability/` |
@@ -153,15 +156,16 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 | 字段 | 当前值 |
 |---|---|
 | Slice | `SLICE-MICRO-RELATIONSHIP-001` |
-| 已完成 | product_defined、product_decided、spec_approved、traceable |
-| 关闭性复审 | `yes_with_conditions`，P1=0 |
+| 已完成 | product_defined、product_decided |
+| 当前 PRD | `PRDv05.md` v0.5 Approved |
+| SPEC Compatibility | `review_required`（S1-S9） |
 | Architecture Decision | `absent` |
 | Suite Materialization | `false` |
 | Implementation Plan | `absent` |
 | Business Implementation | 未开始 |
 | Business Verification | `not_executed` |
 
-下一阶段不是编码，而是只为该合成链路建立最小 ADR；ADR 通过后物化 Micro §6 exact required suite，再编写 Implementation Plan。
+下一阶段不是 ADR 或编码，而是按 S1→S9 完成 PRD v0.5 Compatibility Review；全部兼容或完成升版后，才恢复 `spec_approved` 和 `traceable`。
 
 ## 11. 相关说明与模板
 
