@@ -45,7 +45,7 @@ business_verification: not_executed
 ```powershell
 git fetch origin --tags
 git cat-file -t spec-v05-compatibility-v0.1-approved
-git rev-parse spec-v05-compatibility-v0.1-approved^{}
+git rev-parse 'spec-v05-compatibility-v0.1-approved^{}'
 git switch -c restore/spec-v05-compatibility spec-v05-compatibility-v0.1-approved
 powershell -ExecutionPolicy Bypass -File .\tools\validate_product_baseline.ps1
 powershell -ExecutionPolicy Bypass -File .\tools\validate_spec_baseline.ps1
