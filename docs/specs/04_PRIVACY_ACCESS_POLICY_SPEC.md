@@ -5,14 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-PAP-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md` v0.4 |
-| 上游 | S1-S3 `Approved` |
+| 产品基线 | `PRDv05.md` v0.5 |
+| 上游 | S1 v0.5、S2-S3 v0.4，均 `Approved` |
 | 产品裁决 | `IQ-011`、`IQ-012`、`IQ-013`、`IQ-017`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 纠偏复审 | 2026-07-14；闭合 Source policy 初始化、unknown subject 与保守默认 |
+| v0.5 兼容复审 | 2026-07-15；为 unarchive/unseal/restore 建立显式授权与 ChangeSet operation 映射 |
 
 本文定义授权、封存、删除和导出语义，不选择身份供应商、加密算法、密钥库或云服务。
 
@@ -90,15 +90,21 @@
 ### 6.2 AccessRequest
 
 ```yaml
+privacy_lifecycle_action_values: [archive, unarchive, seal, unseal, soft_delete, restore, hard_delete]
+```
+
+```yaml
 caller_ref: actor
 purpose: declared purpose
-action: read | search | summarize | propose | append | approve | mutate | revert | export_private | share_external | seal | unseal | soft_delete | hard_delete
+action: read | search | summarize | propose | append | approve | mutate | revert | export_private | share_external | archive | unarchive | seal | unseal | soft_delete | restore | hard_delete
 resource_refs: requested scope
 field_paths: requested fields
 valid_time_scope: optional
 authorization_refs: owner_session, explicit grant, or capability refs
 requested_at: timestamp
 ```
+
+Policy action 与 S3 proposal operation MUST 一一对应：`archive`、`unarchive`、`seal`、`unseal`、`soft_delete`、`restore`、`hard_delete` 使用同名 operation。`revert` 只授权整包补偿 ChangeSet，不得代替 `unarchive|unseal|restore`；`restore` 只恢复 policy 允许窗口内的 soft delete，不得恢复 hard delete。
 
 ### 6.3 PolicyDecision
 
@@ -147,16 +153,17 @@ Retention 与封存敏感度使用两个独立状态机：
 
 ```text
 retention_state:
-  active <-> archived
+  active -> archived       (operation=archive)
+  archived -> active       (operation=unarchive)
   active | archived -> soft_deleted
-  soft_deleted -> active | archived  (仅在 policy 撤销窗口内)
+  soft_deleted -> active | archived  (operation=restore，仅在 policy 撤销窗口内)
   active | archived | soft_deleted -> hard_delete_pending
   hard_delete_pending -> hard_deleted | delete_partial_failure
   delete_partial_failure -> hard_delete_pending
 
 sensitivity seal transition:
-  normal | private | restricted -> sealed
-  sealed -> pre_seal_sensitivity  (仅 owner 主动 unseal)
+  normal | private | restricted -> sealed  (operation=seal)
+  sealed -> pre_seal_sensitivity  (operation=unseal，仅 owner 主动)
 
 source policy resolution:
   provisional -> declared | confirmed  (仅受控 metadata revision)
@@ -167,7 +174,7 @@ source policy resolution:
 
 ## 8. 允许与禁止的状态转换
 
-允许：owner 主动解封且不改变 retention；软删除窗口内恢复到删除前的 active/archived 状态；硬删除失败后重试未完成层；临时 Grant 到期自动失效；provisional Source 经受控修订补充声明或由 owner 确认。
+允许：owner 以 `unseal` 主动解封且不改变 retention；以 `unarchive` 恢复 archived；以 `restore` 在软删除窗口内恢复到删除前的 active/archived 状态；硬删除失败后重试未完成层；临时 Grant 到期自动失效；provisional Source 经受控修订补充声明或由 owner 确认。
 
 禁止：Agent 自动解封；sealed 内容进入检索/摘要/候选；权限不足时用相关关系猜测；把 archive 当删除；把 unseal 当 restore；删除失败仍返回 completed；分享动作复用 owner 全量导出权限；parser/model 直接把 provisional 改为 declared/confirmed 或降低 Source 保护。
 
@@ -190,6 +197,7 @@ source policy resolution:
 | `PAP-INV-013` | sealed sensitivity、retention 与 retrieval activation 正交，任一轴转换不得隐式修改另两轴 |
 | `PAP-INV-014` | 被硬删除 Source/正文不能继续支撑 verified 回答；依赖对象与 View 必须失效并重评估 |
 | `PAP-INV-015` | Source policy 由获授权声明与 profile 确定性初始化；未解析主体使用 provisional/unknown 保守默认，hint 不得降低保护 |
+| `PAP-INV-016` | archive/seal/soft delete 的逆向授权与 ChangeSet operation 分别为 unarchive/unseal/restore，且不得恢复 hard delete 或隐式修改其他状态轴 |
 
 ## 10. 时间语义
 
@@ -262,7 +270,7 @@ destructive action 必须 owner 明确授权并重新认证（具体机制后置
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: privacy_access_policy_v0_3
+suite_id: privacy_access_policy_v0_4
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -301,8 +309,9 @@ suite_passed: false
 | `PAP-AT-028` | policy engine 不可用且存在旧 allow decision | 不返回缓存 payload，明确 unavailable/deny 且不泄露资源 |
 | `PAP-AT-029` | direct owner Intake 显式声明 subjects、third-party 和 compartments，并引用固定 profile | Source policy 字段由声明/profile 唯一产生，状态 declared；正文内容不参与初始化 |
 | `PAP-AT-030` | Intake 缺少 subject/compartment 声明且给出 `normal` hint，profile floor 为 private/personal；parser 后来提出 subject | Source 先为 private/personal/provisional、subjects=[]、third-party=unknown；非 owner/非 intake purpose deny；parser 只产生 metadata proposal，owner 确认后新 revision 才为 confirmed |
+| `PAP-AT-031` | caller 分别请求 unarchive/unseal/restore，并尝试 restore hard-deleted payload | 前三者只有同名授权与 S3 operation 都通过时生效且不改变其他轴；hard delete restore 永久拒绝，`revert/correct` 不得替代 |
 
-不变量覆盖：001→AT001/022/025/028/030；002→003/004；003→005；004→006/007；005→010/028；006→008/009；007→012/025；008→011/012；009→016-019；010→016；011→020；012→021；013→013-015/026；014→027；015→029/030。
+不变量覆盖：001→AT001/022/025/028/030；002→003/004；003→005；004→006/007；005→010/028；006→008/009；007→012/025；008→011/012；009→016-019；010→016；011→020；012→021；013→013-015/026；014→027；015→029/030；016→AT031。
 
 ## 20. 未决问题
 
@@ -319,8 +328,8 @@ suite_passed: false
 
 - 默认拒绝、字段裁剪、sealed、防旁路和 destructive action 可测试。
 - 删除不作虚假承诺，私有/分享导出分离。
-- 15 条不变量与 30 个测试有映射。
+- 16 条不变量与 31 个测试有映射。
 - FR-012/304/305 进入追踪，但后两者实现仍按路线图 deferred。
 - 测试未执行、未选择安全技术栈。
 
-当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。Source policy 初始化、unknown subject 和保守 fail-closed 默认已闭合；测试尚未物化、执行或通过，不授权权限 runtime、家庭协作、数字遗产或外部 Agent 实现。
+当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Source policy 保守初始化继续有效，隐私生命周期正向/逆向动作已与 S3 一一映射；测试仍未物化、执行或通过，不授权权限 runtime、家庭协作、数字遗产或外部 Agent 实现。

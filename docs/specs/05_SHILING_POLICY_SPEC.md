@@ -5,13 +5,13 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SHP-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md` v0.4 |
-| 上游 | S1-S4 `Approved` |
+| 产品基线 | `PRDv05.md` v0.5 |
+| 上游 | S1 v0.5、S2-S4 v0.4，均 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 纠偏复审 | 2026-07-14；强化非空 protected semantics 与只读 personality sentinel oracle |
+| v0.5 兼容复审 | 2026-07-15；登记 DQ-011 并固定当前最保守 automatic 边界 |
 
 识灵是一个权限受限的协调内核，不是多 Agent 系统。本文不选择模型、Prompt、Reranker 或编排框架。
 
@@ -92,6 +92,12 @@ Micro 只允许从合成文本提出 `relationship.contact=no_contact` ChangeSet
 - `risk_level=low`：仍须服从语义边界；只有确定性机器元数据或预授权无语义机械修复可 automatic/posthoc。
 - `review_priority=critical|high|normal|low` 分别对应立即、优先、周期摘要、静默聚合；它不改变 ChangeSet risk 或 confirmation policy。
 
+```yaml
+current_automatic_publish_scope_values: [deterministic_source_receipt_metadata]
+```
+
+`DQ-011` 的预授权最大范围仍为 deferred。在它重开并形成 Product Decision 前，当前最保守 profile 只允许 hash、media type、byte count、`ingested_at` 等可确定重算、不会解释个人语义的 Source receipt 元数据使用 `automatic`。任何修改 Canonical personal semantics 的 Candidate，包括声称为“机械修复”的 proposal，都 MUST 至少使用 `single_confirmation`；不得以 `posthoc_revertible` 先发布。Micro 的 `relationship.contact` proposal 固定为 `single_confirmation`。该临时边界不否定未来经产品决定扩大预授权范围。
+
 ### 6.3 Review Budget
 
 默认：新用户单次最多 3 个高价值问题；稳定使用每周中位审查目标不超过 5 分钟；高价值积压超预算时停止生成低价值语义候选。预算只影响提示时机，不影响证据、状态或权限。
@@ -160,6 +166,7 @@ proposed -> submitted | rejected | expired
 | `SHP-INV-011` | 失败、冲突、无覆盖必须使用诚实状态 |
 | `SHP-INV-012` | 一个协调内核，不扩建多 Agent/A2A |
 | `SHP-INV-013` | risk、review priority、confidence 与 truth status 四轴不得互相替代 |
+| `SHP-INV-014` | DQ-011 未重开前，automatic 只适用于确定性非语义 Source receipt 元数据；Canonical personal semantics 不得以 automatic/posthoc 先发布 |
 
 ## 10. 时间语义
 
@@ -231,7 +238,7 @@ proposed -> submitted | rejected | expired
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: shiling_policy_v0_3
+suite_id: shiling_policy_v0_4
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -273,19 +280,20 @@ suite_passed: false
 | `SHP-AT-031` | Decision 后记录实际结果 | Outcome/Calibration 分离，预测不自动成为结果 |
 | `SHP-AT-032` | high risk 但 low review priority，或 low risk 但 critical priority | risk 不被降级、priority 不改变真值；confirmation policy 分别按 risk/授权求值 |
 | `SHP-AT-033` | 检查运行时角色/消息边界清单 | 仅一个协调内核；不存在 Agent 间辩论、A2A 或绕过统一 policy 的写路径 |
+| `SHP-AT-034` | DQ-011 未重开，分别提交确定性 hash 元数据与低风险 Canonical personal semantic mechanical fix | 前者在明确 profile 下可 automatic；后者强制至少 single_confirmation，posthoc 不得先发布；Micro contact 始终单次确认 |
 
-不变量覆盖：001→AT001/002/025/027；002→001/008；003→003/013/028/032；004→004；005→005/007/026；006→015/016/029；007→017；008→011-013；009→008-010/029/032；010→023；011→018-022；012→AT033；013→AT032；Hypothesis/Decision 边界→AT030/031。
+不变量覆盖：001→AT001/002/025/027；002→001/008；003→003/013/028/032；004→004；005→005/007/026；006→015/016/029；007→017；008→011-013；009→008-010/029/032；010→023；011→018-022；012→AT033；013→AT032；014→AT034；Hypothesis/Decision 边界→AT030/031。
 
 ## 20. 未决问题
 
-本 SPEC 无 blocking open question。默认 Review Budget 可由用户调整，但算法、阈值和领域 freshness policy 后置实现评测/ADR；调整不得突破权限、证据和确认不变量。多 Agent、A2A、自动人格诊断和全自动因果推断明确 deferred/非目标。
+本 SPEC 无 blocking open question。`DQ-011` 保持 deferred，§6.2 只规定重开前的最保守 automatic profile。默认 Review Budget 可由用户调整，但算法、阈值和领域 freshness policy 后置实现评测/ADR；调整不得突破权限、证据和确认不变量。多 Agent、A2A、自动人格诊断和全自动因果推断明确 deferred/非目标。
 
 ## 21. 完成定义
 
 - 七职责边界、候选状态、风险、确认、预算和诚实降级可测试。
 - Micro allowlist 与 forbidden paths 封闭。
-- 13 条不变量、33 个测试有映射。
+- 14 条不变量、34 个测试有映射。
 - FR-003/101/102/103/107/203/206 进入追踪；非 Micro 实现仍 deferred。
 - 未选择模型/Prompt；测试未执行。
 
-当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。protected semantics oracle 已改为非空对象与只读 personality sentinel digest；测试尚未物化、执行或通过，不授权 Hypothesis 工作流、多 Agent 或广域智能实现。
+当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。protected semantics oracle 保持有效，DQ-011 未重开前的 automatic 边界采用最保守配置；测试仍未物化、执行或通过，不授权 Hypothesis 工作流、多 Agent 或广域智能实现。

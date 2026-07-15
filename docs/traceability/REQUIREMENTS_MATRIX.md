@@ -20,7 +20,7 @@ PRD Requirement
 | `specified_not_implemented` | 语义合同已足以指导后续实现，但不属于 Micro | 可声称已规范，不可声称已实现或验证 |
 | `boundary_only_deferred` | 当前只锁定不变量、旁路禁止或对象边界，完整能力明确后置 | 不可声称该 FR 已完成规范闭环 |
 
-当前所有 Implementation Module 均为 `TBD`，所有 suite 均 `suite_materialized=false`，所有 Verification Result 均为 `not_executed`，当前适用性为 `current`。`TBD` 是诚实缺口，不是豁免。依据：PRD §6.14、§22.1；S6 v0.3。
+当前所有 Implementation Module 均为 `TBD`，所有 suite 均 `suite_materialized=false`，所有 Verification Result 均为 `not_executed`，当前适用性为 `current`。`TBD` 是诚实缺口，不是豁免。依据：PRD v0.5 §6.14、§22.1；S6 v0.4。
 
 Test Ref 简写采用固定语法：`PREFIX-AT-001/004/009` 表示同 prefix 的离散集合，`PREFIX-AT-001-009` 表示含首尾的连续范围，“`PREFIX-AT-001` 至 `PREFIX-AT-009`”与连续范围等价。静态校验必须展开简写并确认每个 ID 存在；不得使用无法解析的自然语言代替 Test Ref。
 
@@ -28,15 +28,15 @@ Test Ref 简写采用固定语法：`PREFIX-AT-001/004/009` 表示同 prefix 的
 
 | 代号 | SPEC | 版本 | 状态 |
 |---|---|---|---|
-| S1 | Semantic Object Model | v0.4 | `Approved` |
-| S2 | Bitemporal & Evidence | v0.3 | `Approved` |
-| S3 | ChangeSet & Consistency | v0.3 | `Approved` |
-| S4 | Privacy & Access Policy | v0.3 | `Approved` |
-| S5 | Shiling Policy | v0.3 | `Approved` |
-| S6 | Semantic Test Harness | v0.3 | `Approved` |
-| S7 | Storage, Index & Portability | v0.2 | `Approved` |
-| S8 | MCP Contract | v0.2 | `Approved` |
-| S9 | Ingestion & Migration | v0.3 | `Approved` |
+| S1 | Semantic Object Model | v0.5 | `Approved` |
+| S2 | Bitemporal & Evidence | v0.4 | `Approved` |
+| S3 | ChangeSet & Consistency | v0.4 | `Approved` |
+| S4 | Privacy & Access Policy | v0.4 | `Approved` |
+| S5 | Shiling Policy | v0.4 | `Approved` |
+| S6 | Semantic Test Harness | v0.4 | `Approved` |
+| S7 | Storage, Index & Portability | v0.3 | `Approved` |
+| S8 | MCP Contract | v0.3 | `Approved` |
+| S9 | Ingestion & Migration | v0.4 | `Approved` |
 
 批准表示语义合同经审查，不表示 suite 已物化、执行或通过。
 
@@ -62,24 +62,24 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 | PRD Requirement | Coverage Level | SPEC Section | Acceptance Test | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
 | FR-001 | `micro_required_slice` | S1 §6.2；S4 §6.6；S9 §4-§7、§14 | `SOM-AT-026/027`、`PAP-AT-029/030`、`IMM-AT-001` 至 `IMM-AT-006`、`IMM-AT-029/030`、`MM-001` | `TBD` | `not_executed` |
-| FR-002 | `micro_required_slice` | S1 §6.2；S2 §6.4-§6.7；S4 §6.6；S7 §6；S9 §6 | `SOM-AT-004/019/020/026/027`、`BTE-AT-011` 至 `BTE-AT-019`、`BTE-AT-037`、`PAP-AT-029/030`、`SIP-AT-001/003/010`、`IMM-AT-001`、`IMM-AT-007` 至 `IMM-AT-010`、`IMM-AT-029/030`、`MM-001/002` | `TBD` | `not_executed` |
+| FR-002 | `micro_required_slice` | S1 §6.2、§7.1；S2 §6.4-§6.7；S4 §6.6；S7 §6；S9 §6 | `SOM-AT-004/019/020/026/027/028`、`BTE-AT-011` 至 `BTE-AT-019`、`BTE-AT-037`、`PAP-AT-029/030`、`SIP-AT-001/003/010`、`IMM-AT-001`、`IMM-AT-007` 至 `IMM-AT-010`、`IMM-AT-029/030`、`MM-001/002` | `TBD` | `not_executed` |
 | FR-003 | `micro_required_slice` | S1 §5-§6；S5 §4-§7 | `SOM-AT-002/013/014/025`、`SHP-AT-001/002/004/005`、`MM-002/007` | `TBD` | `not_executed` |
 | FR-004 | `micro_required_slice` | S3 §5-§9、§14 | `CS-AT-001` 至 `CS-AT-005`、`CS-AT-008/025`、`CS-AT-029` 至 `CS-AT-031`、`MM-003/004/009` | `TBD` | `not_executed` |
 | FR-005 | `micro_required_slice` | S3 §6.4-§6.7；S5 §6 | `CS-AT-006/007`、`SHP-AT-004/005/032`、`MM-002/003` | `TBD` | `not_executed` |
 | FR-006 | `micro_required_slice` | S3 §6.4-§6.5、§8-§14 | `CS-AT-013` 至 `CS-AT-016`、`MM-005/010` | `TBD` | `not_executed` |
-| FR-007 | `micro_required_slice` | S3 §6.5、§7.3、§14-§15 | `CS-AT-016` 至 `CS-AT-019`、`CS-AT-027` 至 `CS-AT-029`、`MM-004/008` | `TBD` | `not_executed` |
-| FR-008 | `specified_not_implemented` | S1 §3、§6.4；S2 §6.8-§7.3；S8 §6 | `SOM-AT-007/008/018/021`、`BTE-AT-020` 至 `BTE-AT-030`、`MCP-AT-007/008/026` | `TBD` | `not_executed` |
+| FR-007 | `micro_required_slice` | S3 §6.2、§6.5、§7.3、§14-§15 | `CS-AT-016` 至 `CS-AT-019`、`CS-AT-027` 至 `CS-AT-029`、`CS-AT-032`、`MM-004/008` | `TBD` | `not_executed` |
+| FR-008 | `specified_not_implemented` | S1 §3、§6.4；S2 §6.8-§7.3；S8 §6 | `SOM-AT-007/008/018/021`、`BTE-AT-020` 至 `BTE-AT-030`、`BTE-AT-038`、`MCP-AT-007/008/026` | `TBD` | `not_executed` |
 | FR-009 | `micro_required_slice` | S1 §6.6；S2 §5-§10 | `SOM-AT-015/024`、`BTE-AT-001` 至 `BTE-AT-010`、`BTE-AT-033`、`MM-004/006` | `TBD` | `not_executed` |
 | FR-010 | `specified_not_implemented` | S1 §7.3、§13；S2 §5.3、§13；S3 §13 | `SOM-AT-021`、`BTE-AT-030` 至 `BTE-AT-032`、`CS-AT-008` | `TBD` | `not_executed` |
 | FR-011 | `boundary_only_deferred` | S1 §6.3、§7.2、§15；S3 §6.2 | `SOM-AT-017`；完整 merge/split 原子与回滚 suite `TBD` | `TBD` | `not_executed` |
-| FR-012 | `specified_not_implemented` | S4 §5-§14；S8 §6、§12 | `PAP-AT-001` 至 `PAP-AT-010`、`PAP-AT-022/028`、`MCP-AT-001` 至 `MCP-AT-003`、`MCP-AT-027` | `TBD` | `not_executed` |
+| FR-012 | `specified_not_implemented` | S3 §6.2；S4 §5-§14；S8 §6、§12 | `CS-AT-032`、`PAP-AT-001` 至 `PAP-AT-010`、`PAP-AT-022/028/031`、`MCP-AT-001` 至 `MCP-AT-003`、`MCP-AT-027` | `TBD` | `not_executed` |
 | FR-101 | `boundary_only_deferred` | S5 §5-§7、§11 | `SHP-AT-003/011-014`；完整聚合/去重/排序算法 suite `TBD` | `TBD` | `not_executed` |
 | FR-102 | `specified_not_implemented` | S5 §6.2-§6.3、§8-§10 | `SHP-AT-011` 至 `SHP-AT-013`、`SHP-AT-032` | `TBD` | `not_executed` |
 | FR-103 | `boundary_only_deferred` | S1 §5.1、§6.9；S5 §6.5、§11 | `SHP-AT-025`；完整 Episode/分层摘要 suite `TBD` | `TBD` | `not_executed` |
 | FR-104 | `boundary_only_deferred` | S1 §5.2、§6.9；S5 §6.5 | `SOM-AT-003`、`SHP-AT-026`；完整 Commitment 生命周期/提醒 suite `TBD` | `TBD` | `not_executed` |
 | FR-105 | `micro_required_slice` | S3 §8-§14；S6 §6-§14 | `CS-AT-021/022`、`MM-010` | `TBD` | `not_executed` |
 | FR-106 | `specified_not_implemented` | S3 §6.3、§15 | `CS-AT-020` | `TBD` | `not_executed` |
-| FR-107 | `specified_not_implemented` | S3 §6.7、§7；S5 §6.2、§8 | `CS-AT-007/028`、`SHP-AT-009/010/032` | `TBD` | `not_executed` |
+| FR-107 | `specified_not_implemented` | S3 §6.7、§7；S5 §6.2、§8 | `CS-AT-007/028`、`SHP-AT-009/010/032/034` | `TBD` | `not_executed` |
 | FR-108 | `specified_not_implemented` | S7 §10-§11；S9 §6.3、§10-§11 | `SIP-AT-011`、`IMM-AT-011/013` | `TBD` | `not_executed` |
 | FR-201 | `boundary_only_deferred` | S1 §5.1、§6.9；S2 §11；S5 §6.5 | `SOM-AT-010`、`BTE-AT-016` 至 `BTE-AT-018`、`SHP-AT-030`；完整生命周期 suite `TBD` | `TBD` | `not_executed` |
 | FR-202 | `boundary_only_deferred` | S1 §5.2、§6.9；S5 §6.5 | `SOM-AT-003`、`SHP-AT-031`；完整闭环 suite `TBD` | `TBD` | `not_executed` |
@@ -89,8 +89,8 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 | FR-206 | `boundary_only_deferred` | S5 §5、§6.5、§12、§14 | `SHP-AT-029`；行动跟进 suite `TBD` | `TBD` | `not_executed` |
 | FR-301 | `boundary_only_deferred` | S7 §2、§10、§16、§20 | 加密同步、设备冲突与密钥恢复 suite `TBD`（Year 2）；当前没有功能验收测试 | `TBD` | `not_executed` |
 | FR-302 | `boundary_only_deferred` | S9 §2、§4、§14、§20 | 连接器能力 suite `TBD`（Year 2）；当前只有输入旁路边界 | `TBD` | `not_executed` |
-| FR-303 | `specified_not_implemented` | S7 §6-§16；S9 §6.5、§7.2、§13-§16 | `SIP-AT-001` 至 `SIP-AT-009`、`SIP-AT-012` 至 `SIP-AT-016`、`SIP-AT-020/025/026`、`IMM-AT-015` 至 `IMM-AT-021`、`IMM-AT-027/028` | `TBD` | `not_executed` |
-| FR-304 | `boundary_only_deferred` | S4 §6、§12；S8 §6、§12 | 专业 Agent 权限模板 suite `TBD`；`PAP-AT-001/008` 与 `MCP-AT-001-003` 只证明通用授权边界 | `TBD` | `not_executed` |
+| FR-303 | `specified_not_implemented` | S7 §6-§16；S9 §6.5、§7.2、§13-§16 | `SIP-AT-001` 至 `SIP-AT-009`、`SIP-AT-012` 至 `SIP-AT-016`、`SIP-AT-020/025/026`、`IMM-AT-015` 至 `IMM-AT-021`、`IMM-AT-027/028/031` | `TBD` | `not_executed` |
+| FR-304 | `boundary_only_deferred` | S4 §6、§12；S8 §6、§12 | 专业 Agent 权限模板 suite `TBD`；`PAP-AT-001/008` 与 `MCP-AT-001-003/006` 只证明通用授权及不可逆动作边界 | `TBD` | `not_executed` |
 | FR-305 | `boundary_only_deferred` | S4 §2、§12-§16、§20 | 家庭授权/数字遗产工作流 suite `TBD`；当前明确非目标 | `TBD` | `not_executed` |
 | FR-306 | `boundary_only_deferred` | S8 §2、§4-§9、§20 | A2A/互操作能力 suite `TBD`；`MCP-AT-025` 只证明未知协议不能旁路 | `TBD` | `not_executed` |
 

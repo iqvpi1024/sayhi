@@ -5,16 +5,16 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-BTE-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md`，PRD v0.4 |
-| 上游基线 | `SPEC-SOM-001` v0.3，`Approved` |
+| 产品基线 | `PRDv05.md`，PRD v0.5 |
+| 上游基线 | `SPEC-SOM-001` v0.5，`Approved` |
 | 当前阶段 | Phase 2：Bitemporal & Evidence |
 | 下一依赖 | ChangeSet & Consistency SPEC |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
 | 产品裁决 | `IQ-003`、`IQ-004`、`IQ-007`、`IQ-009`、`IQ-010` 均于 2026-07-13 决定，见 `OPEN_QUESTIONS.md` |
-| 独立审计 | 2026-07-14；拆分 Canonical Evidence Ref 与 Derived Evidence Assessment |
+| v0.5 兼容复审 | 2026-07-15；固定 `value=unknown` 在 DQ-012 未重开前的保守查询行为 |
 
 本文定义语义合同，不选择数据库时间类型、查询引擎、证据评分模型、编程语言、序列化框架或模型供应商。
 
@@ -293,6 +293,12 @@ IQ-003 已决定：用户确认必须声明 `verification_scope`，其封闭枚�
 
 IQ-007 已决定：`answer_status=stale` 与 Derived View 的 `freshness_status` 是两个轴。fresh View 仍可能只包含 stale evidence；stale View 不能把旧答案标成当前 verified。View freshness 的传播合同由 S3 定义。
 
+```yaml
+canonical_unknown_answer_status_values: [unknown]
+```
+
+`DQ-012` 仍为 deferred。它重开并形成新 Product Decision 前，Canonical `State.value=unknown` 只表示“规范状态值被记录为未知”，不得被解释为已验证的具体 world value。查询实际状态时 MUST 返回 `answer_status=unknown`、`answer_value=null`；获授权响应 MAY 给出非泄露 `canonical_value_unknown` reason。系统 MUST NOT 返回 `verified + value=unknown`，也不得把该记录当作 `not_covered`、`unconfirmed` 或支持任一具体值的反证。该保守规则不裁决未来 UI 是否允许表达“已验证地不知道”。
+
 ## 7. 状态机
 
 ### 7.1 时间解释状态
@@ -368,6 +374,7 @@ Answer Status MUST 按 query valid time、recorded_as_of、授权证据、Covera
 | `BTE-INV-013` | 纠正、裁决与撤销保留 recorded-time 审计历史和反证 |
 | `BTE-INV-014` | 仅使用调用者有权访问的证据计算回答，且不得通过状态或错误泄露隐藏内容 |
 | `BTE-INV-015` | 所有 fixture 和示例只使用合成数据 |
+| `BTE-INV-016` | DQ-012 未重开前，Canonical `value=unknown` 的实际状态查询只能保守返回 Answer `unknown`，不得伪装为 verified 具体值或其他认知状态 |
 
 ## 10. 时间语义
 
@@ -653,7 +660,7 @@ reason: evidence_is_old
 ### 19.1 测试状态
 
 ```yaml
-suite_id: bitemporal_evidence_v0_3
+suite_id: bitemporal_evidence_v0_4
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -703,6 +710,7 @@ suite_passed: false
 | `BTE-AT-035` | 无权限 evidence 会影响结论 | 生成低权限回答 | fail closed 且不通过状态、计数或 reason 泄露隐藏证据 |
 | `BTE-AT-036` | 全部 S2 fixture | 执行隐私静态扫描 | 仅含合成 ID/内容，不出现真实个人数据 |
 | `BTE-AT-037` | Canonical Evidence Ref 带 `dimensions`、`evidence_family_id` 或 export receipt | 校验规范写入 | 拒绝派生/receipt 字段进入事实 evidence；assessment 只能进入 Derived EvidenceAssessment，receipt 只能进入 Coverage declaration/审计引用 |
+| `BTE-AT-038` | Canonical RelationshipState 的 `value=unknown`，且覆盖充分、无具体值证据 | 查询实际联系状态 | `answer_status=unknown`、`answer_value=null`；不得返回 verified/not_covered/unconfirmed，也不得推断任一具体联系状态 |
 
 ### 19.3 PRD Case 覆盖
 
@@ -743,6 +751,7 @@ suite_passed: false
 | `BTE-INV-013` | `BTE-AT-030`、`BTE-AT-033` |
 | `BTE-INV-014` | `BTE-AT-035` |
 | `BTE-INV-015` | `BTE-AT-036` |
+| `BTE-INV-016` | `BTE-AT-038` |
 
 ## 20. 未决问题
 
@@ -764,6 +773,8 @@ suite_passed: false
 - 权限不足时的外部错误合同与最小披露由 S4/S8 定义。
 - Evidence Family 的持久化 ID 推算机制由 S7/ADR 定义。
 
+`DQ-012` 保持 deferred；§6.9 只规定其重开前的最保守行为，不把该行为升级为永久产品裁决。
+
 ## 21. 完成定义
 
 本 SPEC 批准须满足以下条件，已全部达成：
@@ -781,4 +792,4 @@ suite_passed: false
 - 产品负责人已明确批准本 SPEC。✓
 - 测试状态继续如实区分 defined、executed、passed；未执行不得称为通过。✓
 
-当前结论：本 SPEC v0.3 于 2026-07-14 完成独立基线审计并保持 `Approved`。本次修订将 Canonical Evidence Ref 与可重算 assessment 分离；不表示测试已物化、执行或通过，也不授权扩大 Micro-MVP。
+当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Canonical Evidence Ref 与可重算 assessment 继续分离，并增加 DQ-012 未裁决期间的保守查询约束；测试仍未物化、执行或通过。

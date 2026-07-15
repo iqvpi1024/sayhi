@@ -5,13 +5,13 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-MCP-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md` v0.4 |
-| 上游 | S1-S7 `Approved` |
+| 产品基线 | `PRDv05.md` v0.5 |
+| 上游 | S1 v0.5、S2-S6 v0.4、S7 v0.3，均 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 独立审计 | 2026-07-14；分离 execution/answer/freshness 状态并收紧拒绝响应 |
+| v0.5 兼容复审 | 2026-07-15；闭合非 verified 不可逆动作 gate 与 denied 响应 disclosure profile |
 
 本文定义外部能力语义，不选择 MCP SDK、传输、进程模型、认证实现或协议扩展。
 
@@ -84,15 +84,17 @@ result_status: ok | accepted | denied | conflict | unavailable | failed
 data_revision: authorized current canonical revision | withheld
 view_revision: authorized actual view revision | not_applicable | withheld
 freshness_status: fresh | stale | updating | unavailable | not_applicable | withheld
-answer_status: BTE status | not_applicable
+answer_status: BTE status | not_applicable | withheld
 evidence_refs: authorized Source refs | []
-missing_evidence: boolean or non-leaking reason
+missing_evidence: boolean or non-leaking reason | withheld
 receipt_ref: Source/ChangeSet/destructive receipt | null
 payload: minimized result | withheld
 error: stable non-leaking error | null
 ```
 
-`result_status` 只描述请求执行结果；`answer_status` 只描述事实型回答的六态；`freshness_status` 只描述 View 对齐情况。`not_covered`/Answer `stale` 不得写进 result_status，View `stale` 也不得把事实回答自动改成 stale。authorization=denied 时 result_status 必须为 denied，revision/freshness/answer/evidence/payload 均按策略 `withheld|not_applicable`，不得泄露全局活动。
+`result_status` 只描述请求执行结果；`answer_status` 只描述事实型回答的六态；`freshness_status` 只描述 View 对齐情况。`not_covered`/Answer `stale` 不得写进 result_status，View `stale` 也不得把事实回答自动改成 stale。`withheld` 是 disclosure sentinel，不是第七种 Answer Status 或 freshness 状态。
+
+`authorization=denied` 使用唯一封闭 profile：`result_status=denied`、`data_revision=withheld`、`view_revision=withheld`、`freshness_status=withheld`、`answer_status=withheld`、`evidence_refs=[]`、`missing_evidence=withheld`、`receipt_ref=null`、`payload=withheld`，并只返回 stable non-leaking error。实现不得在 denied 响应中任选 `not_applicable`、布尔 missing evidence 或实际 revision，因为这些组合会泄露资源类型、证据存在性或全局活动。
 
 ### 6.3 Tool Classes
 
@@ -103,6 +105,12 @@ error: stable non-leaking error | null
 | append | `record_source|record_diary|record_outcome` | 只追加原始 Source receipt；`record_outcome` 之名不允许直接创建 Canonical Outcome，语义候选另走 ChangeSet |
 | controlled mutate | `approve_changeset|correct_assertion|revert_changeset` | S3 + 权限 |
 | destructive | `seal_item|delete_item|export_sensitive_pack` | owner 强授权、S4 receipt |
+
+```yaml
+irreversible_fact_answer_status_values: [verified]
+```
+
+`DQ-013` 仍为 deferred。重开并形成 Product Decision 前，任何消费或以事实型回答为理由的不可逆 MCP 动作 MUST 要求 `answer_status=verified`；若动作读取 View，该 View 还必须 `fresh`，直接 Canonical 动作可使用 `freshness_status=not_applicable`。`unconfirmed|disputed|not_covered|stale|unknown` 任一状态都必须拒绝，不存在由 confidence、caller 类型或 urgency 推导的例外。owner 针对显式 resource scope 发起的直接 S4 destructive 请求不等同于“事实回答驱动”，但仍不得用非 verified 答案扩大其 scope。
 
 ### 6.4 Pagination/Continuation
 
@@ -124,7 +132,7 @@ Mutating tool 的实际 ChangeSet/Source 状态由上游 SPEC 管理。
 
 允许：read 返回裁剪数据；propose 返回 proposal ID；append 返回 stored receipt；mutate 返回 ChangeSet receipt；异步 accepted 后查询结果。
 
-禁止：propose 直接 published；Agent 设置 verified；stale 资源执行 irreversible action；denied 响应透露隐藏资源/revision；同 idempotency key 不同 payload；任何非 read tool 缺 idempotency key；MCP 上传大文件正文作为默认通道。
+禁止：propose 直接 published；Agent 设置 verified；任一非 verified 答案驱动 irreversible action；stale View 驱动 irreversible action；denied 响应偏离唯一 disclosure profile；同 idempotency key 不同 payload；任何非 read tool 缺 idempotency key；MCP 上传大文件正文作为默认通道。
 
 ## 9. 系统不变量
 
@@ -133,7 +141,7 @@ Mutating tool 的实际 ChangeSet/Source 状态由上游 SPEC 管理。
 | `MCP-INV-001` | MCP 不能绕过 Source Append/ChangeSet/权限合同 |
 | `MCP-INV-002` | 每个响应明确 authorization；授权响应给实际 revision，拒绝响应不得以 revision 泄露活动 |
 | `MCP-INV-003` | L2/L3 响应明确 view/freshness，不冒充 current |
-| `MCP-INV-004` | stale/unknown/not_covered/denied 不驱动不可逆行动 |
+| `MCP-INV-004` | `unconfirmed|disputed|not_covered|stale|unknown` 和 denied 均不得驱动不可逆行动；DQ-013 未裁决前无隐式例外 |
 | `MCP-INV-005` | caller 只获得任务所需最小字段 |
 | `MCP-INV-006` | denied/redacted 不通过错误、计数、摘要泄露 |
 | `MCP-INV-007` | 外部 Agent 不能直接 Verify 个人语义事实 |
@@ -211,7 +219,7 @@ Mutating tool 的实际 ChangeSet/Source 状态由上游 SPEC 管理。
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: mcp_contract_v0_2
+suite_id: mcp_contract_v0_3
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -225,7 +233,7 @@ suite_passed: false
 | `MCP-AT-003` | redacted read | 只返回 allowed fields |
 | `MCP-AT-004` | stale L2 | result ok + freshness updating/unavailable，fallback 或无旧 payload，不冒充 current |
 | `MCP-AT-005` | stale L3 | result ok + freshness stale，answer_status 独立求值 |
-| `MCP-AT-006` | stale 驱动 irreversible | 拒绝 |
+| `MCP-AT-006` | 分别以 unconfirmed/disputed/not_covered/stale/unknown 答案或 stale View 驱动 irreversible | 全部拒绝；只有 verified 且所用 View fresh（或直接 Canonical 不适用 freshness）才可继续授权评估 |
 | `MCP-AT-007` | not_covered query | 正确 answer status |
 | `MCP-AT-008` | disputed query | 并列授权证据 |
 | `MCP-AT-009` | Agent verify 请求 | 拒绝 |
@@ -246,13 +254,13 @@ suite_passed: false
 | `MCP-AT-024` | fixtures 扫描 | 仅合成数据 |
 | `MCP-AT-025` | A2A/未知 Agent 协议尝试调用 | 仍须 capability/policy/ChangeSet，不能旁路 |
 | `MCP-AT-026` | answer not_covered、View fresh 且请求成功 | result_status=ok、answer_status=not_covered、freshness_status=fresh，三轴不互相覆盖 |
-| `MCP-AT-027` | denied caller 观察响应 | result_status=denied；data/view revision、evidence、计数和 payload 均 withheld/空且不可推断全局活动 |
+| `MCP-AT-027` | denied caller 观察响应 | 精确返回 denied profile：revision/freshness/answer/missing/payload=withheld、evidence=[]、receipt=null；不得混用 not_applicable/实际值且不可推断全局活动 |
 
 不变量覆盖：001→AT010-013/025；002→001/004/027；003→004/005/026；004→006-009；005→001/003；006→002/014/022/027；007→009；008→012/015/016；009→019；010→023；011→013/017/021；012→AT025。
 
 ## 20. 未决问题
 
-本 SPEC 无 blocking open question。SDK、transport、认证、分页 token 编码和错误码载体后置实现 ADR。A2A、专业 Agent 市场、多 Agent 编排保持 deferred；FR-306 在本 SPEC 只获得“不绕过本合同”的未来边界。
+本 SPEC 无 blocking open question。`DQ-013` 保持 deferred，§6.3 只定义重开前的最保守不可逆动作 gate。SDK、transport、认证、分页 token 编码和错误码载体后置实现 ADR。A2A、专业 Agent 市场、多 Agent 编排保持 deferred；FR-306 在本 SPEC 只获得“不绕过本合同”的未来边界。
 
 ## 21. 完成定义
 
@@ -261,4 +269,4 @@ suite_passed: false
 - FR-306 及关联 FR 进入追踪，但无 runtime 实现。
 - 未选择 SDK/传输；测试未执行。
 
-当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。execution、answer、freshness 与 authorization 已分轴，拒绝响应不再泄露 revision；测试尚未物化、执行或通过，不授权 A2A、多 Agent 或 MCP runtime 实现。
+当前结论：本 SPEC v0.3 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。execution、answer、freshness、authorization 与 disclosure 继续分轴，非 verified 答案不得驱动不可逆动作；测试仍未物化、执行或通过，不授权 A2A、多 Agent 或 MCP runtime 实现。

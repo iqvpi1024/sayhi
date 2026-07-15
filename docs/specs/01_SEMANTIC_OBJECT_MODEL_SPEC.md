@@ -5,15 +5,15 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SOM-001` |
-| 版本 | `0.4` |
+| 版本 | `0.5` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md`，PRD v0.4 |
+| 产品基线 | `PRDv05.md`，PRD v0.5 |
 | 产品裁决 | `BQ-001` 至 `BQ-005`，2026-07-13 已决定 |
 | 当前阶段 | Phase 1：Semantic Object Model |
 | 下一依赖 | Bitemporal & Evidence SPEC |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 纠偏复审 | 2026-07-14；闭合 Source policy 初始化与只读 protected sentinel，不新增产品能力 |
+| v0.5 兼容复审 | 2026-07-15；对齐 Source Append/Intake receipt 状态并移除 v0.4 兼容措辞 |
 
 本文定义语义合同，不选择数据库、编程语言、序列化框架、图引擎、事件溯源框架或模型供应商。
 
@@ -25,7 +25,7 @@
 
 1. 明确区分 Source、事实陈述、观点、推断、分析、预测、虚构和 Hypothesis。
 2. 明确区分规范对象与 Derived View，阻止派生结果反向成为事实证据。
-3. 封闭 PRD v0.4 的 12 个核心对象，并处理 PRD 中出现的别名词。
+3. 封闭 PRD v0.5 的 12 个核心对象，并处理 PRD 中出现的别名词。
 4. 为 Micro-MVP 的 `Source`、`Entity`、`Assertion`、`Relationship`、`State`/`RelationshipState`、`ChangeSet` 给出可测试的字段与边界。
 5. 保证联系状态变化不覆盖历史，不自动修改 `origin`、`role`、`trust`、`closeness` 或人格判断。
 6. 为后续双时态、ChangeSet、一致性、权限、存储和测试 SPEC 提供稳定上游合同。
@@ -58,7 +58,7 @@
 | State | 某主体在有效时间内的可变化值；历史 State 不因当前值变化而被覆盖 |
 | RelationshipState | `State` 的语义配置，`subject_ref` 指向 `Relationship`；不是独立核心对象 |
 | Review Status | 某条 Assertion/State 的审查处置状态，不等同于内容类型或查询回答状态 |
-| Answer Status | 事实型回答的六态结果：`verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown`；这是对 PRD §9.4 “五态 + 必要时 unknown”的规范化，`unknown` 在本 SPEC 中是正式第六态 |
+| Answer Status | 事实型回答的六态结果：`verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown`；直接采用 PRD v0.5 §9.4 的正式六态 |
 | Evidence Ref | 指向 Source 及其稳定 locator 的引用；Derived View 不能成为直接证据 |
 | narrative_context | 结构化枚举无法表达的原话、背景或用户说明的可追溯容器 |
 | supersede | 以新修订替代当前解释，同时保留旧记录、证据和审计历史 |
@@ -235,7 +235,7 @@ inferred | analysis | predicted | fictional
 
 `disputed` 和 `unknown` MUST NOT 作为 `assertion_kind`。用户确认 MUST NOT 把 `opinion`、`inferred`、`analysis`、`predicted` 或 `fictional` 改写为 `observed`。
 
-上述八态是对 PRD §8.1 “Assertion 类型”的规范精化：PRD 表中混列的 `disputed` 被移到 `review_status`/`answer_status`，`unknown` 被移到 `answer_status` 或有类型的 State value；二者不再描述 Assertion 的内容来源或性质。依据：`BQ-002` 与 `SOM-INV-004`。
+上述八态直接采用 PRD v0.5 §8.1：`disputed` 属于 `review_status`/`answer_status`，`unknown` 属于 `answer_status` 或有类型的 State value；二者都不描述 Assertion 的内容来源或性质。依据：`BQ-002` 与 `SOM-INV-004`。
 
 ### 6.5 Relationship
 
@@ -356,12 +356,16 @@ ChangeSet 的完整事务、并发、幂等和 rollback 合同由 S3 定义。
 
 ### 7.1 Source Append Receipt
 
-```text
-received -> stored | rejected
-stored -> immutable
+```yaml
+source_append_status_values: [received, validating, stored, duplicate, rejected]
 ```
 
-解析失败不把已成功 `stored` 的 Source 改成 rejected；解析状态属于后续摄取处理状态。
+```text
+received -> validating
+validating -> stored | duplicate | rejected
+```
+
+`stored|duplicate|rejected` 是一次 Source Append/Intake 的终态。`stored` 创建新 Source；`duplicate` 返回既有 Source 与 provenance 引用且不创建第二份 Source；`rejected` 不创建 Source。三种终态都必须有 Append Receipt。解析使用 S9 的独立 Parse Attempt 状态，解析失败不得把已成功 `stored|duplicate` 的 receipt 改为 rejected。S9 可以扩展 receipt 字段，但不得另建不同含义的 Source append 状态集合。
 
 ### 7.2 Entity Identity Status
 
@@ -671,7 +675,7 @@ append_source:
 ### 19.1 测试状态
 
 ```yaml
-suite_id: semantic_object_model_v0_4
+suite_id: semantic_object_model_v0_5
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -711,6 +715,7 @@ suite_passed: false
 | `SOM-AT-025` | evidence_refs 为空但 status=present，或 refs 非空但 status=missing | 校验 Canonical 对象 | 拒绝不一致；receipt/Derived ref 也不能把 evidence_status 设为 present |
 | `SOM-AT-026` | 获授权 Intake 显式声明 recorder、subjects、third-party 和 compartments，并引用固定 policy profile | 初始化 Source | 每个 expected policy 字段由 request/profile 唯一产生；不读取正文推断 |
 | `SOM-AT-027` | Intake 缺少 subject/compartment 声明且 hint 低于 profile floor | 初始化 Source | Source 为 private/personal/provisional，subjects 为空、third-party=unknown；非 owner/非 intake purpose fail closed，hint 不降低保护 |
+| `SOM-AT-028` | 相同内容和 provenance 的 Source 再次 Intake | 执行 Source Append | 返回 `status=duplicate` 并引用既有 Source；不创建新 Source、不增加 Canonical revision；receipt 状态与 S9 完全一致 |
 
 ### 19.3 与 Micro-MVP 的对应
 
@@ -773,4 +778,4 @@ suite_passed: false
 - 产品负责人逐份审查并明确批准本 SPEC。
 - 测试状态仍如实区分 defined、executed、passed；未执行不得称为通过。
 
-当前结论：本 SPEC v0.4 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。本次修订闭合 Source policy 初始化和只读 protected sentinel 边界；不表示测试已物化、执行或通过，也不授权扩大 Micro-MVP 或实现 Hypothesis 工作流。
+当前结论：本 SPEC v0.5 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Source Append/Intake receipt 状态已与 S9 对齐；测试仍未物化、执行或通过，也不授权扩大 Micro-MVP 或实现 Hypothesis 工作流。

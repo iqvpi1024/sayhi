@@ -5,14 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SIP-001` |
-| 版本 | `0.2` |
+| 版本 | `0.3` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md` v0.4 |
-| 上游 | S1-S6 `Approved` |
+| 产品基线 | `PRDv05.md` v0.5 |
+| 上游 | S1 v0.5、S2-S6 v0.4，均 `Approved` |
 | 产品裁决 | `IQ-006`、`IQ-011`、`IQ-012`、`IQ-015`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 独立审计 | 2026-07-14；补齐 Pack 快照、路径安全与策略感知重建合同 |
+| v0.5 兼容复审 | 2026-07-15；确认 Pack、删除、导出与未知字段合同兼容当前产品基线 |
 
 本文定义逻辑持久与可移植合同，不选择数据库、对象存储、向量库、图数据库、文件系统布局或云服务。
 
@@ -225,7 +225,7 @@ failed -> rebuilding
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: storage_portability_v0_2
+suite_id: storage_portability_v0_3
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -282,4 +282,4 @@ suite_passed: false
 - FR-002/301/303 进入追踪；FR-301 实现仍 deferred。
 - 未选择存储技术；测试未执行。
 
-当前结论：本 SPEC v0.2 于 2026-07-14 完成独立基线审计并保持 `Approved`。Pack 快照不可变、引用不越界、导入内容惰性和策略感知重建已闭合；测试尚未物化、执行或通过，不授权多设备同步或物理存储选型。
+当前结论：本 SPEC v0.3 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Pack 快照、路径安全、策略感知重建、删除与双导出合同保持兼容；测试仍未物化、执行或通过，不授权多设备同步或物理存储选型。

@@ -10,7 +10,7 @@
 
 流程按“切片”运行，不表示整个项目一次性从左走到右。当前切片是 `SLICE-MICRO-RELATIONSHIP-001`，只覆盖合成 RelationshipState 链路。
 
-依据：PRD §6、§10-§12、§20-§22、§24-§27；S6 v0.3；`DEC-MICRO-GATE-001`。
+依据：PRD v0.5 §6、§10-§12、§20-§22、§24-§27；S6 v0.4；`DEC-PRD-V05-001`。
 
 ## 2. 权威链路
 
@@ -156,16 +156,16 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 | 字段 | 当前值 |
 |---|---|
 | Slice | `SLICE-MICRO-RELATIONSHIP-001` |
-| 已完成 | product_defined、product_decided |
+| 已完成 | product_defined、product_decided、spec_approved、traceable |
 | 当前 PRD | `PRDv05.md` v0.5 Approved |
-| SPEC Compatibility | `review_required`（S1-S9） |
+| SPEC Compatibility | `yes`：S1 v0.5；S2-S6 v0.4；S7-S8 v0.3；S9 v0.4 |
 | Architecture Decision | `absent` |
 | Suite Materialization | `false` |
 | Implementation Plan | `absent` |
 | Business Implementation | 未开始 |
 | Business Verification | `not_executed` |
 
-下一阶段不是 ADR 或编码，而是按 S1→S9 完成 PRD v0.5 Compatibility Review；全部兼容或完成升版后，才恢复 `spec_approved` 和 `traceable`。
+下一阶段是只为当前 Micro 切片建立必要的最小 ADR，仍不得直接编码。ADR 不能修改 SPEC 语义、选择长期数据库平台或扩大 Micro；Accepted 后还必须依次完成 exact suite 物化与 Implementation Plan。
 
 ## 11. 相关说明与模板
 

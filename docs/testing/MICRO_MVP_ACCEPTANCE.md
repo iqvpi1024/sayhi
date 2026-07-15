@@ -4,7 +4,8 @@
 
 | 字段 | 值 |
 |---|---|
-| `suite_id` | `micro_mvp_relationship_state_v2` |
+| `suite_id` | `micro_mvp_relationship_state_v3` |
+| `product_baseline` | `PRDv05.md` v0.5 |
 | `suite_defined` | `true` |
 | `suite_materialized` | `false` |
 | `suite_executed` | `false` |
@@ -13,7 +14,7 @@
 | 外部网络 | 禁止 |
 | 真实个人数据 | 禁止 |
 
-依据 PRD §6.14 和 §22.1，本文只定义验收场景。尚无实现和测试运行器，因此不得描述为通过。
+依据 PRD v0.5 §6.14 和 §22.1，本文只定义验收场景。尚无实现和测试运行器，因此不得描述为通过。
 
 ## 2. 验收范围
 
@@ -152,7 +153,7 @@ historical_source_fixture:
       end_byte_exclusive: 58
 ```
 
-两个 locator 都是各自原始 UTF-8 字节序列上的零基半开区间，并分别绑定自身 hash；字符数、UTF-16 code unit 或渲染后文本偏移均不是本 fixture 的 locator。新 proposal 必须回指 `src_micro_001`；旧 `active` State 必须回指独立的 `src_history_001`，两份证据不得互换。Source policy 字段只由显式 Intake 声明和固定 profile 产生，不从正文同步解析。依据 PRD §6.2-§6.3、§7.2、§17、§19.4；S1 v0.4 §6.2；S4 v0.3 §6.6；S9 v0.3 §6.1。
+两个 locator 都是各自原始 UTF-8 字节序列上的零基半开区间，并分别绑定自身 hash；字符数、UTF-16 code unit 或渲染后文本偏移均不是本 fixture 的 locator。新 proposal 必须回指 `src_micro_001`；旧 `active` State 必须回指独立的 `src_history_001`，两份证据不得互换。Source policy 字段只由显式 Intake 声明和固定 profile 产生，不从正文同步解析。依据 PRD v0.5 §6.2-§6.3、§7.2、§17、§19.4；S1 v0.5 §6.2；S4 v0.4 §6.6；S9 v0.4 §6.1。
 
 ### 3.3 初始 Canonical State
 
@@ -563,7 +564,7 @@ Then：
 - 重新基于 current revision 只能创建新 `changeset_id`，并用 `retry_of` 引用原 conflicted ChangeSet；不得执行 `conflicted -> publishing`。
 - 人物卡和关系时间线继续对应发布前的当前 revision。
 
-依据：PRD §11.2、§12.1、§21.1、§25.2；S3 v0.3 §6.5、§7.1-§7.2、§13-§14。
+依据：PRD v0.5 §11.2、§12.1、§21.1、§25.2；S3 v0.4 §6.5、§7.1-§7.2、§13-§14。
 
 ### MM-010：L2 传播失败不能把旧值冒充最新
 

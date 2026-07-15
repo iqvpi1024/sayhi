@@ -5,14 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-CS-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md`，PRD v0.4 |
-| 上游基线 | `SPEC-SOM-001` v0.4、`SPEC-BTE-001` v0.3，均 `Approved` |
+| 产品基线 | `PRDv05.md`，PRD v0.5 |
+| 上游基线 | `SPEC-SOM-001` v0.5、`SPEC-BTE-001` v0.4，均 `Approved` |
 | 产品裁决 | `IQ-001`、`IQ-002`、`IQ-005`、`IQ-008`、`IQ-017`、`IQ-018`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 纠偏复审 | 2026-07-14；闭合 preflight attempt、合法终态、回执与重试语义 |
+| v0.5 兼容复审 | 2026-07-15；闭合 archive/seal/soft delete 的显式逆向 operation 映射 |
 
 本文只定义变更和一致性语义，不选择数据库事务、消息系统、锁、队列或事件框架。用户已授权按保守推荐方案完成全部 SPEC；批准不代表实现或测试通过。
 
@@ -106,8 +106,12 @@ review/approval event MUST 记录 `review_actor`、决定、时间、policy/revi
 ### 6.2 Proposal
 
 ```yaml
+proposal_operation_values: [add, correct, end, merge, split, archive, unarchive, seal, unseal, soft_delete, restore, hard_delete]
+```
+
+```yaml
 proposal_id: stable ID within ChangeSet
-operation: add | correct | end | merge | split | archive | seal | soft_delete | hard_delete
+operation: add | correct | end | merge | split | archive | unarchive | seal | unseal | soft_delete | restore | hard_delete
 target_ref: Canonical object/path
 before_digest: expected semantic digest | absent
 after_value: typed semantic value | tombstone intent
@@ -117,6 +121,8 @@ protected_paths: paths that MUST remain semantically equal
 ```
 
 Micro 只允许 `end` 旧 State 与 `add` 新 State 两个不可分 proposal。
+
+隐私生命周期动作 MUST 使用唯一 operation：`archive -> unarchive`、`seal -> unseal`、`soft_delete -> restore`。`correct` 不得代替这三个逆向动作，`restore` 也不得恢复 `hard_delete`；整包 `revert_changeset` 属于 §7.3 的补偿流程，不是 proposal operation。每个逆向动作都必须引用正向动作/当前 lifecycle revision，并重新执行 S4 授权与 S3 preflight。
 
 ### 6.3 Revision
 
@@ -175,9 +181,9 @@ published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 
 ## 8. 允许与禁止的状态转换
 
-允许：用户确认后发布；preflight conflict/failure 形成可审计终态 receipt；终态后创建带 `retry_of` 的新 ChangeSet；L1 成功后异步重建 L3；整包撤销产生补偿 revision。
+允许：用户确认后发布；preflight conflict/failure 形成可审计终态 receipt；终态后创建带 `retry_of` 的新 ChangeSet；L1 成功后异步重建 L3；整包撤销产生补偿 revision；经 S4 授权分别使用 `unarchive`、`unseal`、`restore` 执行可逆隐私生命周期动作。
 
-禁止：跳过 reviewing；preflight 未通过仍进入 publishing；从 conflicted/failed 原地重试；部分 L1 发布；原地修改 published ChangeSet；重用旧 `published_revision`；用 View 写回 Canonical；把旧 L2 标为 current；自动修改 protected paths。
+禁止：跳过 reviewing；preflight 未通过仍进入 publishing；从 conflicted/failed 原地重试；部分 L1 发布；原地修改 published ChangeSet；重用旧 `published_revision`；用 View 写回 Canonical；把旧 L2 标为 current；自动修改 protected paths；用 `correct` 或整包 `revert` 冒充 unarchive/unseal/restore。
 
 ## 9. 系统不变量
 
@@ -198,6 +204,7 @@ published -> reverted  (仅 reversible，且补偿 ChangeSet 已成功发布)
 | `CS-INV-013` | 补偿撤销基于执行时 current revision，不能覆盖介入变更；不可逆操作不能伪造 rollback |
 | `CS-INV-014` | Canonical L1 结果、revision、ChangeSet outcome 与 receipt summary 具有同一恢复边界 |
 | `CS-INV-015` | 每次发布命令先产生幂等绑定的 durable Publish Attempt；preflight conflict/failure 有合法终态、无 revision 且可由 receipt 唯一解释 |
+| `CS-INV-016` | archive、seal、soft delete 的逆向意图分别只使用 unarchive、unseal、restore；不得用 correct/revert 混淆生命周期或恢复 hard delete |
 
 ## 10. 时间语义
 
@@ -287,7 +294,7 @@ published_revision: rev_011
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: changeset_consistency_v0_3
+suite_id: changeset_consistency_v0_4
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -327,8 +334,9 @@ suite_passed: false
 | `CS-AT-029` | 注入 outcome/revision/receipt summary 任一持久化失败 | L1 全部不提交、revision 不增加；详细传播 receipt 失败则保留已提交 L1 并标 incomplete |
 | `CS-AT-030` | stale base 的同一 publish 命令和 payload 按同一 idempotency key 重放 | 返回同一 conflict attempt/receipt；原 ChangeSet 保持 conflicted，不新增 revision/attempt |
 | `CS-AT-031` | preflight 分别注入 before_digest mismatch、dangling ref、protected path change | mismatch 为 conflicted；引用/protected failure 为 failed；均有唯一 receipt、无 publishing/部分写，重试只能新 ChangeSet + retry_of |
+| `CS-AT-032` | 分别请求撤销 archive、seal、soft delete，并尝试恢复 hard delete | 只接受 `unarchive`、`unseal`、`restore` 的一一映射且重新授权/preflight；`correct`/整包 revert 代替映射或 hard delete restore 均被拒绝 |
 
-不变量覆盖：001→AT001/025；002→003/004；003→008/030；004→011/012；005→002；006→003/013；007→013/014；008→015/022；009→017-019；010→009/010/030；011→016/029-031；012→005/020/031；013→027/028；014→029；015→008/023/024/030/031。
+不变量覆盖：001→AT001/025；002→003/004；003→008/030；004→011/012；005→002；006→003/013；007→013/014；008→015/022；009→017-019；010→009/010/030；011→016/029-031；012→005/020/031；013→027/028；014→029；015→008/023/024/030/031；016→AT032。
 
 ## 20. 未决问题
 
@@ -348,8 +356,8 @@ suite_passed: false
 - 上游 S1/S2 已批准。
 - 六项产品问题已 decided。
 - Micro 发布、两个 View、撤销和两个失败场景有确定 oracle。
-- 14 条不变量与 29 个测试均有映射。
+- 16 条不变量与 32 个测试均有映射。
 - FR-004/005/006/007/105/106/107 已进入追踪。
 - 未选择技术栈；测试仍未执行。
 
-当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。preflight attempt、conflicted/failed 终态、幂等 receipt 和 retry_of 已闭合；测试尚未物化、执行或通过。
+当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。preflight/receipt/补偿语义继续有效，隐私生命周期逆向动作已获得唯一 operation 映射；测试仍未物化、执行或通过。

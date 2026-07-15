@@ -5,13 +5,13 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-IMM-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md` v0.4 |
-| 上游 | S1-S8 `Approved` |
+| 产品基线 | `PRDv05.md` v0.5 |
+| 上游 | S1 v0.5、S2-S6 v0.4、S7-S8 v0.3，均 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 纠偏复审 | 2026-07-14；闭合 Intake 到 Source policy/subject 的确定性初始化合同 |
+| v0.5 兼容复审 | 2026-07-15；对齐 Source append receipt，并闭合多 ChangeSet 部分应用后的补偿回滚路径 |
 
 本文定义输入与迁移语义，不实现连接器、OCR、ASR、视频处理、真实历史迁移或迁移框架。
 
@@ -100,7 +100,11 @@ sensitivity_hint: suggestion only
 
 ### 6.2 AppendReceipt
 
-必须包含 `intake_id`、`source_id`（stored/duplicate 时）、`status=stored|rejected|duplicate`、hash/bytes/media、ingested_at、locator scheme、coverage raw status、`policy_profile_ref`、`policy_resolution_status`、effective policy 摘要、failure、actor 和 receipt ID。duplicate receipt 必须引用既有 Source/provenance 结果，不伪造新 Source 已存储，也不得用本次较宽 hint 改写既有 Source policy。
+```yaml
+append_receipt_status_values: [stored, duplicate, rejected]
+```
+
+必须包含 `intake_id`、`source_id`（stored/duplicate 时）、上述终态 `status`、hash/bytes/media、ingested_at、locator scheme、coverage raw status、`policy_profile_ref`、`policy_resolution_status`、effective policy 摘要、failure、actor 和 receipt ID。该集合是 S1 `source_append_status_values` 的终态子集，S9 的 Intake/AppendReceipt 不得给相同状态名附加不同语义。duplicate receipt 必须引用既有 Source/provenance 结果，不伪造新 Source 已存储，也不得用本次较宽 hint 改写既有 Source policy。
 
 ### 6.3 ParseArtifact
 
@@ -146,12 +150,16 @@ verifying -> verified | verification_failed
 verification_failed | verified -> rolling_back
 rolling_back -> rolled_back | rollback_failed
 rollback_failed -> rolling_back  (新 rollback attempt)
-failed -> planned (新 plan/version)
+failed -> rolling_back  (已有一个或多个子 ChangeSet 发布)
+failed -> planned       (仅零子 ChangeSet 发布，且使用新 plan/version)
+rolled_back -> planned  (使用新 plan/version)
 ```
+
+Migration apply attempt MUST 记录有序 `planned_changeset_refs`、每个子 ChangeSet 的实际 terminal status/`published_revision`、`last_safe_revision` 和 `rollback_attempt_refs`。多个 ChangeSet 不是一个跨 ChangeSet 原子事务：若前项已发布而后项失败，Migration 状态为 `failed`，随后必须补偿已发布项并进入 `rolling_back`；全部补偿成功前不得进入 `planned`、`applied` 或 `verified`。补偿按逆序、基于执行时 current revision 运行 S3 preflight；任何介入变更或补偿失败进入 `rollback_failed`，不得覆盖介入语义。
 
 ## 8. 允许与禁止的状态转换
 
-允许：stored 后以新 attempt 解析重试；duplicate 引用已有 Source；dry run 后人工批准；应用失败回到新计划；验证失败或后来主动撤销时补偿回滚。
+允许：stored 后以新 attempt 解析重试；duplicate 引用已有 Source；dry run 后人工批准；零 Canonical 写入的应用失败进入新计划；已有部分写入的应用失败或验证失败进入补偿回滚；verified 迁移可由后来明确撤销触发补偿回滚。
 
 禁止：解析失败把 Source 改 rejected；near duplicate 自动合并；parser 输出写 verified；未校验 Pack 直接 applying；迁移原地重写历史；未知字段静默丢弃；真实数据进入 Micro fixture。
 
@@ -175,6 +183,7 @@ failed -> planned (新 plan/version)
 | `IMM-INV-014` | resource/Pack 引用不能越界或触发主动内容；迁移未验证不得称 verified |
 | `IMM-INV-015` | rollback 失败必须保持显式不安全状态并可重试，不能称 rolled_back/verified |
 | `IMM-INV-016` | Intake 到 Source policy/subject 字段是授权声明与 profile 的确定性映射；不得依赖正文解析，缺失时使用 provisional 保守默认 |
+| `IMM-INV-017` | 多 ChangeSet migration 部分应用后必须按已发布清单补偿；全部补偿成功前保持 failed/rolling_back/rollback_failed，不能重新计划或声称 applied/verified |
 
 ## 10. 时间语义
 
@@ -218,7 +227,7 @@ failed -> planned (新 plan/version)
 | hash mismatch | quarantine/reject，不静默修复 |
 | unsupported media | Source 可保存，解析 unavailable |
 | unknown schema | quarantine，保留 pack/blob |
-| migration partial failure | S3 原子失败或补偿回滚，不声称 applied |
+| migration partial failure | 若零子 ChangeSet 发布可使用新 plan；若已有发布则记录清单并进入补偿回滚，全部成功前不称 applied/verified |
 | post-apply verification failure | `verification_failed`，不得称 verified；执行补偿回滚并保留失败 artifact |
 | compensation rollback failure | `rollback_failed`，保留 applied revision 与失败 receipt，隔离结果并以新 attempt 重试；不得称 rolled_back/verified |
 | connector unavailable | 不影响本地已有 Source；明确 unavailable |
@@ -253,7 +262,7 @@ failed -> planned (新 plan/version)
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: ingestion_migration_v0_3
+suite_id: ingestion_migration_v0_4
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -292,8 +301,9 @@ suite_passed: false
 | `IMM-AT-028` | verification_failed 后补偿 rollback 注入失败 | 状态 rollback_failed，applied/失败历史与 receipt 保留；重试使用新 attempt，期间不称 verified/rolled_back |
 | `IMM-AT-029` | Micro direct-owner Intake 显式声明 subjects/third-party，引用 private/personal profile | expected Source 的 owner/recorder/subjects/sensitivity/compartments/retention 字段唯一确定且 status=declared；正文零参与 |
 | `IMM-AT-030` | Intake 未声明 subjects/compartments，hint=normal，profile floor=private/default personal | Source stored 为 private/personal/provisional、subjects=[]、third-party=unknown；后续解析只生成受控 metadata proposal |
+| `IMM-AT-031` | 三个有序 migration ChangeSet 中第一个已发布、第二个失败，随后补偿成功或注入介入冲突 | 记录实际 published list；先进入 failed 再 rolling_back；成功时 rolled_back 且历史保留，冲突时 rollback_failed；任何情况下都不称 applied/verified，也不覆盖介入变更 |
 
-不变量覆盖：001→AT001-004/026；002→003/004/026；003→005/006；004→018-021/027/028；005→007-010；006→011；007→015/016；008→016/017；009→017-021/027/028；010→022；011→023/024；012→012/025；013→003/004/026；014→025/027；015→028；016→029/030。
+不变量覆盖：001→AT001-004/026；002→003/004/026；003→005/006；004→018-021/027/028/031；005→007-010；006→011；007→015/016；008→016/017；009→017-021/027/028/031；010→022；011→023/024；012→012/025；013→003/004/026；014→025/027；015→028/031；016→029/030；017→AT031。
 
 ## 20. 未决问题
 
@@ -302,8 +312,8 @@ suite_passed: false
 ## 21. 完成定义
 
 - Intake、Source receipt、parser、candidate、dedup、quarantine、migration 和 rollback 可测试。
-- 16 条不变量、30 个测试有映射。
+- 17 条不变量、31 个测试有映射。
 - FR-001/002/108/302/303 进入追踪；连接器/真实迁移仍 deferred。
 - 未选择适配/迁移技术；测试未执行。
 
-当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。Intake 到 Source policy/subject 的确定性映射已闭合；测试尚未物化、执行或通过，仍不得把文档当实现、权限 runtime 或测试通过。
+当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Intake/Source receipt 已与 S1 对齐，多 ChangeSet 迁移的部分应用与补偿回滚状态已闭合；测试仍未物化、执行或通过。

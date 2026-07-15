@@ -11,7 +11,7 @@
 | `suite_executed` | 对适用版本实际运行并保存结果 | `false` |
 | `suite_passed` | 同一次 current run 的全部 required tests 通过 | `false` |
 
-依据：PRD §6.14、§22；S6 v0.3；`MICRO_MVP_ACCEPTANCE.md`。
+依据：PRD v0.5 §6.14、§22；S6 v0.4；`MICRO_MVP_ACCEPTANCE.md`。
 
 ## 2. 目录职责
 

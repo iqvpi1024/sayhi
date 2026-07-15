@@ -5,21 +5,21 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-HTH-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv04.md` v0.4 |
-| 上游 | S1-S5 `Approved` |
+| 产品基线 | `PRDv05.md` v0.5 |
+| 上游 | S1 v0.5、S2-S5 v0.4，均 `Approved` |
 | 产品裁决 | `IQ-014`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| 纠偏复审 | 2026-07-14；分离 test/run/artifact/applicability/result 枚举并锁定 Micro required refs |
+| v0.5 兼容复审 | 2026-07-15；维持 test/run/artifact/applicability/result 分轴并对齐 PRD 四态测试声明 |
 
 本文定义如何证明 SPEC，不实现测试运行器、不选择测试框架，也不把文档场景当成已执行结果。
 
 ## 1. 目标
 
 1. 统一 fixture、确定性时钟、输入、ChangeSet、预期 Canonical、View 和禁止变化 oracle。
-2. 机器可检查地区分 defined、executed、passed。
+2. 机器可检查地区分 defined、materialized、executed、passed。
 3. 覆盖正常、反例、冲突、权限、失败、撤销、重放和迁移。
 4. 建立 PRD→SPEC→Test→Module→Result 的可追踪结果合同。
 5. 把 Micro-MVP 作为第一套必须实现的离线合成测试。
@@ -214,7 +214,7 @@ Micro fixture 固定 `now`，执行确认、原子发布、两个 View、历史�
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: semantic_harness_contract_v0_3
+suite_id: semantic_harness_contract_v0_4
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -259,9 +259,9 @@ suite_passed: false
 
 ## 21. 完成定义
 
-- 三态测试、fixture、result、trace、SLO 和隐私合同完整。
+- defined/materialized/executed/passed 四态、fixture、result、trace、SLO 和隐私合同完整。
 - 12 条不变量、27 个测试有映射。
 - Micro suite 被指定为首套 required，但仍未执行。
 - 未选择测试框架；没有伪造 Implementation Module。
 
-当前结论：本 SPEC v0.3 于 2026-07-14 完成 Micro Gate 纠偏并保持 `Approved`。individual/run/artifact/applicability/verification 枚举与 Micro required Test Ref 权威映射已分离；所有 suite 仍未物化、未执行、未通过。
+当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。individual/run/artifact/applicability/verification 枚举与 Micro required Test Ref 权威映射继续分离；所有 suite 仍未物化、未执行、未通过。
