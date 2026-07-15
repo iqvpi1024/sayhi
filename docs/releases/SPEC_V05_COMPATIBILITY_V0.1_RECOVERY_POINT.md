@@ -44,11 +44,14 @@ business_verification: not_executed
 
 ```powershell
 git fetch origin --tags
-git verify-tag spec-v05-compatibility-v0.1-approved
+git cat-file -t spec-v05-compatibility-v0.1-approved
+git rev-parse spec-v05-compatibility-v0.1-approved^{}
 git switch -c restore/spec-v05-compatibility spec-v05-compatibility-v0.1-approved
 powershell -ExecutionPolicy Bypass -File .\tools\validate_product_baseline.ps1
 powershell -ExecutionPolicy Bypass -File .\tools\validate_spec_baseline.ps1
 ```
+
+第一条 tag 检查的预期输出为 `tag`；本恢复点是 annotated 但未配置 GPG 签名，因此不使用会要求签名的 `git verify-tag` 冒充完整性检查。
 
 若只需查看，不创建分支，可使用：
 
