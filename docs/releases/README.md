@@ -40,4 +40,4 @@
 
 ## 5. 当前已知基线
 
-最近的规范纠偏恢复点为 tag `micro-gate-corrective-v0.1-validated`。本流程建档完成并验证后应创建独立的新恢复点；它仍然只是流程/文档基线。
+最近的开发前恢复点为 tag `micro-development-ready-v0.1-approved`，记录见 `MICRO_DEVELOPMENT_READY_V0.1_RECOVERY_POINT.md`。它只证明当前 Micro 已达到 `implementation_planned`，不证明业务实现或业务测试通过。
