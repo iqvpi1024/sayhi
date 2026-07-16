@@ -13,7 +13,7 @@
 | Suite Manifest | `tests/micro_suite_manifest.json`；SHA-256 `54d70b993dbd5ce117605f6b07c305d2b97eba67df6a782c0e75f3afc28a5390` |
 | Scope Owner | Noetide Technical Lead |
 
-计划批准表示任务边界可施工。TASK-001..009 已完成；TASK-010 正在完成 Gate Review 与 Recovery Point 发布。
+计划批准表示任务边界可施工。TASK-001..010 已完成；Micro Recovery Point 已发布。
 
 ## 1. 目标与非目标
 
@@ -72,7 +72,7 @@ synthetic text Source -> contact ChangeSet -> user approval
 | `TASK-007` | `views.py` project/read/reconcile | S3 §6.4/§14；`MM-005/010` | 两 View 对齐 rev_011；单 View 失败仅 fallback 或无旧 payload；reconcile 不改 Canonical | `completed` |
 | `TASK-008` | `changesets.py` compensation + audit；Views 收敛 | S3 §7.3/§15；`MM-008` | 新 rev_012 恢复等价 active；rev_011/原 ChangeSet 保留；两 View/保护字段一致 | `completed` |
 | `TASK-009` | 全模块 hardening、runner 真实执行、result artifact | S6 §6-§15；49 required IDs | 同一次 current run 全部 required 执行；真实结果不可覆盖；任何 skip 只能 partial | `completed` |
-| `TASK-010` | Matrix/Verification/Gate/Recovery Point | Process、Change Control、S6 §6.4 | 回填实际模块与 run；P0/P1=0 才 Review pass；commit/tag/push 后可恢复 | `in_progress` |
+| `TASK-010` | Matrix/Verification/Gate/Recovery Point | Process、Change Control、S6 §6.4 | 回填实际模块与 run；P0/P1=0 才 Review pass；commit/tag/push 后可恢复 | `completed` |
 
 ## 5. 实施顺序与检查点
 

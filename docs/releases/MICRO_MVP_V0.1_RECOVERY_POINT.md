@@ -2,14 +2,16 @@
 
 ## 1. 状态
 
-`pending_publish`。本记录先固定恢复合同；只有 annotated tag 创建、推送且远端可解析后，才可改为 `published`。
+`published`。annotated tag 与分支已推送，远端引用已核验。
 
 ## 2. 恢复对象
 
 | 字段 | 值 |
 |---|---|
 | Branch | `codex/micro-development-readiness` |
-| Planned tag | `micro-mvp-v0.1-validated` |
+| Tag | `micro-mvp-v0.1-validated` |
+| Tag target | `b629faf79549c821d1b8907e3408cdf3059a5184` |
+| Remote | `origin`（SSH remote 已核验） |
 | Verified implementation commit | `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de` |
 | Business result | `docs/testing/results/micro-task009-lf-20260717.json` |
 | Business result SHA-256 | `20fabfafb061c20fcf1d941c0e84b191ea9bb32be28769aadeaab961a10f2817` |

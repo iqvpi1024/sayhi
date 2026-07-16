@@ -29,8 +29,8 @@ Finding：P0=0、P1=0、P2=0；P3=1（既有 `MMF-017`，完整长期 SPEC suite
 
 - 本结论只证明单进程、本地、离线、合成数据的 `MM-001..010` 及其 39 个 required upstream slices。
 - 不证明权限 runtime、删除、MCP、连接器、迁移、同步、多设备、性能 SLO、财务、健康、决策、多 Agent 或长期 portability。
-- Recovery Point 尚待创建 annotated tag 并推送、核验远端引用；完成前不得把本 Gate 解释为已发布恢复点。
+- Recovery Point 已创建为 annotated tag `micro-mvp-v0.1-validated`，已推送并由远端解析到 `b629faf79549c821d1b8907e3408cdf3059a5184`。
 
 ## 5. 下一步唯一动作
 
-创建并推送 Micro-MVP 的 annotated Git Recovery Point，随后核验远端分支和 tag 可解析。
+为下一个产品切片建立 Product Decision Gate；不得从本 Gate 自动扩张实现范围。

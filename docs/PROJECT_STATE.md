@@ -25,8 +25,8 @@
 | 项目 | 识海 Noetide |
 | 日期 | 2026-07-17 |
 | 当前切片 | `SLICE-MICRO-RELATIONSHIP-001` |
-| 当前切片交付阶段 | `verification_and_gate` |
-| 开发门禁 | `open`；TASK-001..009 已完成，TASK-010 正在完成 Gate 与 Recovery Point |
+| 当前切片交付阶段 | `recovery_point_published` |
+| 开发门禁 | 当前 Micro 切片已关闭；TASK-001..010 全部完成 |
 | 当前 PRD | `PRDv05.md` v0.5，`Approved Product Baseline` |
 | PRD v0.5 canonical LF SHA-256 | `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 历史 PRD | `PRDv04.md` v0.4，`superseded_read_only`，hash `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
@@ -39,10 +39,10 @@
 | Business Verification | `passed`；同一次 current run 的 49/49 required result IDs passed |
 | Business Implementation | TASK-001..009 已完成：最小 SQLite persistence、Source Append、ChangeSet publish、双时态查询、L2 Views、补偿撤销与完整离线 runner 验证；TASK-010 进行中 |
 | ADR / Architecture | `ADR-0001 Accepted` / `ARCH-MICRO-REL-001` |
-| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..009 completed，TASK-010 in progress |
+| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..010 completed |
 | 当前切片技术基线 | Python 3.12 stdlib + 单进程 SQLite；非长期最终技术栈 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 分支 `codex/micro-development-readiness`；受测实现提交 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de`；Micro Recovery Point 待发布 |
+| Git | 分支 `codex/micro-development-readiness` 已推送；tag `micro-mvp-v0.1-validated` 已推送并解析到 `b629faf79549c821d1b8907e3408cdf3059a5184` |
 
 ## 3. 本阶段完成内容
 
@@ -63,6 +63,7 @@
 15. TASK-007 已实现 `person_card`、`relationship_timeline` 投影、Publish Barrier 读取和单 View 失败的 Canonical fallback/reconcile。
 16. TASK-008 已实现整包补偿撤销、新 `rev_012`、审计 event 和两个 View 的撤销后收敛。
 17. TASK-009 已在 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de` 上通过正式离线 runner；`docs/testing/results/micro-task009-lf-20260717.json` 记录 49 个 required result IDs 全部 `passed`，exit code `0`，仅使用合成数据且隐私扫描通过。
+18. TASK-010 已完成：实现后 Gate Review P0=0、P1=0；annotated tag `micro-mvp-v0.1-validated` 和分支已推送，远端引用已核验。
 
 ## 4. 开发前静态验证记录（历史）
 
@@ -126,11 +127,8 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 - 当前 PRD/Micro blocking=0、important=0。
 - `DQ-001..013` 均 deferred，按记录阶段重开；S2/S5/S8 的保守规则不等于永久产品决定。
 - `MMF-017` 保持 P3：长期 275 个合同测试按切片逐套物化。
-- 业务 suite 未执行；所有业务行为仍待实现和真实 run 证明。
-- TASK-003 起必须实现实际业务路径，不得将 TASK-002 的明确 `NotImplementedError` bootstrap 当作完成实现。
-- TASK-003 的累计定向测试、产品基线与 SPEC 校验均 exit code 0；完整 suite 仍未执行。
-- TASK-004/005 定向测试及正式 `MM-002`、`MM-009` 合约测试均 exit code 0；`MM-004` 的时间查询部分留待 TASK-006。
-- TASK-006/007/008 定向测试和正式 `MM-004`、`MM-005`、`MM-006`、`MM-007`、`MM-008`、`MM-010` 合约测试均 exit code 0；完整 runner 仍未执行。
+- 本 Micro suite 已执行，但它只证明固定单进程、离线、合成链路；不能外推为完整产品业务验证。
+- 后续切片必须重新完成产品裁决、SPEC、Traceability、ADR、可执行 suite 和 Implementation Plan，不得复用 Micro 的 passed 结果。
 - 权限 runtime、MCP、连接器、真实迁移、同步、财务、健康、决策、多 Agent、A2A、数字遗产继续禁止。
 
 ## 7. 范围锁与风险
@@ -144,11 +142,11 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | 运行数据落到仓库外 | runner/test 根固定 `tmp/micro-runs/` 且 Git ignore |
 | 真实个人数据进入项目 | synthetic fixture、网络禁用和隐私扫描 |
 | 开工扩大范围 | Plan 固定 10 tasks；每个停止条件回 Change Control |
-| Bootstrap 端口被误当业务实现 | TASK-002 仅证明 factory/Clock/Protocol；完整 suite 保持未执行 |
+| Bootstrap 端口被误当业务实现 | TASK-002 仍为 test-only factory；业务通过只限已记录的固定 Micro 合同 |
 
 ## 8. 下一步唯一建议动作
 
-**完成 `PLAN-MICRO-REL-001` 的 TASK-010：复核运行记录并创建 Gate Review、Recovery Record、annotated tag 和远端可解析的恢复点。**
+**为下一个产品切片建立 Product Decision Gate；在没有批准范围、SPEC 和可执行 suite 前不得开始任何新业务代码。**
 
 ## 9. 变更日志
 
