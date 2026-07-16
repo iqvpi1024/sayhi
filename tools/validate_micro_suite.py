@@ -146,14 +146,39 @@ expected_flags = {
     "suite_executed": False,
     "suite_passed": False,
 }
-if manifest.get("flags") != expected_flags:
-    fail(f"manifest flags do not match materialized/not-executed state: {manifest.get('flags')}")
+executed_flags = {
+    "suite_defined": True,
+    "suite_materialized": True,
+    "suite_executed": True,
+    "suite_passed": True,
+}
+flags = manifest.get("flags")
+if flags != expected_flags and flags != executed_flags:
+    fail(f"manifest flags are not a valid materialized or passed state: {flags}")
+if flags == expected_flags:
+    if manifest.get("latest_verification_result") != "not_executed":
+        fail("materialized/no-run state must not claim a verification result")
+    if manifest.get("latest_run_applicability") != "not_applicable":
+        fail("materialized/no-run state must use not_applicable")
+elif flags == executed_flags:
+    result_path = manifest.get("latest_verification_result_path")
+    if not isinstance(result_path, str):
+        fail("passed state must name its immutable Verification Result")
+    else:
+        result = load_json(result_path)
+        if (
+            result.get("run_result") != "passed"
+            or result.get("exit_code") != 0
+            or result.get("privacy_scan", {}).get("status") != "passed"
+            or len(result.get("required_results", [])) != 49
+        ):
+            fail("passed state does not bind a complete passing Verification Result")
+    if manifest.get("latest_verification_result") != "passed":
+        fail("passed state must report latest_verification_result=passed")
+    if manifest.get("latest_run_applicability") != "current":
+        fail("passed state must report latest_run_applicability=current")
 if manifest.get("suite_artifact_state") != "materialized":
     fail("suite_artifact_state must be materialized")
-if manifest.get("latest_verification_result") != "not_executed":
-    fail("materialization must not claim a verification result")
-if manifest.get("latest_run_applicability") != "not_applicable":
-    fail("no-run applicability must be not_applicable")
 if manifest.get("required_scenario_ids") != expected_mm:
     fail("required scenario IDs are not ordered MM-001..MM-010")
 if manifest.get("privacy") != {

@@ -23,10 +23,10 @@
 | 字段 | 值 |
 |---|---|
 | 项目 | 识海 Noetide |
-| 日期 | 2026-07-16 |
+| 日期 | 2026-07-17 |
 | 当前切片 | `SLICE-MICRO-RELATIONSHIP-001` |
-| 当前切片交付阶段 | `implementation_planned` |
-| 开发门禁 | `open`；业务开发尚未开始 |
+| 当前切片交付阶段 | `implementing` |
+| 开发门禁 | `open`；TASK-001..008 已完成，TASK-009..010 尚未开始 |
 | 当前 PRD | `PRDv05.md` v0.5，`Approved Product Baseline` |
 | PRD v0.5 canonical LF SHA-256 | `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 历史 PRD | `PRDv04.md` v0.4，`superseded_read_only`，hash `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
@@ -37,12 +37,12 @@
 | Micro required | `MM-001..010`；39 个去重 upstream refs；49 个 required result IDs |
 | Suite | `defined=true`、`materialized=true`、`executed=false`、`passed=false` |
 | Business Verification | `not_executed` |
-| Business Implementation | 无；`src/noetide_micro` 不存在 |
+| Business Implementation | TASK-001..008 已完成：最小 SQLite persistence、Source Append、ChangeSet publish、双时态查询、L2 Views 与补偿撤销；TASK-009..010 未开始 |
 | ADR / Architecture | `ADR-0001 Accepted` / `ARCH-MICRO-REL-001` |
-| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..010 全部 pending |
+| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..008 completed，TASK-009..010 pending |
 | 当前切片技术基线 | Python 3.12 stdlib + 单进程 SQLite；非长期最终技术栈 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 分支 `codex/micro-development-readiness`；内容提交 `581e2838093b21db6a9f80c348d3980878c275ae`；Recovery tag `micro-development-ready-v0.1-approved` |
+| Git | 分支 `codex/micro-development-readiness`；当前实现尚未形成提交；上一开发前 Recovery tag 为 `micro-development-ready-v0.1-approved` |
 
 ## 3. 本阶段完成内容
 
@@ -54,6 +54,14 @@
 6. 建立并批准 `PLAN-MICRO-REL-001`，7 个目标模块、TASK-001..010 全部 pending。
 7. 开发前 Gate Review 结论 yes；没有业务源码、依赖、数据库实例或业务结果。
 8. Python/JSON/Markdown/PowerShell 的 Git EOL 策略固定为 LF，manifest raw-byte digest 可在恢复后复算。
+9. TASK-001 已建立 `src/noetide_micro` 最小 SQLite persistence foundation：Source/Canonical/Ledger/Projection 逻辑分层表、显式事务、`foreign_keys=ON`、`journal_mode=DELETE`、`synchronous=FULL` 与 `rev_010` 合成 seed；没有业务 trigger。
+10. TASK-002 已建立 test-only adapter factory 与 fixture 固定 Clock。factory 仅接受仓库内临时 data root 和合成 fixture，并满足 runner Protocol 的结构检查；尚未实现 Intake、Candidate、ChangeSet、Query 或 View 业务行为。
+11. TASK-003 已实现固定合成 Source Append：校验明确 request、UTF-8 byte length/hash、Source policy 初始化和 receipt；成功不改变 Canonical `rev_010`，失败返回 rejected 且不落 Source。
+12. TASK-004 已实现一个未确认的 allowlisted `end + add` contact ChangeSet、preview 和单次确认；proposal 不写 Canonical 或 Projection。
+13. TASK-005 已实现 publish attempt、base revision preflight、idempotency binding/receipt 与 SQLite L1 原子发布；第二 proposal 失败全回滚，stale base 进入 conflicted，retry 创建新 ChangeSet。
+14. TASK-006 已实现 Canonical relationship contact 半开区间查询、两 Source evidence 隔离和 protected snapshot。
+15. TASK-007 已实现 `person_card`、`relationship_timeline` 投影、Publish Barrier 读取和单 View 失败的 Canonical fallback/reconcile。
+16. TASK-008 已实现整包补偿撤销、新 `rev_012`、审计 event 和两个 View 的撤销后收敛。
 
 ## 4. 验证结果
 
@@ -80,6 +88,16 @@ git diff --check
 | Diff hygiene | `git diff --check` passed |
 | Business tests | `not_executed` |
 
+TASK-001/TASK-002 定向验证已实际运行：
+
+```powershell
+$env:PYTHONPATH='src'; python -m unittest -v tests.semantic.test_task_001_store tests.semantic.test_task_002_adapter
+```
+
+exit code `0`，共 7 项测试通过。完整 `tests.runner.run_micro_suite` 未运行，`suite_executed=false`、`suite_passed=false`、Business Verification=`not_executed` 保持不变。
+
+2026-07-17 恢复核验再次实际运行同一 TASK-001/TASK-002 命令，exit code `0`，7/7 通过；并运行 `$env:PYTHONPATH='src'; python -m compileall -q src\\noetide_micro tests\\semantic`，exit code `0`。该次核验只证明 TASK-001/002 的窄范围基础能力，不构成完整 Micro suite 结果。
+
 详细环境、工具 hash、输出 digest 和诊断失败见 `docs/testing/LATEST_STATIC_VALIDATION.md`。
 
 ## 5. 当前权威产物
@@ -105,6 +123,10 @@ git diff --check
 - `DQ-001..013` 均 deferred，按记录阶段重开；S2/S5/S8 的保守规则不等于永久产品决定。
 - `MMF-017` 保持 P3：长期 275 个合同测试按切片逐套物化。
 - 业务 suite 未执行；所有业务行为仍待实现和真实 run 证明。
+- TASK-003 起必须实现实际业务路径，不得将 TASK-002 的明确 `NotImplementedError` bootstrap 当作完成实现。
+- TASK-003 的累计定向测试、产品基线与 SPEC 校验均 exit code 0；完整 suite 仍未执行。
+- TASK-004/005 定向测试及正式 `MM-002`、`MM-009` 合约测试均 exit code 0；`MM-004` 的时间查询部分留待 TASK-006。
+- TASK-006/007/008 定向测试和正式 `MM-004`、`MM-005`、`MM-006`、`MM-007`、`MM-008`、`MM-010` 合约测试均 exit code 0；完整 runner 仍未执行。
 - 权限 runtime、MCP、连接器、真实迁移、同步、财务、健康、决策、多 Agent、A2A、数字遗产继续禁止。
 
 ## 7. 范围锁与风险
@@ -118,10 +140,11 @@ git diff --check
 | 运行数据落到仓库外 | runner/test 根固定 `tmp/micro-runs/` 且 Git ignore |
 | 真实个人数据进入项目 | synthetic fixture、网络禁用和隐私扫描 |
 | 开工扩大范围 | Plan 固定 10 tasks；每个停止条件回 Change Control |
+| Bootstrap 端口被误当业务实现 | TASK-002 仅证明 factory/Clock/Protocol；完整 suite 保持未执行 |
 
 ## 8. 下一步唯一建议动作
 
-**执行 `PLAN-MICRO-REL-001` 的 TASK-001：只创建 `src/noetide_micro` package、`schema.sql` 与 `store.py`，完成 SQLite 基础配置和 rev_010 fixture seed。不得同时实现 Intake、Candidate、View 或其他任务。**
+**执行 `PLAN-MICRO-REL-001` 的 TASK-009：运行完整离线 Micro suite，保存新的不可覆盖 Verification Result，修复任何真实失败后重新运行。**
 
 ## 9. 变更日志
 

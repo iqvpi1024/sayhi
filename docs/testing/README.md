@@ -49,6 +49,6 @@
 
 结果模板见 `VERIFICATION_RESULT_TEMPLATE.md`。
 
-## 5. 当前下一步
+## 5. 当前验证状态
 
-exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。下一门禁是编制 Implementation Plan；在业务实现存在前不得运行并声称 suite 通过，也不得把矩阵中的长期测试目录整体提升为 Micro required。
+exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。当前实现尚未由离线 runner 生成可核验的业务 Verification Result；因此 `suite_executed=false`、`suite_passed=false`，TASK-009 必须先运行完整 suite。实现后 Gate Review 与 Recovery Point 仍需分别完成，不能由 suite pass 代替。

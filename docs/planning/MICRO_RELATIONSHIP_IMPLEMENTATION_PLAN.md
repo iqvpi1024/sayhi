@@ -13,7 +13,7 @@
 | Suite Manifest | `tests/micro_suite_manifest.json`；SHA-256 `54d70b993dbd5ce117605f6b07c305d2b97eba67df6a782c0e75f3afc28a5390` |
 | Scope Owner | Noetide Technical Lead |
 
-计划批准只表示任务边界可施工。所有任务当前为 pending，业务 suite 尚未执行。
+计划批准表示任务边界可施工。TASK-001..008 已在当前工作树实现并完成定向验证；TASK-009..010 仍 pending，业务 suite 尚未执行。
 
 ## 1. 目标与非目标
 
@@ -63,14 +63,14 @@ synthetic text Source -> contact ChangeSet -> user approval
 
 | Task ID | 修改范围 | SPEC/Test 依据 | 完成条件 | 状态 |
 |---|---|---|---|---|
-| `TASK-001` | package、`schema.sql`、`store.py` | S1 §5-§9；S3 §6.3/§9；ADR-0001 | 仅逻辑分层表；foreign_keys on、DELETE journal、FULL sync；fixture seed 得到 rev_010；无业务 trigger | `pending` |
-| `TASK-002` | `testing_adapter.py` 基础 factory 与固定 Clock | S6 §6.2/§10；HTH-AT-006/007；manifest | 只在调用者提供的仓库内 data_root 建库；无网络；适配器满足 Protocol 的结构检查 | `pending` |
-| `TASK-003` | `intake.py` + adapter intake/source | S1 §6.2/§7.1；S4 §6.6；S9 §6-§7；`MM-001` | 58-byte Source/receipt/policy 精确；写失败 rejected；Canonical rev_010 不变 | `pending` |
-| `TASK-004` | `candidate.py` + preview/approval facade | S1 §6.6；S3 §6.1-§6.2；S5 §6.4；`MM-002/003` | 只产生 end+add；single confirmation；impact 仅两个 View；未确认零 Canonical/View 变化 | `pending` |
-| `TASK-005` | `changesets.py` publish/preflight/idempotency/failure | S3 §6-§14；`MM-004/009` | 成功只增 rev_011；proposal 2 failure 全回滚；stale base conflicted；同 key 重放同 receipt | `pending` |
-| `TASK-006` | `queries.py` + Canonical protected snapshot | S1 §6.6；S2 §6/§10-§11；`MM-006/007` | 半开区间查询正确；两 Source evidence 不互换；三个 protected digest/revision/成员不变 | `pending` |
-| `TASK-007` | `views.py` project/read/reconcile | S3 §6.4/§14；`MM-005/010` | 两 View 对齐 rev_011；单 View 失败仅 fallback 或无旧 payload；reconcile 不改 Canonical | `pending` |
-| `TASK-008` | `changesets.py` compensation + audit；Views 收敛 | S3 §7.3/§15；`MM-008` | 新 rev_012 恢复等价 active；rev_011/原 ChangeSet 保留；两 View/保护字段一致 | `pending` |
+| `TASK-001` | package、`schema.sql`、`store.py` | S1 §5-§9；S3 §6.3/§9；ADR-0001 | 仅逻辑分层表；foreign_keys on、DELETE journal、FULL sync；fixture seed 得到 rev_010；无业务 trigger | `completed` |
+| `TASK-002` | `testing_adapter.py` 基础 factory 与固定 Clock | S6 §6.2/§10；HTH-AT-006/007；manifest | 只在调用者提供的仓库内 data_root 建库；无网络；适配器满足 Protocol 的结构检查 | `completed` |
+| `TASK-003` | `intake.py` + adapter intake/source | S1 §6.2/§7.1；S4 §6.6；S9 §6-§7；`MM-001` | 58-byte Source/receipt/policy 精确；写失败 rejected；Canonical rev_010 不变 | `completed` |
+| `TASK-004` | `candidate.py` + preview/approval facade | S1 §6.6；S3 §6.1-§6.2；S5 §6.4；`MM-002/003` | 只产生 end+add；single confirmation；impact 仅两个 View；未确认零 Canonical/View 变化 | `completed` |
+| `TASK-005` | `changesets.py` publish/preflight/idempotency/failure | S3 §6-§14；`MM-004/009` | 成功只增 rev_011；proposal 2 failure 全回滚；stale base conflicted；同 key 重放同 receipt | `completed` |
+| `TASK-006` | `queries.py` + Canonical protected snapshot | S1 §6.6；S2 §6/§10-§11；`MM-006/007` | 半开区间查询正确；两 Source evidence 不互换；三个 protected digest/revision/成员不变 | `completed` |
+| `TASK-007` | `views.py` project/read/reconcile | S3 §6.4/§14；`MM-005/010` | 两 View 对齐 rev_011；单 View 失败仅 fallback 或无旧 payload；reconcile 不改 Canonical | `completed` |
+| `TASK-008` | `changesets.py` compensation + audit；Views 收敛 | S3 §7.3/§15；`MM-008` | 新 rev_012 恢复等价 active；rev_011/原 ChangeSet 保留；两 View/保护字段一致 | `completed` |
 | `TASK-009` | 全模块 hardening、runner 真实执行、result artifact | S6 §6-§15；49 required IDs | 同一次 current run 全部 required 执行；真实结果不可覆盖；任何 skip 只能 partial | `pending` |
 | `TASK-010` | Matrix/Verification/Gate/Recovery Point | Process、Change Control、S6 §6.4 | 回填实际模块与 run；P0/P1=0 才 Review pass；commit/tag/push 后可恢复 | `pending` |
 

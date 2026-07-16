@@ -216,7 +216,7 @@ def main() -> int:
             "locale": "zh-CN",
             "random_seed": 0,
         },
-        "command": [sys.executable, "-m", "tests.runner.run_micro_suite", *sys.argv[1:]],
+        "command": ["python", "-m", "tests.runner.run_micro_suite", *sys.argv[1:]],
         "exit_code": exit_code,
         "run_result": run_result,
         "required_results": required_results,
