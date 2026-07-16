@@ -20,7 +20,7 @@ PRD Requirement
 | `specified_not_implemented` | 语义合同已足以指导后续实现，但不属于 Micro | 可声称已规范，不可声称已实现或验证 |
 | `boundary_only_deferred` | 当前只锁定不变量、旁路禁止或对象边界，完整能力明确后置 | 不可声称该 FR 已完成规范闭环 |
 
-当前所有 Implementation Module 均为 `TBD`，所有 suite 均 `suite_materialized=false`，所有 Verification Result 均为 `not_executed`，当前适用性为 `current`。`TBD` 是诚实缺口，不是豁免。依据：PRD v0.5 §6.14、§22.1；S6 v0.4。
+当前所有 Implementation Module 均为 `TBD`，Micro exact suite 已 `suite_materialized=true`，九份 SPEC 全量 suite 仍未物化；所有 Verification Result 均为 `not_executed`，当前适用性为 `current`。`TBD` 是诚实缺口，不是豁免。依据：PRD v0.5 §6.14、§22.1；S6 v0.5。
 
 Test Ref 简写采用固定语法：`PREFIX-AT-001/004/009` 表示同 prefix 的离散集合，`PREFIX-AT-001-009` 表示含首尾的连续范围，“`PREFIX-AT-001` 至 `PREFIX-AT-009`”与连续范围等价。静态校验必须展开简写并确认每个 ID 存在；不得使用无法解析的自然语言代替 Test Ref。
 
@@ -28,12 +28,12 @@ Test Ref 简写采用固定语法：`PREFIX-AT-001/004/009` 表示同 prefix 的
 
 | 代号 | SPEC | 版本 | 状态 |
 |---|---|---|---|
-| S1 | Semantic Object Model | v0.5 | `Approved` |
-| S2 | Bitemporal & Evidence | v0.4 | `Approved` |
+| S1 | Semantic Object Model | v0.6 | `Approved` |
+| S2 | Bitemporal & Evidence | v0.5 | `Approved` |
 | S3 | ChangeSet & Consistency | v0.4 | `Approved` |
 | S4 | Privacy & Access Policy | v0.4 | `Approved` |
 | S5 | Shiling Policy | v0.4 | `Approved` |
-| S6 | Semantic Test Harness | v0.4 | `Approved` |
+| S6 | Semantic Test Harness | v0.5 | `Approved` |
 | S7 | Storage, Index & Portability | v0.3 | `Approved` |
 | S8 | MCP Contract | v0.3 | `Approved` |
 | S9 | Ingestion & Migration | v0.4 | `Approved` |

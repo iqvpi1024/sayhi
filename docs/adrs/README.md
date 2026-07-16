@@ -41,4 +41,4 @@ Accepted ADR 的实质决定不原地改写。需要改变时创建新 ADR，并
 
 ## 5. 当前状态
 
-当前没有 ADR。`SLICE-MICRO-RELATIONSHIP-001` 的下一步是只提出该链路真正需要的最小 ADR；不得顺带选择长期数据库、云服务、图平台、全连接器或多 Agent 框架。
+`ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md` 已于 2026-07-16 Accepted，仅为 `SLICE-MICRO-RELATIONSHIP-001` 选择 Python 标准库、单进程 SQLite 事务和 JSON 测试工件。它不是长期最终数据库或技术栈承诺。下一门禁是物化 exact Micro suite，仍不得编写业务实现。

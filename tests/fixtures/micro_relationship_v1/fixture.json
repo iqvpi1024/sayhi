@@ -1,0 +1,459 @@
+{
+  "schema_version": "noetide.micro-fixture.v1",
+  "fixture_id": "micro_relationship_v1",
+  "synthetic": true,
+  "privacy_classification": "synthetic_only",
+  "external_data_used": false,
+  "determinism": {
+    "clock": "2031-10-15T02:00:00Z",
+    "timezone": "Asia/Shanghai",
+    "locale": "zh-CN",
+    "random_seed": 0,
+    "id_strategy": "fixed_fixture_ids_v1"
+  },
+  "source_policy_profile": {
+    "policy_profile_ref": "owner_intake_private_v1",
+    "sensitivity_floor": "private",
+    "default_compartments": [
+      "personal"
+    ],
+    "retention_policy_ref": "user_controlled_v1",
+    "direct_owner_recorder_fallback": "owner_ref",
+    "unresolved_subject_access": "owner_intake_only"
+  },
+  "intake_request": {
+    "intake_id": "intake_micro_001",
+    "source_kind": "synthetic_text",
+    "source_system": "synthetic_fixture",
+    "inline_content": "从2031年9月1日起，我不再与 person_beta 联系。",
+    "source_created_at": "unknown",
+    "language": "zh-CN",
+    "source_timezone": "Asia/Shanghai",
+    "declared_media_type": "text/plain; charset=utf-8",
+    "content_hash": "53bbc4541a77a435f5401b459d1d3e2c21af7a343931341c6db498c28880013c",
+    "owner_ref": "person_alpha",
+    "policy_profile_ref": "owner_intake_private_v1",
+    "recorder_ref": "person_alpha",
+    "declared_subject_refs": [
+      "person_alpha",
+      "person_beta"
+    ],
+    "declared_third_party_present": true,
+    "declared_compartments": [
+      "personal"
+    ],
+    "sensitivity_hint": "private"
+  },
+  "expected_append_receipt": {
+    "receipt_id": "receipt_micro_001",
+    "intake_id": "intake_micro_001",
+    "source_id": "src_micro_001",
+    "status": "stored",
+    "hash_algorithm": "sha256",
+    "byte_length": 58,
+    "media_type": "text/plain; charset=utf-8",
+    "ingested_at": "2031-10-15T02:00:00Z",
+    "locator_scheme": "text_utf8_byte_range_v1",
+    "coverage_raw_status": "absent",
+    "policy_profile_ref": "owner_intake_private_v1",
+    "policy_resolution_status": "declared",
+    "effective_policy": {
+      "owner_ref": "person_alpha",
+      "recorder_ref": "person_alpha",
+      "subject_refs": [
+        "person_alpha",
+        "person_beta"
+      ],
+      "sensitivity": "private",
+      "compartments": [
+        "personal"
+      ],
+      "third_party_present": true,
+      "retention_policy_ref": "user_controlled_v1",
+      "retention_state": "active"
+    },
+    "failure": null,
+    "actor": "user"
+  },
+  "source_records": [
+    {
+      "source_id": "src_micro_001",
+      "source_kind": "synthetic_text",
+      "source_system": "synthetic_fixture",
+      "inline_content": "从2031年9月1日起，我不再与 person_beta 联系。",
+      "content_ref": "fixture://micro/src_micro_001.txt",
+      "content_hash": "53bbc4541a77a435f5401b459d1d3e2c21af7a343931341c6db498c28880013c",
+      "byte_length": 58,
+      "source_created_at": "unknown",
+      "ingested_at": "2031-10-15T02:00:00Z",
+      "language": "zh-CN",
+      "source_timezone": "Asia/Shanghai",
+      "locator_scheme": "text_utf8_byte_range_v1",
+      "append_receipt_id": "receipt_micro_001",
+      "policy_profile_ref": "owner_intake_private_v1",
+      "policy_resolution_status": "declared",
+      "owner_ref": "person_alpha",
+      "subject_refs": [
+        "person_alpha",
+        "person_beta"
+      ],
+      "recorder_ref": "person_alpha",
+      "sensitivity": "private",
+      "compartments": [
+        "personal"
+      ],
+      "third_party_present": true,
+      "retention_policy_ref": "user_controlled_v1",
+      "retention_state": "active",
+      "locator": {
+        "start_byte": 0,
+        "end_byte_exclusive": 58
+      }
+    },
+    {
+      "source_id": "src_history_001",
+      "source_kind": "synthetic_text",
+      "source_system": "synthetic_fixture",
+      "inline_content": "从2030年1月1日起，我与 person_beta 保持联系。",
+      "content_ref": "fixture://micro/src_history_001.txt",
+      "content_hash": "34cdc57abf184dbbd8951ca148b6d4b92b9ceecf455ef0bb55cff63be9f043b1",
+      "byte_length": 58,
+      "source_created_at": "2030-01-01T00:00:00+08:00",
+      "ingested_at": "2030-01-01T00:05:00+08:00",
+      "language": "zh-CN",
+      "source_timezone": "Asia/Shanghai",
+      "locator_scheme": "text_utf8_byte_range_v1",
+      "append_receipt_id": "receipt_history_001",
+      "policy_profile_ref": "owner_intake_private_v1",
+      "policy_resolution_status": "declared",
+      "owner_ref": "person_alpha",
+      "subject_refs": [
+        "person_alpha",
+        "person_beta"
+      ],
+      "recorder_ref": "person_alpha",
+      "sensitivity": "private",
+      "compartments": [
+        "personal"
+      ],
+      "third_party_present": true,
+      "retention_policy_ref": "user_controlled_v1",
+      "retention_state": "active",
+      "locator": {
+        "start_byte": 0,
+        "end_byte_exclusive": 58
+      }
+    }
+  ],
+  "initial_state": {
+    "data_revision": "rev_010",
+    "canonical_objects": [
+      {
+        "entity_id": "person_alpha",
+        "object_type": "entity",
+        "entity_kind": "person",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_001",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-01-01T00:00:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_alpha"
+        ],
+        "third_party_present": false,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {},
+        "identity_status": "active"
+      },
+      {
+        "entity_id": "person_beta",
+        "object_type": "entity",
+        "entity_kind": "person",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_002",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-01-01T00:00:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_beta"
+        ],
+        "third_party_present": true,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {},
+        "identity_status": "active"
+      },
+      {
+        "relationship_id": "rel_alpha_beta",
+        "object_type": "relationship",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_003",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-01-01T00:00:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_alpha",
+          "person_beta"
+        ],
+        "third_party_present": true,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {},
+        "participant_refs": [
+          "person_alpha",
+          "person_beta"
+        ],
+        "origin": "project_peer",
+        "evidence_refs": [],
+        "evidence_status": "missing",
+        "identity_status": "active"
+      },
+      {
+        "object_type": "state",
+        "state_id": "state_role_001",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_004",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-01-01T00:00:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_alpha",
+          "person_beta"
+        ],
+        "third_party_present": true,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {},
+        "state_kind": "relationship.role",
+        "subject_ref": "rel_alpha_beta",
+        "value": "peer",
+        "valid_time": {
+          "kind": "interval",
+          "start": {
+            "boundary_kind": "known",
+            "value": "2030-01-01T00:00:00+08:00",
+            "precision": "instant",
+            "certainty": "exact",
+            "timezone": "Asia/Shanghai",
+            "resolution_status": "confirmed"
+          },
+          "end": {
+            "boundary_kind": "unbounded",
+            "value": null,
+            "precision": "unknown",
+            "certainty": "unknown",
+            "timezone": "not_applicable",
+            "resolution_status": "confirmed"
+          },
+          "bounds": "[)"
+        },
+        "recorded_at": "2030-01-01T00:00:00+08:00",
+        "recorded_by": "user",
+        "evidence_refs": [],
+        "evidence_status": "missing",
+        "review_status": "confirmed"
+      },
+      {
+        "object_type": "state",
+        "state_id": "state_contact_001",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_005",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-01-01T00:10:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_alpha",
+          "person_beta"
+        ],
+        "third_party_present": true,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {},
+        "state_kind": "relationship.contact",
+        "subject_ref": "rel_alpha_beta",
+        "value": "active",
+        "valid_time": {
+          "kind": "interval",
+          "start": {
+            "boundary_kind": "known",
+            "value": "2030-01-01T00:00:00+08:00",
+            "precision": "instant",
+            "certainty": "exact",
+            "timezone": "Asia/Shanghai",
+            "resolution_status": "confirmed"
+          },
+          "end": {
+            "boundary_kind": "unbounded",
+            "value": null,
+            "precision": "unknown",
+            "certainty": "unknown",
+            "timezone": "not_applicable",
+            "resolution_status": "confirmed"
+          },
+          "bounds": "[)"
+        },
+        "recorded_at": "2030-01-01T00:10:00+08:00",
+        "recorded_by": "user",
+        "evidence_refs": [
+          {
+            "source_id": "src_history_001",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 58
+            },
+            "stance": "supports",
+            "claim_ref": "state_contact_001"
+          }
+        ],
+        "evidence_status": "present",
+        "review_status": "confirmed"
+      },
+      {
+        "assertion_id": "assertion_trust_001",
+        "object_type": "assertion",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_006",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-02-01T00:00:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_alpha",
+          "person_beta"
+        ],
+        "third_party_present": true,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {},
+        "subject_ref": "rel_alpha_beta",
+        "predicate": "relationship.trust_assessment",
+        "value": "synthetic_trust_baseline",
+        "assertion_kind": "opinion",
+        "perspective_ref": "person_alpha",
+        "evidence_refs": [],
+        "evidence_status": "missing",
+        "review_status": "confirmed",
+        "recorded_at": "2030-02-01T00:00:00+08:00"
+      },
+      {
+        "assertion_id": "assertion_closeness_001",
+        "object_type": "assertion",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_007",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-02-01T00:00:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_alpha",
+          "person_beta"
+        ],
+        "third_party_present": true,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {},
+        "subject_ref": "rel_alpha_beta",
+        "predicate": "relationship.closeness_assessment",
+        "value": "synthetic_closeness_baseline",
+        "assertion_kind": "opinion",
+        "perspective_ref": "person_alpha",
+        "evidence_refs": [],
+        "evidence_status": "missing",
+        "review_status": "confirmed",
+        "recorded_at": "2030-02-01T00:00:00+08:00"
+      },
+      {
+        "hypothesis_id": "hypothesis_personality_sentinel_001",
+        "object_type": "hypothesis",
+        "schema_version": "noetide.semantic.v1",
+        "object_revision": "rev_008",
+        "owner_ref": "person_alpha",
+        "created_at": "2030-02-01T00:00:00+08:00",
+        "created_by": "user",
+        "sensitivity": "private",
+        "compartments": [
+          "personal"
+        ],
+        "subject_refs": [
+          "person_alpha"
+        ],
+        "third_party_present": false,
+        "recorder_ref": "person_alpha",
+        "retention_policy_ref": "user_controlled_v1",
+        "retention_state": "active",
+        "extensions": {
+          "fixture_role": "read_only_protected_sentinel"
+        },
+        "statement": "synthetic_personality_pattern_sentinel",
+        "scope_ref": "rel_alpha_beta",
+        "evidence_for": [],
+        "evidence_against": [],
+        "status": "active"
+      }
+    ],
+    "core_views": {
+      "person_card": {
+        "data_revision": "rev_010",
+        "view_revision": "rev_010",
+        "freshness_status": "fresh",
+        "contact_state": "active"
+      },
+      "relationship_timeline": {
+        "data_revision": "rev_010",
+        "view_revision": "rev_010",
+        "freshness_status": "fresh",
+        "current_contact_state": "active"
+      }
+    }
+  },
+  "protected_semantics": {
+    "object_ids": [
+      "assertion_trust_001",
+      "assertion_closeness_001",
+      "hypothesis_personality_sentinel_001"
+    ],
+    "relationship_paths": [
+      "relationship.origin",
+      "state[relationship.role].value"
+    ],
+    "entity_ids": [
+      "person_alpha",
+      "person_beta"
+    ]
+  }
+}

@@ -96,7 +96,7 @@ Semantic Object Model
 
 目标：定义规范对象、派生对象、标识、引用、共同元数据和对象间不可跨越的语义边界，证明 Source、事实、观点、推断、预测和虚构不会被混为一类。依据为 PRD §6-§8、§13、§16。
 
-输入依赖：PRD v0.5 基线；`BQ-001` 至 `BQ-005` 已裁决并整合。当前 Approved 正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.5。
+输入依赖：PRD v0.5 基线；`BQ-001` 至 `BQ-005` 已裁决并整合。当前 Approved 正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.6。
 
 范围内：
 
@@ -119,7 +119,7 @@ Semantic Object Model
 
 目标：定义有效时间、记录时间、来源时间、摄取时间、CoverageWindow、证据引用和认知状态的语义。依据为 PRD §6、§9、§12、§13、§18.5、§26 Cases A/B/E/F/G。
 
-输入依赖：已确认 Semantic Object Model SPEC v0.5。当前 Approved 正文：`docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md` v0.4。
+输入依赖：已确认 Semantic Object Model SPEC v0.6。当前 Approved 正文：`docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md` v0.5。
 
 范围内：
 
@@ -141,7 +141,7 @@ Semantic Object Model
 
 目标：定义所有规范语义变更的唯一受控路径、原子发布、冲突、影响传播、回执、撤销和一致性等级。依据为 PRD §6.9、§10-§12、§20 FR-004/005/006/007/010、§21、§25.2、§26。
 
-输入依赖：已确认 S1 v0.5 与 S2 v0.4。当前 Approved 正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.4。
+输入依赖：S3 v0.4 的批准基线为 S1 v0.5/S2 v0.4；开发前兼容复审确认其继续适用于当前 S1 v0.6/S2 v0.5。当前 Approved 正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.4。
 
 范围内：
 
@@ -207,7 +207,7 @@ Semantic Object Model
 
 目标：定义用初始规范状态、Source、ChangeSet、预期状态、影响视图和禁止变化证明语义合同的方法。依据为 PRD §6.14、§22、§23.3、§24、§26。
 
-输入依赖：当前 Approved S1-S5，作为测试 oracle。当前 Approved 正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.4。
+输入依赖：当前 Approved S1-S5，作为测试 oracle。当前 Approved 正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.5。
 
 范围内：
 
@@ -292,6 +292,6 @@ Semantic Object Model
 
 ## 7. 阶段门禁
 
-当前状态：PRD v0.5 Compatibility Review 已完成正文修订。S1 v0.5；S2-S6 v0.4；S7-S8 v0.3；S9 v0.4，均为当前 `Approved`。兼容台账见 `docs/reviews/PRD_V05_SPEC_COMPATIBILITY_REVIEW.md`。实现代码仍为零，所有合同 suite 均未物化、未执行、未通过；`DQ-011..013` 继续 deferred，并采用各 SPEC 明示的最保守临时行为。
+当前状态：PRD v0.5 Compatibility Review 已完成；开发前一致性修订将 S1/S2/S6 分别升为 v0.6/v0.5/v0.5，其余保持 S3-S5 v0.4、S7-S8 v0.3、S9 v0.4，均为当前 `Approved`。当前兼容结论以 `docs/reviews/MICRO_PRE_ADR_SPEC_CONSISTENCY_REVIEW_2026-07-16.md` 为准。Micro exact suite 已物化但未执行/通过；九份 SPEC 全量 suite 仍未物化。`DQ-011..013` 继续 deferred，并采用各 SPEC 明示的最保守临时行为。
 
 兼容静态验证与追踪复核通过后，当前切片恢复到 `traceable`。下一步唯一建议动作才是只为 `SLICE-MICRO-RELATIONSHIP-001` 编制必要的最小 ADR；不得借 ADR 选择长期数据库、扩展 Micro 范围或提前编码。

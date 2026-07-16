@@ -7,14 +7,14 @@
 | `suite_id` | `micro_mvp_relationship_state_v3` |
 | `product_baseline` | `PRDv05.md` v0.5 |
 | `suite_defined` | `true` |
-| `suite_materialized` | `false` |
+| `suite_materialized` | `true` |
 | `suite_executed` | `false` |
 | `suite_passed` | `false` |
 | 数据类型 | 全合成 fixture |
 | 外部网络 | 禁止 |
 | 真实个人数据 | 禁止 |
 
-依据 PRD v0.5 §6.14 和 §22.1，本文只定义验收场景。尚无实现和测试运行器，因此不得描述为通过。
+依据 PRD v0.5 §6.14 和 §22.1，本文定义验收场景；对应机器 manifest、fixture、oracle 和离线 runner 已物化，但尚无业务实现，业务 suite 未执行，因此不得描述为通过。
 
 ## 2. 验收范围
 
@@ -153,7 +153,7 @@ historical_source_fixture:
       end_byte_exclusive: 58
 ```
 
-两个 locator 都是各自原始 UTF-8 字节序列上的零基半开区间，并分别绑定自身 hash；字符数、UTF-16 code unit 或渲染后文本偏移均不是本 fixture 的 locator。新 proposal 必须回指 `src_micro_001`；旧 `active` State 必须回指独立的 `src_history_001`，两份证据不得互换。Source policy 字段只由显式 Intake 声明和固定 profile 产生，不从正文同步解析。依据 PRD v0.5 §6.2-§6.3、§7.2、§17、§19.4；S1 v0.5 §6.2；S4 v0.4 §6.6；S9 v0.4 §6.1。
+两个 locator 都是各自原始 UTF-8 字节序列上的零基半开区间，并分别绑定自身 hash；字符数、UTF-16 code unit 或渲染后文本偏移均不是本 fixture 的 locator。新 proposal 必须回指 `src_micro_001`；旧 `active` State 必须回指独立的 `src_history_001`，两份证据不得互换。Source policy 字段只由显式 Intake 声明和固定 profile 产生，不从正文同步解析。依据 PRD v0.5 §6.2-§6.3、§7.2、§17、§19.4；S1 v0.6 §6.2；S4 v0.4 §6.6；S9 v0.4 §6.1。
 
 ### 3.3 初始 Canonical State
 
@@ -628,4 +628,4 @@ micro_required_contract_slices:
 - 对每个 MM 场景记录实际命令、开始/结束时间、环境、退出码、失败断言和 artifact digest。
 - 同一次 `applicability=current` 的 run 中，MM-001 至 MM-010 和上述 exact upstream slices 全部 required 且 passed 后，才可设置 `suite_executed=true/suite_passed=true`；required skip/缺失只能得到 `run_result=partial`。
 
-当前状态仍是合同场景已定义，但 suite 未物化、未执行、未通过。
+当前状态是合同场景已定义且 exact suite 已物化；`suite_executed=false`、`suite_passed=false`、`business_verification=not_executed`。

@@ -1,0 +1,1 @@
+"""Noetide executable contract tests."""

@@ -1,0 +1,175 @@
+{
+  "schema_version": "noetide.micro-scenarios.v1",
+  "slice_id": "SLICE-MICRO-RELATIONSHIP-001",
+  "fixture_ref": "tests/fixtures/micro_relationship_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/micro_relationship_v1/oracles.json",
+  "scenarios": [
+    {
+      "scenario_id": "MM-001",
+      "actions": [
+        "create_system_from_fixture",
+        "intake_primary_source",
+        "read_source_and_canonical"
+      ],
+      "required_contract_refs": [
+        "SOM-AT-004",
+        "SOM-AT-026",
+        "SOM-AT-027",
+        "PAP-AT-029",
+        "PAP-AT-030",
+        "IMM-AT-001",
+        "IMM-AT-029",
+        "IMM-AT-030"
+      ],
+      "oracle_group": "MM-001"
+    },
+    {
+      "scenario_id": "MM-002",
+      "actions": [
+        "intake_primary_source",
+        "propose_contact_changeset",
+        "read_preview_and_canonical"
+      ],
+      "required_contract_refs": [
+        "SOM-AT-013",
+        "BTE-AT-001",
+        "BTE-AT-005",
+        "BTE-AT-017",
+        "BTE-AT-034",
+        "SHP-AT-004",
+        "SHP-AT-005",
+        "IMM-AT-005"
+      ],
+      "oracle_group": "MM-002"
+    },
+    {
+      "scenario_id": "MM-003",
+      "actions": [
+        "intake_primary_source",
+        "propose_contact_changeset",
+        "read_preview_without_approval"
+      ],
+      "required_contract_refs": [
+        "SOM-AT-005",
+        "CS-AT-002",
+        "SHP-AT-002",
+        "IMM-AT-006"
+      ],
+      "oracle_group": "MM-003"
+    },
+    {
+      "scenario_id": "MM-004",
+      "actions": [
+        "intake_primary_source",
+        "propose_and_approve",
+        "publish_success",
+        "repeat_on_fresh_system_with_second_proposal_failure"
+      ],
+      "required_contract_refs": [
+        "BTE-AT-001",
+        "BTE-AT-005",
+        "CS-AT-003",
+        "CS-AT-004"
+      ],
+      "failure_injections": [
+        "l1.proposal.2"
+      ],
+      "oracle_group": "MM-004"
+    },
+    {
+      "scenario_id": "MM-005",
+      "actions": [
+        "publish_success",
+        "read_person_card_same_session",
+        "read_relationship_timeline_same_session"
+      ],
+      "required_contract_refs": [
+        "CS-AT-013",
+        "CS-AT-014"
+      ],
+      "oracle_group": "MM-005"
+    },
+    {
+      "scenario_id": "MM-006",
+      "actions": [
+        "publish_success",
+        "query_contact_before_transition",
+        "query_contact_at_transition"
+      ],
+      "required_contract_refs": [
+        "SOM-AT-015",
+        "BTE-AT-005",
+        "BTE-AT-027"
+      ],
+      "oracle_group": "MM-006"
+    },
+    {
+      "scenario_id": "MM-007",
+      "actions": [
+        "snapshot_protected_objects",
+        "publish_success",
+        "compare_protected_objects_and_object_set"
+      ],
+      "required_contract_refs": [
+        "SOM-AT-014",
+        "CS-AT-005",
+        "SHP-AT-005"
+      ],
+      "oracle_group": "MM-007"
+    },
+    {
+      "scenario_id": "MM-008",
+      "actions": [
+        "publish_success",
+        "revert_whole_changeset",
+        "read_views_and_audit"
+      ],
+      "required_contract_refs": [
+        "CS-AT-017",
+        "CS-AT-018",
+        "CS-AT-019"
+      ],
+      "oracle_group": "MM-008"
+    },
+    {
+      "scenario_id": "MM-009",
+      "actions": [
+        "propose_at_rev_010",
+        "advance_via_legal_test_change",
+        "publish_stale_changeset",
+        "replay_same_idempotency_key"
+      ],
+      "required_contract_refs": [
+        "CS-AT-008",
+        "CS-AT-024",
+        "CS-AT-030",
+        "CS-AT-031"
+      ],
+      "failure_injections": [
+        "preflight.stale_base"
+      ],
+      "oracle_group": "MM-009"
+    },
+    {
+      "scenario_id": "MM-010",
+      "actions": [
+        "inject_single_projection_failure",
+        "publish_success",
+        "read_failed_view",
+        "reconcile_views",
+        "read_both_views"
+      ],
+      "required_contract_refs": [
+        "BTE-AT-029",
+        "CS-AT-014",
+        "CS-AT-016",
+        "CS-AT-021",
+        "CS-AT-022"
+      ],
+      "failure_injections": [
+        "projection.person_card"
+      ],
+      "oracle_group": "MM-010"
+    }
+  ]
+}

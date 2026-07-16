@@ -1,6 +1,6 @@
 # 可执行测试目录
 
-本目录用于保存机器可运行的 fixture、semantic tests 和 integration tests。当前目录骨架存在，但 Micro suite 尚未物化、业务测试尚未执行。
+本目录用于保存机器可运行的 fixture、semantic tests 和 integration tests。exact Micro suite 已物化，业务实现不存在，业务测试尚未执行。
 
 规则：
 
@@ -17,5 +17,8 @@
 - `fixtures/`：合成输入、初始规范状态、预期状态和 hash 清单。
 - `semantic/`：单个字段、状态机和不变量合同测试。
 - `integration/`：当前切片端到端、失败注入和撤销测试。
+- `runner/`：离线 runner、结果聚合和实现适配器协议。
+
+权威 manifest：`tests/micro_suite_manifest.json`。
 
 物化门禁见 `docs/testing/SUITE_MATERIALIZATION_CHECKLIST.md`。

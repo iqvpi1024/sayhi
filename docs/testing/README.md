@@ -7,11 +7,11 @@
 | 状态 | 含义 | 当前 Micro |
 |---|---|---|
 | `suite_defined` | SPEC 和验收场景已经定义 oracle | `true` |
-| `suite_materialized` | manifest、fixture、oracle 和 runner contract 已成为机器可读取产物 | `false` |
+| `suite_materialized` | manifest、fixture、oracle 和 runner contract 已成为机器可读取产物 | `true` |
 | `suite_executed` | 对适用版本实际运行并保存结果 | `false` |
 | `suite_passed` | 同一次 current run 的全部 required tests 通过 | `false` |
 
-依据：PRD v0.5 §6.14、§22；S6 v0.4；`MICRO_MVP_ACCEPTANCE.md`。
+依据：PRD v0.5 §6.14、§22；S6 v0.5；`MICRO_MVP_ACCEPTANCE.md`。
 
 ## 2. 目录职责
 
@@ -51,4 +51,4 @@
 
 ## 5. 当前下一步
 
-当前只允许在最小 ADR Accepted 后，物化 `MICRO_MVP_ACCEPTANCE.md` §6 的 10 个 `MM-*` 场景和 39 个去重 upstream refs。不得把矩阵中的长期测试目录整体提升为 Micro required。
+exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。下一门禁是编制 Implementation Plan；在业务实现存在前不得运行并声称 suite 通过，也不得把矩阵中的长期测试目录整体提升为 Micro required。

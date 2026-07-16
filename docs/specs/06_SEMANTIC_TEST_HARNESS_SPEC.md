@@ -5,14 +5,14 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-HTH-001` |
-| 版本 | `0.4` |
+| 版本 | `0.5` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv05.md` v0.5 |
-| 上游 | S1 v0.5、S2-S5 v0.4，均 `Approved` |
+| 产品基线 | `PRDv05.md`，PRD v0.5 |
+| 上游 | S1 v0.6、S2 v0.5、S3-S5 v0.4，均 `Approved` |
 | 产品裁决 | `IQ-014`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| v0.5 兼容复审 | 2026-07-15；维持 test/run/artifact/applicability/result 分轴并对齐 PRD 四态测试声明 |
+| v0.5 一致性修订 | 2026-07-16；修正 HTH-AT-024/025/026/027 的验收表列结构 |
 
 本文定义如何证明 SPEC，不实现测试运行器、不选择测试框架，也不把文档场景当成已执行结果。
 
@@ -214,7 +214,7 @@ Micro fixture 固定 `now`，执行确认、原子发布、两个 View、历史�
 ## 19. 可执行验收测试
 
 ```yaml
-suite_id: semantic_harness_contract_v0_4
+suite_id: semantic_harness_contract_v0_5
 suite_defined: true
 suite_materialized: false
 suite_executed: false
@@ -246,10 +246,10 @@ suite_passed: false
 | `HTH-AT-021` | 静态读取全部 invariant/test/trace 引用 | 每个 required invariant 至少映射一个存在的 Test ID，未知或重复 ID 使检查失败 |
 | `HTH-AT-022` | 只有 Markdown 合同用例、无 runner manifest/fixture/assertion | `suite_defined=true` 且 `suite_materialized=false`、`suite_executed=false` |
 | `HTH-AT-023` | 同一 run 中一个 required test skipped 或未运行 | run=partial，`suite_passed=false` |
-| `HTH-AT-024` | individual test=`skipped_with_reason` | run schema 校验 | individual 合法；run result 只能 partial/passed/failed/errored，不接受 skipped |
-| `HTH-AT-025` | 已通过 run 因 SPEC 升版不再适用 | 标记历史 | 原 run result 保持 passed，applicability=superseded；不得把 run result 改为 superseded |
-| `HTH-AT-026` | suite 只有 Markdown 或旧 materialized artifact 已过期 | 计算 artifact/result | artifact 分别 absent/superseded；verification 不得因此变 passed |
-| `HTH-AT-027` | 读取 Micro `micro_required_contract_slices` | 校验 required manifest | `MM-001..010` 各恰有一行，所有 upstream Test Ref 存在且不含 deferred 全套；runner required 集与该映射精确相等 |
+| `HTH-AT-024` | individual test=`skipped_with_reason` 并校验 run schema | individual 合法；run result 只能 partial/passed/failed/errored，不接受 skipped |
+| `HTH-AT-025` | 已通过 run 因 SPEC 升版不再适用并标记历史 | 原 run result 保持 passed，applicability=superseded；不得把 run result 改为 superseded |
+| `HTH-AT-026` | suite 只有 Markdown 或旧 materialized artifact 已过期，计算 artifact/result | artifact 分别 absent/superseded；verification 不得因此变 passed |
+| `HTH-AT-027` | 读取 Micro `micro_required_contract_slices` 并校验 required manifest | `MM-001..010` 各恰有一行，所有 upstream Test Ref 存在且不含 deferred 全套；runner required 集与该映射精确相等 |
 
 不变量覆盖：001→AT001-003/022/023/026；002→015/017/025；003→006-008；004→009；005→010-012；006→003-005/023/024；007→AT021；008→013/014/021/027；009→015/016；010→017/018/025；011→022/023/026；012→024-027。
 
@@ -264,4 +264,4 @@ suite_passed: false
 - Micro suite 被指定为首套 required，但仍未执行。
 - 未选择测试框架；没有伪造 Implementation Module。
 
-当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。individual/run/artifact/applicability/verification 枚举与 Micro required Test Ref 权威映射继续分离；所有 suite 仍未物化、未执行、未通过。
+当前结论：本 SPEC v0.5 于 2026-07-16 完成开发前一致性修订并保持 `Approved`。本次只修正验收表的三列结构，不改变测试枚举、状态机、不变量、验收 ID、required 映射或 Micro 范围；随后 Micro exact suite 已独立物化，但未执行、未通过，其他 SPEC suite 仍未物化。

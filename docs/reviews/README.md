@@ -35,4 +35,4 @@
 
 ## 5. 当前状态
 
-最近适用的规范关闭性复审为 `MICRO_GATE_CORRECTIVE_REVIEW_2026-07-14.md`：P0=0、P1=0、结论 `yes_with_conditions`。该结论只允许进入后续最小 ADR/计划工作，不证明业务实现或业务测试通过。
+最近适用的当前切片门禁为 `MICRO_DEVELOPMENT_READINESS_GATE_2026-07-16.md`：P0=0、P1=0、结论 `yes`。当前阶段为 `implementation_planned`，只授权下一轮从 TASK-001 开始；业务实现尚未开始，业务测试未执行、未通过。

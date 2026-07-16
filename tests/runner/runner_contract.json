@@ -1,0 +1,54 @@
+{
+  "schema_version": "noetide.micro-runner-contract.v1",
+  "runner_id": "micro_relationship_python_runner_v1",
+  "entry_command": "python -m tests.runner.run_micro_suite --adapter noetide_micro.testing_adapter --output <new-result-path>",
+  "runtime": {
+    "language": "python",
+    "minimum_version": "3.12",
+    "dependencies": "stdlib_only"
+  },
+  "environment": {
+    "external_network": "blocked",
+    "business_clock": "fixture_injected",
+    "timezone": "fixture_injected",
+    "locale": "zh-CN",
+    "random_seed": 0,
+    "data_root": "per_run_temporary_directory_inside_workspace"
+  },
+  "implementation_adapter": {
+    "module_argument": "--adapter",
+    "factory": "create_system",
+    "protocol_ref": "tests/runner/adapter_protocol.py",
+    "current_implementation": "TBD"
+  },
+  "result_contract": {
+    "individual_test_result_values": [
+      "passed",
+      "failed",
+      "errored",
+      "skipped_with_reason"
+    ],
+    "run_result_values": [
+      "passed",
+      "failed",
+      "errored",
+      "partial"
+    ],
+    "required_fields": [
+      "run_id",
+      "suite_id",
+      "manifest_sha256",
+      "started_at",
+      "finished_at",
+      "environment",
+      "command",
+      "exit_code",
+      "run_result",
+      "required_results",
+      "privacy_scan"
+    ],
+    "passed_rule": "all 49 required result IDs pass in the same current run",
+    "required_skip_rule": "run_result=partial",
+    "history_rule": "new run_id and new output path; never overwrite an existing result"
+  }
+}

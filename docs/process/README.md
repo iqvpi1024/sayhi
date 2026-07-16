@@ -156,16 +156,16 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 | 字段 | 当前值 |
 |---|---|
 | Slice | `SLICE-MICRO-RELATIONSHIP-001` |
-| 已完成 | product_defined、product_decided、spec_approved、traceable |
+| 已完成 | product_defined、product_decided、spec_approved、traceable、architecture_decided、suite_materialized、implementation_planned |
 | 当前 PRD | `PRDv05.md` v0.5 Approved |
-| SPEC Compatibility | `yes`：S1 v0.5；S2-S6 v0.4；S7-S8 v0.3；S9 v0.4 |
-| Architecture Decision | `absent` |
-| Suite Materialization | `false` |
-| Implementation Plan | `absent` |
+| SPEC Compatibility | `yes`：S1 v0.6；S2 v0.5；S3-S5 v0.4；S6 v0.5；S7-S8 v0.3；S9 v0.4 |
+| Architecture Decision | `ADR-0001 Accepted`；`ARCH-MICRO-REL-001` |
+| Suite Materialization | `true`；10 MM + 39 upstream refs |
+| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..010 pending |
 | Business Implementation | 未开始 |
 | Business Verification | `not_executed` |
 
-下一阶段是只为当前 Micro 切片建立必要的最小 ADR，仍不得直接编码。ADR 不能修改 SPEC 语义、选择长期数据库平台或扩大 Micro；Accepted 后还必须依次完成 exact suite 物化与 Implementation Plan。
+开发前 Gate Review 已通过，但业务开发尚未开始。下一步唯一动作是执行 `PLAN-MICRO-REL-001` 的 TASK-001，只建立 package/Schema/store 基础；不得跨任务实现后续 Intake、Candidate、View 或扩大 Micro。
 
 ## 11. 相关说明与模板
 

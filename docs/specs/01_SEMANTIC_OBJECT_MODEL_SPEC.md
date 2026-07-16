@@ -5,7 +5,7 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SOM-001` |
-| 版本 | `0.5` |
+| 版本 | `0.6` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv05.md`，PRD v0.5 |
 | 产品裁决 | `BQ-001` 至 `BQ-005`，2026-07-13 已决定 |
@@ -13,7 +13,7 @@
 | 下一依赖 | Bitemporal & Evidence SPEC |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
-| v0.5 兼容复审 | 2026-07-15；对齐 Source Append/Intake receipt 状态并移除 v0.4 兼容措辞 |
+| v0.6 一致性修订 | 2026-07-16；补齐 §8.1 的 validating/duplicate 路径并统一测试四态措辞 |
 
 本文定义语义合同，不选择数据库、编程语言、序列化框架、图引擎、事件溯源框架或模型供应商。
 
@@ -412,7 +412,7 @@ Relationship identity、普通 Entity 的现实语义、State 值本身不强制
 
 ### 8.1 允许
 
-- Source receipt 从 `received` 到 `stored` 或 `rejected`。
+- Source receipt 只按 `received -> validating -> stored|duplicate|rejected` 转换。
 - Source policy metadata 经受控修订从 `provisional -> declared|confirmed` 或 `declared -> confirmed`；不改变原 append receipt。
 - 未审查 Assertion 经用户审查进入 `confirmed`、`denied` 或 `in_dispute`。
 - 新证据使已确认 Assertion 进入 `in_dispute`，反证不得被删除。
@@ -776,6 +776,6 @@ suite_passed: false
 - 未选择数据库、技术栈或模型供应商。
 - 文档结构、内部引用和枚举通过静态校验。
 - 产品负责人逐份审查并明确批准本 SPEC。
-- 测试状态仍如实区分 defined、executed、passed；未执行不得称为通过。
+- 测试状态仍如实区分 defined、materialized、executed、passed；未物化或未执行不得称为通过。
 
-当前结论：本 SPEC v0.5 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Source Append/Intake receipt 状态已与 S9 对齐；测试仍未物化、执行或通过，也不授权扩大 Micro-MVP 或实现 Hypothesis 工作流。
+当前结论：本 SPEC v0.6 于 2026-07-16 完成开发前一致性修订并保持 `Approved`。本次只消除 §7.1 与 §8.1 的状态路径矛盾并补齐测试四态措辞，不改变对象、字段、状态集合、验收 ID 或 Micro 范围；测试仍未物化、执行或通过，也不授权扩大 Micro-MVP 或实现 Hypothesis 工作流。

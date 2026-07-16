@@ -1,0 +1,270 @@
+{
+  "schema_version": "noetide.micro-oracles.v1",
+  "fixture_id": "micro_relationship_v1",
+  "canonical_digest": {
+    "algorithm": "sha256",
+    "serialization": "utf8_json_sorted_keys_compact_v1",
+    "ensure_ascii": false
+  },
+  "protected_seed_digests": {
+    "assertion_trust_001": "fc2f1299865d93f8a8074daaf49374ee67f106c57d5fae206bda03b31ce35c45",
+    "assertion_closeness_001": "e132b8d49fe1694232cdb8d4c1f4b57247c5527a61dec3940a1c4002f21b01e1",
+    "hypothesis_personality_sentinel_001": "c9974ad70d67986b25084b839e70c74e5c1812209dbd9a7c44ead6a940611a3b"
+  },
+  "forbidden_change_oracle": {
+    "object_ids_must_remain_present": [
+      "person_alpha",
+      "person_beta",
+      "rel_alpha_beta",
+      "state_role_001",
+      "assertion_trust_001",
+      "assertion_closeness_001",
+      "hypothesis_personality_sentinel_001"
+    ],
+    "object_ids_must_keep_payload_and_revision": [
+      "assertion_trust_001",
+      "assertion_closeness_001",
+      "hypothesis_personality_sentinel_001"
+    ],
+    "paths_must_remain_equal": [
+      "object[rel_alpha_beta].origin",
+      "object[state_role_001].value",
+      "object[person_alpha].identity_status",
+      "object[person_beta].identity_status"
+    ],
+    "forbidden_new_predicates": [
+      "relationship.low_trust",
+      "relationship.emotional_distance",
+      "personality.avoidant"
+    ],
+    "empty_protected_set_is_failure": true
+  },
+  "scenario_oracles": {
+    "MM-001": [
+      {
+        "oracle_id": "ORA-MM001-RECEIPT",
+        "assertion": "deep_equal",
+        "actual": "append_receipt",
+        "expected_ref": "fixture.expected_append_receipt"
+      },
+      {
+        "oracle_id": "ORA-MM001-SOURCE-LOCATOR",
+        "assertion": "utf8_hash_length_locator",
+        "source_id": "src_micro_001",
+        "expected_bytes": 58
+      },
+      {
+        "oracle_id": "ORA-MM001-NO-CANONICAL-WRITE",
+        "assertion": "equals",
+        "actual": "canonical.data_revision",
+        "expected": "rev_010"
+      },
+      {
+        "oracle_id": "ORA-MM001-POLICY",
+        "assertion": "source_policy_equals_declared_profile",
+        "expected_ref": "fixture.expected_append_receipt.effective_policy"
+      }
+    ],
+    "MM-002": [
+      {
+        "oracle_id": "ORA-MM002-STATUS",
+        "assertion": "equals",
+        "actual": "changeset.status",
+        "expected": "proposed"
+      },
+      {
+        "oracle_id": "ORA-MM002-PROPOSALS",
+        "assertion": "exact_contact_end_add_pair",
+        "operations": [
+          "end",
+          "add"
+        ],
+        "new_value": "no_contact",
+        "transition_at": "2031-09-01T00:00:00+08:00"
+      },
+      {
+        "oracle_id": "ORA-MM002-EVIDENCE",
+        "assertion": "all_evidence_refs_equal",
+        "source_id": "src_micro_001",
+        "start_byte": 0,
+        "end_byte_exclusive": 58
+      },
+      {
+        "oracle_id": "ORA-MM002-IMPACT",
+        "assertion": "derived_impact_set_equals",
+        "expected": [
+          "person_card",
+          "relationship_timeline"
+        ]
+      },
+      {
+        "oracle_id": "ORA-MM002-FORBIDDEN",
+        "assertion": "no_proposal_target_matches_forbidden_change_oracle"
+      }
+    ],
+    "MM-003": [
+      {
+        "oracle_id": "ORA-MM003-REVISION",
+        "assertion": "equals",
+        "actual": "canonical.data_revision",
+        "expected": "rev_010"
+      },
+      {
+        "oracle_id": "ORA-MM003-VIEWS",
+        "assertion": "both_views_equal_revision_and_state",
+        "revision": "rev_010",
+        "state": "active"
+      },
+      {
+        "oracle_id": "ORA-MM003-NOT-FACT",
+        "assertion": "proposal_not_exposed_as_confirmed_fact"
+      }
+    ],
+    "MM-004": [
+      {
+        "oracle_id": "ORA-MM004-SUCCESS",
+        "assertion": "atomic_publish",
+        "old_revision": "rev_010",
+        "new_revision": "rev_011",
+        "operations": 2
+      },
+      {
+        "oracle_id": "ORA-MM004-TIME",
+        "assertion": "bitemporal_contact_values",
+        "before": "active",
+        "from_transition": "no_contact",
+        "recorded_at": "2031-10-15T02:00:00Z"
+      },
+      {
+        "oracle_id": "ORA-MM004-ATTEMPT",
+        "assertion": "durable_attempt_precedes_publish",
+        "preflight_result": "passed"
+      },
+      {
+        "oracle_id": "ORA-MM004-FAILURE",
+        "assertion": "injected_second_proposal_failure_rolls_back_all",
+        "revision": "rev_010"
+      }
+    ],
+    "MM-005": [
+      {
+        "oracle_id": "ORA-MM005-PERSON-CARD",
+        "assertion": "view_equals",
+        "view": "person_card",
+        "data_revision": "rev_011",
+        "view_revision": "rev_011",
+        "state": "no_contact"
+      },
+      {
+        "oracle_id": "ORA-MM005-TIMELINE",
+        "assertion": "timeline_has_current_and_history",
+        "data_revision": "rev_011",
+        "view_revision": "rev_011",
+        "current": "no_contact",
+        "historical": "active"
+      }
+    ],
+    "MM-006": [
+      {
+        "oracle_id": "ORA-MM006-BEFORE",
+        "assertion": "contact_query_equals",
+        "at": "2031-08-31T23:59:59+08:00",
+        "value": "active",
+        "source_id": "src_history_001"
+      },
+      {
+        "oracle_id": "ORA-MM006-AFTER",
+        "assertion": "contact_query_equals",
+        "at": "2031-09-01T00:00:00+08:00",
+        "value": "no_contact",
+        "source_id": "src_micro_001"
+      }
+    ],
+    "MM-007": [
+      {
+        "oracle_id": "ORA-MM007-PROTECTED",
+        "assertion": "protected_payload_revision_and_membership_equal_seed"
+      },
+      {
+        "oracle_id": "ORA-MM007-RELATIONSHIP",
+        "assertion": "paths_equal_seed",
+        "paths_ref": "forbidden_change_oracle.paths_must_remain_equal"
+      },
+      {
+        "oracle_id": "ORA-MM007-NO-NEW-JUDGMENT",
+        "assertion": "no_new_predicate",
+        "predicates_ref": "forbidden_change_oracle.forbidden_new_predicates"
+      }
+    ],
+    "MM-008": [
+      {
+        "oracle_id": "ORA-MM008-COMPENSATION",
+        "assertion": "compensation_revision",
+        "published_revision": "rev_011",
+        "compensation_revision": "rev_012",
+        "current_state": "active"
+      },
+      {
+        "oracle_id": "ORA-MM008-VIEWS",
+        "assertion": "both_views_equal_revision_and_state",
+        "revision": "rev_012",
+        "state": "active"
+      },
+      {
+        "oracle_id": "ORA-MM008-AUDIT",
+        "assertion": "audit_contains_publish_and_revert"
+      },
+      {
+        "oracle_id": "ORA-MM008-PROTECTED",
+        "assertion": "protected_payload_revision_and_membership_equal_seed"
+      }
+    ],
+    "MM-009": [
+      {
+        "oracle_id": "ORA-MM009-CONFLICT",
+        "assertion": "stale_base_conflicted_without_publish",
+        "base_revision": "rev_010"
+      },
+      {
+        "oracle_id": "ORA-MM009-IDEMPOTENCY",
+        "assertion": "same_key_same_payload_returns_same_attempt_receipt"
+      },
+      {
+        "oracle_id": "ORA-MM009-RETRY",
+        "assertion": "retry_requires_new_changeset_id_and_retry_of"
+      }
+    ],
+    "MM-010": [
+      {
+        "oracle_id": "ORA-MM010-SAFE-READ",
+        "assertion": "failed_l2_is_canonical_fallback_or_no_old_payload",
+        "data_revision": "rev_011",
+        "forbidden_current_payload": {
+          "revision": "rev_010",
+          "state": "active"
+        }
+      },
+      {
+        "oracle_id": "ORA-MM010-RECEIPT",
+        "assertion": "receipt_records_projection_failure"
+      },
+      {
+        "oracle_id": "ORA-MM010-RECONCILE",
+        "assertion": "both_views_converge_without_canonical_revision_change",
+        "revision": "rev_011"
+      }
+    ]
+  },
+  "global_oracles": [
+    "derived_view_is_not_evidence",
+    "unconfirmed_proposal_does_not_write_canonical",
+    "l1_all_or_none",
+    "current_does_not_overwrite_historical",
+    "hypothesis_does_not_upgrade_to_fact",
+    "core_views_do_not_claim_different_current_revisions",
+    "revert_preserves_audit_history",
+    "protected_semantics_remain_equal",
+    "old_l2_does_not_claim_current",
+    "synthetic_only_privacy_scan"
+  ]
+}

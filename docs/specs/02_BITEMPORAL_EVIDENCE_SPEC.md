@@ -5,16 +5,16 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-BTE-001` |
-| 版本 | `0.4` |
+| 版本 | `0.5` |
 | 状态 | `Approved` |
 | 产品基线 | `PRDv05.md`，PRD v0.5 |
-| 上游基线 | `SPEC-SOM-001` v0.5，`Approved` |
+| 上游基线 | `SPEC-SOM-001` v0.6，`Approved` |
 | 当前阶段 | Phase 2：Bitemporal & Evidence |
 | 下一依赖 | ChangeSet & Consistency SPEC |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
 | 产品裁决 | `IQ-003`、`IQ-004`、`IQ-007`、`IQ-009`、`IQ-010` 均于 2026-07-13 决定，见 `OPEN_QUESTIONS.md` |
-| v0.5 兼容复审 | 2026-07-15；固定 `value=unknown` 在 DQ-012 未重开前的保守查询行为 |
+| v0.5 一致性修订 | 2026-07-16；修正 S1 上游版本并统一测试四态措辞 |
 
 本文定义语义合同，不选择数据库时间类型、查询引擎、证据评分模型、编程语言、序列化框架或模型供应商。
 
@@ -779,7 +779,7 @@ suite_passed: false
 
 本 SPEC 批准须满足以下条件，已全部达成：
 
-- 上游 `SPEC-SOM-001` v0.3 保持 Approved，且本 SPEC 不反向改变对象边界。✓
+- 上游 `SPEC-SOM-001` v0.6 保持 Approved，且本 SPEC 不反向改变对象边界。✓
 - `IQ-003`、`IQ-004`、`IQ-007`、`IQ-009`、`IQ-010` 已由产品负责人明确决定并记录（见 §20 与 `OPEN_QUESTIONS.md`）。✓
 - 四类时间、unknown/unbounded、粗粒度、时区和事后补录均有唯一语义（见 §5-§10）。✓
 - State 区间端点、相邻、重叠和 current/historical 查询可穷尽测试（见 §10.1、BTE-AT-005/006/009/032）。✓
@@ -790,6 +790,6 @@ suite_passed: false
 - 所有示例和 fixture 均为合成数据；未选择数据库、技术栈或模型供应商。✓
 - 文档结构、内部引用、枚举和测试 ID 通过静态校验。✓
 - 产品负责人已明确批准本 SPEC。✓
-- 测试状态继续如实区分 defined、executed、passed；未执行不得称为通过。✓
+- 测试状态继续如实区分 defined、materialized、executed、passed；未物化或未执行不得称为通过。✓
 
-当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Canonical Evidence Ref 与可重算 assessment 继续分离，并增加 DQ-012 未裁决期间的保守查询约束；测试仍未物化、执行或通过。
+当前结论：本 SPEC v0.5 于 2026-07-16 完成开发前一致性修订并保持 `Approved`。本次只修正上游版本引用并补齐测试四态措辞，不改变时间、证据、查询状态、不变量、验收 ID 或 Micro 范围；测试仍未物化、执行或通过。

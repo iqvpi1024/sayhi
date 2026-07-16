@@ -1,6 +1,6 @@
 # Semantic Tests
 
-本目录未来保存直接证明 SPEC 字段语义、状态转换和不变量的可执行测试。当前没有测试文件。
+本目录保存直接证明 SPEC 字段语义、状态转换和不变量的可执行测试。当前只有 `test_micro_relationship_contract.py`，映射 `MM-001..010` 和 exact required upstream refs。
 
 要求：
 
@@ -10,4 +10,4 @@
 - Derived View 不能被当作 Canonical 事实证据。
 - 未运行测试不得在文件名、注释或报告中标记 passed。
 
-首轮只允许物化 `MICRO_MVP_ACCEPTANCE.md` §6 的 exact upstream slices，不一次性实现 269 个目录项。
+首轮已只物化 `MICRO_MVP_ACCEPTANCE.md` §6 的 exact upstream slices；其余 SPEC tests 保持 deferred，不一次性扩张。

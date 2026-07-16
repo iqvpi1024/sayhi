@@ -1,0 +1,167 @@
+{
+  "schema_version": "noetide.micro-suite-manifest.v1",
+  "suite_id": "micro_mvp_relationship_state_v3",
+  "suite_artifact_version": "1.0.0",
+  "slice_id": "SLICE-MICRO-RELATIONSHIP-001",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_applicable",
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_version": "0.5",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "spec_versions": {
+      "S1": "0.6",
+      "S2": "0.5",
+      "S3": "0.4",
+      "S4": "0.4",
+      "S5": "0.4",
+      "S6": "0.5",
+      "S7": "0.3",
+      "S8": "0.3",
+      "S9": "0.4"
+    },
+    "decision_refs": [
+      "DEC-MICRO-GATE-001"
+    ],
+    "adr_refs": [
+      "ADR-0001"
+    ],
+    "traceability_path": "docs/traceability/REQUIREMENTS_MATRIX.md",
+    "acceptance_contract_path": "docs/testing/MICRO_MVP_ACCEPTANCE.md"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/micro_relationship_v1/fixture.json",
+      "sha256": "e1786f4e12a565116261c0b42e0fd1fdf951e02de70c2d79061587cf59ac16c3"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/micro_relationship_v1/oracles.json",
+      "sha256": "de14c82d0b6b6de36e9a6db3124c19e135d261efea809b2a876dd0a5574e8965"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/micro_relationship_scenarios.json",
+      "sha256": "356c576eb3a86180754043ffadd04460f609afc27d7075c04619d17c6d9f094d"
+    },
+    {
+      "role": "runner_contract",
+      "path": "tests/runner/runner_contract.json",
+      "sha256": "348282e89ade89877020ba138863a4d498ab4acbfd6951033d06483df5686a20"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/adapter_protocol.py",
+      "sha256": "28605faafb132b05fa3f9a698389dc8c5e0c9e1e5ede972c1be359894ad0633c"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_micro_relationship_contract.py",
+      "sha256": "5c747b0737de44881babe698fd951c8f5cfb048afe41b6d97c8a3af0efb4a5d0"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_micro_suite.py",
+      "sha256": "af17c63d489e646a8e263361d721ea4f99714b25f85e0e2ba16a7d6df914e31c"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_micro_suite.py",
+      "sha256": "c67961f3058d6e48923ed470858be52ede427c6333951407b73efdc20e80e543"
+    }
+  ],
+  "artifact_digest_strategy": {
+    "algorithm": "sha256",
+    "bytes": "raw_file_bytes",
+    "manifest_self_digest": "recorded_by_gate_review_not_embedded"
+  },
+  "fixture_refs": [
+    "tests/fixtures/micro_relationship_v1/fixture.json"
+  ],
+  "oracle_refs": [
+    "tests/fixtures/micro_relationship_v1/oracles.json"
+  ],
+  "runner_contract_ref": "tests/runner/runner_contract.json",
+  "scenario_mapping_ref": "tests/integration/micro_relationship_scenarios.json",
+  "required_scenario_ids": [
+    "MM-001",
+    "MM-002",
+    "MM-003",
+    "MM-004",
+    "MM-005",
+    "MM-006",
+    "MM-007",
+    "MM-008",
+    "MM-009",
+    "MM-010"
+  ],
+  "required_upstream_test_refs": [
+    "BTE-AT-001",
+    "BTE-AT-005",
+    "BTE-AT-017",
+    "BTE-AT-027",
+    "BTE-AT-029",
+    "BTE-AT-034",
+    "CS-AT-002",
+    "CS-AT-003",
+    "CS-AT-004",
+    "CS-AT-005",
+    "CS-AT-008",
+    "CS-AT-013",
+    "CS-AT-014",
+    "CS-AT-016",
+    "CS-AT-017",
+    "CS-AT-018",
+    "CS-AT-019",
+    "CS-AT-021",
+    "CS-AT-022",
+    "CS-AT-024",
+    "CS-AT-030",
+    "CS-AT-031",
+    "IMM-AT-001",
+    "IMM-AT-005",
+    "IMM-AT-006",
+    "IMM-AT-029",
+    "IMM-AT-030",
+    "PAP-AT-029",
+    "PAP-AT-030",
+    "SHP-AT-002",
+    "SHP-AT-004",
+    "SHP-AT-005",
+    "SOM-AT-004",
+    "SOM-AT-005",
+    "SOM-AT-013",
+    "SOM-AT-014",
+    "SOM-AT-015",
+    "SOM-AT-026",
+    "SOM-AT-027"
+  ],
+  "classification": {
+    "required": "required_scenario_ids + required_upstream_test_refs",
+    "optional": [],
+    "deferred": [
+      "all SPEC tests not listed by MICRO_MVP_ACCEPTANCE.md section 6",
+      "permission runtime",
+      "MCP runtime",
+      "connectors and migration",
+      "multi-device and sync",
+      "finance health decision workflows",
+      "multi-agent A2A digital legacy"
+    ]
+  },
+  "implementation_module": "TBD",
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}

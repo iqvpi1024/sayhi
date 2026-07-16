@@ -166,12 +166,12 @@ if ($errors.Count -eq $workflowErrorsBefore) {
 }
 
 $specs = [ordered]@{
-    SOM = @{ Path = 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'; Version = '0.5'; Tests = 28; Invariants = 16 }
-    BTE = @{ Path = 'docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md'; Version = '0.4'; Tests = 38; Invariants = 16 }
+    SOM = @{ Path = 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'; Version = '0.6'; Tests = 28; Invariants = 16 }
+    BTE = @{ Path = 'docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md'; Version = '0.5'; Tests = 38; Invariants = 16 }
     CS  = @{ Path = 'docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md'; Version = '0.4'; Tests = 32; Invariants = 16 }
     PAP = @{ Path = 'docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md'; Version = '0.4'; Tests = 31; Invariants = 16 }
     SHP = @{ Path = 'docs/specs/05_SHILING_POLICY_SPEC.md'; Version = '0.4'; Tests = 34; Invariants = 14 }
-    HTH = @{ Path = 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md'; Version = '0.4'; Tests = 27; Invariants = 12 }
+    HTH = @{ Path = 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md'; Version = '0.5'; Tests = 27; Invariants = 12 }
     SIP = @{ Path = 'docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md'; Version = '0.3'; Tests = 27; Invariants = 14 }
     MCP = @{ Path = 'docs/specs/08_MCP_CONTRACT_SPEC.md'; Version = '0.3'; Tests = 27; Invariants = 12 }
     IMM = @{ Path = 'docs/specs/09_INGESTION_MIGRATION_SPEC.md'; Version = '0.4'; Tests = 31; Invariants = 17 }
@@ -297,6 +297,36 @@ if ($allInvariantIds.Count -eq 133) {
     Add-Error "Expected 133 unique invariant IDs, found $($allInvariantIds.Count)"
 }
 
+$somContent = Read-RepoFile 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'
+$bteContent = Read-RepoFile 'docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md'
+$hthContent = Read-RepoFile 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md'
+$consistencyErrorsBefore = $errors.Count
+if (-not $somContent.Contains('received -> validating -> stored|duplicate|rejected')) {
+    Add-Error 'SOM allowed-transition summary does not match the Source Append state machine'
+}
+if (-not $bteContent.Contains('`SPEC-SOM-001` v0.6')) {
+    Add-Error 'BTE does not bind to current SOM v0.6'
+}
+foreach ($item in @(
+    @{ Name = 'SOM'; Content = $somContent },
+    @{ Name = 'BTE'; Content = $bteContent },
+    @{ Name = 'HTH'; Content = $hthContent }
+)) {
+    if ($item.Content.Contains('defined、executed、passed')) {
+        Add-Error "$($item.Name) contains the obsolete three-state test wording"
+    }
+}
+$hthAcceptanceRows = @([regex]::Matches($hthContent, '(?m)^\|\s*`HTH-AT-[0-9]{3}`\s*\|.*$') | ForEach-Object { $_.Value })
+foreach ($row in $hthAcceptanceRows) {
+    $pipeCount = @($row.ToCharArray() | Where-Object { $_ -eq '|' }).Count
+    if ($pipeCount -ne 4) {
+        Add-Error "HTH acceptance row is not a three-column Markdown row: $row"
+    }
+}
+if ($errors.Count -eq $consistencyErrorsBefore) {
+    Add-Check 'SOM/BTE/HTH pre-ADR consistency guards pass'
+}
+
 $micro = Read-RepoFile 'docs/testing/MICRO_MVP_ACCEPTANCE.md'
 $microIds = @([regex]::Matches($micro, '\bMM-[0-9]{3}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
 $expectedMicroIds = @(1..10 | ForEach-Object { 'MM-{0:D3}' -f $_ })
@@ -305,7 +335,7 @@ if (Compare-Object -ReferenceObject $expectedMicroIds -DifferenceObject $microId
 } else {
     Add-Check '10 Micro-MVP scenario IDs are present'
 }
-foreach ($flag in @('| `suite_materialized` | `false` |', '| `suite_executed` | `false` |', '| `suite_passed` | `false` |')) {
+foreach ($flag in @('| `suite_materialized` | `true` |', '| `suite_executed` | `false` |', '| `suite_passed` | `false` |')) {
     if (-not $micro.Contains($flag)) { Add-Error "Micro status missing: $flag" }
 }
 
@@ -537,6 +567,14 @@ foreach ($file in $markdownFiles) {
     if (($fenceCount % 2) -ne 0) { Add-Error "Unpaired Markdown fence: $($file.FullName)" }
 }
 Add-Check "Markdown fence parity checked for $($markdownFiles.Count) files"
+
+$microSuiteOutput = & python (Join-Path $root 'tools/validate_micro_suite.py') 2>&1
+$microSuiteExit = $LASTEXITCODE
+if ($microSuiteExit -ne 0) {
+    Add-Error "Micro suite materialization validation failed (exit $microSuiteExit): $($microSuiteOutput -join ' | ')"
+} else {
+    Add-Check 'Micro suite materialization preflight passed; no business test was executed'
+}
 
 Write-Output 'Noetide specification baseline validation'
 Write-Output "Root: $root"

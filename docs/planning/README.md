@@ -30,4 +30,4 @@ Implementation Plan 把已批准的 SPEC、ADR 和已物化 suite 分解为可�
 
 ## 4. 当前状态
 
-`SLICE-MICRO-RELATIONSHIP-001` 尚无 Implementation Plan。原因是最小 ADR 和 executable suite 都还不存在；当前不得编写业务 TODO 代替这两个门禁。
+`SLICE-MICRO-RELATIONSHIP-001` 已有 Approved `MICRO_RELATIONSHIP_IMPLEMENTATION_PLAN.md`。计划内 TASK-001..010 是唯一业务 TODO，当前全部 pending；业务实现和业务 Verification Result 均不存在。开发前 Gate Review 通过后才可开始 TASK-001。

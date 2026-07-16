@@ -1,6 +1,6 @@
 # 合成 Fixture 规则
 
-当前没有机器 fixture artifact。本目录未来只接收版本化合成数据。
+当前机器 fixture 为 `micro_relationship_v1/fixture.json` 与 `micro_relationship_v1/oracles.json`，仅含固定合成数据。
 
 每个 fixture set 必须：
 
@@ -12,4 +12,4 @@
 - 不从工作区外文件、历史个人 Wiki 或在线账户生成。
 - 修改后升 fixture version，并使旧 Verification Result applicability 可被判定。
 
-Micro 的人类可读固定输入当前只定义在 `docs/testing/MICRO_MVP_ACCEPTANCE.md`；在 manifest 和机器 artifact 创建前，`suite_materialized` 保持 `false`。
+Micro 的人类可读权威合同仍在 `docs/testing/MICRO_MVP_ACCEPTANCE.md`；机器 artifact 已由 `tests/micro_suite_manifest.json` 绑定并通过物化预检。业务 suite 未执行、未通过。
