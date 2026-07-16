@@ -143,11 +143,11 @@ python -m tests.runner.run_micro_suite --adapter noetide_micro.testing_adapter -
 
 ## 9. 完成定义
 
-- [ ] 所有计划任务完成。
-- [ ] 追踪矩阵的 Implementation Module 已更新。
-- [ ] required suite 在同一次 current run 中实际执行。
-- [ ] Verification Result 已保存，未执行项没有被描述为通过。
-- [ ] Gate Review 完成且 P0=0、P1=0。
-- [ ] Git Recovery Point 已创建、推送并验证。
+- [x] 所有计划任务完成。
+- [x] 追踪矩阵的 Implementation Module 已更新。
+- [x] required suite 在同一次 current run 中实际执行。
+- [x] Verification Result 已保存，未执行项没有被描述为通过。
+- [x] Gate Review 完成且 P0=0、P1=0。
+- [x] Git Recovery Point 已创建、推送并验证。
 
-这些勾选项属于未来开发完成条件；计划批准时必须保持未勾选。
+完成证据见 `docs/testing/results/micro-task009-lf-20260717.json`、`MICRO_MVP_IMPLEMENTATION_GATE_2026-07-17.md` 与 `MICRO_MVP_V0.1_RECOVERY_POINT.md`。

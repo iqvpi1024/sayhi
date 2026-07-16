@@ -37,7 +37,7 @@
 | Micro required | `MM-001..010`；39 个去重 upstream refs；49 个 required result IDs |
 | Suite | `defined=true`、`materialized=true`、`executed=true`、`passed=true`；结果绑定 `micro-task009-lf-20260717.json` |
 | Business Verification | `passed`；同一次 current run 的 49/49 required result IDs passed |
-| Business Implementation | TASK-001..009 已完成：最小 SQLite persistence、Source Append、ChangeSet publish、双时态查询、L2 Views、补偿撤销与完整离线 runner 验证；TASK-010 进行中 |
+| Business Implementation | TASK-001..010 已完成：最小 SQLite persistence、Source Append、ChangeSet publish、双时态查询、L2 Views、补偿撤销、完整离线 runner 验证与 Recovery Point 发布 |
 | ADR / Architecture | `ADR-0001 Accepted` / `ARCH-MICRO-REL-001` |
 | Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..010 completed |
 | 当前切片技术基线 | Python 3.12 stdlib + 单进程 SQLite；非长期最终技术栈 |
