@@ -71,12 +71,12 @@
     {
       "role": "offline_runner",
       "path": "tests/runner/run_micro_suite.py",
-      "sha256": "a7a004e6337f7209e77b49991ee061923ae83ef5253599ab247d049dfdfb816f"
+      "sha256": "94ad8b849e4df28fe4887653ff088d7b982d6182a5152e691d4aef0a9e7e3060"
     },
     {
       "role": "suite_preflight_validator",
       "path": "tools/validate_micro_suite.py",
-      "sha256": "0003f080ab5661e7b1b60b6c5ca3931b8166bd662fea4be38d0dfd33342ac02c"
+      "sha256": "667358517066d0997a732777dbb98a30738d0d75373a60b6928fa7fc50020e96"
     }
   ],
   "artifact_digest_strategy": {
@@ -158,7 +158,7 @@
       "multi-agent A2A digital legacy"
     ]
   },
-  "implementation_module": "TBD",
+  "implementation_module": "src/noetide_micro/testing_adapter.py",
   "privacy": {
     "synthetic_only": true,
     "external_network": false,
