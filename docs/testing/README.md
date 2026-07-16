@@ -8,8 +8,8 @@
 |---|---|---|
 | `suite_defined` | SPEC 和验收场景已经定义 oracle | `true` |
 | `suite_materialized` | manifest、fixture、oracle 和 runner contract 已成为机器可读取产物 | `true` |
-| `suite_executed` | 对适用版本实际运行并保存结果 | `false` |
-| `suite_passed` | 同一次 current run 的全部 required tests 通过 | `false` |
+| `suite_executed` | 对适用版本实际运行并保存结果 | `true` |
+| `suite_passed` | 同一次 current run 的全部 required tests 通过 | `true` |
 
 依据：PRD v0.5 §6.14、§22；S6 v0.5；`MICRO_MVP_ACCEPTANCE.md`。
 
@@ -51,4 +51,4 @@
 
 ## 5. 当前验证状态
 
-exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。当前实现尚未由离线 runner 生成可核验的业务 Verification Result；因此 `suite_executed=false`、`suite_passed=false`，TASK-009 必须先运行完整 suite。实现后 Gate Review 与 Recovery Point 仍需分别完成，不能由 suite pass 代替。
+exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。`micro-task009-lf-20260717.json` 在提交 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de` 上以 exit code `0` 实际执行，49 个 required result IDs 均为 `passed`，隐私扫描为 `passed`，原始字节使用 LF；因此 `suite_executed=true`、`suite_passed=true`。该结论只覆盖已定义的 Micro 合同，不替代后续 Gate Review 与 Recovery Point。

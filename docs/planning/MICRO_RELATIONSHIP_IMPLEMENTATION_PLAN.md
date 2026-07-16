@@ -13,7 +13,7 @@
 | Suite Manifest | `tests/micro_suite_manifest.json`；SHA-256 `54d70b993dbd5ce117605f6b07c305d2b97eba67df6a782c0e75f3afc28a5390` |
 | Scope Owner | Noetide Technical Lead |
 
-计划批准表示任务边界可施工。TASK-001..008 已在当前工作树实现并完成定向验证；TASK-009..010 仍 pending，业务 suite 尚未执行。
+计划批准表示任务边界可施工。TASK-001..009 已完成；TASK-010 正在完成 Gate Review 与 Recovery Point 发布。
 
 ## 1. 目标与非目标
 
@@ -71,8 +71,8 @@ synthetic text Source -> contact ChangeSet -> user approval
 | `TASK-006` | `queries.py` + Canonical protected snapshot | S1 §6.6；S2 §6/§10-§11；`MM-006/007` | 半开区间查询正确；两 Source evidence 不互换；三个 protected digest/revision/成员不变 | `completed` |
 | `TASK-007` | `views.py` project/read/reconcile | S3 §6.4/§14；`MM-005/010` | 两 View 对齐 rev_011；单 View 失败仅 fallback 或无旧 payload；reconcile 不改 Canonical | `completed` |
 | `TASK-008` | `changesets.py` compensation + audit；Views 收敛 | S3 §7.3/§15；`MM-008` | 新 rev_012 恢复等价 active；rev_011/原 ChangeSet 保留；两 View/保护字段一致 | `completed` |
-| `TASK-009` | 全模块 hardening、runner 真实执行、result artifact | S6 §6-§15；49 required IDs | 同一次 current run 全部 required 执行；真实结果不可覆盖；任何 skip 只能 partial | `pending` |
-| `TASK-010` | Matrix/Verification/Gate/Recovery Point | Process、Change Control、S6 §6.4 | 回填实际模块与 run；P0/P1=0 才 Review pass；commit/tag/push 后可恢复 | `pending` |
+| `TASK-009` | 全模块 hardening、runner 真实执行、result artifact | S6 §6-§15；49 required IDs | 同一次 current run 全部 required 执行；真实结果不可覆盖；任何 skip 只能 partial | `completed` |
+| `TASK-010` | Matrix/Verification/Gate/Recovery Point | Process、Change Control、S6 §6.4 | 回填实际模块与 run；P0/P1=0 才 Review pass；commit/tag/push 后可恢复 | `in_progress` |
 
 ## 5. 实施顺序与检查点
 
@@ -126,7 +126,7 @@ python -m tests.runner.run_micro_suite --adapter noetide_micro.testing_adapter -
 - Product、SPEC + materialization preflight 同时 exit code 0。
 - 不以截图、日志或静态校验替代业务断言。
 
-执行前当前状态保持 `not_executed`。
+首次正式执行前状态为 `not_executed`；TASK-009 已生成 current `passed` 结果，见 `docs/testing/results/micro-task009-lf-20260717.json`。
 
 ## 8. 风险与未决项
 

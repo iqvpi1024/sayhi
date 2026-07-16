@@ -6,13 +6,15 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": false,
-    "suite_passed": false
+    "suite_executed": true,
+    "suite_passed": true
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "not_applicable",
-  "latest_verification_result_path": null,
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/micro-task009-lf-20260717.json",
+  "latest_verification_manifest_sha256": "ad0f9283fd1d2258dbd9125297cf44d4d07e072551ab209847e9190f9b8e5450",
+  "latest_verification_result_sha256": "20fabfafb061c20fcf1d941c0e84b191ea9bb32be28769aadeaab961a10f2817",
   "baseline": {
     "product_path": "PRDv05.md",
     "product_version": "0.5",

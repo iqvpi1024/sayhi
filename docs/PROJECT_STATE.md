@@ -25,8 +25,8 @@
 | 项目 | 识海 Noetide |
 | 日期 | 2026-07-17 |
 | 当前切片 | `SLICE-MICRO-RELATIONSHIP-001` |
-| 当前切片交付阶段 | `implementing` |
-| 开发门禁 | `open`；TASK-001..008 已完成，TASK-009..010 尚未开始 |
+| 当前切片交付阶段 | `verification_and_gate` |
+| 开发门禁 | `open`；TASK-001..009 已完成，TASK-010 正在完成 Gate 与 Recovery Point |
 | 当前 PRD | `PRDv05.md` v0.5，`Approved Product Baseline` |
 | PRD v0.5 canonical LF SHA-256 | `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 历史 PRD | `PRDv04.md` v0.4，`superseded_read_only`，hash `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
@@ -35,14 +35,14 @@
 | Finding | P0=0、P1=0、P2=0；P3=1 accepted debt（`MMF-017`） |
 | 追踪 | 32/32 FR current；Coverage Level 9 micro / 8 specified / 15 boundary |
 | Micro required | `MM-001..010`；39 个去重 upstream refs；49 个 required result IDs |
-| Suite | `defined=true`、`materialized=true`、`executed=false`、`passed=false` |
-| Business Verification | `not_executed` |
-| Business Implementation | TASK-001..008 已完成：最小 SQLite persistence、Source Append、ChangeSet publish、双时态查询、L2 Views 与补偿撤销；TASK-009..010 未开始 |
+| Suite | `defined=true`、`materialized=true`、`executed=true`、`passed=true`；结果绑定 `micro-task009-lf-20260717.json` |
+| Business Verification | `passed`；同一次 current run 的 49/49 required result IDs passed |
+| Business Implementation | TASK-001..009 已完成：最小 SQLite persistence、Source Append、ChangeSet publish、双时态查询、L2 Views、补偿撤销与完整离线 runner 验证；TASK-010 进行中 |
 | ADR / Architecture | `ADR-0001 Accepted` / `ARCH-MICRO-REL-001` |
-| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..008 completed，TASK-009..010 pending |
+| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..009 completed，TASK-010 in progress |
 | 当前切片技术基线 | Python 3.12 stdlib + 单进程 SQLite；非长期最终技术栈 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 分支 `codex/micro-development-readiness`；当前实现尚未形成提交；上一开发前 Recovery tag 为 `micro-development-ready-v0.1-approved` |
+| Git | 分支 `codex/micro-development-readiness`；受测实现提交 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de`；Micro Recovery Point 待发布 |
 
 ## 3. 本阶段完成内容
 
@@ -62,8 +62,9 @@
 14. TASK-006 已实现 Canonical relationship contact 半开区间查询、两 Source evidence 隔离和 protected snapshot。
 15. TASK-007 已实现 `person_card`、`relationship_timeline` 投影、Publish Barrier 读取和单 View 失败的 Canonical fallback/reconcile。
 16. TASK-008 已实现整包补偿撤销、新 `rev_012`、审计 event 和两个 View 的撤销后收敛。
+17. TASK-009 已在 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de` 上通过正式离线 runner；`docs/testing/results/micro-task009-lf-20260717.json` 记录 49 个 required result IDs 全部 `passed`，exit code `0`，仅使用合成数据且隐私扫描通过。
 
-## 4. 验证结果
+## 4. 开发前静态验证记录（历史）
 
 最终实际执行：
 
@@ -86,15 +87,15 @@ git diff --check
 | Suite materialization | manifest、8 artifact digest、3 protected seed、stdlib AST、隐私预检 passed |
 | Development Gate | ADR/Plan/13 前置产物、0 产品阻塞、无业务源码/依赖/result、PRD diff=0 |
 | Diff hygiene | `git diff --check` passed |
-| Business tests | `not_executed` |
+| Business tests | 当时为 `not_executed`；已由 TASK-009 的正式 result 取代 |
 
-TASK-001/TASK-002 定向验证已实际运行：
+TASK-001/TASK-002 的初始定向验证曾实际运行：
 
 ```powershell
 $env:PYTHONPATH='src'; python -m unittest -v tests.semantic.test_task_001_store tests.semantic.test_task_002_adapter
 ```
 
-exit code `0`，共 7 项测试通过。完整 `tests.runner.run_micro_suite` 未运行，`suite_executed=false`、`suite_passed=false`、Business Verification=`not_executed` 保持不变。
+exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_suite` 尚未运行；该历史状态已由 TASK-009 的正式 current result 取代。
 
 2026-07-17 恢复核验再次实际运行同一 TASK-001/TASK-002 命令，exit code `0`，7/7 通过；并运行 `$env:PYTHONPATH='src'; python -m compileall -q src\\noetide_micro tests\\semantic`，exit code `0`。该次核验只证明 TASK-001/002 的窄范围基础能力，不构成完整 Micro suite 结果。
 
@@ -114,8 +115,11 @@ exit code `0`，共 7 项测试通过。完整 `tests.runner.run_micro_suite` �
 | `docs/testing/MICRO_MVP_ACCEPTANCE.md` | 人类可读 Micro 合同 |
 | `docs/planning/MICRO_RELATIONSHIP_IMPLEMENTATION_PLAN.md` | 唯一施工计划与 TODO |
 | `docs/reviews/MICRO_DEVELOPMENT_READINESS_GATE_2026-07-16.md` | 当前开发前 Gate |
+| `docs/reviews/MICRO_MVP_IMPLEMENTATION_GATE_2026-07-17.md` | 实现后 Gate Review |
 | `docs/testing/LATEST_STATIC_VALIDATION.md` | 最近实际静态/物化/Gate 验证 |
+| `docs/testing/results/micro-task009-lf-20260717.json` | 当前 Micro 业务 Verification Result |
 | `docs/releases/MICRO_DEVELOPMENT_READY_V0.1_RECOVERY_POINT.md` | Git 恢复与重验步骤 |
+| `docs/releases/MICRO_MVP_V0.1_RECOVERY_POINT.md` | Micro 实现恢复点发布与重验步骤 |
 
 ## 6. 未决问题与后置项
 
@@ -133,7 +137,7 @@ exit code `0`，共 7 项测试通过。完整 `tests.runner.run_micro_suite` �
 
 | 风险 | 当前控制 |
 |---|---|
-| 把物化 passed 当业务 passed | executed/passed=false，business not_executed |
+| 把物化 passed 当业务 passed | suite 状态与不可变业务 result 分开记录，并由 manifest hash 绑定 |
 | 测试接口变成产品 API | `testing_adapter.py` 明确 test-only |
 | SQLite 变成长期平台承诺 | ADR 限定当前 Micro，可由新 ADR 替换 |
 | raw-byte digest 被 EOL 破坏 | `.gitattributes` 固定 `*.py/*.json/*.md/*.ps1` 为 LF |
@@ -144,7 +148,7 @@ exit code `0`，共 7 项测试通过。完整 `tests.runner.run_micro_suite` �
 
 ## 8. 下一步唯一建议动作
 
-**执行 `PLAN-MICRO-REL-001` 的 TASK-009：运行完整离线 Micro suite，保存新的不可覆盖 Verification Result，修复任何真实失败后重新运行。**
+**完成 `PLAN-MICRO-REL-001` 的 TASK-010：复核运行记录并创建 Gate Review、Recovery Record、annotated tag 和远端可解析的恢复点。**
 
 ## 9. 变更日志
 
