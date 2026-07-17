@@ -81,8 +81,8 @@ AnswerEnvelope、EvidenceAssessment 和运行结果均不得回写为事实 Evid
 
 无 UI、API、MCP、权限 runtime、Shiling candidate generation、冲突裁决、ChangeSet 写入、第三个 View、Context Pack、安装包或部署脚本。
 
-## 7. 待物化证据
+## 7. 当前证据状态
 
-- A1 manifest/fixture/oracle/runner 不存在。
+- A1 manifest/fixture/oracle/runner 已物化并通过静态 validator；这只证明工件结构可运行。
 - A1 业务测试 `not_executed`。
-- 下一步只能物化 suite；Architecture Accepted 不表示可开始业务实现。
+- Implementation Plan/Task Cards 已通过独立开发前 Gate；下一步只允许执行 `AS-TASK-001`，Architecture Accepted 或 suite materialized 均不表示业务通过。

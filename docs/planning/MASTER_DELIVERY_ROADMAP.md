@@ -63,14 +63,14 @@ Product Baseline
 |---|---|
 | Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
 | Primary FR | FR-008；FR-010 的检测与并列呈现切片 |
-| 状态 | `architecture_decided` |
+| 状态 | `implementation_planned` |
 | 目标 | 一个固定事实查询根据证据、覆盖、冲突和新鲜度返回六态 `AnswerEnvelope` |
 | 非目标 | 通用问答、LLM、权限 runtime、MCP、冲突裁决、Canonical `value=unknown` |
-| 下一门禁 | 执行 `AS-PRE-001..005`，完成 Suite Materialization Gate |
+| 下一门禁 | 按 Approved Plan/Task Cards 执行 `AS-TASK-001` |
 
 该切片只使用固定合成 Canonical snapshot 和固定查询，证明 `verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown` 严格分离，并禁止 Derived View 成为事实证据。
 
-当前已经完成 SPEC applicability、35-ID exact contract、Trace、ADR-0002、Architecture 和 Pre-Suite Gate。A1 suite 尚未物化，Implementation Plan 仍为 blocked Draft，业务实现不存在。当前单一入口见 `docs/process/CURRENT_HANDOFF.md`。
+当前已经完成 SPEC applicability、35-ID exact contract、Trace、ADR-0002、Architecture、suite 物化、Suite Gate、Approved Implementation Plan 和逐任务卡。A1 业务实现仍不存在，35 个 required IDs 全部 `not_executed`。当前单一入口见 `docs/process/CURRENT_HANDOFF.md`。
 
 ### A2：第三个 Core View 与通用当前状态读取
 

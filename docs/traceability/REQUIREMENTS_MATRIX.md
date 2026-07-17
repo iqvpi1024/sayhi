@@ -106,7 +106,7 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 
 Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独归属某一 FR。exact scenario-to-upstream 映射以 `docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` §7 为唯一权威；本节必须与其机械一致。
 
-当前状态：`traceable=true`、`suite_defined=true`、`suite_materialized=false`、`implementation_module=TBD`、`verification_result=not_executed`。
+当前状态：`traceable=true`、`suite_defined=true`、`suite_materialized=true`、`implementation_module=TBD`、`verification_result=not_executed`。A1 manifest 固定 35 个 required result IDs；业务模块只能在 `AS-TASK-001..007` 完成后按真实路径回填。
 
 ## 5. 验证结果语义
 
@@ -122,4 +122,4 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 `MICRO_MVP_ACCEPTANCE.md` §6 的 `micro_required_contract_slices` 是唯一 required upstream Test Ref 映射：10 个 MM 场景与 39 个去重后的 SOM/BTE/CS/PAP/SHP/IMM tests。Matrix 的长期 FR Test Ref 不是 Micro runner required 清单。进入 Micro 实现前只物化该映射；任何未列测试和 `boundary_only_deferred` FR 都不得借“完善架构”被隐式提升。
 
-当前 A1 的唯一 required 映射是 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` §7：11 个 `AS-*` 场景、24 个唯一 upstream refs，共 35 个 result IDs。当前只允许从 `AS-PRE-001` 开始物化该 suite；Matrix 长期 FR 行、旧 Micro required 集和其他 SPEC tests 均不得被隐式并入 A1。
+当前 A1 的唯一 required 映射是 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` §7 和 `tests/answer_safety_suite_manifest.json`：11 个 `AS-*` 场景、24 个唯一 upstream refs，共 35 个 result IDs。Suite 已物化但未执行；当前只允许按 Approved Plan/Task Cards 从 `AS-TASK-001` 开始，Matrix 长期 FR 行、旧 Micro required 集和其他 SPEC tests 均不得被隐式并入 A1。

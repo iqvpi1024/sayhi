@@ -8,12 +8,12 @@ slice_id: SLICE-MVP-A-ANSWER-SAFETY-001
 product_baseline: PRDv05.md v0.5
 decision_ref: DEC-MVP-A-AS-001
 suite_defined: true
-suite_materialized: false
+suite_materialized: true
 suite_executed: false
 suite_passed: false
 ```
 
-本文定义 A1 的 exact 合同；尚无 manifest、fixture、oracle、runner 或实现。Markdown 完成不等于 suite materialized 或 passed。
+本文定义 A1 的 exact 合同；manifest、fixture、oracle、runner 已物化，但业务实现和业务 Verification Result 仍不存在。suite materialized 不等于 executed 或 passed。
 
 ## 1. 目标
 
@@ -214,4 +214,4 @@ answer_safety_required_contract_slices:
 
 ## 9. 当前结论
 
-`suite_defined=true`，`suite_materialized=false`，`suite_executed=false`，`suite_passed=false`。Trace 与 ADR 已完成；下一步只执行 `PLAN-MVP-A-AS-SUITE-001` 的 `AS-PRE-001` 物化固定合成 fixture/oracle，不得开始 A1 业务代码。
+`suite_defined=true`，`suite_materialized=true`，`suite_executed=false`，`suite_passed=false`。Suite Materialization Gate 和 Implementation Planning Gate 已通过；业务实现仍不存在。下一步只能按 Approved Plan 和 Task Cards 执行 `AS-TASK-001`，定向结果不得冒充完整 A1 suite 通过。

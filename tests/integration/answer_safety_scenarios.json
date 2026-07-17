@@ -1,0 +1,159 @@
+{
+  "schema_version": "noetide.answer-safety-scenarios.v1",
+  "slice_id": "SLICE-MVP-A-ANSWER-SAFETY-001",
+  "fixture_ref": "tests/fixtures/answer_safety_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/answer_safety_v1/oracles.json",
+  "scenarios": [
+    {
+      "scenario_id": "AS-001",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as001_viewpoint",
+        "compare_exact_answer",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["SOM-AT-008", "BTE-AT-020"],
+      "oracle_group": "AS-001"
+    },
+    {
+      "scenario_id": "AS-002",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as002_statement_occurrence",
+        "evaluate_as002_world_claim",
+        "compare_exact_answers",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["BTE-AT-021"],
+      "oracle_group": "AS-002"
+    },
+    {
+      "scenario_id": "AS-003",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as003_unconfirmed",
+        "assert_candidate_not_canonical_evidence",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["BTE-AT-024"],
+      "oracle_group": "AS-003"
+    },
+    {
+      "scenario_id": "AS-004",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as004_disputed",
+        "compare_parallel_conflict_evidence",
+        "repeat_with_reversed_fixture_order",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["SOM-AT-021", "BTE-AT-030"],
+      "oracle_group": "AS-004"
+    },
+    {
+      "scenario_id": "AS-005",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as005_outside_coverage",
+        "evaluate_as005_unknown_continuity",
+        "compare_exact_answers",
+        "assert_no_verified_negative",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["BTE-AT-012", "BTE-AT-013"],
+      "oracle_group": "AS-005"
+    },
+    {
+      "scenario_id": "AS-006",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as006_current_stale",
+        "evaluate_as006_historical_not_stale",
+        "compare_exact_answers",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["BTE-AT-026", "BTE-AT-027"],
+      "oracle_group": "AS-006"
+    },
+    {
+      "scenario_id": "AS-007",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as007_unknown",
+        "assert_no_canonical_unknown_state",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["BTE-AT-025"],
+      "oracle_group": "AS-007"
+    },
+    {
+      "scenario_id": "AS-008",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as008_derived_forbidden",
+        "assert_no_direct_evidence_refs",
+        "assert_derived_not_copied_to_source",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["SOM-AT-009", "BTE-AT-034", "SIP-AT-006"],
+      "oracle_group": "AS-008"
+    },
+    {
+      "scenario_id": "AS-009",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as009_fictional_isolated",
+        "assert_fictional_kind_unchanged",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": ["SOM-AT-018"],
+      "oracle_group": "AS-009"
+    },
+    {
+      "scenario_id": "AS-010",
+      "actions": [
+        "create_isolated_case",
+        "snapshot_layers",
+        "evaluate_as010_replay_twice",
+        "compare_semantic_outputs",
+        "assert_fixed_clock_and_no_network",
+        "assert_layers_unchanged"
+      ],
+      "required_contract_refs": [
+        "HTH-AT-006",
+        "HTH-AT-007",
+        "HTH-AT-008",
+        "HTH-AT-009",
+        "HTH-AT-013"
+      ],
+      "oracle_group": "AS-010"
+    },
+    {
+      "scenario_id": "AS-011",
+      "actions": [
+        "prepare_passing_synthetic_result",
+        "inject_result_output_failure_before_atomic_replace",
+        "assert_no_current_pass_artifact",
+        "assert_existing_result_not_overwritten",
+        "assert_failed_run_evidence_retained"
+      ],
+      "required_contract_refs": [
+        "HTH-AT-002",
+        "HTH-AT-019",
+        "HTH-AT-020",
+        "HTH-AT-023"
+      ],
+      "failure_injections": ["result.output.before_atomic_replace"],
+      "oracle_group": "AS-011"
+    }
+  ]
+}

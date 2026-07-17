@@ -5,7 +5,7 @@
 | 字段 | 值 |
 |---|---|
 | Plan ID | `PLAN-MVP-A-AS-SUITE-001` |
-| Status | `Approved for suite materialization only` |
+| Status | `Completed` |
 | Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
 | Acceptance | `ACCEPT-MVP-A-AS-001` |
 | ADR | `ADR-0002` |
@@ -86,13 +86,13 @@ AS-011 还必须注入 result output failure，证明不存在 current passed ar
 
 ## 6. 物化任务
 
-| Task | 内容 | 完成条件 |
-|---|---|---|
-| `AS-PRE-001` | 创建 fixture/oracle | 11 case 完整、hash/locator/digest 可重算，synthetic scan 通过 |
-| `AS-PRE-002` | 创建 scenario plan + protocol | AS-001..011 与 Acceptance §7 exact mapping 一致 |
-| `AS-PRE-003` | 创建 semantic test module + runner | 测试可发现；缺实现时诚实失败/errored，不伪造 pass |
-| `AS-PRE-004` | 创建 manifest + validator | 8 类工件 raw hash 匹配，状态 materialized/not_executed |
-| `AS-PRE-005` | Suite Materialization Gate | Product/SPEC/Trace/ADR 静态通过；业务 tests 仍未执行 |
+| Task | 内容 | 完成条件 | 状态 |
+|---|---|---|---|
+| `AS-PRE-001` | 创建 fixture/oracle | 11 case 完整、hash/locator/digest 可重算，synthetic scan 通过 | `completed` |
+| `AS-PRE-002` | 创建 scenario plan + protocol | AS-001..011 与 Acceptance §7 exact mapping 一致 | `completed` |
+| `AS-PRE-003` | 创建 semantic test module + runner | 测试可发现；缺实现时诚实失败/errored，不伪造 pass | `completed` |
+| `AS-PRE-004` | 创建 manifest + validator | 8 类工件 raw hash 匹配，状态 materialized/not_executed | `completed` |
+| `AS-PRE-005` | Suite Materialization Gate | Product/SPEC/Trace/ADR 静态通过；业务 tests 仍未执行 | `completed` |
 
 ## 7. 验证命令要求
 
@@ -119,4 +119,4 @@ git diff --check
 
 ## 9. 出口
 
-只有 `AS-PRE-001..005` 全部完成且 Gate P0=0/P1=0，A1 Implementation Plan 才可从 Draft 改为 Approved；之后开发模型从业务 `AS-TASK-001` 开始。
+`AS-PRE-001..005` 已全部完成，Suite Materialization Gate P0=0/P1=0。Implementation Plan 已经独立 Planning Gate 审查并改为 Approved；开发模型只能从 `CURRENT_HANDOFF` 指向的 `AS-TASK-001` 开始。

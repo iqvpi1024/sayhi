@@ -1,0 +1,928 @@
+{
+  "schema_version": "noetide.answer-safety-fixture.v1",
+  "fixture_id": "answer_safety_v1",
+  "slice_id": "SLICE-MVP-A-ANSWER-SAFETY-001",
+  "synthetic": true,
+  "external_data_used": false,
+  "owner_ref": "synthetic_owner_001",
+  "subject_ref": "synthetic_subject_001",
+  "authorized_profile": "owner_local_private_v1",
+  "determinism": {
+    "clock": "2032-01-15T12:00:00Z",
+    "timezone": "UTC",
+    "locale": "en-US",
+    "random_seed": 0,
+    "id_strategy": "fixture_declared_v1",
+    "canonical_digest": "sha256_stable_id_sorted_canonical_json_v1"
+  },
+  "cases": [
+    {
+      "scenario_id": "AS-001",
+      "database_identity": "answer_safety_case_as_001",
+      "query_requests": [
+        {
+          "query_id": "as001_viewpoint",
+          "claim_ref": "synthetic_claim_001",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.signal",
+          "requested_value": "enabled",
+          "verification_scope": "viewpoint",
+          "valid_time": "2031-06-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as001_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [
+          {
+            "source_id": "as001_src_opinion",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic viewpoint: signal is enabled",
+            "byte_length": 38,
+            "content_hash": "5e3e0ea98d172dd6d5919f09355f76b4b322b36e2913982cd57cd7c6b65f76b9",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 38
+            },
+            "source_created_at": "2031-06-01T00:00:00Z",
+            "ingested_at": "2031-06-02T00:00:00Z"
+          }
+        ],
+        "canonical_objects": [
+          {
+            "object_type": "assertion",
+            "assertion_id": "as001_assertion_opinion",
+            "object_revision": "as_rev_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.signal",
+            "value": "enabled",
+            "assertion_kind": "opinion",
+            "perspective_ref": "synthetic_subject_001",
+            "review_status": "confirmed",
+            "valid_time": {
+              "start": "2031-06-01T00:00:00Z",
+              "end": "unbounded",
+              "bounds": "[)"
+            },
+            "recorded_at": "2031-06-02T00:00:00Z",
+            "evidence_status": "present",
+            "evidence_refs": [
+              {
+                "source_id": "as001_src_opinion",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 38
+                },
+                "stance": "supports",
+                "claim_ref": "synthetic_claim_001"
+              }
+            ]
+          }
+        ],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as001_coverage",
+            "scope_ref": "synthetic.signal",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "1d8990bb35a2e8e79b361f5d886aaec02a8df8180732508aed2890c09798d1b7",
+        "canonical": "2f14f0b236857c93ba9dafc830ca6a99069f4627b80540c72410f98ea7f585f9",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-002",
+      "database_identity": "answer_safety_case_as_002",
+      "query_requests": [
+        {
+          "query_id": "as002_statement_occurrence",
+          "claim_ref": "synthetic_claim_002",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.marker",
+          "requested_value": "present",
+          "verification_scope": "statement_occurrence",
+          "valid_time": "2031-07-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as002_coverage"]
+        },
+        {
+          "query_id": "as002_world_claim",
+          "claim_ref": "synthetic_claim_002",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.marker",
+          "requested_value": "present",
+          "verification_scope": "world_claim",
+          "valid_time": "2031-07-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as002_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [
+          {
+            "source_id": "as002_src_report",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic report: marker is present",
+            "byte_length": 35,
+            "content_hash": "5b0ab5663f6ee0f649153fbaa77d43ba610b92f0e33c5cc5777b5cd1f5733d15",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 35
+            },
+            "source_created_at": "2031-07-01T00:00:00Z",
+            "ingested_at": "2031-07-02T00:00:00Z"
+          }
+        ],
+        "canonical_objects": [
+          {
+            "object_type": "assertion",
+            "assertion_id": "as002_assertion_reported",
+            "object_revision": "as_rev_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.marker",
+            "value": "present",
+            "assertion_kind": "reported",
+            "perspective_ref": "synthetic_subject_001",
+            "review_status": "confirmed",
+            "valid_time": {
+              "start": "2031-07-01T00:00:00Z",
+              "end": "unbounded",
+              "bounds": "[)"
+            },
+            "recorded_at": "2031-07-02T00:00:00Z",
+            "evidence_status": "present",
+            "evidence_refs": [
+              {
+                "source_id": "as002_src_report",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 35
+                },
+                "stance": "supports",
+                "claim_ref": "synthetic_claim_002"
+              }
+            ]
+          }
+        ],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as002_coverage",
+            "scope_ref": "synthetic.marker",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "decc82551eeb353ede53d320072c7d15e527c478766a5e3d297b5f0035c7472e",
+        "canonical": "4c1798e99344522f93c3a6479ce7dff7d0eb8b9e7ce26c0068ce0349b149ae36",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-003",
+      "database_identity": "answer_safety_case_as_003",
+      "query_requests": [
+        {
+          "query_id": "as003_unconfirmed",
+          "claim_ref": "synthetic_claim_003",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.phase",
+          "requested_value": "beta",
+          "verification_scope": "world_claim",
+          "valid_time": "2031-08-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as003_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [
+          {
+            "source_id": "as003_src_candidate",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic candidate: phase may be beta",
+            "byte_length": 38,
+            "content_hash": "c0c54b1b7583bc475796b82c5f6906dffdcfbb29cce9b8e5fe882bf1cb7b3762",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 38
+            },
+            "source_created_at": "2031-08-01T00:00:00Z",
+            "ingested_at": "2031-08-02T00:00:00Z"
+          }
+        ],
+        "canonical_objects": [],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as003_coverage",
+            "scope_ref": "synthetic.phase",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [
+          {
+            "candidate_id": "as003_candidate_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.phase",
+            "value": "beta",
+            "review_status": "unreviewed",
+            "source_ref": {
+              "source_id": "as003_src_candidate",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 38
+              }
+            }
+          }
+        ],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "a208d565f63c9ce24cafe0d6a22f15971a3ff4b81f71a65386ecd4b0414d050f",
+        "canonical": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-004",
+      "database_identity": "answer_safety_case_as_004",
+      "query_requests": [
+        {
+          "query_id": "as004_disputed",
+          "claim_ref": "synthetic_claim_004",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.mode",
+          "requested_value": null,
+          "verification_scope": "world_claim",
+          "valid_time": "2031-09-15T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as004_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [
+          {
+            "source_id": "as004_src_mode_on",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic mode record: mode is on",
+            "byte_length": 33,
+            "content_hash": "6a66834b0e0daa00fadd4d73356fce67b0960be79f762c6081fc195c56287066",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 33
+            },
+            "source_created_at": "2031-09-01T00:00:00Z",
+            "ingested_at": "2031-09-02T00:00:00Z"
+          },
+          {
+            "source_id": "as004_src_mode_off",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic mode record: mode is off",
+            "byte_length": 34,
+            "content_hash": "16f12c45f80631206fb1e984ce7d8ee525d7a85ebc49cff395d946d9ad28dbff",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 34
+            },
+            "source_created_at": "2031-09-10T00:00:00Z",
+            "ingested_at": "2031-09-11T00:00:00Z"
+          }
+        ],
+        "canonical_objects": [
+          {
+            "object_type": "assertion",
+            "assertion_id": "as004_assertion_mode_on",
+            "object_revision": "as_rev_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.mode",
+            "value": "on",
+            "assertion_kind": "reported",
+            "perspective_ref": "synthetic_subject_001",
+            "review_status": "in_dispute",
+            "valid_time": {
+              "start": "2031-09-01T00:00:00Z",
+              "end": "2031-10-01T00:00:00Z",
+              "bounds": "[)"
+            },
+            "recorded_at": "2031-09-02T00:00:00Z",
+            "evidence_status": "present",
+            "evidence_refs": [
+              {
+                "source_id": "as004_src_mode_on",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 33
+                },
+                "stance": "supports",
+                "claim_ref": "synthetic_claim_004"
+              }
+            ]
+          },
+          {
+            "object_type": "assertion",
+            "assertion_id": "as004_assertion_mode_off",
+            "object_revision": "as_rev_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.mode",
+            "value": "off",
+            "assertion_kind": "reported",
+            "perspective_ref": "synthetic_subject_001",
+            "review_status": "in_dispute",
+            "valid_time": {
+              "start": "2031-09-10T00:00:00Z",
+              "end": "2031-10-10T00:00:00Z",
+              "bounds": "[)"
+            },
+            "recorded_at": "2031-09-11T00:00:00Z",
+            "evidence_status": "present",
+            "evidence_refs": [
+              {
+                "source_id": "as004_src_mode_off",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 34
+                },
+                "stance": "contradicts",
+                "claim_ref": "synthetic_claim_004"
+              }
+            ]
+          }
+        ],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as004_coverage",
+            "scope_ref": "synthetic.mode",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "33f9e530f7a2946dc1ce182568c76b7f4549143bbb9cd86c9ca265f86009518b",
+        "canonical": "cba8b299d58fab2350e967cbb0f1827bd6b0951724346332b73e383949439e49",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-005",
+      "database_identity": "answer_safety_case_as_005",
+      "query_requests": [
+        {
+          "query_id": "as005_outside_coverage",
+          "claim_ref": "synthetic_claim_005a",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.event",
+          "requested_value": "occurred",
+          "verification_scope": "world_claim",
+          "valid_time": "2031-02-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "negative_query": true,
+          "coverage_window_refs": ["as005_coverage_late"]
+        },
+        {
+          "query_id": "as005_unknown_continuity",
+          "claim_ref": "synthetic_claim_005b",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.event",
+          "requested_value": "occurred",
+          "verification_scope": "world_claim",
+          "valid_time": "2031-08-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "negative_query": true,
+          "coverage_window_refs": ["as005_coverage_unknown"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [],
+        "canonical_objects": [],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as005_coverage_late",
+            "scope_ref": "synthetic.event",
+            "coverage_start": "2031-06-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          },
+          {
+            "coverage_window_id": "as005_coverage_unknown",
+            "scope_ref": "synthetic.event",
+            "coverage_start": "2031-06-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "unknown",
+            "gaps": [],
+            "export_completeness": "unknown"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "canonical": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-006",
+      "database_identity": "answer_safety_case_as_006",
+      "query_requests": [
+        {
+          "query_id": "as006_current_stale",
+          "claim_ref": "synthetic_claim_006",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.status",
+          "requested_value": "ready",
+          "verification_scope": "statement_occurrence",
+          "valid_time": "current",
+          "recorded_as_of": "current",
+          "requires_current_freshness": true,
+          "freshness_policy_ref": "as_policy_current_30d",
+          "coverage_window_refs": ["as006_coverage"]
+        },
+        {
+          "query_id": "as006_historical_not_stale",
+          "claim_ref": "synthetic_claim_006",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.status",
+          "requested_value": "ready",
+          "verification_scope": "statement_occurrence",
+          "valid_time": "2031-01-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as006_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [
+          {
+            "source_id": "as006_src_status",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic status record: status is ready",
+            "byte_length": 40,
+            "content_hash": "274dd2d0ec2b05e6c02c85ce3b978ea9154cbae27c7772fd6defc2462e4d8ca5",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 40
+            },
+            "source_created_at": "2031-01-01T00:00:00Z",
+            "ingested_at": "2031-01-02T00:00:00Z"
+          }
+        ],
+        "canonical_objects": [
+          {
+            "object_type": "assertion",
+            "assertion_id": "as006_assertion_status",
+            "object_revision": "as_rev_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.status",
+            "value": "ready",
+            "assertion_kind": "reported",
+            "perspective_ref": "synthetic_subject_001",
+            "review_status": "confirmed",
+            "valid_time": {
+              "start": "2031-01-01T00:00:00Z",
+              "end": "unbounded",
+              "bounds": "[)"
+            },
+            "recorded_at": "2031-01-02T00:00:00Z",
+            "evidence_status": "present",
+            "evidence_refs": [
+              {
+                "source_id": "as006_src_status",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 40
+                },
+                "stance": "supports",
+                "claim_ref": "synthetic_claim_006"
+              }
+            ]
+          }
+        ],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as006_coverage",
+            "scope_ref": "synthetic.status",
+            "coverage_start": "2030-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": [
+          {
+            "policy_id": "as_policy_current_30d",
+            "applies_to": "current_query_only",
+            "max_age_seconds": 2592000,
+            "evaluated_at": "2032-01-15T12:00:00Z"
+          }
+        ]
+      },
+      "expected_initial_layer_digests": {
+        "source": "473c28a9e12de0df80954935fa1c4a4e624129b49820f8c1a7a0801c35762bde",
+        "canonical": "e7575a9681f42ed8ead8cf0a5e40b047bcb06e57a9c056fab2fe11ab4066dc6c",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-007",
+      "database_identity": "answer_safety_case_as_007",
+      "query_requests": [
+        {
+          "query_id": "as007_unknown",
+          "claim_ref": "synthetic_claim_007",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.flag",
+          "requested_value": "set",
+          "verification_scope": "world_claim",
+          "valid_time": "2031-11-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as007_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [],
+        "canonical_objects": [],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as007_coverage",
+            "scope_ref": "synthetic.flag",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "canonical": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-008",
+      "database_identity": "answer_safety_case_as_008",
+      "query_requests": [
+        {
+          "query_id": "as008_derived_forbidden",
+          "claim_ref": "synthetic_claim_008",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.summary_flag",
+          "requested_value": "set",
+          "verification_scope": "world_claim",
+          "valid_time": "2031-12-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as008_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [],
+        "canonical_objects": [],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as008_coverage",
+            "scope_ref": "synthetic.summary_flag",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [
+          {
+            "view_name": "synthetic_summary",
+            "data_revision": "as_rev_001",
+            "view_revision": "as_rev_001",
+            "freshness_status": "fresh",
+            "payload": {
+              "predicate": "synthetic.summary_flag",
+              "value": "set"
+            }
+          }
+        ],
+        "derived_inputs": [
+          {
+            "derived_kind": "projection",
+            "derived_ref": "synthetic_summary",
+            "claim_ref": "synthetic_claim_008"
+          }
+        ],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "canonical": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "12d0cd1963f151c531fa807b3be482c66c3063145956df7094155fc5163bf935"
+      }
+    },
+    {
+      "scenario_id": "AS-009",
+      "database_identity": "answer_safety_case_as_009",
+      "query_requests": [
+        {
+          "query_id": "as009_fictional_isolated",
+          "claim_ref": "synthetic_claim_009",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.world_flag",
+          "requested_value": "set",
+          "verification_scope": "world_claim",
+          "valid_time": "2031-12-15T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as009_coverage"]
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [
+          {
+            "source_id": "as009_src_fiction",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic fiction: world flag is set",
+            "byte_length": 36,
+            "content_hash": "a2fd3b39fc616720251ca5a70462db69e231a7b7441d4e0d969ddb6fc2e411b7",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 36
+            },
+            "source_created_at": "2031-12-15T00:00:00Z",
+            "ingested_at": "2031-12-16T00:00:00Z"
+          }
+        ],
+        "canonical_objects": [
+          {
+            "object_type": "assertion",
+            "assertion_id": "as009_assertion_fictional",
+            "object_revision": "as_rev_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.world_flag",
+            "value": "set",
+            "assertion_kind": "fictional",
+            "perspective_ref": "synthetic_subject_001",
+            "review_status": "confirmed",
+            "valid_time": {
+              "start": "2031-12-15T00:00:00Z",
+              "end": "unbounded",
+              "bounds": "[)"
+            },
+            "recorded_at": "2031-12-16T00:00:00Z",
+            "evidence_status": "present",
+            "evidence_refs": [
+              {
+                "source_id": "as009_src_fiction",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 36
+                },
+                "stance": "contextual",
+                "claim_ref": "synthetic_claim_009"
+              }
+            ]
+          }
+        ],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as009_coverage",
+            "scope_ref": "synthetic.world_flag",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "fe7c507ba6ca1a00afbf158dade6674e1c990059c003e6dfc951c1377addecc0",
+        "canonical": "cbb15ca05b0fb20008f3ec7dc65c4694f1ae3eae9c9eef1b964f4af87abb6519",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-010",
+      "database_identity": "answer_safety_case_as_010",
+      "query_requests": [
+        {
+          "query_id": "as010_replay",
+          "claim_ref": "synthetic_claim_010",
+          "subject_ref": "synthetic_subject_001",
+          "predicate": "synthetic.replay_signal",
+          "requested_value": "enabled",
+          "verification_scope": "viewpoint",
+          "valid_time": "2031-06-01T00:00:00Z",
+          "recorded_as_of": "current",
+          "requires_current_freshness": false,
+          "coverage_window_refs": ["as010_coverage"],
+          "replay_count": 2
+        }
+      ],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [
+          {
+            "source_id": "as010_src_replay",
+            "source_kind": "synthetic_text",
+            "source_system": "synthetic_fixture",
+            "inline_content": "synthetic replay viewpoint: signal enabled",
+            "byte_length": 42,
+            "content_hash": "53d3d97c6c9c6db62bdfd73eba56f340443fd4dd6a40276230cdeb869cfa693a",
+            "locator": {
+              "scheme": "text_utf8_byte_range_v1",
+              "start_byte": 0,
+              "end_byte_exclusive": 42
+            },
+            "source_created_at": "2031-06-01T00:00:00Z",
+            "ingested_at": "2031-06-02T00:00:00Z"
+          }
+        ],
+        "canonical_objects": [
+          {
+            "object_type": "assertion",
+            "assertion_id": "as010_assertion_replay",
+            "object_revision": "as_rev_001",
+            "subject_ref": "synthetic_subject_001",
+            "predicate": "synthetic.replay_signal",
+            "value": "enabled",
+            "assertion_kind": "opinion",
+            "perspective_ref": "synthetic_subject_001",
+            "review_status": "confirmed",
+            "valid_time": {
+              "start": "2031-06-01T00:00:00Z",
+              "end": "unbounded",
+              "bounds": "[)"
+            },
+            "recorded_at": "2031-06-02T00:00:00Z",
+            "evidence_status": "present",
+            "evidence_refs": [
+              {
+                "source_id": "as010_src_replay",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 42
+                },
+                "stance": "supports",
+                "claim_ref": "synthetic_claim_010"
+              }
+            ]
+          }
+        ],
+        "coverage_windows": [
+          {
+            "coverage_window_id": "as010_coverage",
+            "scope_ref": "synthetic.replay_signal",
+            "coverage_start": "2031-01-01T00:00:00Z",
+            "coverage_end": "unbounded",
+            "continuity": "continuous",
+            "gaps": [],
+            "export_completeness": "complete"
+          }
+        ],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "expected_initial_layer_digests": {
+        "source": "8d69a7a3e69e30d4ece75c27b70864389a7ec60ee559b3bbdce3ad86ce9e00d2",
+        "canonical": "319da2ad2ac32c44b3e05ba26969e702b0b35b9ab71ffa5ad04f1a60be958b80",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "scenario_id": "AS-011",
+      "database_identity": "answer_safety_case_as_011",
+      "query_requests": [],
+      "initial_state": {
+        "data_revision": "as_rev_001",
+        "source_records": [],
+        "canonical_objects": [],
+        "coverage_windows": [],
+        "candidates": [],
+        "ledger_records": [],
+        "projection_rows": [],
+        "derived_inputs": [],
+        "freshness_policies": []
+      },
+      "failure_injection": {
+        "point": "result.output.before_atomic_replace",
+        "expected_error": "result_artifact_write_failed"
+      },
+      "expected_initial_layer_digests": {
+        "source": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "canonical": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "ledger": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "projection": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    }
+  ]
+}

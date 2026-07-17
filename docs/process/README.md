@@ -157,18 +157,18 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 | 字段 | 当前值 |
 |---|---|
 | Active Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
-| Active Phase | `architecture_decided` |
+| Active Phase | `implementation_planned` |
 | 当前 PRD | `PRDv05.md` v0.5 Approved |
 | Product Decision | `DEC-MVP-A-AS-001` decided |
 | SPEC Applicability | `passed`：S1/S2/S3/S6/S7 keep current |
 | Trace / ADR / Architecture | Matrix §4.1 complete；`ADR-0002` Accepted；`ARCH-MVP-A-AS-001` Accepted Design Baseline |
-| Suite | `defined=true`、`materialized=false`、`executed=false`、`passed=false` |
-| Plan | suite-only Plan Approved；Implementation Plan Draft blocked |
+| Suite | `defined=true`、`materialized=true`、`executed=false`、`passed=false` |
+| Plan | suite-only Plan completed；Implementation Plan 与 Task Cards Approved |
 | Business Implementation | `absent` |
 | Business Verification | `not_executed` |
 | Previous Slice | `SLICE-MICRO-RELATIONSHIP-001` = `recovery_point_published`；49/49 required passed |
 
-下一步唯一动作是执行 `PLAN-MVP-A-AS-SUITE-001` 的 `AS-PRE-001`，只创建固定合成 fixture/oracle。`AS-PRE-001..005` 完成并通过 Suite Materialization Gate 前不得批准 Implementation Plan 或编写 A1 业务代码。
+下一步唯一动作是按 `PLAN-MVP-A-AS-IMPL-001` 和 `CARDS-MVP-A-AS-001` 执行 `AS-TASK-001`。每轮只执行一张 Task Card；A1 统一 business runner 保持 `not_executed`，直到 `AS-TASK-008`。
 
 ## 11. 相关说明与模板
 

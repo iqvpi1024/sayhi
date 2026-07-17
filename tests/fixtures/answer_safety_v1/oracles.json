@@ -1,0 +1,506 @@
+{
+  "schema_version": "noetide.answer-safety-oracles.v1",
+  "oracle_id": "answer_safety_v1_oracles",
+  "fixture_ref": "tests/fixtures/answer_safety_v1/fixture.json",
+  "synthetic": true,
+  "answer_status_values": [
+    "verified",
+    "unconfirmed",
+    "disputed",
+    "not_covered",
+    "stale",
+    "unknown"
+  ],
+  "verification_scope_values": [
+    "record_accuracy",
+    "statement_occurrence",
+    "viewpoint",
+    "world_claim"
+  ],
+  "global_forbidden_write_oracle": {
+    "data_revision_unchanged": true,
+    "source_layer_digest_unchanged": true,
+    "canonical_layer_digest_unchanged": true,
+    "ledger_layer_digest_unchanged": true,
+    "projection_layer_digest_unchanged": true,
+    "source_count_unchanged": true,
+    "canonical_count_unchanged": true,
+    "ledger_count_unchanged": true,
+    "projection_count_unchanged": true,
+    "forbidden_new_canonical_values": ["unknown"],
+    "forbidden_new_object_types": ["changeset"],
+    "derived_input_must_not_become_source": true,
+    "network_access": false,
+    "workspace_external_reads": false
+  },
+  "scenarios": {
+    "AS-001": {
+      "expected_answers": {
+        "as001_viewpoint": {
+          "answer_status": "verified",
+          "answer_value": "enabled",
+          "verification_scope": "viewpoint",
+          "valid_time": {
+            "requested": "2031-06-01T00:00:00Z",
+            "resolved": "2031-06-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [
+            {
+              "source_id": "as001_src_opinion",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 38
+              }
+            }
+          ],
+          "coverage": {
+            "window_refs": ["as001_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["viewpoint_scope_confirmed"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "answer_scope_policy_v1"
+        }
+      },
+      "forbidden_assertions": [
+        "world_claim_verified_from_viewpoint",
+        "assertion_kind_changed"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-002": {
+      "expected_answers": {
+        "as002_statement_occurrence": {
+          "answer_status": "verified",
+          "answer_value": "present",
+          "verification_scope": "statement_occurrence",
+          "valid_time": {
+            "requested": "2031-07-01T00:00:00Z",
+            "resolved": "2031-07-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [
+            {
+              "source_id": "as002_src_report",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 35
+              }
+            }
+          ],
+          "coverage": {
+            "window_refs": ["as002_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["statement_occurrence_confirmed"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "answer_scope_policy_v1"
+        },
+        "as002_world_claim": {
+          "answer_status": "unknown",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-07-01T00:00:00Z",
+            "resolved": "2031-07-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [
+            {
+              "source_id": "as002_src_report",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 35
+              }
+            }
+          ],
+          "coverage": {
+            "window_refs": ["as002_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["world_claim_not_verified"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable"
+        }
+      },
+      "forbidden_assertions": ["world_claim_verified_from_statement_occurrence"],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-003": {
+      "expected_answers": {
+        "as003_unconfirmed": {
+          "answer_status": "unconfirmed",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-08-01T00:00:00Z",
+            "resolved": "2031-08-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [],
+          "coverage": {
+            "window_refs": ["as003_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["unreviewed_candidate_present"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable"
+        }
+      },
+      "allowed_candidate_refs": ["as003_candidate_001"],
+      "forbidden_assertions": [
+        "candidate_in_canonical_evidence",
+        "candidate_auto_confirmed"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-004": {
+      "expected_answers": {
+        "as004_disputed": {
+          "answer_status": "disputed",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-09-15T00:00:00Z",
+            "resolved": "2031-09-15T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [
+            {
+              "source_id": "as004_src_mode_off",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 34
+              }
+            },
+            {
+              "source_id": "as004_src_mode_on",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 33
+              }
+            }
+          ],
+          "coverage": {
+            "window_refs": ["as004_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["unresolved_conflict"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable",
+          "conflict_details": [
+            {
+              "assertion_id": "as004_assertion_mode_off",
+              "value": "off",
+              "perspective_ref": "synthetic_subject_001",
+              "valid_time": {
+                "start": "2031-09-10T00:00:00Z",
+                "end": "2031-10-10T00:00:00Z",
+                "bounds": "[)"
+              }
+            },
+            {
+              "assertion_id": "as004_assertion_mode_on",
+              "value": "on",
+              "perspective_ref": "synthetic_subject_001",
+              "valid_time": {
+                "start": "2031-09-01T00:00:00Z",
+                "end": "2031-10-01T00:00:00Z",
+                "bounds": "[)"
+              }
+            }
+          ]
+        }
+      },
+      "comparison_order": "sort_by_assertion_id",
+      "forbidden_winner_rules": [
+        "latest_recorded_at",
+        "evidence_count",
+        "model_confidence",
+        "input_order"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-005": {
+      "expected_answers": {
+        "as005_outside_coverage": {
+          "answer_status": "not_covered",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-02-01T00:00:00Z",
+            "resolved": "2031-02-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [],
+          "coverage": {
+            "window_refs": ["as005_coverage_late"],
+            "gaps": [
+              {
+                "start": "unbounded",
+                "end": "2031-06-01T00:00:00Z",
+                "reason": "outside_window"
+              }
+            ],
+            "sufficient": false
+          },
+          "reason_codes": ["outside_coverage_window"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable"
+        },
+        "as005_unknown_continuity": {
+          "answer_status": "not_covered",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-08-01T00:00:00Z",
+            "resolved": "2031-08-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [],
+          "coverage": {
+            "window_refs": ["as005_coverage_unknown"],
+            "gaps": [
+              {
+                "start": "2031-06-01T00:00:00Z",
+                "end": "unbounded",
+                "reason": "continuity_unknown"
+              }
+            ],
+            "sufficient": false
+          },
+          "reason_codes": ["coverage_continuity_unknown"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable"
+        }
+      },
+      "forbidden_assertions": [
+        "verified_negative_from_zero_results",
+        "unknown_when_not_covered"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-006": {
+      "expected_answers": {
+        "as006_current_stale": {
+          "answer_status": "stale",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "current",
+            "resolved": "2032-01-15T12:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [
+            {
+              "source_id": "as006_src_status",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 40
+              }
+            }
+          ],
+          "coverage": {
+            "window_refs": ["as006_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["evidence_outside_freshness_window"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "as_policy_current_30d",
+          "evidence_effective_at": "2031-01-01T00:00:00Z"
+        },
+        "as006_historical_not_stale": {
+          "answer_status": "verified",
+          "answer_value": "ready",
+          "verification_scope": "statement_occurrence",
+          "valid_time": {
+            "requested": "2031-01-01T00:00:00Z",
+            "resolved": "2031-01-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [
+            {
+              "source_id": "as006_src_status",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 40
+              }
+            }
+          ],
+          "coverage": {
+            "window_refs": ["as006_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["statement_occurrence_confirmed"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "answer_scope_policy_v1"
+        }
+      },
+      "forbidden_assertions": [
+        "historical_stale_due_to_age",
+        "view_freshness_used_as_answer_freshness"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-007": {
+      "expected_answers": {
+        "as007_unknown": {
+          "answer_status": "unknown",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-11-01T00:00:00Z",
+            "resolved": "2031-11-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [],
+          "coverage": {
+            "window_refs": ["as007_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["coverage_sufficient_no_safe_conclusion"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable"
+        }
+      },
+      "forbidden_assertions": [
+        "canonical_unknown_state_created",
+        "not_covered_when_coverage_sufficient"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-008": {
+      "expected_answers": {
+        "as008_derived_forbidden": {
+          "answer_status": "unknown",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-12-01T00:00:00Z",
+            "resolved": "2031-12-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [],
+          "coverage": {
+            "window_refs": ["as008_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["derived_evidence_forbidden"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable"
+        }
+      },
+      "forbidden_assertions": [
+        "derived_ref_in_evidence_refs",
+        "derived_payload_copied_to_source"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-009": {
+      "expected_answers": {
+        "as009_fictional_isolated": {
+          "answer_status": "unknown",
+          "answer_value": null,
+          "verification_scope": null,
+          "valid_time": {
+            "requested": "2031-12-15T00:00:00Z",
+            "resolved": "2031-12-15T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [],
+          "coverage": {
+            "window_refs": ["as009_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["fictional_evidence_excluded"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "not_applicable"
+        }
+      },
+      "forbidden_assertions": [
+        "fictional_world_claim_verified",
+        "assertion_kind_changed"
+      ],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-010": {
+      "expected_answers": {
+        "as010_replay": {
+          "answer_status": "verified",
+          "answer_value": "enabled",
+          "verification_scope": "viewpoint",
+          "valid_time": {
+            "requested": "2031-06-01T00:00:00Z",
+            "resolved": "2031-06-01T00:00:00Z"
+          },
+          "recorded_as_of": "current",
+          "evaluated_at": "2032-01-15T12:00:00Z",
+          "evidence_refs": [
+            {
+              "source_id": "as010_src_replay",
+              "locator": {
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0,
+                "end_byte_exclusive": 42
+              }
+            }
+          ],
+          "coverage": {
+            "window_refs": ["as010_coverage"],
+            "gaps": [],
+            "sufficient": true
+          },
+          "reason_codes": ["viewpoint_scope_confirmed"],
+          "data_revision": "as_rev_001",
+          "assessment_policy_ref": "answer_scope_policy_v1"
+        }
+      },
+      "replay_count": 2,
+      "semantic_outputs_must_match": true,
+      "excluded_runtime_metadata": ["duration_ms", "runner_started_at"],
+      "layer_digests_after": "same_as_fixture_initial"
+    },
+    "AS-011": {
+      "expected_answers": {},
+      "result_writer_contract": {
+        "failure_injection": "result.output.before_atomic_replace",
+        "expected_error": "result_artifact_write_failed",
+        "current_passed_artifact_created": false,
+        "existing_result_overwritten": false,
+        "suite_passed_published": false,
+        "failed_run_evidence_retained": true
+      },
+      "layer_digests_after": "same_as_fixture_initial"
+    }
+  }
+}

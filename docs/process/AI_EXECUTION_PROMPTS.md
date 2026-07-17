@@ -41,7 +41,7 @@ Suite Materializer
 最终用中文汇报文件、验证、歧义、Git 状态和下一步唯一动作。
 ```
 
-当前应替换为：`<PRE_TASK_ID> = AS-PRE-001`。
+当前没有获授权的 PRE Task；`AS-PRE-001..005` 已完成。除非 Suite Gate 将工件标为 superseded，不得再次使用本提示词。
 
 ## 3. Planning Gate / 批准 Implementation Plan
 
@@ -53,7 +53,7 @@ Suite Materializer
 
 按 AGENTS.md 和 CURRENT_HANDOFF.md 恢复。核验 manifest、fixture、oracle、scenario plan、adapter protocol、semantic tests、runner、validator、artifact hash、35 required IDs、合成/离线边界和 suite_materialized 状态。不得运行或声称 A1 业务通过；缺实现的 bootstrap 结果必须诚实记录。
 
-只有 Suite Materialization Gate P0=0/P1=0，且 suite_materialized=true、suite_executed=false、suite_passed=false 时，才可按既有 Draft 内容完成 Plan Review，将计划标为 Approved 并把 AS-TASK-001 设为唯一下一动作。不得改变业务语义、增加 Task 范围或开始 AS-TASK-001。
+只有 Suite Materialization Gate P0=0/P1=0，且 suite_materialized=true、suite_executed=false、suite_passed=false 时，才可按既有 Draft 内容完成 Plan Review。必须逐项核对 `docs/planning/MVP_A_ANSWER_SAFETY_TASK_CARDS.md` 与 materialized manifest、protocol、scenario method 和实际路径一致，将计划标为 Approved、卡集标为 Approved Companion，并把 AS-TASK-001 设为唯一下一动作。不得改变业务语义、增加 Task 范围或开始 AS-TASK-001。
 
 若发现 expected 歧义、实现渗入 suite、跨 run 拼接或真实数据，Gate 必须关闭并记录 Finding。修改已有文件只用 apply_patch；完成文档、静态验证和 Recovery Point 后停止。
 ```
@@ -66,9 +66,9 @@ Suite Materializer
 工作区：D:\sayhi
 本轮唯一任务：<TASK_ID>
 
-按 AGENTS.md 和 CURRENT_HANDOFF.md 完整恢复。只有 current_phase 至少为 implementation_planned、suite_materialized=true、Implementation Plan=Approved 且 next_single_action=<TASK_ID> 时才允许写业务代码；否则停止并报告门禁未满足。
+按 AGENTS.md 和 CURRENT_HANDOFF.md 完整恢复。随后必须完整读取 Approved Implementation Plan、`docs/planning/MVP_A_ANSWER_SAFETY_TASK_CARDS.md` 中的全局执行合同、总映射和 <TASK_ID> 卡。只有 current_phase 至少为 implementation_planned、suite_materialized=true、Implementation Plan=Approved、Task Cards=Approved Companion 且 next_single_action=<TASK_ID> 时才允许写业务代码；否则停止并报告门禁未满足。
 
-只修改 Approved Plan 为 <TASK_ID> 指定的模块和窄测试。以 PRD、Decision、Approved SPEC、ADR、manifest、fixture/oracle 为唯一合同。不得修改 expected 迎合实现，不得提前执行下一 Task，不得引入 deferred 能力、第三方依赖、网络、真实数据、UI/API/插件框架或长期平台抽象。
+只修改 <TASK_ID> 卡明确允许的模块、窄测试和状态记录。以 PRD、Decision、Approved SPEC、ADR、manifest、fixture/oracle、Approved Plan 和 Task Card 为合同；冲突时回上游停线。不得修改 expected 迎合实现，不得提前执行下一 Task，不得引入 deferred 能力、第三方依赖、网络、真实数据、UI/API/插件框架或长期平台抽象。
 
 修改已有文件只用 apply_patch；若 filesystem sandbox helper 错误则停止。运行该 Task 定向 A1 tests、受影响 Micro tests、静态 validators 和 git diff --check，记录真实结果。定向 pass 不能写成完整 A1 suite passed。更新 PROJECT_STATE、Plan Task 状态、CURRENT_HANDOFF 和验证记录；next_single_action 指向下一 Task 后立即停止。
 ```
@@ -89,6 +89,8 @@ Suite Materializer
 ```
 
 当前 A1 未来值：`<VERIFICATION_TASK_ID> = AS-TASK-008`。
+
+当前 Implementer 首个值：`<TASK_ID> = AS-TASK-001`。只有 `CURRENT_HANDOFF.md` 仍指向该值时才可使用。
 
 ## 6. Independent Auditor / 只读审计
 

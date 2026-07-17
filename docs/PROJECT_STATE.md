@@ -28,8 +28,8 @@
 | 项目 | 识海 Noetide |
 | 日期 | 2026-07-17 |
 | 当前切片 | `SLICE-MVP-A-ANSWER-SAFETY-001` |
-| 当前切片交付阶段 | `architecture_decided` |
-| 开发门禁 | `closed`；当前只允许执行 `PLAN-MVP-A-AS-SUITE-001` 的 `AS-PRE-001..005` |
+| 当前切片交付阶段 | `implementation_planned` |
+| 开发门禁 | `open_for_single_task`；当前只允许执行 Approved Plan/Task Cards 的 `AS-TASK-001` |
 | 当前 PRD | `PRDv05.md` v0.5，`Approved Product Baseline` |
 | PRD v0.5 canonical LF SHA-256 | `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 历史 PRD | `PRDv04.md` v0.4，`superseded_read_only`，hash `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
@@ -38,14 +38,14 @@
 | Finding | P0=0、P1=0、P2=0；P3=1 accepted debt（`MMF-017`） |
 | 追踪 | 现有 32/32 FR 基线有效；A1 映射覆盖 FR-002/008/010，exact required set 为 11 个场景 + 24 个唯一 upstream refs = 35 IDs |
 | 上一 Micro 结果 | `MM-001..010` + 39 upstream refs，49/49 passed；保持 current historical evidence |
-| A1 Suite | `defined=true`、`materialized=false`、`executed=false`、`passed=false` |
+| A1 Suite | `defined=true`、`materialized=true`、`executed=false`、`passed=false`；manifest `tests/answer_safety_suite_manifest.json` |
 | A1 Business Verification | `not_executed` |
 | A1 Business Implementation | `absent` |
 | A1 ADR / Architecture | `ADR-0002 Accepted`；`ARCH-MVP-A-AS-001 Accepted Design Baseline` |
-| A1 Implementation Plan | `Draft - blocked by suite_materialized=false`；不可执行 `AS-TASK-*` |
+| A1 Implementation Plan | `PLAN-MVP-A-AS-IMPL-001 Approved`；`CARDS-MVP-A-AS-001 Approved Companion`；只可执行 handoff 指向的单一 Task |
 | A1 技术基线 | Python 3.12 stdlib + 单进程 SQLite 的加法式查询切片；只限 A1，不是长期技术栈承诺 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 分支已推送；当前 handoff tag `mvp-a-answer-safety-handoff-v0.1-approved` 已推送并指向 `5f81f1f6634b07f8890d26f4f84df9322f622e72`。旧 architecture/planning tag 与上一 Micro tag 保持不变 |
+| Git | 当前分支已推送到旧 handoff recovery；本轮 development-ready Recovery Point 正在建立，完成前不得用旧 tag 代表新 suite/plan。旧 tags 保持不变 |
 
 ## 3. 本阶段完成内容
 
@@ -86,12 +86,23 @@
 35. 建立 `AI_EXECUTION_PROMPTS.md`，为 Suite Materializer、Planning Gate、Implementer、Verifier、Auditor、Debugger、Re-auditor、Recovery Releaser 和 Public Releaser 提供可复制提示词。
 36. 模型执行交接提交和 annotated tag 已推送，远端分支/tag peel 均解析到 `5f81f1f6634b07f8890d26f4f84df9322f622e72`；旧 tags 未移动。
 37. `AUDIT-NOETIDE-DELIVERY-PLANNING-001` 逐项核对 A1、开发、验证、审计、Debug/复审、Recovery、future slices 和 D2/D3 路线，结论 P0=0、P1=0，规划体系完成门禁 yes。
+38. 建立 `CARDS-MVP-A-AS-001`，把 `AS-TASK-001..009` 的入口、权威输入、exact Test Ref、允许文件、必要/禁止行为、定向验证、交接和停线条件逐项闭合。
+39. 完成 `AS-PRE-001`：物化 11 个隔离合成 case、13 个 query variant 和字段级 oracle；Source hash/UTF-8 locator 与四层初始 digest 可复算。
+40. 完成 `AS-PRE-002`：scenario plan 与 test-only Protocol 固定为 `evaluate/layer_snapshot/inject_failure/create_system`；Acceptance/Scenario/Manifest 映射一致。
+41. 完成 `AS-PRE-003`：semantic test module 和 offline runner 可发现/编译；runner 强制离线、不可覆盖 result、原子写和 AS-011 失败注入；未执行业务场景。
+42. 完成 `AS-PRE-004`：A1 manifest/validator 绑定 7 个外部工件 raw hash、11 scenario、24 upstream refs 和 35 result IDs；状态 materialized/not_executed。
+43. `GATE-MVP-A-AS-SUITE-001` 通过，P0=0/P1=0；suite materialized=true，executed/passed=false。
+44. `GATE-MVP-A-AS-DEVELOPMENT-READY-001` 通过，P0=0/P1=0；Implementation Plan 与 Task Cards Approved，只授权 `AS-TASK-001`。
 
-## 4. 当前 A1 规划验证
+## 4. 当前 A1 开发就绪验证
+
+2026-07-17 20:00 +08:00 在起始 HEAD `99b7e57087059774d37ceec6cafc0af12cccbe90` 的 suite/planning 工作树上实际执行 Product、SPEC、Micro artifact、A1 artifact、Python compile、AS-011 result-writer bootstrap 和 diff 检查，最终均 exit code `0`。A1 validator 确认 11 + 24 = 35 IDs、fixture/oracle/hash/locator/digest/AST/stdlib/privacy/四态；明确输出 `NOT_EXECUTED: Answer Safety business runner`。完整记录见 `MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_VALIDATION_2026-07-17.md`。
+
+### 4.1 上一 A1 交接规划验证（历史）
 
 2026-07-17 17:53 +08:00 在起始 HEAD `264d975271f91f1118238f78fa8fb37303e8caa0` 的交接规划工作树上实际复跑 Product、SPEC、Micro artifact 和 `git diff --check`，最终均 exit code `0`。附加机械检查确认：`CURRENT_HANDOFF.md` 标准字段缺失 0、角色提示词缺失 0、PRD/SPEC/源码/测试工件改动 0。A1 业务测试仍为 `not_executed`。
 
-### 4.1 A1 architecture 规划验证（历史）
+### 4.2 A1 architecture 规划验证（历史）
 
 2026-07-17 在分支 `codex/mvp-a-answer-safety-planning`、起始 HEAD `c4ec6b45970e00b1dd92a82aa9a1bca2a5342370` 的规划工作树上实际执行：
 
@@ -106,7 +117,7 @@ git diff --check
 
 第一次 SPEC validator 因 A1 子表 FR 单元格被旧正则误计为第二套主表而 exit code `1`；将三个 active-slice FR 单元格改为 Markdown code identifiers 后复跑通过，未改变任何业务合同。完整环境、digest 和未证明项见 `docs/testing/LATEST_STATIC_VALIDATION.md`。
 
-### 4.2 开发前静态验证记录（历史）
+### 4.3 Micro 开发前静态验证记录（历史）
 
 最终实际执行：
 
@@ -164,8 +175,13 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | `docs/adrs/ADR-0002_ANSWER_SAFETY_RUNTIME_AND_STORAGE.md` | A1 运行时与持久化增量技术决定 |
 | `docs/architecture/MVP_A_ANSWER_SAFETY_ARCHITECTURE.md` | A1 只读组件、数据与失败边界 |
 | `docs/testing/MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md` | A1 suite-only 物化计划 |
-| `docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN_DRAFT.md` | A1 被 suite 门禁阻塞的未来施工草案 |
+| `tests/answer_safety_suite_manifest.json` | A1 materialized suite 唯一机器入口；35 required IDs |
+| `docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN.md` | A1 Approved 施工顺序 |
+| `docs/planning/MVP_A_ANSWER_SAFETY_TASK_CARDS.md` | `AS-TASK-001..009` 逐任务精确合同 |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_PRE_SUITE_GATE_2026-07-17.md` | A1 architecture_decided -> suite_materialization 门禁 |
+| `docs/reviews/MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_GATE_2026-07-17.md` | A1 suite materialized Gate |
+| `docs/reviews/MVP_A_ANSWER_SAFETY_DEVELOPMENT_READINESS_GATE_2026-07-17.md` | A1 Approved Plan / business start Gate |
+| `docs/testing/MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_VALIDATION_2026-07-17.md` | A1 suite 静态物化验证与未证明项 |
 | `docs/reviews/DELIVERY_PLANNING_COMPLETION_AUDIT_2026-07-17.md` | 端到端规划与多模型交付体系完成审计 |
 | `docs/specs/01..09` | 当前 Approved 语义合同 |
 | `docs/traceability/REQUIREMENTS_MATRIX.md` | 32 FR 的当前追踪 |
@@ -189,7 +205,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 - 本 Micro suite 已执行，但它只证明固定单进程、离线、合成链路；不能外推为完整产品业务验证。
 - 后续切片必须重新完成产品裁决、SPEC、Traceability、ADR、可执行 suite 和 Implementation Plan，不得复用 Micro 的 passed 结果。
 - 权限 runtime、MCP、连接器、真实迁移、同步、财务、健康、决策、多 Agent、A2A、数字遗产继续禁止。
-- A1 exact 合同、ADR、Architecture 和 suite 物化计划已存在；机器 manifest/fixture/oracle/runner 仍不存在，Implementation Plan 仍为 blocked Draft。
+- A1 exact suite 已 materialized，Implementation Plan/Task Cards 已 Approved；这只授权逐 Task 施工，不证明任何 A1 actual。
 - A1 当前没有业务实现或业务结果；35 个 required result IDs 全部 `not_executed`，不得复用上一 Micro 的 49/49 pass。
 
 ## 7. 范围锁与风险
@@ -197,22 +213,25 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | 风险 | 当前控制 |
 |---|---|
 | 把物化 passed 当业务 passed | suite 状态与不可变业务 result 分开记录，并由 manifest hash 绑定 |
-| 测试接口变成产品 API | `testing_adapter.py` 明确 test-only |
-| SQLite 变成长期平台承诺 | ADR 限定当前 Micro，可由新 ADR 替换 |
+| 测试接口变成产品 API | `testing_adapter.py` 与未来 `answer_testing_adapter.py` 均明确 test-only |
+| SQLite 变成长期平台承诺 | ADR-0001/0002 只限定当前切片，可由后续切片新 ADR 替换 |
 | raw-byte digest 被 EOL 破坏 | `.gitattributes` 固定 `*.py/*.json/*.md/*.ps1` 为 LF |
-| 运行数据落到仓库外 | runner/test 根固定 `tmp/micro-runs/` 且 Git ignore |
+| 运行数据落到仓库外 | runner/test 根固定 `tmp/micro-runs/` 或 `tmp/answer-safety-runs/` 且 Git ignore |
 | 真实个人数据进入项目 | synthetic fixture、网络禁用和隐私扫描 |
-| 开工扩大范围 | Plan 固定 10 tasks；每个停止条件回 Change Control |
-| Bootstrap 端口被误当业务实现 | TASK-002 仍为 test-only factory；业务通过只限已记录的固定 Micro 合同 |
+| 开工扩大范围 | A1 Plan 固定 9 tasks；每个 Task Card 的停线条件回 Change Control |
+| Test Protocol 被误当业务实现 | materialized Protocol 无实现；未来 adapter 仍为 test-only，业务通过只限固定 A1 合同 |
 | 路线图被误当实施授权 | 每个 future slice 必须重新经过 Decision、SPEC、Trace、ADR、suite 和 Plan |
 | 其他模型丢失上下文 | 强制按 `AGENTS.md` 和 `MODEL_HANDOFF_PROTOCOL.md` 恢复，聊天不是权威状态 |
 | 用户手工转交提示词时跨过门禁 | `CURRENT_HANDOFF.md` 固定单一动作；角色提示词先核门禁再写文件 |
 | 六态复合条件诱发实现自定 precedence | 11 个 case 独立物化；出现未由 S2 唯一决定的组合即停止并回 SPEC |
-| Draft Plan 被误当开工授权 | 明确 `suite_materialized=false`，只有 `AS-PRE-001..005` 可执行 |
+| Approved Plan 被误当全量开工授权 | `CURRENT_HANDOFF` 只授权一个 Task；当前仅 `AS-TASK-001` |
+| 低模型跨 Task 或用摘要表施工 | Implementer 必须读取 Approved Task Cards；`CURRENT_HANDOFF` 每轮只有一个 Task |
+| materialized 被误当 passed | manifest 固定 executed/passed=false；完整 A1 runner 只在 AS-TASK-008 |
+| AS-TASK-007 为写代码而篡改 runner | suite 工件默认只读；若已满足 AS-011 可用验证关闭，否则回 suite supersede 流程 |
 
 ## 8. 下一步唯一建议动作
 
-**执行 `PLAN-MVP-A-AS-SUITE-001` 的 `AS-PRE-001`：只创建 A1 固定合成 fixture/oracle；不得编写业务代码。**
+**由 Implementer 按 Approved Plan 与 Task Cards 只执行 `AS-TASK-001`；完成并记录定向验证后停止，不得开始 `AS-TASK-002`。**
 
 ## 9. 变更日志
 
@@ -223,3 +242,4 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | 2026-07-15 | PRD v0.5 / SPEC Compatibility | v0.5 Approved；九份 SPEC current-compatible |
 | 2026-07-16 | Development Readiness | SPEC 勘误、ADR、Architecture、suite materialization、Plan 和开发前 Gate 完成 |
 | 2026-07-17 | MVP-A Answer Safety Architecture | SPEC applicability、A1 exact contract、Trace、ADR-0002、Architecture、suite-only Plan 和 Pre-Suite Gate 完成；业务开发门禁仍 closed |
+| 2026-07-17 | MVP-A Answer Safety Development Ready | A1 suite 物化、逐任务卡、Suite Gate 和 Development Readiness Gate 完成；业务实现/执行仍 absent/not_executed，只授权 AS-TASK-001 |

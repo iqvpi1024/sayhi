@@ -23,6 +23,8 @@ node_modules/
 dist/
 build/
 coverage/
+__pycache__/
+*.py[cod]
 
 # Local runtime stores and exports
 .local/

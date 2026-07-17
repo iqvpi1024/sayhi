@@ -2,12 +2,12 @@
 
 ## 1. 权威状态
 
-本文件是下一执行模型的当前入口，不替代 `AGENTS.md`、PRD、SPEC、ADR、Acceptance 或 Plan。每次阶段变化后必须更新本文件；聊天中的“继续”不能替代这里的 `next_single_action`。
+本文件是下一执行模型的当前入口，不替代 `AGENTS.md`、PRD、SPEC、ADR、suite、Approved Plan 或 Task Cards。聊天中的“继续”不能替代 `next_single_action`。
 
 ```yaml
-handoff_id: HANDOFF-MVP-A-AS-001
+handoff_id: HANDOFF-MVP-A-AS-002
 slice_id: SLICE-MVP-A-ANSWER-SAFETY-001
-current_phase: architecture_decided
+current_phase: implementation_planned
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -25,82 +25,96 @@ acceptance_ref: docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md
 adr_refs:
   - ADR-0002
 architecture_ref: docs/architecture/MVP_A_ANSWER_SAFETY_ARCHITECTURE.md
-suite_manifest: absent
-suite_materialization_plan: docs/testing/MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md
-implementation_plan: docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN_DRAFT.md
-implementation_plan_status: draft_blocked
+suite_manifest: tests/answer_safety_suite_manifest.json
+suite_flags:
+  suite_defined: true
+  suite_materialized: true
+  suite_executed: false
+  suite_passed: false
+implementation_plan: docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN.md
+implementation_plan_status: approved
+task_cards: docs/planning/MVP_A_ANSWER_SAFETY_TASK_CARDS.md
+task_cards_status: approved_companion
 verification_result: not_executed
-gate_review: docs/reviews/MVP_A_ANSWER_SAFETY_PRE_SUITE_GATE_2026-07-17.md
+gate_review: docs/reviews/MVP_A_ANSWER_SAFETY_DEVELOPMENT_READINESS_GATE_2026-07-17.md
 git_branch: codex/mvp-a-answer-safety-planning
-git_commit: 5f81f1f6634b07f8890d26f4f84df9322f622e72
-git_recovery_tag: mvp-a-answer-safety-handoff-v0.1-approved
+git_commit: pending_development_ready_recovery_point
+git_recovery_tag: pending_development_ready_recovery_point
 scope_in:
-  - AS-PRE-001 fixture
-  - AS-PRE-001 oracle
-  - task-scoped static validation and status records
+  - AS-TASK-001 additive A1 schema/store seed
+  - AS-TASK-001 narrow tests
+  - task-scoped verification and status records
 scope_out:
-  - A1 business implementation
-  - AS-PRE-002..005
-  - AS-TASK-001..009
-  - PRD, Product Decision, Approved SPEC and Acceptance semantic changes
-  - old Micro fixture, oracle, result and tag changes
+  - AS-TASK-002..009
+  - answers.py and answer_testing_adapter.py
+  - AnswerEnvelope, EvidenceSelector, Coverage, freshness and conflict behavior
+  - A1 full runner and business Verification Result
+  - PRD, Product Decision, Approved SPEC, Acceptance expected and materialized oracle changes
+  - old Micro fixture, oracle, historical result and tag changes
   - UI, API, permission runtime, MCP, deployment and public release
 open_blockers: []
-next_role: SuiteMaterializer
-next_single_action: AS-PRE-001
+next_role: Implementer
+next_single_action: AS-TASK-001
 ```
 
-## 2. 当前允许范围
+## 2. `AS-TASK-001` 权威入口
 
-`AS-PRE-001` 只允许：
+Implementer 必须完整读取：
 
-- 创建 `tests/fixtures/answer_safety_v1/fixture.json`。
-- 创建 `tests/fixtures/answer_safety_v1/oracles.json`。
-- 使用 11 个互相隔离的合成 case、固定 Clock、CoverageWindow、显式 freshness policy 和字段级 forbidden-write oracle。
-- 运行只证明 fixture/oracle 结构、hash、locator、确定性和合成数据边界的检查。
-- 更新 `PROJECT_STATE.md`、本交接包和对应静态验证记录。
+1. `AGENTS.md` 和其恢复链。
+2. `PLAN-MVP-A-AS-IMPL-001`。
+3. `CARDS-MVP-A-AS-001` 的 §1、§2、§3 和 §12。
+4. A1 manifest、fixture、oracle、adapter protocol 和 `AS-010` scenario。
+5. ADR-0002、Architecture 与 `VERIFY-MVP-A-AS-SUITE-001`。
 
-`AS-PRE-001` 明确禁止：
+只有以上文件仍显示 Approved/current 且 manifest validator exit code `0` 时，才允许写 AS-TASK-001。
 
-- 创建或修改 `src/noetide_micro/answers.py`、业务 Schema、业务 adapter 或任何 A1 evaluator。
-- 创建 scenario runner、manifest 或 validator；这些分别属于 `AS-PRE-002..004`。
-- 执行完整 A1 business suite 或设置 `suite_materialized=true`。
-- 修改 PRD、Product Decision、Approved SPEC、Acceptance expected、旧 Micro fixture/oracle/result/tag。
-- 读取工作区外个人资料、访问网络或引入第三方依赖。
+## 3. 当前允许文件
 
-## 3. 完成与停止
+- `src/noetide_micro/schema.sql`
+- `src/noetide_micro/store.py`
+- `src/noetide_micro/__init__.py`，仅必要 export
+- `tests/semantic/test_answer_task_001_store.py`，可选窄测试
+- `docs/PROJECT_STATE.md`
+- `docs/process/CURRENT_HANDOFF.md`
+- Approved Plan 的 Task 状态和 AS-TASK-001 定向验证记录
 
-完成 `AS-PRE-001` 必须留下：
+任何其他业务路径需要先由 Task Card 或 Change Control 授权。
 
-1. fixture/oracle 的字段来源可回到 `ACCEPT-MVP-A-AS-001` 和适用 SPEC。
-2. 11 个 case 相互隔离，hash/UTF-8 locator/digest 可重算。
-3. 合成数据和路径边界检查有实际命令、环境、exit code 和真实结果。
-4. A1 状态仍为 `suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
-5. `next_single_action` 更新为 `AS-PRE-002`，然后立即停止。
+## 4. 当前禁止
 
-出现以下任一项必须停止并记录 Finding/Open Question：
+- 不创建 `src/noetide_micro/answers.py` 或 `answer_testing_adapter.py`。
+- 不实现六态判断、Evidence/Coverage/Freshness/Conflict evaluator。
+- 不修改 manifest、fixture、oracle、scenario、protocol、semantic contract test 或 runner 来迎合实现。
+- 不执行完整 A1 runner，不设置 `suite_executed=true` 或 `suite_passed=true`。
+- 不修改旧 Micro expected/result/tag，不引入第三方依赖、网络、真实数据或工作区外读取。
+- 不开始 AS-TASK-002。
 
-- expected 需要自行定义六态 precedence、默认 freshness 阈值或 world-claim verification rule。
-- fixture/oracle 只能通过读取实现 actual 生成。
-- 需要权限 runtime、MCP、LLM、外部服务或真实数据。
-- 需要改变旧 Micro expected 或任何 Approved 语义合同。
-- `apply_patch` 出现 filesystem sandbox helper 错误。
+## 5. `AS-TASK-001` 完成证据
 
-## 4. 后续固定接力
+必须同时留下：
+
+1. A1 逻辑存储为加法式，不破坏现有 Micro schema/seed。
+2. 11 case 可独立、幂等 seed；相同 identity 不同 payload 拒绝；失败不部分写入。
+3. PRAGMA、外键、hash/locator、Source/Canonical/Ledger/Projection count/digest 能力有窄测试。
+4. 受影响 Micro store/adapter 定向测试、Product/SPEC/Micro/A1 validators 和 diff check 的真实命令、环境、exit code、结果。
+5. 完整 A1 suite 仍为 `not_executed`。
+6. 完成后 `next_single_action=AS-TASK-002`，然后立即停止。
+
+## 6. 停线条件
+
+出现 Task Cards §12 任一条件必须停止并记录。特别是：需要定义物理 schema 之外的产品语义、需要修改 oracle、需要创建 AnswerEnvelope、需要工作区外路径或 `apply_patch` helper 失败时，不得绕过。
+
+## 7. 后续固定接力
 
 ```text
-AS-PRE-001 fixture/oracle
--> AS-PRE-002 scenarios/protocol
--> AS-PRE-003 semantic tests/runner
--> AS-PRE-004 manifest/validator
--> AS-PRE-005 independent Suite Materialization Gate
--> Planner approves Implementation Plan
--> Implementer executes AS-TASK-001..007 one task at a time
--> Verifier executes AS-TASK-008 unified A1 + Micro regression
--> Auditor performs independent read-only audit
--> Debugger fixes confirmed findings and creates new results
--> Auditor rechecks P0/P1 closure
--> Releaser executes AS-TASK-009 Recovery Point
+AS-TASK-001..007 one task per handoff
+-> AS-TASK-008 independent unified A1 + Micro verification
+-> independent read-only audit
+-> Debug + new Verification Result when findings exist
+-> independent re-audit closes P0/P1
+-> AS-TASK-009 engineering Recovery Point
+-> next slice Product Decision
 ```
 
-可复制提示词见 `docs/process/AI_EXECUTION_PROMPTS.md`。当前只能使用其中的“Suite Materializer / 单一 PRE Task”提示词。
+可复制提示词见 `docs/process/AI_EXECUTION_PROMPTS.md`。当前只允许使用 Implementer 提示词并替换 `<TASK_ID> = AS-TASK-001`。

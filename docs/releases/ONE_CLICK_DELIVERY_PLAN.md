@@ -105,7 +105,7 @@ required job 的 skip、取消或缺失不能合并为 green。公共发布使�
 
 当前仅达到 Micro 工程 Recovery Point，尚未达到 `D0`。仓库没有用户 UI、安装包、发布构建或 Product Release；任何文档不得声称已经可以一键部署。
 
-当前 A1 处于 `architecture_decided`，下一动作是 suite 物化，不是部署。A1 只需保证未来 runtime 决策不会破坏本地、离线、可测试和可移植边界。
+当前 A1 处于 `implementation_planned`，下一动作是 `AS-TASK-001`，不是部署。A1 suite 已物化但未执行；A1 只需保证未来 runtime 决策不会破坏本地、离线、可测试和可移植边界。
 
 ## 10. 模型责任链
 

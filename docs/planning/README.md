@@ -30,10 +30,10 @@ Implementation Plan 把已批准的 SPEC、ADR 和已物化 suite 分解为可�
 
 ## 4. 当前状态
 
-`SLICE-MICRO-RELATIONSHIP-001` 的 Approved Plan 已全部完成并发布 Recovery Point。当前 active slice 为 `SLICE-MVP-A-ANSWER-SAFETY-001`，已达到 `architecture_decided`。
+`SLICE-MICRO-RELATIONSHIP-001` 的 Approved Plan 已全部完成并发布 Recovery Point。当前 active slice 为 `SLICE-MVP-A-ANSWER-SAFETY-001`，已达到 `implementation_planned`。
 
-`MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md` 只批准 `AS-PRE-001..005` 测试物化任务。`MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN_DRAFT.md` 仍为 `Draft - blocked by suite_materialized=false`，任何 `AS-TASK-*` 都不得执行。
+`MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md` 的 `AS-PRE-001..005` 已完成。`MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN.md` 与 `MVP_A_ANSWER_SAFETY_TASK_CARDS.md` 已通过开发前门禁；当前只授权执行 `CURRENT_HANDOFF.next_single_action` 指向的 `AS-TASK-001`。
 
-跨切片路线见 `MASTER_DELIVERY_ROADMAP.md`。路线图和 Draft Plan 都不是业务开工批准，future slice 不得据此开工。
+跨切片路线见 `MASTER_DELIVERY_ROADMAP.md`。路线图不是 future slice 的业务开工批准；A1 的 Approved Plan 也不能授权 A2 或跳过单 Task handoff。
 
 当前单一执行入口见 `docs/process/CURRENT_HANDOFF.md`；把任务交给其他模型时使用 `docs/process/AI_EXECUTION_PROMPTS.md`，不得把本目录中的长期 TODO 直接当作实施授权。

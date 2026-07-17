@@ -53,7 +53,7 @@ next_single_action: one action
 - active slice 至少为 `implementation_planned`。
 - Product Decision、适用 SPEC、Trace、Accepted ADR、materialized suite 和 Approved Plan 都存在。
 - `suite_executed=false` 与 `suite_passed=false` 被如实记录。
-- Plan 指定了本轮唯一 Task、文件范围、验收条件和停止条件。
+- Plan 和 Approved Task Card 指定了本轮唯一 Task、精确 Test Ref、文件范围、必要/禁止行为、验收条件和停止条件。
 - 工作树相关改动可以归属；外部目录和个人资料不在范围内。
 
 开发提示词必须要求模型完成一个或明确的一组连续 Task 后停止，不允许“顺手”实现下一路线。

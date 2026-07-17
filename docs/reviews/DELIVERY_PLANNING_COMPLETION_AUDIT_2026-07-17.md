@@ -76,3 +76,16 @@ next_single_action: AS-PRE-001
 ## 6. 下一步唯一动作
 
 交给 Suite Materializer 执行 `AS-PRE-001`，只创建固定合成 A1 fixture/oracle；不得编写业务代码。
+
+## 7. 后续闭合附录（2026-07-17 20:00 +08:00）
+
+本附录不改写 §1-§6 的时点审计结论。原下一动作已由后续受控工作完成：
+
+- `AS-PRE-001..005` 全部 completed；A1 suite 已 materialized。
+- 新增 `CARDS-MVP-A-AS-001`，9 个业务/验证/Recovery Task 均有 exact Test Ref、允许文件、必要/禁止行为、验证和停线条件。
+- `GATE-MVP-A-AS-SUITE-001` 与 `GATE-MVP-A-AS-DEVELOPMENT-READY-001` 均 P0=0/P1=0。
+- Implementation Plan 和 Task Cards 已 Approved。
+- 当前仍无 A1 业务实现或业务结果；`suite_executed=false`、`suite_passed=false`。
+- 当前唯一动作已更新为 `AS-TASK-001`。
+
+现态证据以 `PROJECT_STATE.md`、`CURRENT_HANDOFF.md`、A1 manifest 和两份新 Gate 为准。

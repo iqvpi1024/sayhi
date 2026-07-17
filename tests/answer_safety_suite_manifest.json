@@ -1,0 +1,150 @@
+{
+  "schema_version": "noetide.answer-safety-suite-manifest.v1",
+  "suite_id": "mvp_a_answer_safety_v1",
+  "suite_artifact_version": "1.0.0",
+  "slice_id": "SLICE-MVP-A-ANSWER-SAFETY-001",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_applicable",
+  "latest_verification_result_path": null,
+  "latest_verification_manifest_sha256": null,
+  "latest_verification_result_sha256": null,
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_version": "0.5",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "spec_versions": {
+      "S1": "0.6",
+      "S2": "0.5",
+      "S3": "0.4",
+      "S6": "0.5",
+      "S7": "0.3"
+    },
+    "decision_refs": ["DEC-MVP-A-AS-001"],
+    "adr_refs": ["ADR-0002"],
+    "architecture_ref": "ARCH-MVP-A-AS-001",
+    "architecture_path": "docs/architecture/MVP_A_ANSWER_SAFETY_ARCHITECTURE.md",
+    "traceability_path": "docs/traceability/REQUIREMENTS_MATRIX.md",
+    "acceptance_contract_path": "docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md",
+    "suite_materialization_plan_path": "docs/testing/MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md",
+    "implementation_plan_path": "docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN.md",
+    "task_cards_path": "docs/planning/MVP_A_ANSWER_SAFETY_TASK_CARDS.md"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/answer_safety_v1/fixture.json",
+      "sha256": "2ce3f449d64240c77e235997d4c6bfe23a87b5b46ca072e82dfb5ddf7a3a5135"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/answer_safety_v1/oracles.json",
+      "sha256": "2e72b19f0ef484b02e3534bef0bcd5069b60f158f4ea985a93a18bdf3c786fff"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/answer_safety_scenarios.json",
+      "sha256": "458e0c73c4fa6961a33a94e0ab2ce4d10d23e492ec7f6d64e6eda6ee9cccc9fe"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/answer_safety_adapter_protocol.py",
+      "sha256": "132fbd9d6b208127d4e92f24801337b6b4f110ca50d087286f92de6a032bfccd"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_answer_safety_contract.py",
+      "sha256": "6da29723f6b9a8d41f6d43d333084eef04c553f883f329c6174e21c51db2d314"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_answer_safety_suite.py",
+      "sha256": "ebd94aae5b3191d0f8a61800d8c6c0c9ced32de21c89e2cad2102a15eef679ef"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_answer_safety_suite.py",
+      "sha256": "3310dd1287a3d82a4ce015b96a7a44c97457d89dd938bfb15c40117ff89ef01c"
+    }
+  ],
+  "artifact_digest_strategy": {
+    "algorithm": "sha256",
+    "bytes": "raw_file_bytes",
+    "manifest_self_digest": "recorded_by_gate_review_not_embedded",
+    "logical_layer_digest": "sha256_stable_id_sorted_canonical_json_v1"
+  },
+  "fixture_refs": ["tests/fixtures/answer_safety_v1/fixture.json"],
+  "oracle_refs": ["tests/fixtures/answer_safety_v1/oracles.json"],
+  "scenario_mapping_ref": "tests/integration/answer_safety_scenarios.json",
+  "adapter_protocol_ref": "tests/runner/answer_safety_adapter_protocol.py",
+  "semantic_test_ref": "tests/semantic/test_answer_safety_contract.py",
+  "offline_runner_ref": "tests/runner/run_answer_safety_suite.py",
+  "validator_ref": "tools/validate_answer_safety_suite.py",
+  "required_scenario_ids": [
+    "AS-001",
+    "AS-002",
+    "AS-003",
+    "AS-004",
+    "AS-005",
+    "AS-006",
+    "AS-007",
+    "AS-008",
+    "AS-009",
+    "AS-010",
+    "AS-011"
+  ],
+  "required_upstream_test_refs": [
+    "BTE-AT-012",
+    "BTE-AT-013",
+    "BTE-AT-020",
+    "BTE-AT-021",
+    "BTE-AT-024",
+    "BTE-AT-025",
+    "BTE-AT-026",
+    "BTE-AT-027",
+    "BTE-AT-030",
+    "BTE-AT-034",
+    "HTH-AT-002",
+    "HTH-AT-006",
+    "HTH-AT-007",
+    "HTH-AT-008",
+    "HTH-AT-009",
+    "HTH-AT-013",
+    "HTH-AT-019",
+    "HTH-AT-020",
+    "HTH-AT-023",
+    "SIP-AT-006",
+    "SOM-AT-008",
+    "SOM-AT-009",
+    "SOM-AT-018",
+    "SOM-AT-021"
+  ],
+  "required_upstream_count": 24,
+  "required_result_count": 35,
+  "classification": {
+    "required": "required_scenario_ids + required_upstream_test_refs",
+    "optional": [],
+    "deferred": [
+      "all SPEC tests not listed by ACCEPT-MVP-A-AS-001 section 7",
+      "composite answer-status precedence outside isolated cases",
+      "default freshness policy",
+      "world-claim strong-evidence rules",
+      "canonical value unknown",
+      "permission runtime and MCP",
+      "UI API deployment and public release"
+    ]
+  },
+  "implementation_module": "TBD",
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}
