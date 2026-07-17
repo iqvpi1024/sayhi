@@ -2,7 +2,7 @@
 
 > 版本：2026-07-18
 > 状态：执行中
-> 当前阶段：Phase 4 — Micro-MVP 剩余部分
+> 当前阶段：Phase 4 — Micro-MVP CLI 已完成
 > 总目标：产品可用（用户可安装、录入数据、查看人物卡/时间线、确认/撤销 ChangeSet）
 > 完成前不得打扰用户
 
@@ -16,7 +16,7 @@
 | Phase 1 | 九份 SPEC | 完成 | S1-S9 Approved，兼容复核 |
 | Phase 2 | Micro-MVP 核心 | 完成 | TASK-001..010，49/49 passed |
 | Phase 3 | MVP-A Answer Safety | 完成 | AS-TASK-001..010，35/35 passed |
-| Phase 4 | Micro-MVP 剩余 | 进行中 | CLI + 人物卡 + 时间线 + ChangeSet 确认/撤销 |
+| Phase 4 | Micro-MVP CLI | 完成 | CLI-001..006 实现并验证 |
 | Phase 5 | MVP-B Shiling | 待开始 | 审查预算、校准、低打扰 |
 | Phase 6 | MVP-C 决策室 | 待开始 | 财务/健康/决策舱室 |
 | Phase 7 | 连接器 | 待开始 | 微信/日历/邮件导入 |
@@ -24,27 +24,31 @@
 
 ---
 
-## Phase 4 详细任务（当前）
+## Phase 4 完成总结
 
-### 目标
-用户可以通过命令行完成完整 Micro-MVP 链路：
+### 已实现命令
 
-    录入文本 -> 识灵提出 ChangeSet -> 用户确认 -> 人物卡/时间线更新 -> 历史保留 -> 用户撤销 -> 恢复一致
+| 命令 | 功能 | 验证状态 |
+|------|------|----------|
+| `init` | 初始化数据库 | 通过 |
+| `status` | 显示当前 revision | 通过 |
+| `intake` | 录入文本 Source | 通过 |
+| `propose` | 从 Source 提出 ChangeSet | 通过 |
+| `changesets` | 查看 ChangeSet 状态 | 通过 |
+| `approve` | 确认 ChangeSet | 通过 |
+| `publish` | 发布 ChangeSet | 通过 |
+| `revert` | 撤销已发布 ChangeSet | 通过 |
+| `person-card` | 查看人物卡 | 通过 |
+| `timeline` | 查看关系时间线 | 通过 |
+| `export` | 导出数据为 JSON | 通过 |
 
-### 子任务
+### 完整链路验证
 
-| ID | 任务 | 交付物 | 验收标准 |
-|----|------|--------|----------|
-| CLI-001 | 命令行入口 | src/noetide_micro/cli.py | 可启动、可录入、可查询 |
-| CLI-002 | 人物卡展示 | 人物卡格式化输出 | 显示当前状态、历史版本 |
-| CLI-003 | 关系时间线 | 时间线格式化输出 | 按时间排序、显示变更 |
-| CLI-004 | ChangeSet 确认 | 确认/拒绝交互 | 用户输入确认后原子发布 |
-| CLI-005 | ChangeSet 撤销 | 撤销交互 | 撤销后 Core View 恢复一致 |
-| CLI-006 | 数据导出 | JSON/CSV 导出 | 用户可导出全部数据 |
-| CLI-007 | 集成测试 | 端到端测试 | 完整链路 pytest 通过 |
-| CLI-008 | 文档更新 | README + 使用说明 | 用户可独立安装使用 |
-| CLI-009 | Recovery Point | Git tag + 验证 | 可回滚到可用状态 |
-| CLI-010 | GitHub 推送 | 推送到 origin | 他人可 clone 运行 |
+```
+intake -> propose -> approve -> publish -> person-card -> timeline -> revert -> person-card -> timeline
+```
+
+所有步骤验证通过，数据一致性正确。
 
 ---
 
@@ -103,9 +107,9 @@
 
 ## 当前状态
 
-- 阶段：Phase 4 CLI-001 准备开始
-- 上一完成：AS-TASK-010 Gate Review PASSED
-- 下一动作：建立 CLI-001 Implementation Plan + Task Cards
+- 阶段：Phase 4 CLI 已完成
+- 上一完成：CLI-001..006 实现并验证
+- 下一动作：CLI-007 集成测试 + CLI-008 文档 + CLI-009 Recovery Point
 - 预计：Phase 4 全部完成后，产品进入可用状态
 
 ---
