@@ -24,7 +24,7 @@
 | 检查 | 真实结果 |
 |---|---|
 | Product baseline | PRD v0.4 immutable hash 与 PRD v0.5 current hash 均匹配；32 FR、12 核心对象和 DQ-001..013 队列通过 |
-| SPEC baseline | 275 个 Test ID、133 个 Invariant、20 个 closed enum、32 条权威 FR 主表、64 个隐私扫描文件和 83 个 Markdown fence 文件通过 |
+| SPEC baseline | 275 个 Test ID、133 个 Invariant、20 个 closed enum、32 条权威 FR 主表、64 个隐私扫描文件和 84 个 Markdown fence 文件通过 |
 | Matrix refs | 185 个唯一 Test Ref 可解析；长期 Coverage 仍为 9/8/15 |
 | A1 exact mapping | 按 Matrix 简写规则展开后，Acceptance 与 Matrix 均为 11 个 `AS-*`、24 个唯一 upstream refs，集合差异为 0；共 35 个 required result IDs，exit code `0` |
 | A1 artifact state | Acceptance 已定义；manifest/fixture/oracle/runner 不存在，`suite_materialized=false` |

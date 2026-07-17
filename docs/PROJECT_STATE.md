@@ -85,6 +85,7 @@
 34. 建立 `CURRENT_HANDOFF.md`，把当前阶段、权威输入、范围锁、完成证据、停止条件和 `AS-PRE-001` 固定为机器可恢复的唯一下一动作。
 35. 建立 `AI_EXECUTION_PROMPTS.md`，为 Suite Materializer、Planning Gate、Implementer、Verifier、Auditor、Debugger、Re-auditor、Recovery Releaser 和 Public Releaser 提供可复制提示词。
 36. 模型执行交接提交和 annotated tag 已推送，远端分支/tag peel 均解析到 `5f81f1f6634b07f8890d26f4f84df9322f622e72`；旧 tags 未移动。
+37. `AUDIT-NOETIDE-DELIVERY-PLANNING-001` 逐项核对 A1、开发、验证、审计、Debug/复审、Recovery、future slices 和 D2/D3 路线，结论 P0=0、P1=0，规划体系完成门禁 yes。
 
 ## 4. 当前 A1 规划验证
 
@@ -165,6 +166,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | `docs/testing/MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md` | A1 suite-only 物化计划 |
 | `docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN_DRAFT.md` | A1 被 suite 门禁阻塞的未来施工草案 |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_PRE_SUITE_GATE_2026-07-17.md` | A1 architecture_decided -> suite_materialization 门禁 |
+| `docs/reviews/DELIVERY_PLANNING_COMPLETION_AUDIT_2026-07-17.md` | 端到端规划与多模型交付体系完成审计 |
 | `docs/specs/01..09` | 当前 Approved 语义合同 |
 | `docs/traceability/REQUIREMENTS_MATRIX.md` | 32 FR 的当前追踪 |
 | `docs/adrs/ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md` | 当前切片运行时/事务技术决定 |
