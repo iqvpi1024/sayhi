@@ -55,9 +55,10 @@ def scenario_id(test: unittest.case.TestCase) -> str:
 
 
 class RecordingResult(unittest.TestResult):
-    def __init__(self) -> None:
+    def __init__(self, required_scenario_ids: list[str] | None = None) -> None:
         super().__init__()
         self.scenario_results: dict[str, dict[str, Any]] = {}
+        self.required_scenario_ids = required_scenario_ids or []
 
     def _record(self, test: unittest.case.TestCase, result: str, detail: str = "") -> None:
         self.scenario_results[scenario_id(test)] = {
@@ -190,10 +191,10 @@ def main() -> int:
         if module_file:
             adapter_path = str(Path(module_file).resolve().relative_to(ROOT))
         suite = unittest.defaultTestLoader.loadTestsFromName(TEST_MODULE)
-        result = RecordingResult()
+        result = RecordingResult(manifest.get('required_scenario_ids', []))
         suite.run(result)
     except Exception as exc:
-        result = RecordingResult()
+        result = RecordingResult(manifest.get('required_scenario_ids', []))
         for item in manifest["required_scenario_ids"]:
             result.scenario_results[item] = {
                 "individual_test_result": "errored",

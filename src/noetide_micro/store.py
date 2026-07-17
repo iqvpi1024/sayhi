@@ -389,18 +389,21 @@ class SemanticStore:
                 )
 
                 for source in initial.get('source_records', []):
+                    receipt_id = source.get('append_receipt_id')
+                    if receipt_id is None:
+                        receipt_id = source['source_id'] + ':receipt'
                     connection.execute(
                         'INSERT OR IGNORE INTO source_records (source_id, append_receipt_id, source_kind, content_hash, payload_json) VALUES (?, ?, ?, ?, ?)',
                         (
                             source['source_id'],
-                            source.get('append_receipt_id', source['source_id'] + ':receipt'),
+                            receipt_id,
                             source['source_kind'],
                             source.get('content_hash', _canonical_digest(source)),
                             _canonical_json(source),
                         ),
                     )
                     receipt = {
-                        'receipt_id': source.get('append_receipt_id', source['source_id'] + ':receipt'),
+                        'receipt_id': receipt_id,
                         'source_id': source['source_id'],
                         'status': 'stored',
                         'actor': 'fixture_seed',
@@ -478,6 +481,13 @@ class SemanticStore:
         def _rows_digest(rows):
             import hashlib, json
             payloads = [json.loads(r[0]) for r in rows]
+            # Sort by stable identifier for deterministic digest
+            def _sort_key(x):
+                for key in ('source_id', 'assertion_id', 'object_id', 'record_id', 'view_name', 'coverage_window_id'):
+                    if key in x:
+                        return x[key]
+                return ''
+            payloads.sort(key=_sort_key)
             return hashlib.sha256(json.dumps(payloads, ensure_ascii=False, sort_keys=True, separators=(chr(44), chr(58))).encode('utf-8')).hexdigest()
 
         result = {
