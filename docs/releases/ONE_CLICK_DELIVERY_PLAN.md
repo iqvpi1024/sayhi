@@ -105,4 +105,17 @@ required job 的 skip、取消或缺失不能合并为 green。公共发布使�
 
 当前仅达到 Micro 工程 Recovery Point，尚未达到 `D0`。仓库没有用户 UI、安装包、发布构建或 Product Release；任何文档不得声称已经可以一键部署。
 
-下一部署动作不在当前 A1 切片内。A1 只需保证未来 runtime 决策不会破坏本地、离线、可测试和可移植边界。
+当前 A1 处于 `architecture_decided`，下一动作是 suite 物化，不是部署。A1 只需保证未来 runtime 决策不会破坏本地、离线、可测试和可移植边界。
+
+## 10. 模型责任链
+
+| 阶段 | 责任角色 | 必须留下的证据 |
+|---|---|---|
+| D0/D1 规划 | Planner | runtime/package ADR、Acceptance、clean-machine suite、Approved Plan |
+| 构建实现 | Implementer | 范围内代码、构建脚本、定向测试，不含发布凭据 |
+| 安装验证 | Verifier | clean install、first run、offline smoke、cleanup 的不可覆盖 result |
+| 安全审计 | Auditor | P0-P3 Findings、secret/privacy/SBOM/路径证据 |
+| 修复回归 | Debugger + Re-auditor | 复现、修复、新 result、P0/P1 独立关闭 |
+| D2/D3 发布 | Public Releaser | artifact/hash/signature/SBOM/tag/Release Record/远端核对 |
+
+角色提示词见 `docs/process/AI_EXECUTION_PROMPTS.md`。公开仓库、公开 Release 和外部通知始终需要用户明确授权。

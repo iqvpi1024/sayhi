@@ -4,9 +4,9 @@
 
 | 字段 | 值 |
 |---|---|
-| 日期 | 2026-07-17 13:40:40 +08:00 |
+| 日期 | 2026-07-17 17:53:47 +08:00 |
 | 分支 | `codex/mvp-a-answer-safety-planning` |
-| 起始 HEAD | `c4ec6b45970e00b1dd92a82aa9a1bca2a5342370` + 当前未提交规划工作树 |
+| 起始 HEAD | `264d975271f91f1118238f78fa8fb37303e8caa0` + 当前未提交交接规划工作树 |
 | Product 命令 | `powershell -ExecutionPolicy Bypass -File .\tools\validate_product_baseline.ps1` |
 | SPEC 命令 | `powershell -ExecutionPolicy Bypass -File .\tools\validate_spec_baseline.ps1` |
 | Micro artifact 命令 | `python .\tools\validate_micro_suite.py` |
@@ -24,11 +24,13 @@
 | 检查 | 真实结果 |
 |---|---|
 | Product baseline | PRD v0.4 immutable hash 与 PRD v0.5 current hash 均匹配；32 FR、12 核心对象和 DQ-001..013 队列通过 |
-| SPEC baseline | 275 个 Test ID、133 个 Invariant、20 个 closed enum 和 32 条权威 FR 主表行通过 |
+| SPEC baseline | 275 个 Test ID、133 个 Invariant、20 个 closed enum、32 条权威 FR 主表、63 个隐私扫描文件和 82 个 Markdown fence 文件通过 |
 | Matrix refs | 185 个唯一 Test Ref 可解析；长期 Coverage 仍为 9/8/15 |
 | A1 exact mapping | 按 Matrix 简写规则展开后，Acceptance 与 Matrix 均为 11 个 `AS-*`、24 个唯一 upstream refs，集合差异为 0；共 35 个 required result IDs，exit code `0` |
 | A1 artifact state | Acceptance 已定义；manifest/fixture/oracle/runner 不存在，`suite_materialized=false` |
 | A1 phase | SPEC applicability、Trace、ADR-0002、Architecture 和 Pre-Suite Gate 已闭合到 `architecture_decided` |
+| Current handoff | 标准交接包 required fields 缺失数为 0；唯一下一动作为 `AS-PRE-001` |
+| Role prompt pack | Suite Materializer、Planning Gate、Implementer、Verifier、Auditor、Debugger、Re-auditor、Recovery Releaser、Public Releaser 共 9 类角色，缺失数为 0 |
 | Protected paths | `git diff --name-only -- PRDv04.md PRDv05.md docs/specs src tests/fixtures tests/integration tests/runner tests/semantic` 返回 0 项 |
 | Privacy/scope | 新增 A1 文档只使用中性 synthetic ID；Product/SPEC privacy heuristic 通过；未读取工作区外个人资料 |
 | Git hygiene | `git diff --check` exit code `0`；`.workbuddy/` 与 `Review-report/` 不在交付范围 |
@@ -42,6 +44,8 @@
 | Micro artifact validator | `667358517066d0997a732777dbb98a30738d0d75373a60b6928fa7fc50020e96` |
 | A1 Acceptance（当前工作树） | `e0ea00cd6919651d6bcdaf5129d38d9370921f0c64bcea6f7391462d82081ce1` |
 | Micro manifest（validator 输出） | `b6e71a2fb4ca3c7f7c8e54a60ae6f8a1cd18808013f472d2fde2fe6a93ae58d6` |
+| Current Handoff（当前工作树） | `1b17a7584139a601d4923177e2233fd8085d11b0381301f8864e14988a0d75dd` |
+| AI Execution Prompts（当前工作树） | `b2d0b0b8c2a8d5f41db065e2099d40143902e29946fd9db5651d338772f776fe` |
 
 ## 4. 诊断与修正记录
 
@@ -49,6 +53,7 @@
 2. 修正只把 A1 子表的 `FR-002/008/010` 单元格改为 Markdown code identifiers；没有改变 FR、SPEC、Test Ref 或验证状态。复跑 SPEC validator exit code `0`。
 3. 环境探测第一次读取 Windows PowerShell 版本时因外层变量展开产生 parser error；使用单引号重新执行后得到 `5.1.26100.8875`。该失败不属于产品、SPEC 或业务测试。
 4. 第一次附加比对脚本没有展开 `AS-001/002`、`BTE-AT-012/013` 简写，因此产生错误集合差异；按 Matrix §1 的简写规则展开后，Acceptance/Matrix 场景数均为 11、upstream refs 均为 24，两个集合差异均为 0。
+5. Windows sandbox 登录会话曾连续三轮使 `apply_patch` 返回 helper error；未使用替代写入方式。用户恢复 unrestricted permission 后，所有本文档变更均重新通过 `apply_patch` 完成。
 
 失败尝试被保留在本记录中，不被最终通过覆盖或描述为业务失败。
 

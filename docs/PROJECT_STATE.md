@@ -9,12 +9,15 @@
 3. `docs/PROJECT_STATE.md`
 4. `docs/decisions/OPEN_QUESTIONS.md`
 5. `docs/process/README.md`
-6. 当前切片适用的 Approved SPEC
-7. `docs/traceability/REQUIREMENTS_MATRIX.md`
-8. 当前 suite/verification 记录
-9. 当前 ADR、Implementation Plan 和 Gate Review
+6. `docs/process/CURRENT_HANDOFF.md`（存在时）
+7. 当前切片适用的 Approved SPEC
+8. `docs/traceability/REQUIREMENTS_MATRIX.md`
+9. 当前 suite/verification 记录
+10. 当前 ADR、Implementation Plan 和 Gate Review
 
 当前规划入口：`MASTER_DELIVERY_ROADMAP.md`、`MVP_A_ANSWER_SAFETY_SLICE_DECISION_2026-07-17.md`、`MODEL_HANDOFF_PROTOCOL.md`。上一已完成切片的恢复证据继续由 `MICRO_MVP_V0.1_RECOVERY_POINT.md` 保存。
+
+当前执行入口：`docs/process/CURRENT_HANDOFF.md`；给后续模型的角色提示词：`docs/process/AI_EXECUTION_PROMPTS.md`。
 
 除用户明确指定的评审附件外，不使用工作区外或历史知识库作为产品事实来源。测试、示例和 fixture 只允许合成数据。
 
@@ -79,8 +82,14 @@
 31. 建立 `PLAN-MVP-A-AS-IMPL-001` Draft；在 suite materialized 和开发前 Gate 通过前，`AS-TASK-001..009` 全部 blocked。
 32. `GATE-MVP-A-AS-PRE-SUITE-001` 通过，P0=0、P1=0、P2=0、P3=1；只授权 suite 物化，不授权业务开发。
 33. A1 architecture 规划提交和 annotated tag 已推送，远端分支/tag peel 均解析到 `3c9d0fa0bee01c19219c6fbcfb8f853b701863ed`；旧 tag 未移动。
+34. 建立 `CURRENT_HANDOFF.md`，把当前阶段、权威输入、范围锁、完成证据、停止条件和 `AS-PRE-001` 固定为机器可恢复的唯一下一动作。
+35. 建立 `AI_EXECUTION_PROMPTS.md`，为 Suite Materializer、Planning Gate、Implementer、Verifier、Auditor、Debugger、Re-auditor、Recovery Releaser 和 Public Releaser 提供可复制提示词。
 
 ## 4. 当前 A1 规划验证
+
+2026-07-17 17:53 +08:00 在起始 HEAD `264d975271f91f1118238f78fa8fb37303e8caa0` 的交接规划工作树上实际复跑 Product、SPEC、Micro artifact 和 `git diff --check`，最终均 exit code `0`。附加机械检查确认：`CURRENT_HANDOFF.md` 标准字段缺失 0、角色提示词缺失 0、PRD/SPEC/源码/测试工件改动 0。A1 业务测试仍为 `not_executed`。
+
+### 4.1 A1 architecture 规划验证（历史）
 
 2026-07-17 在分支 `codex/mvp-a-answer-safety-planning`、起始 HEAD `c4ec6b45970e00b1dd92a82aa9a1bca2a5342370` 的规划工作树上实际执行：
 
@@ -95,7 +104,7 @@ git diff --check
 
 第一次 SPEC validator 因 A1 子表 FR 单元格被旧正则误计为第二套主表而 exit code `1`；将三个 active-slice FR 单元格改为 Markdown code identifiers 后复跑通过，未改变任何业务合同。完整环境、digest 和未证明项见 `docs/testing/LATEST_STATIC_VALIDATION.md`。
 
-### 4.1 开发前静态验证记录（历史）
+### 4.2 开发前静态验证记录（历史）
 
 最终实际执行：
 
@@ -140,6 +149,8 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | `PRDv05.md` | 当前 Approved 产品需求基线 |
 | `docs/planning/MASTER_DELIVERY_ROADMAP.md` | 全项目切片路线、依赖和发布目标 |
 | `docs/process/MODEL_HANDOFF_PROTOCOL.md` | 不同模型顺序接力和证据交接协议 |
+| `docs/process/CURRENT_HANDOFF.md` | 当前阶段机器可读交接包与唯一动作 |
+| `docs/process/AI_EXECUTION_PROMPTS.md` | 后续测试、开发、验证、审计、Debug 和发布模型提示词 |
 | `docs/releases/ONE_CLICK_DELIVERY_PLAN.md` | D0-D3 一键部署与 GitHub Release 门禁 |
 | `docs/decisions/MVP_A_ANSWER_SAFETY_SLICE_DECISION_2026-07-17.md` | 当前 A1 Product Decision |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_PRODUCT_GATE_2026-07-17.md` | A1 Product Gate Review |
@@ -191,6 +202,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | Bootstrap 端口被误当业务实现 | TASK-002 仍为 test-only factory；业务通过只限已记录的固定 Micro 合同 |
 | 路线图被误当实施授权 | 每个 future slice 必须重新经过 Decision、SPEC、Trace、ADR、suite 和 Plan |
 | 其他模型丢失上下文 | 强制按 `AGENTS.md` 和 `MODEL_HANDOFF_PROTOCOL.md` 恢复，聊天不是权威状态 |
+| 用户手工转交提示词时跨过门禁 | `CURRENT_HANDOFF.md` 固定单一动作；角色提示词先核门禁再写文件 |
 | 六态复合条件诱发实现自定 precedence | 11 个 case 独立物化；出现未由 S2 唯一决定的组合即停止并回 SPEC |
 | Draft Plan 被误当开工授权 | 明确 `suite_materialized=false`，只有 `AS-PRE-001..005` 可执行 |
 

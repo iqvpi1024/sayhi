@@ -41,10 +41,11 @@ PRD
 3. `docs/PROJECT_STATE.md`
 4. `docs/decisions/OPEN_QUESTIONS.md`
 5. `docs/process/README.md`
-6. 当前切片适用的 Approved SPEC
-7. `docs/traceability/REQUIREMENTS_MATRIX.md`
-8. 当前 suite 合同、manifest 和最近 Verification Result
-9. 当前适用 ADR、Implementation Plan 和最近 Gate Review
+6. `docs/process/CURRENT_HANDOFF.md`（存在时）
+7. 当前切片适用的 Approved SPEC
+8. `docs/traceability/REQUIREMENTS_MATRIX.md`
+9. 当前 suite 合同、manifest 和最近 Verification Result
+10. 当前适用 ADR、Implementation Plan 和最近 Gate Review
 
 没有对应文件时，必须明确写 `absent` 或 `not_executed`，不得用记忆补齐。
 
@@ -181,4 +182,6 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 - 可执行测试目录：`tests/README.md`
 - 总路线图：`docs/planning/MASTER_DELIVERY_ROADMAP.md`
 - 模型接力：`docs/process/MODEL_HANDOFF_PROTOCOL.md`
+- 当前唯一交接：`docs/process/CURRENT_HANDOFF.md`
+- AI 角色提示词：`docs/process/AI_EXECUTION_PROMPTS.md`
 - 一键部署：`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`

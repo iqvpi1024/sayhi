@@ -35,3 +35,5 @@ Implementation Plan 把已批准的 SPEC、ADR 和已物化 suite 分解为可�
 `MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md` 只批准 `AS-PRE-001..005` 测试物化任务。`MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN_DRAFT.md` 仍为 `Draft - blocked by suite_materialized=false`，任何 `AS-TASK-*` 都不得执行。
 
 跨切片路线见 `MASTER_DELIVERY_ROADMAP.md`。路线图和 Draft Plan 都不是业务开工批准，future slice 不得据此开工。
+
+当前单一执行入口见 `docs/process/CURRENT_HANDOFF.md`；把任务交给其他模型时使用 `docs/process/AI_EXECUTION_PROMPTS.md`，不得把本目录中的长期 TODO 直接当作实施授权。

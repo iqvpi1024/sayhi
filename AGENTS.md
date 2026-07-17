@@ -11,10 +11,11 @@
 3. `docs/PROJECT_STATE.md`
 4. `docs/decisions/OPEN_QUESTIONS.md`
 5. `docs/process/README.md`
-6. 当前切片适用的 Approved SPEC
-7. `docs/traceability/REQUIREMENTS_MATRIX.md`
-8. 当前 suite/verification 记录
-9. 当前 ADR、Implementation Plan 和 Gate Review（存在时）
+6. `docs/process/CURRENT_HANDOFF.md`（存在时）
+7. 当前切片适用的 Approved SPEC
+8. `docs/traceability/REQUIREMENTS_MATRIX.md`
+9. 当前 suite/verification 记录
+10. 当前 ADR、Implementation Plan 和 Gate Review（存在时）
 
 以 `docs/PROJECT_STATE.md` 的“下一步唯一建议动作”为默认工作入口；用户的新明确指令优先，但不得静默跨过产品或实现门禁。
 

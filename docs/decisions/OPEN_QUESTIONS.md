@@ -24,7 +24,9 @@
 
 ### 1.3 当前 MVP-A Answer Safety 决定
 
-`DEC-MVP-A-AS-001` 于 2026-07-17 选择 `SLICE-MVP-A-ANSWER-SAFETY-001` 作为下一切片，只授权进入 S1/S2/S3/S6/S7 applicability review。当前切片 blocking=0；`DQ-012` 不重开，因为本切片不写 Canonical `value=unknown`，只在覆盖充分但无法判断时派生 `answer_status=unknown`。业务实现、ADR、suite 和 Implementation Plan 均不存在。
+`DEC-MVP-A-AS-001` 于 2026-07-17 选择 `SLICE-MVP-A-ANSWER-SAFETY-001` 作为下一切片，决定当时只授权进入 S1/S2/S3/S6/S7 applicability review。当前切片 blocking=0；`DQ-012` 不重开，因为本切片不写 Canonical `value=unknown`，只在覆盖充分但无法判断时派生 `answer_status=unknown`。
+
+该段保留 Product Decision 当时的授权边界，不作为动态阶段状态。后续 applicability、Trace、ADR-0002、Architecture 和 Pre-Suite Gate 已完成；当前动态状态与唯一下一动作只以 `docs/PROJECT_STATE.md` 和 `docs/process/CURRENT_HANDOFF.md` 为准。
 
 ## 2. Blocking
 

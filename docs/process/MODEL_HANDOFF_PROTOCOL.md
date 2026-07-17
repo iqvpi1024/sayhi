@@ -6,6 +6,8 @@
 
 任何模型开始前都必须读取 `AGENTS.md` 并按仓库恢复顺序工作。聊天记录不是权威状态，仓库文件和实际工具结果才是。
 
+当前交接实例见 `CURRENT_HANDOFF.md`；可直接交给不同模型的完整提示词见 `AI_EXECUTION_PROMPTS.md`。本文件定义协议，前两者分别定义“现在做什么”和“如何向角色下达任务”。
+
 ## 2. 角色边界
 
 | Role | 允许 | 禁止 | 完成产物 |
@@ -127,3 +129,14 @@ next_single_action: one action
 - 每个角色提交范围单一，commit message 只描述真实完成内容。
 - failed、errored、partial 和 superseded result 永久保留。
 - 只有 Review Gate 通过后才能建立 Recovery Point；只有 Product Release Gate 通过后才能称为可部署版本。
+
+## 10. 交接文件更新责任
+
+- Planner：建立 active slice 的第一份 `CURRENT_HANDOFF.md`。
+- Suite Materializer / Implementer：完成单一 Task 后，只更新真实 Task 状态和 `next_single_action`。
+- Verifier：填入 current result path、commit 和 applicability，不改历史结果。
+- Auditor：填入 audit report 和 open Finding IDs，不改实现状态。
+- Debugger：填入修复 result 和待复审 Finding，不自行关闭 P0/P1。
+- Releaser：填入 branch、commit、tag、remote verification 和下一切片入口。
+
+任何角色发现 `CURRENT_HANDOFF.md` 与仓库事实不一致时，必须先修正文档或停止；不得按聊天中的旧任务继续。

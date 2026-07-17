@@ -118,6 +118,8 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 - 在 fixture、manifest、runner 与 implementation 不存在时，Acceptance Test 表中的 ID 只是合同目录，不能产生 passed 结果。
 - 后续每次真实 run 必须回填模块、命令、环境、时间、exit code、artifact digest 与单项结果；SPEC 升版会使旧结果 superseded。
 
-## 6. 下一门禁
+## 6. Required suite authority 与下一门禁
 
 `MICRO_MVP_ACCEPTANCE.md` §6 的 `micro_required_contract_slices` 是唯一 required upstream Test Ref 映射：10 个 MM 场景与 39 个去重后的 SOM/BTE/CS/PAP/SHP/IMM tests。Matrix 的长期 FR Test Ref 不是 Micro runner required 清单。进入 Micro 实现前只物化该映射；任何未列测试和 `boundary_only_deferred` FR 都不得借“完善架构”被隐式提升。
+
+当前 A1 的唯一 required 映射是 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` §7：11 个 `AS-*` 场景、24 个唯一 upstream refs，共 35 个 result IDs。当前只允许从 `AS-PRE-001` 开始物化该 suite；Matrix 长期 FR 行、旧 Micro required 集和其他 SPEC tests 均不得被隐式并入 A1。
