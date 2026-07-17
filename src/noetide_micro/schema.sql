@@ -63,3 +63,15 @@ CREATE TABLE IF NOT EXISTS projection_rows (
     freshness_status TEXT NOT NULL CHECK (freshness_status IN ('fresh', 'stale', 'updating', 'unavailable')),
     payload_json TEXT NOT NULL
 );
+
+-- A1 additive: CoverageWindow storage for answer safety evaluation
+-- AS-TASK-001: persistence only. No business trigger or status evaluation.
+CREATE TABLE IF NOT EXISTS coverage_windows (
+    coverage_window_id TEXT PRIMARY KEY,
+    scope_ref TEXT NOT NULL,
+    coverage_start TEXT NOT NULL,
+    coverage_end TEXT NOT NULL,
+    continuity TEXT NOT NULL CHECK (continuity IN ('continuous', 'unknown', 'gapped')),
+    gaps_json TEXT NOT NULL,
+    export_completeness TEXT NOT NULL CHECK (export_completeness IN ('complete', 'partial', 'unknown'))
+);

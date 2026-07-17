@@ -362,6 +362,170 @@ class SemanticStore:
             raise SeedValidationError("fixture must seed exactly the two approved Micro projections")
 
 
+    # A1 additive: Answer Safety fixture seed (AS-TASK-001)
+
+    def seed_answer_safety_fixture(self, fixture):
+        self._validate_answer_safety_fixture(fixture)
+        fixture_digest = _canonical_digest(fixture)
+        marker_key = 'fixture_seed:' + fixture['fixture_id']
+        existing_marker = self._connection.execute(
+            'SELECT metadata_value FROM schema_metadata WHERE metadata_key = ?',
+            (marker_key,),
+        ).fetchone()
+        if existing_marker is not None:
+            if existing_marker[0] != fixture_digest:
+                raise SeedConflictError('fixture seed marker does not match the supplied fixture')
+            return False
+
+        with self.transaction() as connection:
+            for case in fixture['cases']:
+                initial = case['initial_state']
+                data_revision = initial['data_revision']
+                clock = fixture['determinism']['clock']
+
+                connection.execute(
+                    "INSERT OR IGNORE INTO canonical_revisions (revision_id, recorded_at, revision_kind) VALUES (?, ?, 'seed')",
+                    (data_revision, clock),
+                )
+
+                for source in initial.get('source_records', []):
+                    connection.execute(
+                        'INSERT OR IGNORE INTO source_records (source_id, append_receipt_id, source_kind, content_hash, payload_json) VALUES (?, ?, ?, ?, ?)',
+                        (
+                            source['source_id'],
+                            source.get('append_receipt_id', source['source_id'] + ':receipt'),
+                            source['source_kind'],
+                            source.get('content_hash', _canonical_digest(source)),
+                            _canonical_json(source),
+                        ),
+                    )
+                    receipt = {
+                        'receipt_id': source.get('append_receipt_id', source['source_id'] + ':receipt'),
+                        'source_id': source['source_id'],
+                        'status': 'stored',
+                        'actor': 'fixture_seed',
+                    }
+                    connection.execute(
+                        'INSERT OR IGNORE INTO append_receipts (receipt_id, source_id, status, payload_json) VALUES (?, ?, ?, ?)',
+                        (receipt['receipt_id'], source['source_id'], receipt['status'], _canonical_json(receipt)),
+                    )
+
+                for item in initial.get('canonical_objects', []):
+                    object_id = _object_id(item)
+                    connection.execute(
+                        'INSERT OR IGNORE INTO canonical_objects (object_id, object_type, object_revision, payload_json) VALUES (?, ?, ?, ?)',
+                        (object_id, item['object_type'], item.get('object_revision', data_revision), _canonical_json(item)),
+                    )
+                    for evidence_ref in item.get('evidence_refs', []):
+                        connection.execute(
+                            'INSERT OR IGNORE INTO canonical_evidence_refs (object_id, source_id, locator_json, stance, claim_ref) VALUES (?, ?, ?, ?, ?)',
+                            (
+                                object_id,
+                                evidence_ref['source_id'],
+                                _canonical_json(evidence_ref.get('locator', {})),
+                                evidence_ref.get('stance', 'supports'),
+                                evidence_ref.get('claim_ref', ''),
+                            ),
+                        )
+
+                for cw in initial.get('coverage_windows', []):
+                    connection.execute(
+                        'INSERT OR IGNORE INTO coverage_windows (coverage_window_id, scope_ref, coverage_start, coverage_end, continuity, gaps_json, export_completeness) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                        (
+                            cw['coverage_window_id'],
+                            cw['scope_ref'],
+                            cw['coverage_start'],
+                            cw['coverage_end'],
+                            cw['continuity'],
+                            _canonical_json(cw.get('gaps', [])),
+                            cw['export_completeness'],
+                        ),
+                    )
+
+                for lr in initial.get('ledger_records', []):
+                    connection.execute(
+                        'INSERT OR IGNORE INTO ledger_records (record_id, revision_id, record_type, payload_json) VALUES (?, ?, ?, ?)',
+                        (lr['record_id'], lr.get('revision_id'), lr['record_type'], _canonical_json(lr)),
+                    )
+
+                for pr in initial.get('projection_rows', []):
+                    connection.execute(
+                        'INSERT OR IGNORE INTO projection_rows (view_name, data_revision, view_revision, freshness_status, payload_json) VALUES (?, ?, ?, ?, ?)',
+                        (
+                            pr['view_name'],
+                            pr.get('data_revision', data_revision),
+                            pr.get('view_revision', data_revision),
+                            pr.get('freshness_status', 'fresh'),
+                            _canonical_json(pr),
+                        ),
+                    )
+
+            connection.execute(
+                'INSERT INTO schema_metadata (metadata_key, metadata_value) VALUES (?, ?)',
+                (marker_key, fixture_digest),
+            )
+
+        return True
+
+    def a1_seed_snapshot(self, scenario_id=None):
+        conn = self._connection
+        source_rows = conn.execute('SELECT payload_json FROM source_records').fetchall()
+        canonical_rows = conn.execute('SELECT payload_json FROM canonical_objects').fetchall()
+        ledger_rows = conn.execute('SELECT payload_json FROM ledger_records').fetchall()
+        projection_rows = conn.execute('SELECT payload_json FROM projection_rows').fetchall()
+        coverage_rows = conn.execute('SELECT coverage_window_id, scope_ref, coverage_start, coverage_end, continuity, gaps_json, export_completeness FROM coverage_windows').fetchall()
+
+        def _rows_digest(rows):
+            import hashlib, json
+            payloads = [r[0] for r in rows]
+            return hashlib.sha256(json.dumps(payloads, ensure_ascii=False, sort_keys=True, separators=(chr(44), chr(58))).encode('utf-8')).hexdigest()
+
+        result = {
+            'source': {'count': len(source_rows), 'digest': _rows_digest(source_rows)},
+            'canonical': {'count': len(canonical_rows), 'digest': _rows_digest(canonical_rows)},
+            'ledger': {'count': len(ledger_rows), 'digest': _rows_digest(ledger_rows)},
+            'projection': {'count': len(projection_rows), 'digest': _rows_digest(projection_rows)},
+            'coverage': {'count': len(coverage_rows), 'digest': hashlib.sha256(json.dumps(coverage_rows, ensure_ascii=False, sort_keys=True, separators=(chr(44), chr(58))).encode('utf-8')).hexdigest()},
+        }
+
+        if scenario_id:
+            result['scenario_id'] = scenario_id
+
+        return result
+
+    def coverage_window(self, window_id):
+        row = self._connection.execute(
+            'SELECT coverage_window_id, scope_ref, coverage_start, coverage_end, continuity, gaps_json, export_completeness FROM coverage_windows WHERE coverage_window_id = ?',
+            (window_id,),
+        ).fetchone()
+        if row is None:
+            return None
+        import json
+        return {
+            'coverage_window_id': row[0],
+            'scope_ref': row[1],
+            'coverage_start': row[2],
+            'coverage_end': row[3],
+            'continuity': row[4],
+            'gaps': json.loads(row[5]),
+            'export_completeness': row[6],
+        }
+
+    def _validate_answer_safety_fixture(self, fixture):
+        if fixture.get('fixture_id') != 'answer_safety_v1' or fixture.get('synthetic') is not True:
+            raise SeedValidationError('TASK-001 only accepts the approved synthetic A1 fixture')
+        if not isinstance(fixture.get('cases'), list):
+            raise SeedValidationError('fixture must contain cases list')
+        for case in fixture['cases']:
+            initial = case.get('initial_state')
+            if not isinstance(initial, dict):
+                raise SeedValidationError('case initial_state must be a mapping')
+            for cw in initial.get('coverage_windows', []):
+                required = ('coverage_window_id', 'scope_ref', 'coverage_start', 'coverage_end', 'continuity', 'export_completeness')
+                for field in required:
+                    if field not in cw:
+                        raise SeedValidationError('coverage_window missing required field: ' + field)
+
 def _object_id(item: Mapping[str, Any]) -> str:
     for key in (
         "entity_id",
