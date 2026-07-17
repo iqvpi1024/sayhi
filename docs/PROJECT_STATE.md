@@ -42,7 +42,7 @@
 | A1 Implementation Plan | `Draft - blocked by suite_materialized=false`；不可执行 `AS-TASK-*` |
 | A1 技术基线 | Python 3.12 stdlib + 单进程 SQLite 的加法式查询切片；只限 A1，不是长期技术栈承诺 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 分支 `codex/mvp-a-answer-safety-planning` 已推送；tag `mvp-a-answer-safety-planning-v0.1-approved` 已推送并指向 `bf333a30b5f4df7b06c63dd6dd9dbb4569f31dca`。上一 Micro tag 保持不变 |
+| Git | 分支已推送；A1 architecture tag `mvp-a-answer-safety-architecture-v0.1-approved` 已推送并指向 `3c9d0fa0bee01c19219c6fbcfb8f853b701863ed`。旧 planning tag 与上一 Micro tag 保持不变 |
 
 ## 3. 本阶段完成内容
 
@@ -78,6 +78,7 @@
 30. 批准 `PLAN-MVP-A-AS-SUITE-001` 仅用于物化 suite；`AS-PRE-001..005` 未开始，禁止创建 A1 业务实现。
 31. 建立 `PLAN-MVP-A-AS-IMPL-001` Draft；在 suite materialized 和开发前 Gate 通过前，`AS-TASK-001..009` 全部 blocked。
 32. `GATE-MVP-A-AS-PRE-SUITE-001` 通过，P0=0、P1=0、P2=0、P3=1；只授权 suite 物化，不授权业务开发。
+33. A1 architecture 规划提交和 annotated tag 已推送，远端分支/tag peel 均解析到 `3c9d0fa0bee01c19219c6fbcfb8f853b701863ed`；旧 tag 未移动。
 
 ## 4. 当前 A1 规划验证
 
@@ -143,6 +144,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | `docs/decisions/MVP_A_ANSWER_SAFETY_SLICE_DECISION_2026-07-17.md` | 当前 A1 Product Decision |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_PRODUCT_GATE_2026-07-17.md` | A1 Product Gate Review |
 | `docs/releases/MVP_A_ANSWER_SAFETY_PLANNING_V0.1_RECOVERY_POINT.md` | 当前规划恢复说明 |
+| `docs/releases/MVP_A_ANSWER_SAFETY_ARCHITECTURE_V0.1_RECOVERY_POINT.md` | 当前 A1 architecture 规划恢复说明 |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_SPEC_APPLICABILITY_2026-07-17.md` | A1 适用 SPEC 复核与范围边界 |
 | `docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` | A1 人类可读 exact 合同与 35-ID required 集合 |
 | `docs/adrs/ADR-0002_ANSWER_SAFETY_RUNTIME_AND_STORAGE.md` | A1 运行时与持久化增量技术决定 |
