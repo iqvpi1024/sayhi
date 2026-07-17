@@ -1,6 +1,6 @@
 # Verification Results
 
-本目录保存实际业务 suite 的不可改写运行结果。当前没有业务 Verification Result，因为 Micro suite 尚未物化、实现不存在、业务测试未执行。
+本目录保存实际业务 suite 的不可改写运行结果。当前 Micro 结果为 `micro-task009-lf-20260717.json`，状态 `passed/current`；A1 尚无 suite 和 result，状态为 `not_executed`。
 
 规则：
 

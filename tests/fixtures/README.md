@@ -12,4 +12,4 @@
 - 不从工作区外文件、历史个人 Wiki 或在线账户生成。
 - 修改后升 fixture version，并使旧 Verification Result applicability 可被判定。
 
-Micro 的人类可读权威合同仍在 `docs/testing/MICRO_MVP_ACCEPTANCE.md`；机器 artifact 已由 `tests/micro_suite_manifest.json` 绑定并通过物化预检。业务 suite 未执行、未通过。
+Micro 的人类可读权威合同仍在 `docs/testing/MICRO_MVP_ACCEPTANCE.md`；机器 artifact 已由 `tests/micro_suite_manifest.json` 绑定并实际通过。A1 fixture 不存在，必须等 exact required contract 确定后再创建。

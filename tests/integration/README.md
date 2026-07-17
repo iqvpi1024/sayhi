@@ -1,6 +1,6 @@
 # Integration Tests
 
-本目录未来保存当前切片跨模块的端到端可执行测试。当前没有测试文件。
+本目录保存跨模块场景计划和后续端到端测试。Micro 的 `micro_relationship_scenarios.json` 已由统一 runner 实际执行；A1 尚无 integration artifact。
 
 Micro 首个 integration suite 只允许覆盖：合成 Source append、单个联系状态 ChangeSet、用户确认、原子发布、两个 Core View、历史保留、protected semantics、stale base、L2 失败和整包撤销。
 

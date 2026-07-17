@@ -22,6 +22,10 @@
 
 `DEC-PRD-V05-001` 于 2026-07-15 批准 `PRDv05.md` 为当前产品基线，并将 v0.4 的已确认裁决整合回 PRD。当前 blocking=0、important=0；`DQ-001..013` 保持 deferred。S1-S9 在完成 v0.5 兼容复核前不得被当作 current-compatible，也不得开始业务实现。
 
+### 1.3 当前 MVP-A Answer Safety 决定
+
+`DEC-MVP-A-AS-001` 于 2026-07-17 选择 `SLICE-MVP-A-ANSWER-SAFETY-001` 作为下一切片，只授权进入 S1/S2/S3/S6/S7 applicability review。当前切片 blocking=0；`DQ-012` 不重开，因为本切片不写 Canonical `value=unknown`，只在覆盖充分但无法判断时派生 `answer_status=unknown`。业务实现、ADR、suite 和 Implementation Plan 均不存在。
+
 ## 2. Blocking
 
 ### BQ-001：`RelationshipState` 的规范对象归属是什么？

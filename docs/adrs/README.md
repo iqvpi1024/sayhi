@@ -41,4 +41,4 @@ Accepted ADR 的实质决定不原地改写。需要改变时创建新 ADR，并
 
 ## 5. 当前状态
 
-`ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md` 已于 2026-07-16 Accepted，仅为 `SLICE-MICRO-RELATIONSHIP-001` 选择 Python 标准库、单进程 SQLite 事务和 JSON 测试工件。它不是长期最终数据库或技术栈承诺。下一门禁是物化 exact Micro suite，仍不得编写业务实现。
+`ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md` 已为完成的 Micro 切片提供技术基线。它不会自动适用于 A1；A1 必须先完成 SPEC 与 Trace，只有出现当前切片必须解决的技术问题时才创建或复核 ADR。

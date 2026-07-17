@@ -31,4 +31,4 @@
 
 ## 4. 当前状态
 
-当前切片 `SLICE-MICRO-RELATIONSHIP-001` 已有 `MICRO_RELATIONSHIP_ARCHITECTURE.md`，绑定 `ADR-0001`。该视图只固定组件、数据、失败和信任边界；实现与业务验证仍不存在。下一门禁是物化 exact Micro suite。
+`SLICE-MICRO-RELATIONSHIP-001` 的 `MICRO_RELATIONSHIP_ARCHITECTURE.md` 已被实现和验证。当前 A1 切片尚未达到 `traceable`，因此没有 Architecture View；先做 SPEC applicability review，不创建占位架构。

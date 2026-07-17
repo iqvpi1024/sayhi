@@ -1,6 +1,6 @@
 # Semantic Tests
 
-本目录保存直接证明 SPEC 字段语义、状态转换和不变量的可执行测试。当前只有 `test_micro_relationship_contract.py`，映射 `MM-001..010` 和 exact required upstream refs。
+本目录保存直接证明 SPEC 字段语义、状态转换和不变量的可执行测试。Micro 包含 `test_micro_relationship_contract.py` 和 TASK-001..008 的定向测试；正式 current 结果以统一 runner artifact 为准。
 
 要求：
 

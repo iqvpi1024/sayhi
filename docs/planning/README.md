@@ -30,4 +30,6 @@ Implementation Plan 把已批准的 SPEC、ADR 和已物化 suite 分解为可�
 
 ## 4. 当前状态
 
-`SLICE-MICRO-RELATIONSHIP-001` 已有 Approved `MICRO_RELATIONSHIP_IMPLEMENTATION_PLAN.md`。计划内 TASK-001..010 是唯一业务 TODO，当前全部 pending；业务实现和业务 Verification Result 均不存在。开发前 Gate Review 通过后才可开始 TASK-001。
+`SLICE-MICRO-RELATIONSHIP-001` 的 Approved Plan 已全部完成并发布 Recovery Point。当前 active slice 为 `SLICE-MVP-A-ANSWER-SAFETY-001`，仅达到 `product_decided`，尚无 Implementation Plan；下一步是 SPEC applicability review。
+
+跨切片路线见 `MASTER_DELIVERY_ROADMAP.md`。路线图不是 Approved Implementation Plan，future slice 不得据此开工。

@@ -1,6 +1,6 @@
 # 可执行测试目录
 
-本目录用于保存机器可运行的 fixture、semantic tests 和 integration tests。exact Micro suite 已物化，业务实现不存在，业务测试尚未执行。
+本目录用于保存机器可运行的 fixture、semantic tests 和 integration tests。exact Micro suite 已物化、执行并通过；A1 suite 尚未定义或物化。
 
 规则：
 

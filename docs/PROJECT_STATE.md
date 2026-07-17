@@ -14,7 +14,7 @@
 8. 当前 suite/verification 记录
 9. 当前 ADR、Implementation Plan 和 Gate Review
 
-当前技术入口：`ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md`、`MICRO_RELATIONSHIP_ARCHITECTURE.md`、`tests/micro_suite_manifest.json`、`MICRO_RELATIONSHIP_IMPLEMENTATION_PLAN.md`、`MICRO_DEVELOPMENT_READINESS_GATE_2026-07-16.md`。
+当前规划入口：`MASTER_DELIVERY_ROADMAP.md`、`MVP_A_ANSWER_SAFETY_SLICE_DECISION_2026-07-17.md`、`MODEL_HANDOFF_PROTOCOL.md`。上一已完成切片的恢复证据继续由 `MICRO_MVP_V0.1_RECOVERY_POINT.md` 保存。
 
 除用户明确指定的评审附件外，不使用工作区外或历史知识库作为产品事实来源。测试、示例和 fixture 只允许合成数据。
 
@@ -24,25 +24,25 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 日期 | 2026-07-17 |
-| 当前切片 | `SLICE-MICRO-RELATIONSHIP-001` |
-| 当前切片交付阶段 | `recovery_point_published` |
-| 开发门禁 | 当前 Micro 切片已关闭；TASK-001..010 全部完成 |
+| 当前切片 | `SLICE-MVP-A-ANSWER-SAFETY-001` |
+| 当前切片交付阶段 | `product_decided` |
+| 开发门禁 | `closed`；下一切片只允许进入 SPEC applicability review |
 | 当前 PRD | `PRDv05.md` v0.5，`Approved Product Baseline` |
 | PRD v0.5 canonical LF SHA-256 | `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 历史 PRD | `PRDv04.md` v0.4，`superseded_read_only`，hash `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
-| 正式 SPEC | S1 v0.6；S2 v0.5；S3-S5 v0.4；S6 v0.5；S7-S8 v0.3；S9 v0.4，全部 `Approved/current` |
-| 产品问题 | blocking=0、important=0；`DQ-001..013` deferred |
+| 正式 SPEC | 仓库基线全部 `Approved`；A1 切片的 S1/S2/S3/S6/S7 applicability 尚待复核 |
+| 产品问题 | A1 blocking=0；`DQ-012` 不重开，其他 `DQ-*` 按阶段 deferred |
 | Finding | P0=0、P1=0、P2=0；P3=1 accepted debt（`MMF-017`） |
-| 追踪 | 32/32 FR current；Coverage Level 9 micro / 8 specified / 15 boundary |
-| Micro required | `MM-001..010`；39 个去重 upstream refs；49 个 required result IDs |
-| Suite | `defined=true`、`materialized=true`、`executed=true`、`passed=true`；结果绑定 `micro-task009-lf-20260717.json` |
-| Business Verification | `passed`；同一次 current run 的 49/49 required result IDs passed |
-| Business Implementation | TASK-001..010 已完成：最小 SQLite persistence、Source Append、ChangeSet publish、双时态查询、L2 Views、补偿撤销、完整离线 runner 验证与 Recovery Point 发布 |
-| ADR / Architecture | `ADR-0001 Accepted` / `ARCH-MICRO-REL-001` |
-| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..010 completed |
-| 当前切片技术基线 | Python 3.12 stdlib + 单进程 SQLite；非长期最终技术栈 |
+| 追踪 | 现有 32/32 FR 基线有效；A1 exact required set 尚未建立 |
+| 上一 Micro 结果 | `MM-001..010` + 39 upstream refs，49/49 passed；保持 current historical evidence |
+| A1 Suite | `defined=false`、`materialized=false`、`executed=false`、`passed=false` |
+| A1 Business Verification | `not_executed` |
+| A1 Business Implementation | `absent` |
+| A1 ADR / Architecture | `absent`；不得自动沿用 `ADR-0001` |
+| A1 Implementation Plan | `absent` |
+| A1 技术基线 | `not_decided`；SPEC/Trace 稳定前不创建 ADR |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 分支 `codex/micro-development-readiness` 已推送；tag `micro-mvp-v0.1-validated` 已推送并解析到 `b629faf79549c821d1b8907e3408cdf3059a5184` |
+| Git | 当前分支 `codex/mvp-a-answer-safety-planning`；规划 Recovery Point 待发布。上一 Micro tag `micro-mvp-v0.1-validated` 保持不变 |
 
 ## 3. 本阶段完成内容
 
@@ -64,6 +64,11 @@
 16. TASK-008 已实现整包补偿撤销、新 `rev_012`、审计 event 和两个 View 的撤销后收敛。
 17. TASK-009 已在 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de` 上通过正式离线 runner；`docs/testing/results/micro-task009-lf-20260717.json` 记录 49 个 required result IDs 全部 `passed`，exit code `0`，仅使用合成数据且隐私扫描通过。
 18. TASK-010 已完成：实现后 Gate Review P0=0、P1=0；annotated tag `micro-mvp-v0.1-validated` 和分支已推送，远端引用已核验。
+19. 建立 `ROADMAP-NOETIDE-001`，按 MVP-A、MVP-B、MVP-C、Year 2 和长期阶段拆分交付切片与依赖。
+20. 建立 `MODEL_HANDOFF_PROTOCOL.md`，固定 Planner、Implementer、Auditor、Debugger 和 Releaser 的顺序与交接证据。
+21. 建立 `ONE_CLICK_DELIVERY_PLAN.md`，把开发启动、评审包、普通用户安装包和 GitHub Release 分为 D0-D3 门禁。
+22. `DEC-MVP-A-AS-001` 选择 A1 Answer Safety 为下一切片；只授权 SPEC applicability review，不授权代码、ADR、suite 或 Implementation Plan。
+23. `GATE-MVP-A-AS-PRODUCT-001` 通过，P0=0、P1=0；产品、SPEC 和既有 Micro artifact 静态校验均 exit code `0`。
 
 ## 4. 开发前静态验证记录（历史）
 
@@ -108,6 +113,12 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 |---|---|
 | `docs/product/CURRENT_PRODUCT_BASELINE.md` | 当前/历史 PRD 唯一指针和 hash |
 | `PRDv05.md` | 当前 Approved 产品需求基线 |
+| `docs/planning/MASTER_DELIVERY_ROADMAP.md` | 全项目切片路线、依赖和发布目标 |
+| `docs/process/MODEL_HANDOFF_PROTOCOL.md` | 不同模型顺序接力和证据交接协议 |
+| `docs/releases/ONE_CLICK_DELIVERY_PLAN.md` | D0-D3 一键部署与 GitHub Release 门禁 |
+| `docs/decisions/MVP_A_ANSWER_SAFETY_SLICE_DECISION_2026-07-17.md` | 当前 A1 Product Decision |
+| `docs/reviews/MVP_A_ANSWER_SAFETY_PRODUCT_GATE_2026-07-17.md` | A1 Product Gate Review |
+| `docs/releases/MVP_A_ANSWER_SAFETY_PLANNING_V0.1_RECOVERY_POINT.md` | 当前规划恢复说明 |
 | `docs/specs/01..09` | 当前 Approved 语义合同 |
 | `docs/traceability/REQUIREMENTS_MATRIX.md` | 32 FR 的当前追踪 |
 | `docs/adrs/ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md` | 当前切片运行时/事务技术决定 |
@@ -130,6 +141,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 - 本 Micro suite 已执行，但它只证明固定单进程、离线、合成链路；不能外推为完整产品业务验证。
 - 后续切片必须重新完成产品裁决、SPEC、Traceability、ADR、可执行 suite 和 Implementation Plan，不得复用 Micro 的 passed 结果。
 - 权限 runtime、MCP、连接器、真实迁移、同步、财务、健康、决策、多 Agent、A2A、数字遗产继续禁止。
+- A1 的 exact required tests、ADR、suite 和 Implementation Plan 均不存在；不得把路线图当作开工批准。
 
 ## 7. 范围锁与风险
 
@@ -143,10 +155,12 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | 真实个人数据进入项目 | synthetic fixture、网络禁用和隐私扫描 |
 | 开工扩大范围 | Plan 固定 10 tasks；每个停止条件回 Change Control |
 | Bootstrap 端口被误当业务实现 | TASK-002 仍为 test-only factory；业务通过只限已记录的固定 Micro 合同 |
+| 路线图被误当实施授权 | 每个 future slice 必须重新经过 Decision、SPEC、Trace、ADR、suite 和 Plan |
+| 其他模型丢失上下文 | 强制按 `AGENTS.md` 和 `MODEL_HANDOFF_PROTOCOL.md` 恢复，聊天不是权威状态 |
 
 ## 8. 下一步唯一建议动作
 
-**为下一个产品切片建立 Product Decision Gate；在没有批准范围、SPEC 和可执行 suite 前不得开始任何新业务代码。**
+**对 S1/S2/S3/S6/S7 执行 `SLICE-MVP-A-ANSWER-SAFETY-001` applicability review；先证明现有合同是否足够，再决定保持版本或升版修订。**
 
 ## 9. 变更日志
 

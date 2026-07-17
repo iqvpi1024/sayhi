@@ -35,4 +35,4 @@
 
 ## 5. 当前状态
 
-最近适用的当前切片门禁为 `MICRO_DEVELOPMENT_READINESS_GATE_2026-07-16.md`：P0=0、P1=0、结论 `yes`。当前阶段为 `implementation_planned`，只授权下一轮从 TASK-001 开始；业务实现尚未开始，业务测试未执行、未通过。
+上一完成切片的最新 Gate 为 `MICRO_MVP_IMPLEMENTATION_GATE_2026-07-17.md`：P0=0、P1=0，Recovery Point 已发布。当前 A1 的 `MVP_A_ANSWER_SAFETY_PRODUCT_GATE_2026-07-17.md` 已通过，只允许进入 SPEC applicability review；尚未到 Architecture/Development Gate。

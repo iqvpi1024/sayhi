@@ -8,9 +8,9 @@
 2. 产品、语义、架构、测试、实现和验证各自有唯一职责，不能互相越权。
 3. 每个可交付切片都有明确门禁、失败回退和 Git 恢复点。
 
-流程按“切片”运行，不表示整个项目一次性从左走到右。当前切片是 `SLICE-MICRO-RELATIONSHIP-001`，只覆盖合成 RelationshipState 链路。
+流程按“切片”运行，不表示整个项目一次性从左走到右。`SLICE-MICRO-RELATIONSHIP-001` 已完成并发布恢复点；当前切片是 `SLICE-MVP-A-ANSWER-SAFETY-001`，只覆盖合成 AnswerEnvelope 六态与最小冲突呈现。
 
-依据：PRD v0.5 §6、§10-§12、§20-§22、§24-§27；S6 v0.4；`DEC-PRD-V05-001`。
+依据：PRD v0.5 §6、§10-§12、§20-§22、§24-§27；S6 v0.5；`DEC-PRD-V05-001`。
 
 ## 2. 权威链路
 
@@ -151,21 +151,21 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 
 停止后把问题写入 OPEN_QUESTIONS、Finding 或 Gate Review；不得只在聊天中说明。
 
-## 10. 当前 Micro 切片
+## 10. 当前与上一切片
 
 | 字段 | 当前值 |
 |---|---|
-| Slice | `SLICE-MICRO-RELATIONSHIP-001` |
-| 已完成 | product_defined、product_decided、spec_approved、traceable、architecture_decided、suite_materialized、implementation_planned |
+| Active Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
+| Active Phase | `product_decided` |
 | 当前 PRD | `PRDv05.md` v0.5 Approved |
-| SPEC Compatibility | `yes`：S1 v0.6；S2 v0.5；S3-S5 v0.4；S6 v0.5；S7-S8 v0.3；S9 v0.4 |
-| Architecture Decision | `ADR-0001 Accepted`；`ARCH-MICRO-REL-001` |
-| Suite Materialization | `true`；10 MM + 39 upstream refs |
-| Implementation Plan | `PLAN-MICRO-REL-001 Approved`；TASK-001..010 pending |
-| Business Implementation | 未开始 |
+| Product Decision | `DEC-MVP-A-AS-001` decided |
+| SPEC Applicability | `review_required`：S1/S2/S3/S6/S7 |
+| Trace / ADR / Suite / Plan | `absent` |
+| Business Implementation | `absent` |
 | Business Verification | `not_executed` |
+| Previous Slice | `SLICE-MICRO-RELATIONSHIP-001` = `recovery_point_published`；49/49 required passed |
 
-开发前 Gate Review 已通过，但业务开发尚未开始。下一步唯一动作是执行 `PLAN-MICRO-REL-001` 的 TASK-001，只建立 package/Schema/store 基础；不得跨任务实现后续 Intake、Candidate、View 或扩大 Micro。
+下一步唯一动作是对 S1/S2/S3/S6/S7 做 A1 applicability review。没有 SPEC/Trace/ADR/suite/Plan 前不得编写 A1 业务代码。
 
 ## 11. 相关说明与模板
 
@@ -177,3 +177,6 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 - Gate Review：`docs/reviews/README.md`
 - Git 恢复点：`docs/releases/README.md`
 - 可执行测试目录：`tests/README.md`
+- 总路线图：`docs/planning/MASTER_DELIVERY_ROADMAP.md`
+- 模型接力：`docs/process/MODEL_HANDOFF_PROTOCOL.md`
+- 一键部署：`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`
