@@ -38,8 +38,8 @@ task_cards_status: approved_companion
 verification_result: not_executed
 gate_review: docs/reviews/MVP_A_ANSWER_SAFETY_DEVELOPMENT_READINESS_GATE_2026-07-17.md
 git_branch: codex/mvp-a-answer-safety-planning
-git_commit: pending_development_ready_recovery_point
-git_recovery_tag: pending_development_ready_recovery_point
+git_commit: 7e28546c3f1766afeb5c3524bc55a97ff1102e3f
+git_recovery_tag: mvp-a-answer-safety-development-ready-v0.1-approved
 scope_in:
   - AS-TASK-001 additive A1 schema/store seed
   - AS-TASK-001 narrow tests

@@ -45,7 +45,7 @@
 | A1 Implementation Plan | `PLAN-MVP-A-AS-IMPL-001 Approved`；`CARDS-MVP-A-AS-001 Approved Companion`；只可执行 handoff 指向的单一 Task |
 | A1 技术基线 | Python 3.12 stdlib + 单进程 SQLite 的加法式查询切片；只限 A1，不是长期技术栈承诺 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 当前分支已推送到旧 handoff recovery；本轮 development-ready Recovery Point 正在建立，完成前不得用旧 tag 代表新 suite/plan。旧 tags 保持不变 |
+| Git | A1 development-ready 内容提交为 `7e28546c3f1766afeb5c3524bc55a97ff1102e3f`；annotated tag `mvp-a-answer-safety-development-ready-v0.1-approved` 正在绑定与推送。旧 tags 保持不变 |
 
 ## 3. 本阶段完成内容
 
