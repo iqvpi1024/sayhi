@@ -43,3 +43,5 @@
 最近已验证的工程恢复点为 tag `micro-mvp-v0.1-validated`，记录见 `MICRO_MVP_V0.1_RECOVERY_POINT.md`。它证明固定合成 Micro 链路通过，不是面向普通用户的 Product Release。
 
 从开发入口到安装包和 GitHub Release 的 D0-D3 门禁见 `ONE_CLICK_DELIVERY_PLAN.md`。当前尚未达到 D0，不得声称可一键部署。
+
+当前规划恢复点为 tag `mvp-a-answer-safety-planning-v0.1-approved`，记录见 `MVP_A_ANSWER_SAFETY_PLANNING_V0.1_RECOVERY_POINT.md`。它只批准路线图和 A1 Product Decision，不授权 A1 业务开发。

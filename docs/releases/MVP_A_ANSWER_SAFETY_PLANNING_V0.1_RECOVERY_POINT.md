@@ -2,14 +2,16 @@
 
 ## 1. 状态
 
-`pending_publish`。只有规划提交、annotated tag 和远端分支都可解析后才改为 `published`。
+`published`。规划提交、annotated tag 和远端分支均已推送并可解析。
 
 ## 2. 恢复对象
 
 | 字段 | 值 |
 |---|---|
 | Branch | `codex/mvp-a-answer-safety-planning` |
-| Planned Tag | `mvp-a-answer-safety-planning-v0.1-approved` |
+| Tag | `mvp-a-answer-safety-planning-v0.1-approved` |
+| Tag Target | `bf333a30b5f4df7b06c63dd6dd9dbb4569f31dca` |
+| Remote | `origin`（SSH remote 已核验） |
 | Parent Commit | `593aeac10ef8320c4929433126e8d12b933704a1` |
 | Product Baseline | `PRDv05.md` v0.5 Approved |
 | Product Decision | `DEC-MVP-A-AS-001` |

@@ -42,7 +42,7 @@
 | A1 Implementation Plan | `absent` |
 | A1 技术基线 | `not_decided`；SPEC/Trace 稳定前不创建 ADR |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 当前分支 `codex/mvp-a-answer-safety-planning`；规划 Recovery Point 待发布。上一 Micro tag `micro-mvp-v0.1-validated` 保持不变 |
+| Git | 分支 `codex/mvp-a-answer-safety-planning` 已推送；tag `mvp-a-answer-safety-planning-v0.1-approved` 已推送并指向 `bf333a30b5f4df7b06c63dd6dd9dbb4569f31dca`。上一 Micro tag 保持不变 |
 
 ## 3. 本阶段完成内容
 
@@ -69,6 +69,7 @@
 21. 建立 `ONE_CLICK_DELIVERY_PLAN.md`，把开发启动、评审包、普通用户安装包和 GitHub Release 分为 D0-D3 门禁。
 22. `DEC-MVP-A-AS-001` 选择 A1 Answer Safety 为下一切片；只授权 SPEC applicability review，不授权代码、ADR、suite 或 Implementation Plan。
 23. `GATE-MVP-A-AS-PRODUCT-001` 通过，P0=0、P1=0；产品、SPEC 和既有 Micro artifact 静态校验均 exit code `0`。
+24. 路线图与 A1 Product Decision 已建立 Git Recovery Point；分支和 annotated tag 已推送并核验。
 
 ## 4. 开发前静态验证记录（历史）
 
