@@ -47,3 +47,5 @@
 当前规划恢复点为 tag `mvp-a-answer-safety-planning-v0.1-approved`，记录见 `MVP_A_ANSWER_SAFETY_PLANNING_V0.1_RECOVERY_POINT.md`。它只批准路线图和 A1 Product Decision，不授权 A1 业务开发。
 
 当前 A1 architecture 恢复点为 tag `mvp-a-answer-safety-architecture-v0.1-approved`，记录见 `MVP_A_ANSWER_SAFETY_ARCHITECTURE_V0.1_RECOVERY_POINT.md`。它批准 SPEC applicability、exact contract、Trace、ADR-0002、Architecture 和 suite-only Plan；A1 suite 尚未物化，Implementation Plan 仍是 blocked Draft。
+
+当前模型交接恢复点为 tag `mvp-a-answer-safety-handoff-v0.1-approved`，记录见 `MVP_A_ANSWER_SAFETY_HANDOFF_V0.1_RECOVERY_POINT.md`。它提供当前唯一动作和测试、开发、验证、审计、Debug、复审、Recovery/Public Release 角色提示词；不授权跳过 suite 物化门禁。

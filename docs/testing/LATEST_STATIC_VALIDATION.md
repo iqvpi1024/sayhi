@@ -24,7 +24,7 @@
 | 检查 | 真实结果 |
 |---|---|
 | Product baseline | PRD v0.4 immutable hash 与 PRD v0.5 current hash 均匹配；32 FR、12 核心对象和 DQ-001..013 队列通过 |
-| SPEC baseline | 275 个 Test ID、133 个 Invariant、20 个 closed enum、32 条权威 FR 主表、63 个隐私扫描文件和 82 个 Markdown fence 文件通过 |
+| SPEC baseline | 275 个 Test ID、133 个 Invariant、20 个 closed enum、32 条权威 FR 主表、64 个隐私扫描文件和 83 个 Markdown fence 文件通过 |
 | Matrix refs | 185 个唯一 Test Ref 可解析；长期 Coverage 仍为 9/8/15 |
 | A1 exact mapping | 按 Matrix 简写规则展开后，Acceptance 与 Matrix 均为 11 个 `AS-*`、24 个唯一 upstream refs，集合差异为 0；共 35 个 required result IDs，exit code `0` |
 | A1 artifact state | Acceptance 已定义；manifest/fixture/oracle/runner 不存在，`suite_materialized=false` |
@@ -44,7 +44,7 @@
 | Micro artifact validator | `667358517066d0997a732777dbb98a30738d0d75373a60b6928fa7fc50020e96` |
 | A1 Acceptance（当前工作树） | `e0ea00cd6919651d6bcdaf5129d38d9370921f0c64bcea6f7391462d82081ce1` |
 | Micro manifest（validator 输出） | `b6e71a2fb4ca3c7f7c8e54a60ae6f8a1cd18808013f472d2fde2fe6a93ae58d6` |
-| Current Handoff（当前工作树） | `1b17a7584139a601d4923177e2233fd8085d11b0381301f8864e14988a0d75dd` |
+| Current Handoff（当前工作树） | `a6ca0f051e9eba27de0c9c965252dba0bdd851595f3e90e639d690bf79dcd83c` |
 | AI Execution Prompts（当前工作树） | `b2d0b0b8c2a8d5f41db065e2099d40143902e29946fd9db5651d338772f776fe` |
 
 ## 4. 诊断与修正记录

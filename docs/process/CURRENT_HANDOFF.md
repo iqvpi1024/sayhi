@@ -32,8 +32,8 @@ implementation_plan_status: draft_blocked
 verification_result: not_executed
 gate_review: docs/reviews/MVP_A_ANSWER_SAFETY_PRE_SUITE_GATE_2026-07-17.md
 git_branch: codex/mvp-a-answer-safety-planning
-git_commit: 3c9d0fa0bee01c19219c6fbcfb8f853b701863ed
-git_recovery_tag: mvp-a-answer-safety-architecture-v0.1-approved
+git_commit: 5f81f1f6634b07f8890d26f4f84df9322f622e72
+git_recovery_tag: mvp-a-answer-safety-handoff-v0.1-approved
 scope_in:
   - AS-PRE-001 fixture
   - AS-PRE-001 oracle

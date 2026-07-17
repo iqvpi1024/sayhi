@@ -45,7 +45,7 @@
 | A1 Implementation Plan | `Draft - blocked by suite_materialized=false`；不可执行 `AS-TASK-*` |
 | A1 技术基线 | Python 3.12 stdlib + 单进程 SQLite 的加法式查询切片；只限 A1，不是长期技术栈承诺 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | 分支已推送；A1 architecture tag `mvp-a-answer-safety-architecture-v0.1-approved` 已推送并指向 `3c9d0fa0bee01c19219c6fbcfb8f853b701863ed`。旧 planning tag 与上一 Micro tag 保持不变 |
+| Git | 分支已推送；当前 handoff tag `mvp-a-answer-safety-handoff-v0.1-approved` 已推送并指向 `5f81f1f6634b07f8890d26f4f84df9322f622e72`。旧 architecture/planning tag 与上一 Micro tag 保持不变 |
 
 ## 3. 本阶段完成内容
 
@@ -84,6 +84,7 @@
 33. A1 architecture 规划提交和 annotated tag 已推送，远端分支/tag peel 均解析到 `3c9d0fa0bee01c19219c6fbcfb8f853b701863ed`；旧 tag 未移动。
 34. 建立 `CURRENT_HANDOFF.md`，把当前阶段、权威输入、范围锁、完成证据、停止条件和 `AS-PRE-001` 固定为机器可恢复的唯一下一动作。
 35. 建立 `AI_EXECUTION_PROMPTS.md`，为 Suite Materializer、Planning Gate、Implementer、Verifier、Auditor、Debugger、Re-auditor、Recovery Releaser 和 Public Releaser 提供可复制提示词。
+36. 模型执行交接提交和 annotated tag 已推送，远端分支/tag peel 均解析到 `5f81f1f6634b07f8890d26f4f84df9322f622e72`；旧 tags 未移动。
 
 ## 4. 当前 A1 规划验证
 
@@ -156,6 +157,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | `docs/reviews/MVP_A_ANSWER_SAFETY_PRODUCT_GATE_2026-07-17.md` | A1 Product Gate Review |
 | `docs/releases/MVP_A_ANSWER_SAFETY_PLANNING_V0.1_RECOVERY_POINT.md` | 当前规划恢复说明 |
 | `docs/releases/MVP_A_ANSWER_SAFETY_ARCHITECTURE_V0.1_RECOVERY_POINT.md` | 当前 A1 architecture 规划恢复说明 |
+| `docs/releases/MVP_A_ANSWER_SAFETY_HANDOFF_V0.1_RECOVERY_POINT.md` | 当前模型执行交接恢复说明 |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_SPEC_APPLICABILITY_2026-07-17.md` | A1 适用 SPEC 复核与范围边界 |
 | `docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` | A1 人类可读 exact 合同与 35-ID required 集合 |
 | `docs/adrs/ADR-0002_ANSWER_SAFETY_RUNTIME_AND_STORAGE.md` | A1 运行时与持久化增量技术决定 |
