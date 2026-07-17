@@ -45,7 +45,7 @@
 | A1 Implementation Plan | `PLAN-MVP-A-AS-IMPL-001 Approved`；`CARDS-MVP-A-AS-001 Approved Companion`；只可执行 handoff 指向的单一 Task |
 | A1 技术基线 | Python 3.12 stdlib + 单进程 SQLite 的加法式查询切片；只限 A1，不是长期技术栈承诺 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
-| Git | A1 development-ready 内容提交为 `7e28546c3f1766afeb5c3524bc55a97ff1102e3f`；annotated tag `mvp-a-answer-safety-development-ready-v0.1-approved` 正在绑定与推送。旧 tags 保持不变 |
+| Git | A1 development-ready 内容提交 `7e28546c3f1766afeb5c3524bc55a97ff1102e3f`；handoff/tag target `80a920aa8f07571bb866ce223039033c56b5dd72`；annotated tag `mvp-a-answer-safety-development-ready-v0.1-approved` 已推送并远端核验。旧 tags 保持不变 |
 
 ## 3. 本阶段完成内容
 
@@ -93,6 +93,7 @@
 42. 完成 `AS-PRE-004`：A1 manifest/validator 绑定 7 个外部工件 raw hash、11 scenario、24 upstream refs 和 35 result IDs；状态 materialized/not_executed。
 43. `GATE-MVP-A-AS-SUITE-001` 通过，P0=0/P1=0；suite materialized=true，executed/passed=false。
 44. `GATE-MVP-A-AS-DEVELOPMENT-READY-001` 通过，P0=0/P1=0；Implementation Plan 与 Task Cards Approved，只授权 `AS-TASK-001`。
+45. 建立并推送 A1 development-ready Recovery Point；远端 branch/tag peel 指向 `80a920aa8f07571bb866ce223039033c56b5dd72`，旧 tags 未移动。
 
 ## 4. 当前 A1 开发就绪验证
 
@@ -170,6 +171,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | `docs/releases/MVP_A_ANSWER_SAFETY_PLANNING_V0.1_RECOVERY_POINT.md` | 当前规划恢复说明 |
 | `docs/releases/MVP_A_ANSWER_SAFETY_ARCHITECTURE_V0.1_RECOVERY_POINT.md` | 当前 A1 architecture 规划恢复说明 |
 | `docs/releases/MVP_A_ANSWER_SAFETY_HANDOFF_V0.1_RECOVERY_POINT.md` | 当前模型执行交接恢复说明 |
+| `docs/releases/MVP_A_ANSWER_SAFETY_DEVELOPMENT_READY_V0.1_RECOVERY_POINT.md` | A1 suite/plan/task cards 开发就绪恢复说明 |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_SPEC_APPLICABILITY_2026-07-17.md` | A1 适用 SPEC 复核与范围边界 |
 | `docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` | A1 人类可读 exact 合同与 35-ID required 集合 |
 | `docs/adrs/ADR-0002_ANSWER_SAFETY_RUNTIME_AND_STORAGE.md` | A1 运行时与持久化增量技术决定 |
