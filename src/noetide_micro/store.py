@@ -477,7 +477,7 @@ class SemanticStore:
 
         def _rows_digest(rows):
             import hashlib, json
-            payloads = [r[0] for r in rows]
+            payloads = [json.loads(r[0]) for r in rows]
             return hashlib.sha256(json.dumps(payloads, ensure_ascii=False, sort_keys=True, separators=(chr(44), chr(58))).encode('utf-8')).hexdigest()
 
         result = {

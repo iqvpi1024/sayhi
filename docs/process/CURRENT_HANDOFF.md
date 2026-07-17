@@ -42,11 +42,11 @@ git_commit: 80a920aa8f07571bb866ce223039033c56b5dd72
 git_content_commit: 7e28546c3f1766afeb5c3524bc55a97ff1102e3f
 git_recovery_tag: mvp-a-answer-safety-development-ready-v0.1-approved
 scope_in:
-  - AS-TASK-002 AnswerEnvelope type and evidence selector
-  - AS-TASK-002 narrow tests
+  - AS-TASK-003 Coverage evaluator
+  - AS-TASK-003 narrow tests
   - task-scoped verification and status records
 scope_out:
-  - AS-TASK-003..009
+  - AS-TASK-004..009
   - answers.py and answer_testing_adapter.py
   - AnswerEnvelope, EvidenceSelector, Coverage, freshness and conflict behavior
   - A1 full runner and business Verification Result
@@ -55,7 +55,7 @@ scope_out:
   - UI, API, permission runtime, MCP, deployment and public release
 open_blockers: []
 next_role: Implementer
-next_single_action: AS-TASK-002
+next_single_action: AS-TASK-003
 ```
 
 ## 2. `AS-TASK-001` 权威入口

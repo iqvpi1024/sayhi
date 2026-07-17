@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS ledger_records (
 
 -- Derived Projection. Values are seeded only; projector/read behavior is deferred to TASK-007.
 CREATE TABLE IF NOT EXISTS projection_rows (
-    view_name TEXT PRIMARY KEY CHECK (view_name IN ('person_card', 'relationship_timeline')),
+    view_name TEXT PRIMARY KEY,
     data_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
     view_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
     freshness_status TEXT NOT NULL CHECK (freshness_status IN ('fresh', 'stale', 'updating', 'unavailable')),
