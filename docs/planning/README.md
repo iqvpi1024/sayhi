@@ -30,6 +30,8 @@ Implementation Plan 把已批准的 SPEC、ADR 和已物化 suite 分解为可�
 
 ## 4. 当前状态
 
-`SLICE-MICRO-RELATIONSHIP-001` 的 Approved Plan 已全部完成并发布 Recovery Point。当前 active slice 为 `SLICE-MVP-A-ANSWER-SAFETY-001`，仅达到 `product_decided`，尚无 Implementation Plan；下一步是 SPEC applicability review。
+`SLICE-MICRO-RELATIONSHIP-001` 的 Approved Plan 已全部完成并发布 Recovery Point。当前 active slice 为 `SLICE-MVP-A-ANSWER-SAFETY-001`，已达到 `architecture_decided`。
 
-跨切片路线见 `MASTER_DELIVERY_ROADMAP.md`。路线图不是 Approved Implementation Plan，future slice 不得据此开工。
+`MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md` 只批准 `AS-PRE-001..005` 测试物化任务。`MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN_DRAFT.md` 仍为 `Draft - blocked by suite_materialized=false`，任何 `AS-TASK-*` 都不得执行。
+
+跨切片路线见 `MASTER_DELIVERY_ROADMAP.md`。路线图和 Draft Plan 都不是业务开工批准，future slice 不得据此开工。

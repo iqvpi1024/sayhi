@@ -25,22 +25,22 @@
 | 项目 | 识海 Noetide |
 | 日期 | 2026-07-17 |
 | 当前切片 | `SLICE-MVP-A-ANSWER-SAFETY-001` |
-| 当前切片交付阶段 | `product_decided` |
-| 开发门禁 | `closed`；下一切片只允许进入 SPEC applicability review |
+| 当前切片交付阶段 | `architecture_decided` |
+| 开发门禁 | `closed`；当前只允许执行 `PLAN-MVP-A-AS-SUITE-001` 的 `AS-PRE-001..005` |
 | 当前 PRD | `PRDv05.md` v0.5，`Approved Product Baseline` |
 | PRD v0.5 canonical LF SHA-256 | `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 历史 PRD | `PRDv04.md` v0.4，`superseded_read_only`，hash `F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC` |
-| 正式 SPEC | 仓库基线全部 `Approved`；A1 切片的 S1/S2/S3/S6/S7 applicability 尚待复核 |
+| 正式 SPEC | 仓库基线全部 `Approved`；A1 的 S1/S2/S3/S6/S7 applicability 已复核通过并保持 current |
 | 产品问题 | A1 blocking=0；`DQ-012` 不重开，其他 `DQ-*` 按阶段 deferred |
 | Finding | P0=0、P1=0、P2=0；P3=1 accepted debt（`MMF-017`） |
-| 追踪 | 现有 32/32 FR 基线有效；A1 exact required set 尚未建立 |
+| 追踪 | 现有 32/32 FR 基线有效；A1 映射覆盖 FR-002/008/010，exact required set 为 11 个场景 + 24 个唯一 upstream refs = 35 IDs |
 | 上一 Micro 结果 | `MM-001..010` + 39 upstream refs，49/49 passed；保持 current historical evidence |
-| A1 Suite | `defined=false`、`materialized=false`、`executed=false`、`passed=false` |
+| A1 Suite | `defined=true`、`materialized=false`、`executed=false`、`passed=false` |
 | A1 Business Verification | `not_executed` |
 | A1 Business Implementation | `absent` |
-| A1 ADR / Architecture | `absent`；不得自动沿用 `ADR-0001` |
-| A1 Implementation Plan | `absent` |
-| A1 技术基线 | `not_decided`；SPEC/Trace 稳定前不创建 ADR |
+| A1 ADR / Architecture | `ADR-0002 Accepted`；`ARCH-MVP-A-AS-001 Accepted Design Baseline` |
+| A1 Implementation Plan | `Draft - blocked by suite_materialized=false`；不可执行 `AS-TASK-*` |
+| A1 技术基线 | Python 3.12 stdlib + 单进程 SQLite 的加法式查询切片；只限 A1，不是长期技术栈承诺 |
 | 依赖 / 数据库实例 | 未安装依赖；未创建数据库实例 |
 | Git | 分支 `codex/mvp-a-answer-safety-planning` 已推送；tag `mvp-a-answer-safety-planning-v0.1-approved` 已推送并指向 `bf333a30b5f4df7b06c63dd6dd9dbb4569f31dca`。上一 Micro tag 保持不变 |
 
@@ -70,8 +70,31 @@
 22. `DEC-MVP-A-AS-001` 选择 A1 Answer Safety 为下一切片；只授权 SPEC applicability review，不授权代码、ADR、suite 或 Implementation Plan。
 23. `GATE-MVP-A-AS-PRODUCT-001` 通过，P0=0、P1=0；产品、SPEC 和既有 Micro artifact 静态校验均 exit code `0`。
 24. 路线图与 A1 Product Decision 已建立 Git Recovery Point；分支和 annotated tag 已推送并核验。
+25. `REVIEW-MVP-A-AS-SPEC-001` 完成 S1/S2/S3/S6/S7 applicability review：全部适用合同保持 current，无需修改正式 SPEC。
+26. 建立 `ACCEPT-MVP-A-AS-001`：固定 AS-001..011、24 个唯一 upstream refs 和 35 个 required result IDs；当前只达到 `suite_defined=true`。
+27. Requirements Matrix §4.1 已建立 A1 active-slice 追踪，覆盖 FR-002/008/010，Implementation Module 仍为 `TBD`，Verification 为 `not_executed/current`。
+28. Accepted `ADR-0002`：A1 延续 Python 3.12 stdlib + 单进程 SQLite，只新增固定合成 Coverage/Answer evaluator，不建设通用问答、服务或规则平台。
+29. 建立 `ARCH-MVP-A-AS-001`，固定 Evidence/Coverage/Conflict/Answer 只读数据流、case 隔离和查询前后全层 digest 不变证明。
+30. 批准 `PLAN-MVP-A-AS-SUITE-001` 仅用于物化 suite；`AS-PRE-001..005` 未开始，禁止创建 A1 业务实现。
+31. 建立 `PLAN-MVP-A-AS-IMPL-001` Draft；在 suite materialized 和开发前 Gate 通过前，`AS-TASK-001..009` 全部 blocked。
+32. `GATE-MVP-A-AS-PRE-SUITE-001` 通过，P0=0、P1=0、P2=0、P3=1；只授权 suite 物化，不授权业务开发。
 
-## 4. 开发前静态验证记录（历史）
+## 4. 当前 A1 规划验证
+
+2026-07-17 在分支 `codex/mvp-a-answer-safety-planning`、起始 HEAD `c4ec6b45970e00b1dd92a82aa9a1bca2a5342370` 的规划工作树上实际执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\validate_product_baseline.ps1
+powershell -ExecutionPolicy Bypass -File .\tools\validate_spec_baseline.ps1
+python .\tools\validate_micro_suite.py
+git diff --check
+```
+
+最终均 exit code `0`。A1 exact mapping 另经机器解析为 11 个场景、24 个唯一 upstream refs、35 个 required IDs，exit code `0`。这些结果只证明产品/SPEC/Trace/既有 Micro 工件和规划范围静态有效；A1 `suite_materialized=false`、业务测试 `not_executed`。
+
+第一次 SPEC validator 因 A1 子表 FR 单元格被旧正则误计为第二套主表而 exit code `1`；将三个 active-slice FR 单元格改为 Markdown code identifiers 后复跑通过，未改变任何业务合同。完整环境、digest 和未证明项见 `docs/testing/LATEST_STATIC_VALIDATION.md`。
+
+### 4.1 开发前静态验证记录（历史）
 
 最终实际执行：
 
@@ -120,6 +143,13 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | `docs/decisions/MVP_A_ANSWER_SAFETY_SLICE_DECISION_2026-07-17.md` | 当前 A1 Product Decision |
 | `docs/reviews/MVP_A_ANSWER_SAFETY_PRODUCT_GATE_2026-07-17.md` | A1 Product Gate Review |
 | `docs/releases/MVP_A_ANSWER_SAFETY_PLANNING_V0.1_RECOVERY_POINT.md` | 当前规划恢复说明 |
+| `docs/reviews/MVP_A_ANSWER_SAFETY_SPEC_APPLICABILITY_2026-07-17.md` | A1 适用 SPEC 复核与范围边界 |
+| `docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` | A1 人类可读 exact 合同与 35-ID required 集合 |
+| `docs/adrs/ADR-0002_ANSWER_SAFETY_RUNTIME_AND_STORAGE.md` | A1 运行时与持久化增量技术决定 |
+| `docs/architecture/MVP_A_ANSWER_SAFETY_ARCHITECTURE.md` | A1 只读组件、数据与失败边界 |
+| `docs/testing/MVP_A_ANSWER_SAFETY_SUITE_MATERIALIZATION_PLAN.md` | A1 suite-only 物化计划 |
+| `docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN_DRAFT.md` | A1 被 suite 门禁阻塞的未来施工草案 |
+| `docs/reviews/MVP_A_ANSWER_SAFETY_PRE_SUITE_GATE_2026-07-17.md` | A1 architecture_decided -> suite_materialization 门禁 |
 | `docs/specs/01..09` | 当前 Approved 语义合同 |
 | `docs/traceability/REQUIREMENTS_MATRIX.md` | 32 FR 的当前追踪 |
 | `docs/adrs/ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md` | 当前切片运行时/事务技术决定 |
@@ -142,7 +172,8 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 - 本 Micro suite 已执行，但它只证明固定单进程、离线、合成链路；不能外推为完整产品业务验证。
 - 后续切片必须重新完成产品裁决、SPEC、Traceability、ADR、可执行 suite 和 Implementation Plan，不得复用 Micro 的 passed 结果。
 - 权限 runtime、MCP、连接器、真实迁移、同步、财务、健康、决策、多 Agent、A2A、数字遗产继续禁止。
-- A1 的 exact required tests、ADR、suite 和 Implementation Plan 均不存在；不得把路线图当作开工批准。
+- A1 exact 合同、ADR、Architecture 和 suite 物化计划已存在；机器 manifest/fixture/oracle/runner 仍不存在，Implementation Plan 仍为 blocked Draft。
+- A1 当前没有业务实现或业务结果；35 个 required result IDs 全部 `not_executed`，不得复用上一 Micro 的 49/49 pass。
 
 ## 7. 范围锁与风险
 
@@ -158,10 +189,12 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | Bootstrap 端口被误当业务实现 | TASK-002 仍为 test-only factory；业务通过只限已记录的固定 Micro 合同 |
 | 路线图被误当实施授权 | 每个 future slice 必须重新经过 Decision、SPEC、Trace、ADR、suite 和 Plan |
 | 其他模型丢失上下文 | 强制按 `AGENTS.md` 和 `MODEL_HANDOFF_PROTOCOL.md` 恢复，聊天不是权威状态 |
+| 六态复合条件诱发实现自定 precedence | 11 个 case 独立物化；出现未由 S2 唯一决定的组合即停止并回 SPEC |
+| Draft Plan 被误当开工授权 | 明确 `suite_materialized=false`，只有 `AS-PRE-001..005` 可执行 |
 
 ## 8. 下一步唯一建议动作
 
-**对 S1/S2/S3/S6/S7 执行 `SLICE-MVP-A-ANSWER-SAFETY-001` applicability review；先证明现有合同是否足够，再决定保持版本或升版修订。**
+**执行 `PLAN-MVP-A-AS-SUITE-001` 的 `AS-PRE-001`：只创建 A1 固定合成 fixture/oracle；不得编写业务代码。**
 
 ## 9. 变更日志
 
@@ -171,3 +204,4 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 | 2026-07-14 | Corrective Gate | P1 关闭到 0；业务测试未执行 |
 | 2026-07-15 | PRD v0.5 / SPEC Compatibility | v0.5 Approved；九份 SPEC current-compatible |
 | 2026-07-16 | Development Readiness | SPEC 勘误、ADR、Architecture、suite materialization、Plan 和开发前 Gate 完成 |
+| 2026-07-17 | MVP-A Answer Safety Architecture | SPEC applicability、A1 exact contract、Trace、ADR-0002、Architecture、suite-only Plan 和 Pre-Suite Gate 完成；业务开发门禁仍 closed |

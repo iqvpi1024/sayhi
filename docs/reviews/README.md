@@ -35,4 +35,6 @@
 
 ## 5. 当前状态
 
-上一完成切片的最新 Gate 为 `MICRO_MVP_IMPLEMENTATION_GATE_2026-07-17.md`：P0=0、P1=0，Recovery Point 已发布。当前 A1 的 `MVP_A_ANSWER_SAFETY_PRODUCT_GATE_2026-07-17.md` 已通过，只允许进入 SPEC applicability review；尚未到 Architecture/Development Gate。
+上一完成切片的最新 Gate 为 `MICRO_MVP_IMPLEMENTATION_GATE_2026-07-17.md`：P0=0、P1=0，Recovery Point 已发布。
+
+当前 A1 已通过 Product Gate、SPEC Applicability Review 和 `MVP_A_ANSWER_SAFETY_PRE_SUITE_GATE_2026-07-17.md`。最新门禁 P0=0、P1=0，只允许执行 `AS-PRE-001..005` 物化 suite；Development Gate 尚未通过。

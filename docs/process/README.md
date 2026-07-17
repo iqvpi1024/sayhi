@@ -156,16 +156,18 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 | 字段 | 当前值 |
 |---|---|
 | Active Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
-| Active Phase | `product_decided` |
+| Active Phase | `architecture_decided` |
 | 当前 PRD | `PRDv05.md` v0.5 Approved |
 | Product Decision | `DEC-MVP-A-AS-001` decided |
-| SPEC Applicability | `review_required`：S1/S2/S3/S6/S7 |
-| Trace / ADR / Suite / Plan | `absent` |
+| SPEC Applicability | `passed`：S1/S2/S3/S6/S7 keep current |
+| Trace / ADR / Architecture | Matrix §4.1 complete；`ADR-0002` Accepted；`ARCH-MVP-A-AS-001` Accepted Design Baseline |
+| Suite | `defined=true`、`materialized=false`、`executed=false`、`passed=false` |
+| Plan | suite-only Plan Approved；Implementation Plan Draft blocked |
 | Business Implementation | `absent` |
 | Business Verification | `not_executed` |
 | Previous Slice | `SLICE-MICRO-RELATIONSHIP-001` = `recovery_point_published`；49/49 required passed |
 
-下一步唯一动作是对 S1/S2/S3/S6/S7 做 A1 applicability review。没有 SPEC/Trace/ADR/suite/Plan 前不得编写 A1 业务代码。
+下一步唯一动作是执行 `PLAN-MVP-A-AS-SUITE-001` 的 `AS-PRE-001`，只创建固定合成 fixture/oracle。`AS-PRE-001..005` 完成并通过 Suite Materialization Gate 前不得批准 Implementation Plan 或编写 A1 业务代码。
 
 ## 11. 相关说明与模板
 

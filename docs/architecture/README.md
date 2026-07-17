@@ -31,4 +31,6 @@
 
 ## 4. 当前状态
 
-`SLICE-MICRO-RELATIONSHIP-001` 的 `MICRO_RELATIONSHIP_ARCHITECTURE.md` 已被实现和验证。当前 A1 切片尚未达到 `traceable`，因此没有 Architecture View；先做 SPEC applicability review，不创建占位架构。
+`SLICE-MICRO-RELATIONSHIP-001` 的 `MICRO_RELATIONSHIP_ARCHITECTURE.md` 已被实现和验证。
+
+当前 A1 已达到 `architecture_decided`。`MVP_A_ANSWER_SAFETY_ARCHITECTURE.md` 是 Accepted Design Baseline，固定合成 Evidence/Coverage/Conflict/Answer 的只读数据流和失败边界；A1 suite 尚未物化，业务行为仍为 `not_executed`。
