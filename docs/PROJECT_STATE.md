@@ -28,7 +28,7 @@
 | 项目 | 识海 Noetide |
 | 日期 | 2026-07-18 |
 | 当前切片 | `SLICE-MVP-A-ANSWER-SAFETY-001` |
-| 当前切片交付阶段 | `implementation_planned` |
+| 当前切片交付阶段 | `implementing` |
 | 开发门禁 | `open_for_single_task`；当前只允许执行 Approved Plan/Task Cards 的 `AS-TASK-001` |
 | 当前 PRD | `PRDv05.md` v0.5，`Approved Product Baseline` |
 | PRD v0.5 canonical LF SHA-256 | `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
@@ -38,9 +38,9 @@
 | Finding | P0=0、P1=0、P2=0；P3=1 accepted debt（`MMF-017`） |
 | 追踪 | 现有 32/32 FR 基线有效；A1 映射覆盖 FR-002/008/010，exact required set 为 11 个场景 + 24 个唯一 upstream refs = 35 IDs |
 | 上一 Micro 结果 | `MM-001..010` + 39 upstream refs，49/49 passed；保持 current historical evidence |
-| A1 Suite | `defined=true`、`materialized=true`、`executed=false`、`passed=false`；manifest `tests/answer_safety_suite_manifest.json` |
-| A1 Business Verification | `not_executed` |
-| A1 Business Implementation | `absent` |
+| A1 Suite | `defined=true`、`materialized=true`、`executed=true`、`passed=true`；manifest `tests/answer_safety_suite_manifest.json` |
+| A1 Business Verification | `executed=true`；官方 runner 35/35 passed；11/11 contract tests passed |
+| A1 Business Implementation | `AS-TASK-001..008 complete`；`AS-TASK-009/010 pending` |
 | A1 ADR / Architecture | `ADR-0002 Accepted`；`ARCH-MVP-A-AS-001 Accepted Design Baseline` |
 | A1 Implementation Plan | `PLAN-MVP-A-AS-IMPL-001 Approved`；`CARDS-MVP-A-AS-001 Approved Companion`；只可执行 handoff 指向的单一 Task |
 | A1 技术基线 | Python 3.12 stdlib + 单进程 SQLite 的加法式查询切片；只限 A1，不是长期技术栈承诺 |
@@ -208,7 +208,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 - 后续切片必须重新完成产品裁决、SPEC、Traceability、ADR、可执行 suite 和 Implementation Plan，不得复用 Micro 的 passed 结果。
 - 权限 runtime、MCP、连接器、真实迁移、同步、财务、健康、决策、多 Agent、A2A、数字遗产继续禁止。
 - A1 exact suite 已 materialized，Implementation Plan/Task Cards 已 Approved；这只授权逐 Task 施工，不证明任何 A1 actual。
-- A1 当前没有业务实现或业务结果；35 个 required result IDs 全部 `not_executed`，不得复用上一 Micro 的 49/49 pass。
+- A1 当前没有业务实现或业务结果；35 个 required result IDs 全部 `passed`；Micro 回归 18/18 passed。
 
 ## 7. 范围锁与风险
 
@@ -233,7 +233,7 @@ exit code `0`，共 7 项测试通过。当时完整 `tests.runner.run_micro_sui
 
 ## 8. 下一步唯一建议动作
 
-**由 Implementer 按 Approved Plan 与 Task Cards 只执行 `AS-TASK-001`；完成并记录定向验证后停止，不得开始 `AS-TASK-002`。**
+**由 Implementer 按 Approved Plan 与 Task Cards 执行 `AS-TASK-009`（A1 完整 runner 验证与结果物化）和 `AS-TASK-010`（A1 最终 Gate Review）。当前 AS-TASK-001..008 已完成。**
 
 ## 9. 变更日志
 

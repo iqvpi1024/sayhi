@@ -1,0 +1,30 @@
+{
+  "verification_id": "AS-TASK-008-verification-2026-07-18",
+  "suite_id": "mvp_a_answer_safety_v1",
+  "suite_artifact_version": "1.0.0",
+  "run_id": "answer-safety-20260717T174103Z-06110377",
+  "run_result": "passed",
+  "suite_passed": true,
+  "required_results_count": 35,
+  "passed_count": 35,
+  "failed_count": 0,
+  "errored_count": 0,
+  "git_commit": "5ba117e44b4c2a1015fbae67cb3b7da403a9a66b",
+  "manifest_sha256": "759878a902c46f2b1eb424eb3146561d09b75ddb780dd697bc0cca598d2e32fc",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "dependencies": "stdlib_only",
+    "network": "blocked",
+    "business_clock": "fixture_injected",
+    "timezone": "UTC",
+    "locale": "en-US",
+    "random_seed": 0
+  },
+  "artifact_path": "tests/results/answer_safety/a1_run_result_20260718_006.json",
+  "verified_at": "2026-07-17T17:41:03.379060Z",
+  "verification_method": "official_runner_subprocess_with_env",
+  "micro_regression_result": "18/18 passed (TASK-001..008)",
+  "answer_contract_result": "11/11 passed"
+}
