@@ -1,0 +1,15 @@
+{
+  "schema_version": "noetide.context-pack-suite-manifest.v1",
+  "suite_id": "context_pack_portability_v1",
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
+  "latest_verification_result": "not_executed",
+  "required_scenario_ids": ["CP-001", "CP-002", "CP-003", "CP-004", "CP-005", "CP-006"],
+  "artifacts": [
+    {"role": "fixture", "path": "tests/fixtures/context_pack_v1/fixture.json", "sha256": "f5cbae3dd184c0d16c08c9f3ca408cb85a33ea6a890f55de025b58cfdfc38e50"},
+    {"role": "oracle", "path": "tests/fixtures/context_pack_v1/oracles.json", "sha256": "9b3e0e9866fdbcfe5ec19336304827f73a0c11afbd8920f81c645fb004f1ee84"},
+    {"role": "business_test_module", "path": "tests/semantic/test_portability.py", "sha256": "6c4cd8343b04a7437f49aa7b977daef7a37fe0a976ef891a2f6a75a749beb1b0"},
+    {"role": "offline_runner", "path": "tests/runner/run_context_pack_suite.py", "sha256": "62cdd1b9dac9b10d3b09578fcc896ab6808dbeec7cd2dcb6caba45c99e932343"},
+    {"role": "suite_preflight_validator", "path": "tools/validate_context_pack_suite.py", "sha256": "7db152c0fdd3e0638346ac90d4b813fadffdad7c995e7bd30d7247c4970b57b2"}
+  ],
+  "privacy": {"synthetic_only": true, "external_network": false, "workspace_external_reads": false, "real_personal_data": false}
+}

@@ -1,0 +1,4 @@
+{
+  "suite_id": "context_pack_portability_v1",
+  "expected_status": {"valid": "validated", "tampered": "rejected_hash_mismatch", "unsafe": "rejected_path"}
+}

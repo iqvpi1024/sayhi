@@ -345,6 +345,35 @@ class SemanticStore:
             )
         }
 
+    def portability_snapshot(self) -> JsonObject:
+        """Return the authoritative layers needed for a private Context Pack.
+
+        Projection rows are intentionally excluded: they are Derived and cannot
+        become evidence by travelling through a portability export.
+        """
+        revision = self.current_revision()
+        return {
+            "data_revision": revision,
+            "sources": [
+                json.loads(row[0])
+                for row in self._connection.execute(
+                    "SELECT payload_json FROM source_records ORDER BY source_id"
+                )
+            ],
+            "canonical": [
+                json.loads(row[0])
+                for row in self._connection.execute(
+                    "SELECT payload_json FROM canonical_objects ORDER BY object_id"
+                )
+            ],
+            "ledger": [
+                json.loads(row[0])
+                for row in self._connection.execute(
+                    "SELECT payload_json FROM ledger_records ORDER BY record_id"
+                )
+            ],
+        }
+
     def _validate_fixture(self, fixture: Mapping[str, Any]) -> None:
         if fixture.get("fixture_id") != "micro_relationship_v1" or fixture.get("synthetic") is not True:
             raise SeedValidationError("TASK-001 only accepts the approved synthetic Micro fixture")

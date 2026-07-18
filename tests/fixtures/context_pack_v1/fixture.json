@@ -1,0 +1,7 @@
+{
+  "fixture_id": "context_pack_v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "determinism": {"clock": "2031-10-15T02:00:00Z"},
+  "required_scenario_ids": ["CP-001", "CP-002", "CP-003", "CP-004", "CP-005", "CP-006"]
+}
