@@ -1,7 +1,7 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
-    [string]$Version = "0.1.0",
-    [string]$Tag = "v0.1.0-synthetic-preview",
+    [string]$Version = "0.1.1",
+    [string]$Tag = "v0.1.1-synthetic-preview",
     [string]$OutputDirectory = (Join-Path $PSScriptRoot "..\dist")
 )
 
@@ -19,7 +19,7 @@ try {
 
     $archive = Join-Path ([IO.Path]::GetFullPath($OutputDirectory)) "Noetide-synthetic-preview-v$Version.zip"
     $checksums = Join-Path ([IO.Path]::GetFullPath($OutputDirectory)) "SHA256SUMS.txt"
-    $notes = Join-Path $repoRoot "docs\releases\PUBLIC_PREVIEW_V0.1.0_RELEASE_NOTES.md"
+    $notes = Join-Path $repoRoot "docs\releases\PUBLIC_PREVIEW_V0.1.1_RELEASE_NOTES.md"
     if (-not (Test-Path -LiteralPath $archive) -or -not (Test-Path -LiteralPath $checksums) -or -not (Test-Path -LiteralPath $notes)) {
         throw "required release files are missing"
     }

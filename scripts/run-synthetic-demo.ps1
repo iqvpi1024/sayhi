@@ -29,18 +29,23 @@ try {
     if (-not (Test-Path -LiteralPath $venvPython)) {
         throw "virtual environment creation failed"
     }
-    $wheelPath = Join-Path $installPath "wheel"
-    New-Item -ItemType Directory -Force -Path $wheelPath | Out-Null
-    & $python.Source -m pip wheel --no-deps --no-build-isolation --wheel-dir $wheelPath $repoRoot
-    if ($LASTEXITCODE -ne 0) { throw "local wheel build failed" }
-    $wheel = Get-ChildItem -LiteralPath $wheelPath -Filter "noetide-*.whl" | Select-Object -First 1
-    if ($null -eq $wheel) { throw "local wheel build produced no Noetide wheel" }
-    & $venvPython -m pip install --no-deps $wheel.FullName
-    if ($LASTEXITCODE -ne 0) { throw "isolated wheel installation failed" }
-    & $venvPython -m noetide_micro --data-dir $dataPath init
-    if ($LASTEXITCODE -ne 0) { throw "module smoke check failed" }
-    & (Join-Path $venvPath "Scripts\noetide.exe") --data-dir $dataPath status
-    if ($LASTEXITCODE -ne 0) { throw "console smoke check failed" }
+    $sourcePath = Join-Path $repoRoot "src"
+    if (-not (Test-Path -LiteralPath (Join-Path $sourcePath "noetide_micro"))) {
+        throw "source package is missing"
+    }
+    $launcherPath = Join-Path $installPath "noetide.cmd"
+    Set-Content -LiteralPath $launcherPath -Value "@echo off`r`n`"$venvPython`" -m noetide_micro %*" -Encoding ascii
+    $previousPythonPath = $env:PYTHONPATH
+    try {
+        $env:PYTHONPATH = $sourcePath
+        & $venvPython -m noetide_micro --data-dir $dataPath init
+        if ($LASTEXITCODE -ne 0) { throw "module smoke check failed" }
+        & $launcherPath --data-dir $dataPath status
+        if ($LASTEXITCODE -ne 0) { throw "launcher smoke check failed" }
+    }
+    finally {
+        $env:PYTHONPATH = $previousPythonPath
+    }
     Write-Output "Synthetic local demo is ready: $dataPath"
     exit 0
 }

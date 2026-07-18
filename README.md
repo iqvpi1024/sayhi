@@ -1,6 +1,6 @@
 # 识海 Noetide
 
-识海是一个 Local-first、User-owned、Correctable、Portable 的 Personal Context & Growth Engine。本仓库公开提供 `v0.1.0-synthetic-preview`：它只演示一条已批准的合成 Micro 链路，不接收真实个人数据，也不声称实现完整 PRD。
+识海是一个 Local-first、User-owned、Correctable、Portable 的 Personal Context & Growth Engine。本仓库公开提供 `v0.1.1-synthetic-preview`：它只演示一条已批准的合成 Micro 链路，不接收真实个人数据，也不声称实现完整 PRD。
 
 ## 当前可运行范围
 
@@ -26,17 +26,17 @@ Windows 上可用一个命令准备**仅含合成数据**的本地演示：
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python -m pip install .
+$env:PYTHONPATH = "$PWD\src"
 
 $dataDir = Join-Path $env:TEMP 'noetide-demo'
-.\.venv\Scripts\noetide --data-dir $dataDir init
-.\.venv\Scripts\noetide --data-dir $dataDir intake
-.\.venv\Scripts\noetide --data-dir $dataDir propose src_micro_001
-.\.venv\Scripts\noetide --data-dir $dataDir approve --id changeset_micro_001
-.\.venv\Scripts\noetide --data-dir $dataDir publish --id changeset_micro_001
-.\.venv\Scripts\noetide --data-dir $dataDir person-card
-.\.venv\Scripts\noetide --data-dir $dataDir timeline
-.\.venv\Scripts\noetide --data-dir $dataDir revert --id changeset_micro_001
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir init
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir intake
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir propose src_micro_001
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir approve --id changeset_micro_001
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir publish --id changeset_micro_001
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir person-card
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir timeline
+.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir revert --id changeset_micro_001
 ```
 
 `intake --text ...` 会被拒绝并返回非零 exit code，因为当前 RC 仅允许包内的合成 demo Source。
