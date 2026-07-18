@@ -12,9 +12,9 @@
   "suite_artifact_state": "materialized",
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/a1-ws12-a603085-pyspath-20260718.json",
-  "latest_verification_manifest_sha256": "66ae60d3cdfaac5ac2006ddd5aae9375cd30a3f6f94e7601cc4c80789b460a72",
-  "latest_verification_result_sha256": "598899384b09fb13cf4e470244b194f040dfd94a88bf808bb3854679882d3812",
+  "latest_verification_result_path": "docs/testing/results/a1-release-8556eea-20260719.json",
+  "latest_verification_manifest_sha256": "912568db98d3a02ce7a083425f9d18a1c7194bae7cea31178378be297894367f",
+  "latest_verification_result_sha256": "45f100c3a28f83930055ec08b3392c7d48a1332ed0dbdabeec8b1676f9687d73",
   "historical_verification_results": [
     {
       "applicability": "superseded",

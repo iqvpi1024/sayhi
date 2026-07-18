@@ -4,9 +4,9 @@
   "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/c1-ws12-5a324f9-pyspath-20260718.json",
-  "latest_verification_manifest_sha256": "a4653a463e1ccf1d37ed530a79b68dbca0800e11be8753869c1e94fd9877230a",
-  "latest_verification_result_sha256": "98c13e3abba3d21380e7bd3fdc746aae06f593556771de41e00483592d795675",
+  "latest_verification_result_path": "docs/testing/results/c1-release-8556eea-20260719.json",
+  "latest_verification_manifest_sha256": "b57e08aad6a9fdfd3490a2444edec9e0a328134c1f7831cc5c8d180ef84e108c",
+  "latest_verification_result_sha256": "764b4c8e9caee8506e51f217040c9e6bf30d5ef0b358b105382e06665ab67345",
   "historical_verification_results": [
     {"applicability": "superseded", "path": "docs/testing/results/c1-ws05-21c97a2-20260718.json", "reason": "The C1 manifest did not bind its fixture, oracle, test modules, runner and validator."},
     {"applicability": "superseded", "path": "docs/testing/results/c1-ws12-0452a0c-pyspath-20260718.json", "reason": "The runner did not fail the suite for errors in its unbound C1 integration module."}
