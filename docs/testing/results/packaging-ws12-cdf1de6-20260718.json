@@ -1,0 +1,36 @@
+{
+  "schema_version": "noetide.packaging-run-result.v1",
+  "run_id": "packaging-ws12-cdf1de6-20260718",
+  "tested_implementation_commit": "cdf1de6ad62c6fc6450722aaa0b24f7bbadb31cc",
+  "applicability": "current_for_d0_d1_synthetic_demo",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "runtime_dependencies": [],
+    "network": "not_required_for_demo_data"
+  },
+  "command": [
+    "powershell",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    ".\\scripts\\run-synthetic-demo.ps1",
+    "-InstallRoot",
+    ".\\tmp\\ws12-cdf1de6",
+    "-Recreate"
+  ],
+  "exit_code": 0,
+  "checks": {
+    "python_version_guard": "passed",
+    "isolated_venv": "passed",
+    "local_wheel_build": "passed",
+    "module_smoke": "passed",
+    "console_smoke": "passed"
+  },
+  "limitations": [
+    "D0/D1 synthetic local demo only",
+    "no signed installer, upgrade/rollback, public release, or user-data deployment",
+    "license selection remains deferred as DQ-005"
+  ]
+}

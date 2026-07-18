@@ -20,7 +20,7 @@
 | 最终独立审计 | Codex；在 Kimi 内部审计、Debug、全量回归和复审之后 |
 | 正式发布权限 | 禁止推送、合并 `main`、正式 tag、GitHub Release |
 | 当前 Git 分支 | `codex/kimi-end-to-end-release-candidate` |
-| 当前 Git HEAD | `0452a0c`（C1 suite contract 提交；状态/结果证据提交前） |
+| 最近被测实现提交 | `5a324f9`（C1 integration regression；后续证据提交仅更新记录，不改实现） |
 | 工作树 | 用户未跟踪的 `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交 |
 
 ## 3. 真实进度
@@ -44,7 +44,7 @@
 | A1 current manifest/result binding | `a603085` official runner 35/35 passed；manifest 指向该 result |
 | Production runtime / CLI / README | 包内合成 demo 在干净 venv 已验证；完整 Context Pack 与一键脚本仍后置 |
 | B1 Candidate Review | `a603085` suite 5/5 passed；持久化候选、保守预算、审查审计均已验证；不自动写入 Canonical |
-| C1 Decision/Outcome | C1 manifest/fixture/oracle/runner/validator 已补齐；`0452a0c` suite 7/7 passed |
+| C1 Decision/Outcome | C1 manifest/fixture/oracle/runner/validator 已补齐；`5a324f9` suite 7/7 passed，未映射 integration failure 也会使 runner 失败 |
 | Synthetic Ingestion | `a603085` 4/4 passed；manifest 已绑定该 immutable result |
 | Context Pack | `a603085` 6/6 passed；完整 S7/S9 长期范围仍未实现 |
 | Packaging / Windows one-click | D0/D1 synthetic local demo 已验证；D2/D3 与公开发布仍未实现且受 `DQ-005` 限制 |

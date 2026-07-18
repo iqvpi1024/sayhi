@@ -22,12 +22,12 @@ final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
 git_branch: codex/kimi-end-to-end-release-candidate
-git_head: 0452a0c
+verified_implementation_commit: 5a324f9
 suite_status:
   micro_current: passed_at_a603085
   a1_current: passed_at_a603085
   b1_current: passed_at_a603085
-  c1_current: passed_at_0452a0c
+  c1_current: passed_at_5a324f9
   synthetic_ingestion_current: passed_at_a603085
   portability_current: passed_at_a603085
 scope_in:
