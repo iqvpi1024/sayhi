@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-B-EPISODE-SUMMARY-001
 slice_id: SLICE-MVP-B-EPISODE-SUMMARY-001
-current_phase: traceable
+current_phase: architecture_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -21,8 +21,10 @@ ci_runs:
   - 29654930604
 decision_ref: DEC-MVP-B-EPISODE-SUMMARY-001
 spec_contract: SPEC-B2-EPISODE-SUMMARY-001
-next_role: System Architect
-next_single_action: create_minimal_b2_adr_and_architecture_view
+adr_ref: ADR-0004
+architecture_ref: ARCH-B2-EPISODE-SUMMARY-001
+next_role: Suite Materializer
+next_single_action: materialize_b2_fixture_oracle_manifest_runner_validator
 scope_in:
   - fixed synthetic Episode, Derived summary, freshness and traceability boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B2 traceability
@@ -31,7 +33,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B2 minimal ADR and architecture view are accepted without expanding scope
+stop_condition: B2 suite is materialized with exact required scenarios and no business run claimed
 ```
 
 ## 当前事实

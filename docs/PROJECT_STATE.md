@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-B-EPISODE-SUMMARY-001` |
-| 当前阶段 | `traceable` |
+| 当前阶段 | `architecture_decided` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -26,6 +26,7 @@
 3. `v0.1.3-synthetic-preview` 已发布源码 ZIP、Windows portable ZIP 及各自 SHA-256 校验文件。portable 包自带 Python runtime，解压后可初始化合成 SQLite 并读取 `rev_010`。
 4. GitHub Actions 对 `main` 和 tag 的两个 run 均通过，包含 Linux 合同/语义回归与 Windows portable smoke。
 5. `DEC-MVP-B-EPISODE-SUMMARY-001` 与 `SPEC-B2-EPISODE-SUMMARY-001` 已定义 B2 Episode 与分层摘要的仅合成、Derived-only 合同；追踪已建立，尚未开始业务代码。
+6. `ADR-0004` 与 `ARCH-B2-EPISODE-SUMMARY-001` 已接受 SQLite 分层持久化与 Derived rebuild 边界；suite 尚未物化。
 
 ## 4. 真实验证结果
 
@@ -50,4 +51,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**为 `SLICE-MVP-B-EPISODE-SUMMARY-001` 建立最小 ADR 与 Architecture View。**
+**物化 B2 的 fixture、oracle、manifest、offline runner 和 validator。**

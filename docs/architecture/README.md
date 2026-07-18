@@ -33,4 +33,4 @@
 
 `SLICE-MICRO-RELATIONSHIP-001` 的 `MICRO_RELATIONSHIP_ARCHITECTURE.md` 已被实现和验证。
 
-当前 A1 已达到 `architecture_decided`。`MVP_A_ANSWER_SAFETY_ARCHITECTURE.md` 是 Accepted Design Baseline，固定合成 Evidence/Coverage/Conflict/Answer 的只读数据流和失败边界；A1 suite 尚未物化，业务行为仍为 `not_executed`。
+当前 A1 已有固定合成 Answer Safety 架构和已验证 runner。B2 的 `B2_EPISODE_SUMMARY_ARCHITECTURE.md` 是 Accepted Design Baseline：固定 synthetic Episode 经 ChangeSet 发布，day/phase summary 位于 Derived 层并按 revision stale/rebuild；B2 suite 仍未物化，业务行为为 `not_executed`。
