@@ -8,6 +8,7 @@ from noetide_micro.c1 import C1ChangeSetService
 from noetide_micro.decision import DecisionService
 from noetide_micro.outcome import OutcomeService
 from noetide_micro.runtime import demo_fixture
+from noetide_micro.scenario import ScenarioService
 from noetide_micro.store import SemanticStore
 
 
@@ -30,3 +31,8 @@ class C1ChangeSetTests(unittest.TestCase):
         before=self.store.current_revision()
         self.assertRaises(ValueError,self.writer.publish,{"object_type":"outcome","outcome_id":"outcome_bad","decision_ref":"missing"},"person_alpha")
         self.assertEqual(self.store.current_revision(),before)
+
+    def test_predicted_scenario_publishes_as_assertion(self):
+        scenario=ScenarioService(self.store,{},"2031-10-15T02:00:00Z").create("scenario_synthetic","decision_synthetic","baseline",["assumption"],"projection")
+        published=self.writer.publish(scenario,"person_alpha")
+        self.assertEqual(self.store.canonical_object(published["assertion_id"])["assertion_kind"],"predicted")

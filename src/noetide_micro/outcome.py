@@ -54,6 +54,9 @@ class OutcomeService:
 class CalibrationService:
     """Compare predicted outcomes with actual outcomes."""
 
+    def __init__(self, now: str) -> None:
+        self._now = now
+
     def calibrate(self, decision: JsonObject, outcome: JsonObject) -> JsonObject:
         """Compare prediction vs actual and return calibration result."""
         predicted = decision.get("predicted_outcome")
@@ -73,7 +76,7 @@ class CalibrationService:
             "predicted": predicted,
             "actual": actual,
             "calibration_status": calibration_status,
-            "calibrated_at": "2031-10-15T02:00:00Z",
+            "calibrated_at": self._now,
         }
 
     def calibration_score(self, calibrations: list[JsonObject]) -> float:

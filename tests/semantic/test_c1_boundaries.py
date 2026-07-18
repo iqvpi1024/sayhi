@@ -26,3 +26,13 @@ class C1BoundaryTests(unittest.TestCase):
     def test_scenario_is_predicted_assertion_not_new_object_type(self):
         scenario=ScenarioService(self.store,{},"2031-10-15T02:00:00Z").create("scenario_synthetic","decision_synthetic","baseline",["assumption"],"projection")
         self.assertEqual((scenario["object_type"],scenario["assertion_kind"]),("assertion","predicted"))
+
+    def test_calibration_does_not_modify_decision_or_outcome(self):
+        decision=self.decision.create("decision_synthetic","question",["a"],[],[],"a")
+        decision["predicted_outcome"]="expected"
+        outcome={"outcome_id":"outcome_synthetic","result":"actual"}
+        from noetide_micro.outcome import CalibrationService
+        before=(decision.copy(),outcome.copy())
+        result=CalibrationService("2031-10-15T02:00:00Z").calibrate(decision,outcome)
+        self.assertEqual(result["calibrated_at"],"2031-10-15T02:00:00Z")
+        self.assertEqual((decision,outcome),before)
