@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `final_regression_and_reaudit` |
+| 当前阶段 | `audit_ready_release_candidate` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -76,4 +76,4 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 7. 下一步唯一建议动作
 
-**继续 `WS-05/C1`：以 `DEC-RC-CONTINUATION-001` 为准将现有 Draft 原型重构为 ChangeSet 驱动的 Decision/Outcome/Scenario/Calibration，并物化 C1 suite。**
+**由独立审计者执行最终审计；不得推送、合并 main、创建正式 tag 或 GitHub Release。**
