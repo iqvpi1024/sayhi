@@ -1,0 +1,71 @@
+{
+  "schema_version": "noetide.b1-run-result.v1",
+  "run_id": "b1-5e4191aee19e4120a4ffbc79875d9ce3",
+  "suite_id": "b1_candidate_review_v1",
+  "manifest_sha256": "0645e79462085786160d9af0826d08ff6f285d53a1a4f47b211331107348ef8a",
+  "git_commit": "b068e8c4e65906e5184fffd9f57c99544c22ec6b",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "B1-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B1-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B1-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B1-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B1-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/b1_candidate_review_v1/fixture.json",
+      "sha256": "01a54003946ad07c8b11dd75b20010920d861840815522b05530f13f5102474d"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/b1_candidate_review_v1/oracles.json",
+      "sha256": "37ef537a1343b5ea04fd4c9d64f26fe721858ee2e92018e99ac6c1c4ddf41df3"
+    },
+    {
+      "role": "budget_tests",
+      "path": "tests/semantic/test_b1_budget.py",
+      "sha256": "e54a8bb0dbf3c92c365ffc3585dbe5cdfbb3601a09c13af11fa41a14bd88250a"
+    },
+    {
+      "role": "persistence_tests",
+      "path": "tests/semantic/test_b1_persistence.py",
+      "sha256": "025b8d448e65448a665cb59ad4fc4f3b993688e61183c374dede8ac8224d1008"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_b1_suite.py",
+      "sha256": "4f6b890be65d046e792440df7509c4053d91d2713f08f64b212ab1431cc90abe"
+    }
+  ]
+}

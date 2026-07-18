@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `remediation_b1` |
+| 当前阶段 | `remediation_c1` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -43,7 +43,7 @@
 | Micro L1 原子性与 `CS-AT-031` | current official runner 49/49 passed；P1 已关闭 |
 | A1 current manifest/result binding | current official runner 35/35 passed；P1 已关闭 |
 | Production runtime / CLI / README | 包内合成 demo 在干净 venv 已验证；完整 Context Pack 与一键脚本仍后置 |
-| B1 Candidate Review | `DQ-002`、`DQ-011` 已由 `DEC-RC-CONTINUATION-001` 按最保守方案裁决；开始纠偏实现 |
+| B1 Candidate Review | current B1 suite 5/5 passed：持久化候选、保守预算、审查审计均已验证；不自动写入 Canonical |
 | C1 Decision/Outcome | `DQ-006` 已裁决；仍依赖 B1 完成，现有内存原型不得作为完成证据 |
 | Synthetic Ingestion | current suite executed/passed；4/4 required IDs 的 immutable result 已被 manifest 绑定；一份先前结果保留为 `superseded` |
 | Context Pack | private synthetic narrow contract current suite 6/6 passed；完整 S7/S9 长期范围仍未实现 |
@@ -76,4 +76,4 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 7. 下一步唯一建议动作
 
-**继续 `WS-04/B1`：以 `DEC-RC-CONTINUATION-001` 为准补齐 Candidate persistence、保守 Review Budget、审计、suite 和验证；不得自动写入 Canonical。**
+**继续 `WS-05/C1`：以 `DEC-RC-CONTINUATION-001` 为准将现有 Draft 原型重构为 ChangeSet 驱动的 Decision/Outcome/Scenario/Calibration，并物化 C1 suite。**
