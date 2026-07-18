@@ -7,9 +7,9 @@
 | Roadmap ID | `ROADMAP-NOETIDE-001` |
 | Status | `Active Planning Baseline` |
 | Product Baseline | `PRDv05.md` v0.5 Approved |
-| Date | 2026-07-17 |
-| Current Completed Slice | `SLICE-MICRO-RELATIONSHIP-001` |
-| Current Active Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
+| Date | 2026-07-19 |
+| Latest Public Release | `v0.1.3-synthetic-preview` (D1 synthetic preview) |
+| Current Active Slice | `SLICE-MVP-B-EPISODE-SUMMARY-001` |
 
 本路线图只规定交付顺序、切片边界和门禁。它不替代 PRD、Product Decision、SPEC、ADR、suite 或单切片 Implementation Plan，也不授权提前实现后续能力。
 
@@ -63,14 +63,14 @@ Product Baseline
 |---|---|
 | Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
 | Primary FR | FR-008；FR-010 的检测与并列呈现切片 |
-| 状态 | `implementation_planned` |
+| 状态 | `verified` |
 | 目标 | 一个固定事实查询根据证据、覆盖、冲突和新鲜度返回六态 `AnswerEnvelope` |
 | 非目标 | 通用问答、LLM、权限 runtime、MCP、冲突裁决、Canonical `value=unknown` |
 | 下一门禁 | 按 Approved Plan/Task Cards 执行 `AS-TASK-001` |
 
 该切片只使用固定合成 Canonical snapshot 和固定查询，证明 `verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown` 严格分离，并禁止 Derived View 成为事实证据。
 
-当前已经完成 SPEC applicability、35-ID exact contract、Trace、ADR-0002、Architecture、suite 物化、Suite Gate、Approved Implementation Plan 和逐任务卡。A1 业务实现仍不存在，35 个 required IDs 全部 `not_executed`。当前单一入口见 `docs/process/CURRENT_HANDOFF.md`。
+当前 A1 已完成固定合成实现与验证；A1 official runner 35/35 passed。它不扩大 FR-008/010 的长期范围，当前单一入口见 `docs/process/CURRENT_HANDOFF.md`。
 
 ### A2：第三个 Core View 与通用当前状态读取
 
@@ -119,6 +119,8 @@ Product Baseline
 | `B4-RECONCILIATION-DIFF` | FR-105 完整化、FR-106；对账与 Semantic Diff | A2、B3 | 多设备同步 |
 | `B5-MULTILINGUAL` | FR-108；原文与翻译对照 | Source/portability 合同 | 覆盖所有语言 |
 | `B6-SHADOW-MIGRATION` | 合成/匿名化复杂数据影子迁移与压力测试 | B1-B5 | 真实历史迁移、全连接器 |
+
+当前 B2 已由 `DEC-MVP-B-EPISODE-SUMMARY-001` 选择，处于 `product_decided`；只允许进入适用 SPEC 复核与追踪，尚未授权业务代码。
 
 进入 B1 前重开 `DQ-002` 和 `DQ-011`。任何默认自动处理范围必须由 Product Decision 明确，不得由模型置信度替代。
 

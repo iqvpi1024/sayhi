@@ -10,8 +10,9 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
-| 当前公开切片 | `PUBLIC-PREVIEW-D1-001` |
-| 当前阶段 | `recovery_point_published` |
+| 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
+| 当前工作切片 | `SLICE-MVP-B-EPISODE-SUMMARY-001` |
+| 当前阶段 | `product_decided` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -24,6 +25,7 @@
 2. A1 suite 完整性绑定已修复，官方 runner 在 `8556eea` 实际通过 35/35；C1 runner 场景映射已修复，官方 runner 在同一提交实际通过 7/7。
 3. `v0.1.3-synthetic-preview` 已发布源码 ZIP、Windows portable ZIP 及各自 SHA-256 校验文件。portable 包自带 Python runtime，解压后可初始化合成 SQLite 并读取 `rev_010`。
 4. GitHub Actions 对 `main` 和 tag 的两个 run 均通过，包含 Linux 合同/语义回归与 Windows portable smoke。
+5. `DEC-MVP-B-EPISODE-SUMMARY-001` 已选择 B2 Episode 与分层摘要为下一条仅合成、Derived-only 切片；尚未开始业务代码。
 
 ## 4. 真实验证结果
 
@@ -48,4 +50,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**在新的 Product Decision 中选择下一条产品切片；不得以发布预览为由扩张 D1 合成范围。**
+**完成 `SLICE-MVP-B-EPISODE-SUMMARY-001` 的 S1/S2/S3/S5/S6/S7 applicability review。**
