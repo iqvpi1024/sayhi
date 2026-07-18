@@ -1,138 +1,47 @@
 # 识海 Noetide
 
-Local-first、User-owned、Correctable、Portable 的 Personal Context & Growth Engine。
+识海是一个 Local-first、User-owned、Correctable、Portable 的 Personal Context & Growth Engine。本仓库当前处于 Release Candidate 纠偏阶段；已提供的本地 CLI 只演示一条已批准的合成 Micro 链路，不接收真实个人数据，也不声称实现完整 PRD。
 
-## 快速开始
+## 当前可运行范围
 
-### 安装
+- 包内合成 Source append。
+- 一个 `relationship.contact: active -> no_contact` ChangeSet 的提案、确认、原子发布与补偿撤销。
+- `person_card` 与 `relationship_timeline` 两个 Core View。
+- 本地 SQLite，Python 3.12 标准库，无网络访问。
 
-```bash
-# 克隆仓库
-git clone https://github.com/iqvpi1024/sayhi.git
-cd sayhi
+不包含：真实数据导入、通用 NLP、权限 runtime、MCP、连接器、同步、财务、健康、决策工作流、完整 Context Pack 或公开发布。
 
-# 安装（Python 3.12+）
-pip install -e .
+## 本地运行
 
-# 初始化数据库
-noetide init
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python -m pip install .
 
-# 查看状态
-noetide status
+$dataDir = Join-Path $env:TEMP 'noetide-demo'
+.\.venv\Scripts\noetide --data-dir $dataDir init
+.\.venv\Scripts\noetide --data-dir $dataDir intake
+.\.venv\Scripts\noetide --data-dir $dataDir propose src_micro_001
+.\.venv\Scripts\noetide --data-dir $dataDir approve --id changeset_micro_001
+.\.venv\Scripts\noetide --data-dir $dataDir publish --id changeset_micro_001
+.\.venv\Scripts\noetide --data-dir $dataDir person-card
+.\.venv\Scripts\noetide --data-dir $dataDir timeline
+.\.venv\Scripts\noetide --data-dir $dataDir revert --id changeset_micro_001
 ```
 
-### 完整使用流程
+`intake --text ...` 会被拒绝并返回非零 exit code，因为当前 RC 仅允许包内的合成 demo Source。
 
-```bash
-# 1. 初始化
-noetide init
+## 验证
 
-# 2. 录入文本
-noetide intake --text "从2031年9月1日起，我不再与 person_beta 联系。"
-
-# 3. 提出 ChangeSet
-noetide propose src_micro_001
-
-# 4. 查看 ChangeSet
-noetide changesets
-
-# 5. 确认 ChangeSet
-noetide approve --id changeset_micro_001 --actor person_alpha
-
-# 6. 发布 ChangeSet
-noetide publish --id changeset_micro_001
-
-# 7. 查看人物卡
-noetide person-card
-
-# 8. 查看时间线
-noetide timeline
-
-# 9. 撤销 ChangeSet
-noetide revert --id changeset_micro_001
-
-# 10. 导出数据
-noetide export --output backup.json
-
-# 11. 查看候选队列（Review Budget）
-noetide review --max-items 3
+```powershell
+$env:PYTHONPATH = "$PWD\src"
+python .\tools\validate_micro_suite.py
+python .\tools\validate_answer_safety_suite.py
+python -m tests.runner.run_micro_suite --adapter noetide_micro.testing_adapter --output tmp\micro-run.json
+python -m tests.runner.run_answer_safety_suite --adapter noetide_micro.answer_testing_adapter --output tmp\answer-run.json
 ```
 
-### 决策与成长
+测试 adapter 仅用于测试，不被 CLI 导入。当前可复现的验证记录位于 `docs/testing/results/`。
 
-```bash
-# 创建 Decision
-noetide decision --question "Should I change jobs?" --options "stay,leave"
+## 开发状态
 
-# 记录 Outcome
-noetide outcome --decision-id decision_001 --result "better salary"
-
-# 查看校准
-noetide calibrate --decision-id decision_001
-
-# 创建情景推演
-noetide scenario --decision-id decision_001 --kind baseline --result "moderate raise"
-```
-
-## 可用命令
-
-| 命令 | 功能 |
-|------|------|
-| `init` | 初始化数据库 |
-| `status` | 显示当前 revision |
-| `intake` | 录入文本 Source |
-| `propose` | 从 Source 提出 ChangeSet |
-| `changesets` | 查看 ChangeSet 状态 |
-| `approve` | 确认 ChangeSet |
-| `publish` | 发布 ChangeSet |
-| `revert` | 撤销已发布 ChangeSet |
-| `person-card` | 查看人物卡 |
-| `timeline` | 查看关系时间线 |
-| `review` | 查看候选队列 |
-| `export` | 导出数据为 JSON |
-
-## 技术栈
-
-- Python 3.12 标准库
-- SQLite（本地存储）
-- 无第三方依赖
-- 无网络连接
-
-## 测试
-
-```bash
-# 设置环境变量
-export NOETIDE_MICRO_ADAPTER=noetide_micro.testing_adapter
-export NOETIDE_ANSWER_ADAPTER=noetide_micro.answer_testing_adapter
-
-# 运行测试
-python -m pytest tests/semantic/ -v
-```
-
-## 项目结构
-
-```
-src/noetide_micro/     # 核心实现
-tests/                  # 测试
-docs/                   # 文档
-tmp/                    # 临时数据（Git 忽略）
-```
-
-## 核心原则
-
-1. **用户拥有最终裁决权** — AI 可以提出，不得伪装成用户确认
-2. **Source 永远不是自动生成结论的替代品** — 原始材料必须保留来源和定位
-3. **事实不能来源于 View** — 摘要、画像和统计只能派生，不能反向成为证据
-4. **Current 不覆盖 Historical** — 当前状态变化必须保留历史有效区间
-5. **Hypothesis 不得自动升级为 Fact** — 必须经过用户确认或符合明确的外部验证规则
-
-## 隐私
-
-- 本地存储，不联网
-- 不收集真实个人数据
-- 所有测试使用合成数据
-- 可导出、可删除、可迁移
-
-## 许可证
-
-MIT
+当前执行阶段与唯一下一动作见 `docs/PROJECT_STATE.md` 和 `docs/process/CURRENT_HANDOFF.md`。产品语义以 `PRDv05.md`、Approved SPEC 和 Decision 为准；不要将 README 示例外推为完整产品能力。

@@ -1,397 +1,132 @@
+"""Small local CLI for the approved synthetic Micro demonstration."""
+
+from __future__ import annotations
+
 import argparse
-import json
 import sys
 from pathlib import Path
-from typing import Any
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from noetide_micro.store import SeedConflictError
-from noetide_micro.testing_adapter import create_system
-from noetide_micro.candidate_aggregator import CandidateAggregator, CandidateEnvelope
-from noetide_micro.review_budget import ReviewBudget, ReviewBudgetService
+from .runtime import open_runtime
 
-JsonObject = dict[str, Any]
+
 DEFAULT_DATA_DIR = Path.home() / ".noetide" / "data"
-FIXTURE_PATH = Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "micro_relationship_v1" / "fixture.json"
 
 
-def _load_fixture():
-    with open(FIXTURE_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+def _data_dir(args: argparse.Namespace) -> Path:
+    return Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
 
 
-def _get_system(data_dir):
-    fixture = _load_fixture()
-    if not data_dir.exists():
-        data_dir.mkdir(parents=True, exist_ok=True)
-    return create_system(fixture, data_dir)
-
-
-def _get_store(data_dir):
-    system = _get_system(data_dir)
-    return system, system.store
-
-
-def cmd_init(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    data_dir.mkdir(parents=True, exist_ok=True)
-    fixture = _load_fixture()
-    db_path = data_dir / "micro.sqlite3"
-    if db_path.exists():
-        print("Database exists:", db_path)
-        return 0
+def _with_runtime(args: argparse.Namespace, action):
+    runtime = open_runtime(_data_dir(args))
     try:
-        create_system(fixture, data_dir)
-        print("Database initialized:", db_path)
-        return 0
-    except SeedConflictError as e:
-        print("Conflict:", e)
-        return 1
-
-
-def cmd_status(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system, store = _get_store(data_dir)
-    try:
-        print("Current revision:", store.current_revision())
-        return 0
+        return action(runtime)
     finally:
-        store.close()
+        runtime.close()
 
 
-def cmd_intake(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system = _get_system(data_dir)
-    fixture = _load_fixture()
-    request = dict(fixture["intake_request"])
-    if args.text:
-        request["inline_content"] = args.text
-        request["content_hash"] = _digest_text(args.text)
-        request["byte_length"] = len(args.text.encode("utf-8"))
-    try:
-        result = system.intake(request)
-        print("Intake status:", result["status"])
-        print("Source ID:", result.get("source_id", "N/A"))
-        return 0
-    finally:
-        system.store.close()
-
-
-def cmd_propose(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system = _get_system(data_dir)
-    try:
-        proposal = system.propose_contact_changeset(args.source_id)
-        print("ChangeSet proposed:", proposal["changeset_id"])
-        print("Status:", proposal["status"])
-        print("Base revision:", proposal["base_revision"])
-        return 0
-    finally:
-        system.store.close()
-
-
-def cmd_changesets(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system, store = _get_store(data_dir)
-    try:
-        cs = store.ledger_record("changeset_micro_001")
-        if cs is None:
-            print("No ChangeSet found.")
-            return 0
-        print("ChangeSet ID:", cs["changeset_id"])
-        print("Status:", cs["status"])
-        print("Base revision:", cs["base_revision"])
-        print("Actor:", cs["actor"])
-        print("Confirmation policy:", cs["confirmation_policy"])
-        if cs.get("published_revision"):
-            print("Published revision:", cs["published_revision"])
-        if cs.get("receipt_id"):
-            print("Receipt ID:", cs["receipt_id"])
-        return 0
-    finally:
-        store.close()
-
-
-def cmd_approve(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system = _get_system(data_dir)
-    try:
-        approved = system.approve_changeset(args.id, args.actor)
-        print("ChangeSet approved:", approved["changeset_id"])
-        print("Status:", approved["status"])
-        if approved.get("approval"):
-            print("Approved by:", approved["approval"]["actor"])
-            print("Approved at:", approved["approval"]["recorded_at"])
-        return 0
-    finally:
-        system.store.close()
-
-
-def cmd_publish(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system = _get_system(data_dir)
-    try:
-        receipt = system.publish_changeset(args.id, args.idempotency_key)
-        print("Publish status:", receipt["status"])
-        if receipt.get("published_revision"):
-            print("Published revision:", receipt["published_revision"])
-        if receipt.get("receipt_id"):
-            print("Receipt ID:", receipt["receipt_id"])
-        return 0
-    finally:
-        system.store.close()
-
-
-def cmd_revert(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system = _get_system(data_dir)
-    try:
-        receipt = system.revert_changeset(args.id, args.idempotency_key)
-        print("Revert status:", receipt["status"])
-        if receipt.get("compensation_revision"):
-            print("Compensation revision:", receipt["compensation_revision"])
-        if receipt.get("receipt_id"):
-            print("Receipt ID:", receipt["receipt_id"])
-        return 0
-    finally:
-        system.store.close()
-
-
-def cmd_person_card(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system = _get_system(data_dir)
-    try:
-        view = system.read_core_view("person_card", "cli_session_001")
-        payload = view["payload"]
-        print("=== Person Card ===")
-        print("Data revision:", view.get("data_revision", "N/A"))
-        print("View freshness:", view.get("freshness_status", "N/A"))
-        print("Contact state:", payload.get("contact_state", "N/A"))
-        if view.get("source") == "canonical_fallback":
-            print("(View from canonical fallback)")
-        return 0
-    finally:
-        system.store.close()
-
-
-def cmd_timeline(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system = _get_system(data_dir)
-    try:
-        view = system.read_core_view("relationship_timeline", "cli_session_001")
-        payload = view["payload"]
-        print("=== Relationship Timeline ===")
-        print("Data revision:", view.get("data_revision", "N/A"))
-        print("View freshness:", view.get("freshness_status", "N/A"))
-        print("Current contact state:", payload.get("current_contact_state", "N/A"))
-        history = payload.get("history", [])
-        if history:
-            print("\nHistory:")
-            for item in history:
-                start_val = item.get("valid_time", {}).get("start", {}).get("value", "N/A")
-                print("  [" + start_val + "] -> " + item.get("value", "N/A"))
-        else:
-            print("No history entries.")
-        if view.get("source") == "canonical_fallback":
-            print("(View from canonical fallback)")
-        return 0
-    finally:
-        system.store.close()
-
-
-def cmd_export(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print("Data dir missing. Run init first.")
-        return 1
-    system, store = _get_store(data_dir)
-    try:
-        snapshot = store.seed_snapshot()
-        export_data = {
-            "export_version": "noetide.export.v1",
-            "exported_at": "2031-10-15T02:00:00Z",
-            "data_revision": snapshot["data_revision"],
-            "objects": list(snapshot["objects"].values()),
-            "projections": snapshot["projections"],
-        }
-        output_path = Path(args.output)
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(export_data, f, ensure_ascii=False, indent=2)
-        print("Exported to:", output_path)
-        print("Objects:", len(export_data["objects"]))
-        print("Projections:", len(export_data["projections"]))
-        return 0
-    finally:
-        store.close()
-
-
-def _digest_text(text: str) -> str:
-    import hashlib
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
-
-
-def cmd_review(args):
-    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
-    if not data_dir.exists():
-        print('Data dir missing. Run init first.')
-        return 1
-
-    agg = CandidateAggregator()
-
-    c1 = CandidateEnvelope(
-        candidate_id='candidate_contact_001',
-        candidate_kind='state',
-        source_refs=[{'source_id': 'src_micro_001', 'locator': {'start': 0, 'end': 58}}],
-        proposed_value='no_contact',
-        valid_time_candidate=None,
-        risk_level='medium',
-        review_priority='high',
-        value_factors={
-            'target_ref': 'state_contact_001',
-            'goal_impact': 0.8,
-            'change_scope': 0.5,
-            'urgency': 0.9,
-            'uncertainty': 0.2,
-            'historical_acceptance': 0.7,
-        },
-        confirmation_policy='single_confirmation',
-    )
-    agg.add_candidate(c1)
-
-    c2 = CandidateEnvelope(
-        candidate_id='candidate_closeness_001',
-        candidate_kind='assertion',
-        source_refs=[{'source_id': 'src_history_001'}],
-        proposed_value='synthetic_closeness_baseline',
-        valid_time_candidate=None,
-        risk_level='high',
-        review_priority='normal',
-        value_factors={
-            'target_ref': 'assertion_closeness_001',
-            'goal_impact': 0.3,
-            'change_scope': 0.2,
-            'urgency': 0.4,
-            'uncertainty': 0.6,
-            'historical_acceptance': 0.5,
-        },
-        confirmation_policy='automatic_forbidden',
-    )
-    agg.add_candidate(c2)
-
-    budget = ReviewBudget(max_items_per_session=args.max_items)
-    service = ReviewBudgetService(budget)
-    items = agg.list_review_items()
-    selected = service.filter_candidates(items)
-
-    print('=== Review Queue ===')
-    print('Total candidates:', len(items))
-    print('Selected for review:', len(selected))
-    print('Budget remaining:', service.get_budget_status()['remaining'])
-    print()
-
-    for item in selected:
-        print('Candidate:', item['candidate_id'])
-        print('  Kind:', item['candidate_kind'])
-        print('  Proposed value:', item['proposed_value'])
-        print('  Value score:', round(item['value_score'], 2))
-        print('  Risk level:', item['risk_level'])
-        print('  Review priority:', item['review_priority'])
-        print('  Confirmation policy:', item['confirmation_policy'])
-        print('  Sources:', item['source_count'])
-        print()
-
-    if service.get_suppressed():
-        print('Suppressed candidates:', len(service.get_suppressed()))
-
+def cmd_init(args: argparse.Namespace) -> int:
+    _with_runtime(args, lambda runtime: runtime.revision())
+    print(f"Initialized local data directory: {_data_dir(args)}")
     return 0
 
-def main():
-    parser = argparse.ArgumentParser(prog="noetide", description="Noetide CLI")
-    parser.add_argument("--data-dir", help="Data directory")
-    subparsers = parser.add_subparsers(dest="command")
 
-    init_p = subparsers.add_parser("init", help="Initialize database")
-    init_p.set_defaults(func=cmd_init)
+def cmd_status(args: argparse.Namespace) -> int:
+    revision = _with_runtime(args, lambda runtime: runtime.revision())
+    print(f"Current revision: {revision}")
+    return 0
 
-    status_p = subparsers.add_parser("status", help="Show status")
-    status_p.set_defaults(func=cmd_status)
 
-    intake_p = subparsers.add_parser("intake", help="Intake text source")
-    intake_p.add_argument("--text", help="Text content to intake")
-    intake_p.set_defaults(func=cmd_intake)
+def cmd_intake(args: argparse.Namespace) -> int:
+    if args.text is not None:
+        print("rejected: this Release Candidate accepts only its packaged synthetic demo Source", file=sys.stderr)
+        return 2
+    receipt = _with_runtime(args, lambda runtime: runtime.intake())
+    print(f"Intake status: {receipt['status']}")
+    print(f"Source ID: {receipt['source_id']}")
+    return 0 if receipt["status"] in {"stored", "duplicate"} else 1
 
-    propose_p = subparsers.add_parser("propose", help="Propose ChangeSet from source")
-    propose_p.add_argument("source_id", help="Source ID")
-    propose_p.set_defaults(func=cmd_propose)
 
-    changesets_p = subparsers.add_parser("changesets", help="List ChangeSets")
-    changesets_p.set_defaults(func=cmd_changesets)
+def cmd_propose(args: argparse.Namespace) -> int:
+    proposal = _with_runtime(args, lambda runtime: runtime.propose(args.source_id))
+    print(f"ChangeSet ID: {proposal['changeset_id']}")
+    print(f"Status: {proposal['status']}")
+    print(f"Base revision: {proposal['base_revision']}")
+    return 0
 
-    approve_p = subparsers.add_parser("approve", help="Approve a ChangeSet")
-    approve_p.add_argument("--id", required=True, help="ChangeSet ID")
-    approve_p.add_argument("--actor", default="person_alpha", help="Actor ID")
-    approve_p.set_defaults(func=cmd_approve)
 
-    publish_p = subparsers.add_parser("publish", help="Publish a ChangeSet")
-    publish_p.add_argument("--id", required=True, help="ChangeSet ID")
-    publish_p.add_argument("--idempotency-key", default="cli_publish_001", help="Idempotency key")
-    publish_p.set_defaults(func=cmd_publish)
-
-    revert_p = subparsers.add_parser("revert", help="Revert a published ChangeSet")
-    revert_p.add_argument("--id", required=True, help="ChangeSet ID")
-    revert_p.add_argument("--idempotency-key", default="cli_revert_001", help="Idempotency key")
-    revert_p.set_defaults(func=cmd_revert)
-
-    person_card_p = subparsers.add_parser("person-card", help="Show person card")
-    person_card_p.set_defaults(func=cmd_person_card)
-
-    timeline_p = subparsers.add_parser("timeline", help="Show relationship timeline")
-    timeline_p.set_defaults(func=cmd_timeline)
-
-    review_p = subparsers.add_parser("review", help="Review candidate queue")
-    review_p.add_argument("--max-items", type=int, default=3, help="Max items per session")
-    review_p.set_defaults(func=cmd_review)
-
-    export_p = subparsers.add_parser("export", help="Export data")
-    export_p.add_argument("--output", required=True, help="Output file path")
-    export_p.set_defaults(func=cmd_export)
-
-    args = parser.parse_args()
-    if not args.command:
-        parser.print_help()
+def cmd_changesets(args: argparse.Namespace) -> int:
+    changeset = _with_runtime(args, lambda runtime: runtime.changeset("changeset_micro_001"))
+    if changeset is None:
+        print("No ChangeSet found.")
         return 0
-    return args.func(args)
+    for key in ("changeset_id", "status", "base_revision", "published_revision", "receipt_id"):
+        if changeset.get(key) is not None:
+            print(f"{key}: {changeset[key]}")
+    return 0
+
+
+def cmd_approve(args: argparse.Namespace) -> int:
+    approved = _with_runtime(args, lambda runtime: runtime.approve(args.id, args.actor))
+    print(f"ChangeSet ID: {approved['changeset_id']}")
+    print(f"Status: {approved['status']}")
+    return 0
+
+
+def cmd_publish(args: argparse.Namespace) -> int:
+    receipt = _with_runtime(args, lambda runtime: runtime.publish(args.id, args.idempotency_key))
+    print(f"Publish status: {receipt['status']}")
+    print(f"Published revision: {receipt.get('published_revision')}")
+    return 0 if receipt["status"] == "published" else 1
+
+
+def cmd_revert(args: argparse.Namespace) -> int:
+    receipt = _with_runtime(args, lambda runtime: runtime.revert(args.id, args.idempotency_key))
+    print(f"Revert status: {receipt['status']}")
+    print(f"Compensation revision: {receipt.get('compensation_revision')}")
+    return 0 if receipt["status"] == "published" else 1
+
+
+def cmd_view(args: argparse.Namespace) -> int:
+    view = _with_runtime(args, lambda runtime: runtime.view(args.view_name))
+    print(f"Data revision: {view['data_revision']}")
+    print(f"View revision: {view['view_revision']}")
+    print(f"Freshness: {view['freshness_status']}")
+    print(view["payload"])
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="noetide")
+    parser.add_argument("--data-dir", help="local SQLite data directory")
+    commands = parser.add_subparsers(dest="command", required=True)
+    for name, handler in (("init", cmd_init), ("status", cmd_status), ("changesets", cmd_changesets)):
+        command = commands.add_parser(name)
+        command.set_defaults(handler=handler)
+    intake = commands.add_parser("intake")
+    intake.add_argument("--text")
+    intake.set_defaults(handler=cmd_intake)
+    propose = commands.add_parser("propose")
+    propose.add_argument("source_id")
+    propose.set_defaults(handler=cmd_propose)
+    approve = commands.add_parser("approve")
+    approve.add_argument("--id", required=True)
+    approve.add_argument("--actor", default="person_alpha")
+    approve.set_defaults(handler=cmd_approve)
+    for name, handler, key in (("publish", cmd_publish, "cli_publish_001"), ("revert", cmd_revert, "cli_revert_001")):
+        command = commands.add_parser(name)
+        command.add_argument("--id", required=True)
+        command.add_argument("--idempotency-key", default=key)
+        command.set_defaults(handler=handler)
+    for name, view_name in (("person-card", "person_card"), ("timeline", "relationship_timeline")):
+        command = commands.add_parser(name)
+        command.set_defaults(handler=cmd_view, view_name=view_name)
+    args = parser.parse_args(argv)
+    try:
+        return args.handler(args)
+    except (KeyError, RuntimeError, ValueError, PermissionError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
