@@ -32,4 +32,3 @@
 ## 后果与验证
 
 导出不得改变数据库。验证必须证明：文件完整性、未知 namespaced 字段往返、篡改/越界拒绝、旧 Pack 不被新导出改写，以及验证过程零 Canonical 写入。若 hash 或路径检查失败，返回 quarantine/rejected，不执行导入。
-

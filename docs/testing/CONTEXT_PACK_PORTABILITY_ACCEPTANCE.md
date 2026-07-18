@@ -26,4 +26,3 @@ context_pack_required_contract_slices:
 | `CP-006` | Derived payload 被尝试加入 Canonical evidence | exporter 拒绝，不让 Derived 成为事实证据 |
 
 所有 fixture 为合成数据；runner 禁止网络；suite 未运行前不得称通过。
-

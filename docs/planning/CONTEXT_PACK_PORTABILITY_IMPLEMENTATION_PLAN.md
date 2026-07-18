@@ -10,4 +10,3 @@
 2. 创建 `portability.py`：目录导出、canonical JSON、Markdown、SHA-256 manifest/checksums 与 fail-closed dry-run verifier。
 3. 创建固定合成 fixture、oracle、semantic tests、manifest、validator 和离线 runner；required 集只能是 `CP-001..006`。
 4. 仅当同一 commit 的所有 CP 场景通过并绑定 artifact/result 后，更新 RC 状态与追踪。不得实现真实导入、分享导出、sealed runtime 或 ChangeSet 写入。
-

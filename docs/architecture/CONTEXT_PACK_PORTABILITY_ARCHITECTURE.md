@@ -21,4 +21,3 @@ ContextPackVerifier -> dry-run validation / quarantine receipt
 - `ContextPackVerifier` 只接受 Pack root 内受控相对引用，先验证 manifest/schema/hash，再返回解析后的 inert snapshot；不写 SQLite。
 - 人类可读 `README.md` 是 Projection，不替代 `canonical.json`、`ledger.json` 或 Source 内容。
 - 任何未知 namespaced 字段作为 JSON 值原样通过导出与校验；未知核心对象类型、路径越界、缺文件和 hash 不匹配均拒绝。
-

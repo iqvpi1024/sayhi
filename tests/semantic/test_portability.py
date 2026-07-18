@@ -80,4 +80,3 @@ class ContextPackTests(unittest.TestCase):
         pack = self.export("pack")
         content = b"".join((pack / name).read_bytes() for name in ("sources.json", "canonical.json", "ledger.json"))
         self.assertNotIn(b"derived_only_sentinel", content)
-
