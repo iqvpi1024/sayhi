@@ -90,6 +90,7 @@ class EpisodeChangeSetService:
         completed.update({"status": "published", "published_revision": revision, "receipt_id": receipt["receipt_id"]})
         with self._store.transaction():
             self._store.add_revision(revision, self._now)
+            self._store.mark_summary_projections_stale(revision)
             self._store.add_canonical_object(candidate["episode_id"], published)
             self._store.replace_evidence_refs(candidate["episode_id"], published["evidence_refs"])
             self._store.put_episode_record(
@@ -127,6 +128,7 @@ class EpisodeChangeSetService:
             self._store.delete_episode_record(episode_id)
             self._store.delete_canonical_object(episode_id)
             self._store.add_revision(revision, self._now)
+            self._store.mark_summary_projections_stale(revision)
             self._store.replace_ledger_record(changeset_id, reverted, revision)
             self._store.put_ledger_record(compensation_id, "changeset", compensation, revision)
             self._store.put_ledger_record(receipt_id, "receipt", {"receipt_id": receipt_id, "changeset_id": changeset_id, "status": "published", "published_revision": revision}, revision)

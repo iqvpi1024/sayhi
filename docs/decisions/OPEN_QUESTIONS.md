@@ -28,6 +28,10 @@
 
 该段保留 Product Decision 当时的授权边界，不作为动态阶段状态。后续 applicability、Trace、ADR-0002、Architecture 和 Pre-Suite Gate 已完成；当前动态状态与唯一下一动作只以 `docs/PROJECT_STATE.md` 和 `docs/process/CURRENT_HANDOFF.md` 为准。
 
+### 1.4 当前 B2 phase window 解释
+
+`DEC-B2-PHASE-WINDOW-001` 于 2026-07-19 仅为 `b2_episode_summary_v1` 解释 fixture 已显式给出的时间边界：`phase_summary.time_window` 使用目标 Episode 的 `valid_time`。它不构成通用 phase grouping 规则，不修改 PRD、B2 Contract、fixture 或 oracle。
+
 ## 2. Blocking
 
 ### BQ-001：`RelationshipState` 的规范对象归属是什么？

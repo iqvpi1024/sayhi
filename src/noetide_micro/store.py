@@ -328,6 +328,11 @@ class SemanticStore:
         if cursor.rowcount != 1:
             raise KeyError(episode_id)
 
+    def episode_records(self) -> list[JsonObject]:
+        return [self.episode_record(row[0]) for row in self._connection.execute(
+            "SELECT episode_id FROM episodes ORDER BY episode_id"
+        )]
+
     def put_summary_projection(
         self,
         projection_id: str,
@@ -347,6 +352,53 @@ class SemanticStore:
             (projection_id, projection_kind, data_revision, view_revision, freshness_status,
              _canonical_json(dependency_set), _canonical_json(payload), generated_at, generator_policy_id),
         )
+
+    def replace_summary_projection(
+        self, projection_id: str, projection_kind: str, data_revision: str, view_revision: str,
+        freshness_status: str, dependency_set: Mapping[str, Any], payload: Mapping[str, Any],
+        generated_at: str, generator_policy_id: str,
+    ) -> None:
+        self._connection.execute(
+            "INSERT INTO summary_projections (projection_id, projection_kind, data_revision, view_revision, "
+            "freshness_status, dependency_json, payload_json, generated_at, generator_policy_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(projection_id) DO UPDATE SET "
+            "projection_kind=excluded.projection_kind, data_revision=excluded.data_revision, "
+            "view_revision=excluded.view_revision, freshness_status=excluded.freshness_status, "
+            "dependency_json=excluded.dependency_json, payload_json=excluded.payload_json, "
+            "generated_at=excluded.generated_at, generator_policy_id=excluded.generator_policy_id",
+            (projection_id, projection_kind, data_revision, view_revision, freshness_status,
+             _canonical_json(dependency_set), _canonical_json(payload), generated_at, generator_policy_id),
+        )
+
+    def summary_projections(self) -> list[JsonObject]:
+        return [self.summary_projection(row[0]) for row in self._connection.execute(
+            "SELECT projection_id FROM summary_projections ORDER BY projection_id"
+        )]
+
+    def mark_summary_projections_stale(self, data_revision: str) -> int:
+        return self._connection.execute(
+            "UPDATE summary_projections SET data_revision = ?, freshness_status = 'stale' "
+            "WHERE view_revision != ? AND freshness_status = 'fresh'",
+            (data_revision, data_revision),
+        ).rowcount
+
+    def put_derived_rebuild_receipt(
+        self, receipt_id: str, projection_id: str, data_revision: str, status: str, payload: Mapping[str, Any]
+    ) -> None:
+        self._connection.execute(
+            "INSERT INTO derived_rebuild_receipts (receipt_id, projection_id, data_revision, status, payload_json) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (receipt_id, projection_id, data_revision, status, _canonical_json(payload)),
+        )
+
+    def derived_rebuild_receipts(self) -> list[JsonObject]:
+        return [
+            {"receipt_id": row[0], "projection_id": row[1], "data_revision": row[2], "status": row[3], "payload": json.loads(row[4])}
+            for row in self._connection.execute(
+                "SELECT receipt_id, projection_id, data_revision, status, payload_json "
+                "FROM derived_rebuild_receipts ORDER BY receipt_id"
+            )
+        ]
 
     def summary_projection(self, projection_id: str) -> JsonObject:
         row = self._connection.execute(
@@ -370,7 +422,9 @@ class SemanticStore:
 
     def delete_summary_projections(self) -> int:
         """Delete all B2 Derived rows without touching Canonical or Ledger data."""
-        return self._connection.execute("DELETE FROM summary_projections").rowcount
+        with self.transaction():
+            self._connection.execute("DELETE FROM derived_rebuild_receipts")
+            return self._connection.execute("DELETE FROM summary_projections").rowcount
 
     def ledger_records_for(self, record_type: str, changeset_id: str) -> list[JsonObject]:
         rows = self._connection.execute(
