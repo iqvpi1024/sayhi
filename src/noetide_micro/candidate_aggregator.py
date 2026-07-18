@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 from dataclasses import dataclass, field
+import json
 from typing import Any, Mapping
 
 JsonObject = dict[str, Any]
@@ -34,6 +35,9 @@ class CandidateEnvelope:
     status: str = "candidate"
     changeset_ref: str | None = None
     expires_at: str | None = None
+    model_or_rule_version: str = "synthetic_rule_v1"
+    assertion_kind: str | None = None
+    target_ref: JsonObject | None = None
 
 
 class CandidateAggregator:
@@ -91,8 +95,8 @@ class CandidateAggregator:
     def _make_key(self, candidate: CandidateEnvelope) -> CandidateKey:
         return CandidateKey(
             candidate_kind=candidate.candidate_kind,
-            target_ref=candidate.value_factors.get("target_ref", "unknown"),
-            proposed_value=str(candidate.proposed_value),
+            target_ref=json.dumps(candidate.target_ref or candidate.value_factors.get("target_ref", "unknown"), sort_keys=True, separators=(",", ":")),
+            proposed_value=json.dumps(candidate.proposed_value, sort_keys=True, separators=(",", ":")),
         )
 
     def _merge_candidates(
