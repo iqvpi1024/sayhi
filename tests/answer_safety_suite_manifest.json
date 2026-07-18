@@ -15,6 +15,13 @@
   "latest_verification_result_path": null,
   "latest_verification_manifest_sha256": null,
   "latest_verification_result_sha256": null,
+  "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/a1-ws02-2375fc7-20260718.json",
+      "reason": "Suite preflight validator changed after this result and invalidated its bound artifact set."
+    }
+  ],
   "baseline": {
     "product_path": "PRDv05.md",
     "product_version": "0.5",
@@ -70,7 +77,7 @@
     {
       "role": "suite_preflight_validator",
       "path": "tools/validate_answer_safety_suite.py",
-      "sha256": "5341eed62a8fe57fb5c2471b077b35ae060c5588b88959ae19e4952405d5fe61"
+      "sha256": "ccb72cb52ed607bc616d11cbae17ced0ccfa4852d128c44b983a743a40b88510"
     }
   ],
   "artifact_digest_strategy": {

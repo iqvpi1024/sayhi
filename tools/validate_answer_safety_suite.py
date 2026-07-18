@@ -188,20 +188,34 @@ def all_source_refs(value: Any) -> Iterable[Mapping[str, Any]]:
 def validate_manifest(v: Validation, manifest: Mapping[str, Any]) -> None:
     v.equal(manifest.get("suite_id"), "mvp_a_answer_safety_v1", "suite_id")
     v.equal(manifest.get("slice_id"), "SLICE-MVP-A-ANSWER-SAFETY-001", "slice_id")
-    v.equal(
-        manifest.get("flags"),
-        {
-            "suite_defined": True,
-            "suite_materialized": True,
-            "suite_executed": False,
-            "suite_passed": False,
-        },
-        "suite flags",
-    )
+    materialized_flags = {
+        "suite_defined": True, "suite_materialized": True,
+        "suite_executed": False, "suite_passed": False,
+    }
+    passed_flags = {
+        "suite_defined": True, "suite_materialized": True,
+        "suite_executed": True, "suite_passed": True,
+    }
+    flags = manifest.get("flags")
+    v.require(flags in (materialized_flags, passed_flags), "suite flags")
     v.equal(manifest.get("suite_artifact_state"), "materialized", "artifact state")
-    v.equal(manifest.get("latest_verification_result"), "not_executed", "verification state")
-    v.equal(manifest.get("latest_run_applicability"), "not_applicable", "run applicability")
-    v.equal(manifest.get("latest_verification_result_path"), None, "result path before execution")
+    if flags == materialized_flags:
+        v.equal(manifest.get("latest_verification_result"), "not_executed", "verification state")
+        v.equal(manifest.get("latest_run_applicability"), "not_applicable", "run applicability")
+        v.equal(manifest.get("latest_verification_result_path"), None, "result path before execution")
+    elif flags == passed_flags:
+        result_path = manifest.get("latest_verification_result_path")
+        v.require(isinstance(result_path, str) and (ROOT / result_path).is_file(), "current result path")
+        v.equal(manifest.get("latest_verification_result"), "passed", "verification state")
+        v.equal(manifest.get("latest_run_applicability"), "current", "run applicability")
+        if isinstance(result_path, str) and (ROOT / result_path).is_file():
+            result = load_json(ROOT / result_path)
+            v.equal(result.get("run_result"), "passed", "current result run state")
+            v.equal(result.get("exit_code"), 0, "current result exit code")
+            v.equal(len(result.get("required_results", [])), 35, "current required result count")
+            v.require(all(item.get("individual_test_result") == "passed" for item in result.get("required_results", [])), "current required results")
+            v.equal(result.get("manifest_sha256"), manifest.get("latest_verification_manifest_sha256"), "result manifest binding")
+            v.equal(sha256_file(ROOT / result_path), manifest.get("latest_verification_result_sha256"), "result raw hash")
     baseline = manifest.get("baseline", {})
     v.equal(baseline.get("product_path"), "PRDv05.md", "product path")
     v.equal(
@@ -230,7 +244,8 @@ def validate_manifest(v: Validation, manifest: Mapping[str, Any]) -> None:
     v.equal(manifest.get("required_upstream_test_refs"), upstream, "required upstream refs")
     v.equal(manifest.get("required_upstream_count"), 24, "required upstream count")
     v.equal(manifest.get("required_result_count"), 35, "required result count")
-    v.equal(manifest.get("implementation_module"), "TBD", "pre-implementation module")
+    expected_module = "TBD" if flags == materialized_flags else "src/noetide_micro/answers.py"
+    v.equal(manifest.get("implementation_module"), expected_module, "implementation module")
     privacy = manifest.get("privacy", {})
     v.equal(
         privacy,
