@@ -24,8 +24,9 @@
     {"role": "adapter_protocol", "path": "tests/runner/b2_episode_summary_adapter_protocol.py", "sha256": "32343c425015d2d0f7606c4c114d57a02c1158ca001fe654ef8be994452eab84"},
     {"role": "business_test_module", "path": "tests/semantic/test_b2_episode_summary_contract.py", "sha256": "60a0c50187fc920a1ed5817835197e3b9dacfffd392c728011470862c94365bf"},
     {"role": "storage_tests", "path": "tests/semantic/test_b2_task_001_store.py", "sha256": "81cf4ab18661b152ea33e5220a032601cccc356e800542c691786a06f02c52bc"},
+    {"role": "episode_changeset_tests", "path": "tests/semantic/test_b2_task_002_episodes.py", "sha256": "df7d5542c7579f7bf809fcc3d9762f3548cf2c7040ac148e2e171f15eba5efaf"},
     {"role": "offline_runner", "path": "tests/runner/run_b2_suite.py", "sha256": "04771fc0fb705fecc384637407860e44cd5cc081cdb3335c146352e610b40d40"},
-    {"role": "suite_preflight_validator", "path": "tools/validate_b2_suite.py", "sha256": "19a3e16a9517c7fc227c1d85b687af9c50be109a397302d67427aa9d0cc4428e"}
+    {"role": "suite_preflight_validator", "path": "tools/validate_b2_suite.py", "sha256": "4319edad3fe41387a898ce7db663509d12176e05a9b6e4971f507853f071f83b"}
   ],
   "privacy": {"synthetic_only": true, "external_network": false, "workspace_external_reads": false, "real_personal_data": false}
 }

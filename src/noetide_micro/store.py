@@ -322,6 +322,12 @@ class SemanticStore:
             "source_refs": refs,
         }
 
+    def delete_episode_record(self, episode_id: str) -> None:
+        self._connection.execute("DELETE FROM episode_source_refs WHERE episode_id = ?", (episode_id,))
+        cursor = self._connection.execute("DELETE FROM episodes WHERE episode_id = ?", (episode_id,))
+        if cursor.rowcount != 1:
+            raise KeyError(episode_id)
+
     def put_summary_projection(
         self,
         projection_id: str,
