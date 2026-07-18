@@ -1,5 +1,5 @@
 from __future__ import annotations
-import argparse,json,socket,sys,unittest
+import argparse,hashlib,json,platform,socket,sqlite3,subprocess,sys,unittest,uuid
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +21,8 @@ def main():
   suite=unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromName("tests.semantic.test_c1_boundaries"),unittest.defaultTestLoader.loadTestsFromName("tests.semantic.test_c1_changesets")]);r=Result();suite.run(r)
  finally:socket.socket,socket.create_connection=old,connect
  rows=[{"test_id":x,**r.rows.get(x,{"individual_test_result":"errored","detail":"missing"})} for x in REQUIRED];ok=all(x["individual_test_result"]=="passed" for x in rows)
- out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps({"suite_id":"c1_decision_outcome_v1","network":"blocked","exit_code":0 if ok else 1,"run_result":"passed" if ok else "failed","required_results":rows},indent=2)+"\n",encoding="utf-8")
+ manifest=ROOT/"tests/c1_suite_manifest.json"
+ artifact={"schema_version":"noetide.c1-run-result.v1","run_id":f"c1-{uuid.uuid4().hex}","suite_id":"c1_decision_outcome_v1","manifest_sha256":hashlib.sha256(manifest.read_bytes()).hexdigest(),"git_commit":subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,capture_output=True,text=True).stdout.strip(),"environment":{"platform":platform.platform(),"python":platform.python_version(),"sqlite":sqlite3.sqlite_version,"network":"blocked","dependencies":"stdlib_only"},"command":["python","-m","tests.runner.run_c1_suite",*sys.argv[1:]],"exit_code":0 if ok else 1,"run_result":"passed" if ok else "failed","required_results":rows}
+ out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(artifact,indent=2)+"\n",encoding="utf-8")
  print(f"{'passed' if ok else 'failed'}: {len(rows)} C1 scenarios");return 0 if ok else 1
 if __name__=="__main__":raise SystemExit(main())
