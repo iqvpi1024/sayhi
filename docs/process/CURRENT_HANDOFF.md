@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: remediation_runtime_cli
+current_phase: remediation_candidate_review
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,15 +14,15 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-03
+current_workstream: WS-04
 current_workstream_status: in_progress
 next_role: Implementer
-next_single_action: WS-03_production_runtime_and_cli
+next_single_action: WS-04_b1_candidate_review_contract_and_implementation
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
 git_branch: codex/kimi-end-to-end-release-candidate
-git_head: 0ae4c7e
+git_head: b8910c7
 suite_status:
   micro_current: passed_at_6dd4288
   a1_current: passed_at_85240c5
@@ -44,7 +44,7 @@ stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 ## 当前事实
 
 - `AUDIT-NOETIDE-IMPL-20260718-001` 的 P1=11、P2=5 是当前纠偏输入；不得将旧 Gate 或历史 result 当成关闭证据。
-- 当前 `changesets.py` 有未提交、未验证的 WS-01 实验改动。它既不是完成证据，也不得被静默丢弃。
+- `WS-03` 已在干净 Python 3.12 venv 从本地安装验证模块入口和 console script；CLI 不导入 testing adapter 或仓库 tests 路径。
 - `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 和 `tests/results/` 是用户未跟踪内容；不得读取、修改或提交。
 
 ## WS-00 / WS-01 结果
@@ -54,4 +54,4 @@ stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 3. 当前未提交代码改动与其验证状态明确可追溯。
 4. 当前 required suite 的 `defined/materialized/executed/passed` 四态与真实执行一致。
 
-以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。下一步只能开始 `WS-03`，不得把 Micro/A1 结果外推到 B1、C1、ingestion、portability 或部署。
+以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。`WS-03` 的 clean-venv package/CLI 验证已通过。下一步只能开始 `WS-04`，不得把 Micro/A1/CLI 结果外推到 B1、C1、ingestion、portability 或部署。
