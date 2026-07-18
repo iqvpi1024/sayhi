@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `remediation_packaging` |
+| 当前阶段 | `blocked_product_decisions_after_ws09` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -69,10 +69,11 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 - B1 进入实现前必须裁决 `DQ-002`、`DQ-011`；它们不能由实施代码、fixture 或默认配置替代产品决定。
 - C1 进入实现前必须裁决 `DQ-006` 且 B1 完成；其现有 Draft 文档和内存原型不构成业务编码授权。
 - 公开发布和正式许可证选择受 `DQ-005` 限制；当前只允许本地合成 D0/D1，不得声称普通用户安装包或 GitHub Release。
+- `WS09-GAP-20260718-001` 已确认：当前可执行 suite/packaging 均有真实证据，但 B1/C1 没有合法 materialized suite，完整 RC suite 无法运行。
 - 关键交付风险是 P1 的合同链、事务边界、验证绑定和部署真实性，而不是缺少更多功能。
 - 当前 CLI 只接受显式包内合成 demo Source；这不是对真实 ingestion 的实现声明。
 - 未读取工作区外数据；本轮不读取、不修改用户私有未跟踪文件。
 
 ## 7. 下一步唯一建议动作
 
-**执行 `WS-09` 当前可运行验证并形成 gap 记录：重跑所有可物化的 suite、CLI、package、privacy 与恢复检查；B1/C1 required suite 必须诚实标记 blocked，不能拼接或伪造完整 RC 通过。**
+**产品负责人裁决 `DQ-002`、`DQ-011`、`DQ-006`；裁决后重建 B1/C1 的 Approved contract 链并继续 WS-04/WS-05。`DQ-005` 在 D2/D3 公开发布前裁决。**

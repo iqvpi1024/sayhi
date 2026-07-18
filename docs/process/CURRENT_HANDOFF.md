@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: verification_gap_assessment
+current_phase: blocked_product_decisions_after_ws09
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,10 +14,10 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-09
-current_workstream_status: partial_verification_pending
+current_workstream: product_decision_gate
+current_workstream_status: blocked
 next_role: Implementer
-next_single_action: WS-09_current_suite_and_gap_verification
+next_single_action: product_owner_decide_dq_002_dq_011_dq_006
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
@@ -38,6 +38,10 @@ scope_out:
   - real personal data and any workspace-external reads
   - user untracked private files
   - push, main merge, formal tag, GitHub Release, and public release
+blockers:
+  - DQ-002 and DQ-011 block B1 Candidate Review
+  - DQ-006 and B1 completion block C1 Decision-Outcome
+  - DQ-005 blocks D2/D3 public release and final license selection
 stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 ```
 
@@ -54,4 +58,4 @@ stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 3. 当前未提交代码改动与其验证状态明确可追溯。
 4. 当前 required suite 的 `defined/materialized/executed/passed` 四态与真实执行一致。
 
-以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。`WS-03` 的 clean-venv package/CLI 验证已通过。`WS-06` 的 durable importer 已由提交 `2d689ea` 上的 official runner 验证 4/4 required IDs；其 manifest、fixture、oracle、测试模块、runner、validator 和 immutable result 均绑定。`WS-07` 已由提交 `f27d686` 上的 official runner 验证 6/6 private synthetic Context Pack 场景。B1 因 `DQ-002`、`DQ-011` 暂停；C1 因 `DQ-006`、B1 依赖和 Draft Plan 暂停。下一步独立处理 `WS-08`，不得借包装工作实现受阻业务语义。
+以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。`WS-03` 的 clean-venv package/CLI 验证已通过。`WS-06` 的 durable importer 已由提交 `2d689ea` 上的 official runner 验证 4/4 required IDs；其 manifest、fixture、oracle、测试模块、runner、validator 和 immutable result 均绑定。`WS-07` 已由提交 `f27d686` 上的 official runner 验证 6/6 private synthetic Context Pack 场景。`WS-08` 已在提交 `aeddff6` 验证 D0/D1 local wheel 安装、smoke 与重装。`WS09-GAP-20260718-001` 记录 B1/C1 产品门禁阻止完整 RC 验证；下一步只能等待产品裁决，不得借包装或审计越过它们。
