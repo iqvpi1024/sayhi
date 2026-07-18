@@ -18,7 +18,7 @@
     {"role": "boundary_test_module", "path": "tests/semantic/test_c1_boundaries.py", "sha256": "b8c6def0049b4f6970d900a0a19bbd5b054e21dfc3c878bf62a6990695ad55fc"},
     {"role": "changeset_test_module", "path": "tests/semantic/test_c1_changesets.py", "sha256": "ee27661f3f5018bb447bb5c4b82d83671fadd2ea545ba5ea3e15036a8558ebe0"},
     {"role": "integration_test_module", "path": "tests/semantic/test_c1_decision_outcome.py", "sha256": "f1408d859dbe1c00c773dea31640a6283e5f05ee5597dabf60b69498b91a1ff0"},
-    {"role": "offline_runner", "path": "tests/runner/run_c1_suite.py", "sha256": "7098f468caf2c0f52c057624ddbcead96ac2616b7f9a981e70d2948717a2998a"},
+    {"role": "offline_runner", "path": "tests/runner/run_c1_suite.py", "sha256": "8b5422006df583c7400b096a7e9ec3610ff5a42920bff34368608df74da20e35"},
     {"role": "suite_preflight_validator", "path": "tools/validate_c1_suite.py", "sha256": "9bdad30ed659e777dc6063673983cecf5ad9a3e21eee32b0471f185aae3693a0"}
   ],
   "privacy": {"synthetic_only": true, "external_network": false, "workspace_external_reads": false, "real_personal_data": false}

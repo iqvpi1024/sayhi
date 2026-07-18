@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import platform
+import re
 import socket
 import sqlite3
 import subprocess
@@ -27,7 +28,12 @@ def blocked(*args: Any, **kwargs: Any) -> Any:
 
 
 def scenario_id(test: unittest.case.TestCase) -> str:
-    return getattr(getattr(test, test._testMethodName), "_noetide_scenario_id", "unknown")
+    method = getattr(test, test._testMethodName)
+    declared = getattr(method, "_noetide_scenario_id", None)
+    if isinstance(declared, str):
+        return declared
+    match = re.fullmatch(r"test_(c1_\d{3})_.*", test._testMethodName)
+    return match.group(1).upper().replace("_", "-") if match else "unknown"
 
 
 class Result(unittest.TestResult):
