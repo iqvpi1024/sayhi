@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: audit_ready_release_candidate
+current_phase: verifying_release_candidate
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,22 +14,22 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-12
-current_workstream_status: ready_for_independent_audit
-next_role: Independent Auditor
-next_single_action: independent_final_audit
+current_workstream: WS-11
+current_workstream_status: verification_evidence_being_rebound
+next_role: Release Candidate Verifier
+next_single_action: run_static_cli_packaging_and_recovery_verification
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
 git_branch: codex/kimi-end-to-end-release-candidate
-git_head: d7f8bf0
+git_head: 0452a0c
 suite_status:
-  micro_current: passed_at_6dd4288
-  a1_current: passed_at_85240c5
-  b1_current: passed_at_b068e8c
-  c1_current: passed_at_927f7be
-  synthetic_ingestion_current: passed_at_2d689ea
-  portability_current: passed_at_f27d686
+  micro_current: passed_at_a603085
+  a1_current: passed_at_a603085
+  b1_current: passed_at_a603085
+  c1_current: passed_at_0452a0c
+  synthetic_ingestion_current: passed_at_a603085
+  portability_current: passed_at_a603085
 scope_in:
   - WS-00 through WS-12 under PLAN-NOETIDE-E2E-RC-001
   - continuous development, testing, Kimi internal audit, debug, full regression, and Kimi re-review
@@ -47,6 +47,7 @@ stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 
 - `AUDIT-NOETIDE-IMPL-20260718-001` 的 P1=11、P2=5 是当前纠偏输入；不得将旧 Gate 或历史 result 当成关闭证据。
 - `WS-03` 已在干净 Python 3.12 venv 从本地安装验证模块入口和 console script；CLI 不导入 testing adapter 或仓库 tests 路径。
+- C1 已补齐可执行 fixture、oracle、artifact binding 和 validator；它只证明批准的 7 个合成场景，不扩大 MVP-C 产品范围。
 - `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 和 `tests/results/` 是用户未跟踪内容；不得读取、修改或提交。
 
 ## WS-00 / WS-01 结果

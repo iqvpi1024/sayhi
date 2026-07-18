@@ -1,0 +1,438 @@
+{
+  "schema_version": "noetide.micro-run-result.v1",
+  "run_id": "micro-20260718T140755Z-39141d34",
+  "suite_id": "micro_mvp_relationship_state_v3",
+  "suite_artifact_version": "1.0.0",
+  "manifest_sha256": "29644fbff7a90fd73aa575bf16fe2143940bee35af356a2e24a65d73b3068bc9",
+  "applicability": "current",
+  "started_at": "2026-07-18T14:07:55.172010Z",
+  "finished_at": "2026-07-18T14:07:56.756933Z",
+  "git_commit": "a60308566031cec53abe85f55d020cd05f5241e0",
+  "implementation_adapter": "noetide_micro.testing_adapter",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "dependencies": "stdlib_only",
+    "network": "blocked",
+    "business_clock": "fixture_injected",
+    "timezone": "fixture_injected",
+    "locale": "zh-CN",
+    "random_seed": 0
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_micro_suite",
+    "--adapter",
+    "noetide_micro.testing_adapter",
+    "--output",
+    "docs/testing/results/micro-ws12-a603085-pyspath-20260718.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "MM-001",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-001"
+      ]
+    },
+    {
+      "test_id": "MM-002",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-002"
+      ]
+    },
+    {
+      "test_id": "MM-003",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-003"
+      ]
+    },
+    {
+      "test_id": "MM-004",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-004"
+      ]
+    },
+    {
+      "test_id": "MM-005",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-005"
+      ]
+    },
+    {
+      "test_id": "MM-006",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-006"
+      ]
+    },
+    {
+      "test_id": "MM-007",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-007"
+      ]
+    },
+    {
+      "test_id": "MM-008",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-008"
+      ]
+    },
+    {
+      "test_id": "MM-009",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-009"
+      ]
+    },
+    {
+      "test_id": "MM-010",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-010"
+      ]
+    },
+    {
+      "test_id": "BTE-AT-001",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002",
+        "MM-004"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002",
+        "MM-004",
+        "MM-006"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-017",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-027",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-006"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-029",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-034",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-002",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-003",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-004"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-004",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-004"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-007"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-008",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-013",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-005"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-014",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-005",
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-016",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-017",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-008"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-018",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-008"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-019",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-008"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-021",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-022",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-024",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-030",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-031",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-001",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-006",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-029",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-030",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "PAP-AT-029",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "PAP-AT-030",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SHP-AT-002",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SHP-AT-004",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SHP-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002",
+        "MM-007"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-004",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-013",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-014",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-007"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-015",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-006"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-026",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-027",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    }
+  ],
+  "privacy_scan": {
+    "status": "passed",
+    "scope": "synthetic fixture and structured result fields",
+    "matched_patterns": []
+  }
+}

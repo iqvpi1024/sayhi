@@ -139,3 +139,19 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | PRD Requirement | Workstream Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
 | `FR-303` | JSON/Markdown/Source/Ledger/manifest/checksums、unknown extension semantic round-trip、hash/path rejection | S7 §5-§16；S9 §5、§13-§14 | `CP-001/002/003/004/005/006` | `src/noetide_micro/portability.py`、`src/noetide_micro/store.py` | `context-pack-ws07-f27d686-20260718.json: 6/6 passed/current` |
+
+## 4.4 Workstream：WS-04 B1 Candidate Review
+
+此窄范围只验证候选持久化、保守预算、审查审计和 critical 优先级；不将候选升级为 Canonical 事实。
+
+| Requirement Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|
+| `FR-101`、`FR-102` 的 B1 合成子集 | S5 §5-§10 | `B1-001/002/003/004/005` | `src/noetide_micro/b1.py`、`candidate_aggregator.py`、`review_budget.py` | `b1-ws12-a603085-pyspath-20260718.json: 5/5 passed/current` |
+
+## 4.5 Workstream：WS-05 C1 Decision/Outcome
+
+此窄范围只验证固定合成 Decision、Outcome 与 predicted Assertion 的 ChangeSet 写入边界；它不代表完整 MVP-C 决策室或 `DQ-006` 已裁决。
+
+| Requirement Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|
+| `FR-202`、`FR-204` 的 C1 合成子集 | S1 §5.2、§6.4、§6.9；S3 §5-§9 | `C1-001/002/003/004/005/006/007` | `src/noetide_micro/c1.py`、`decision.py`、`outcome.py`、`scenario.py` | `c1-ws12-0452a0c-pyspath-20260718.json: 7/7 passed/current` |

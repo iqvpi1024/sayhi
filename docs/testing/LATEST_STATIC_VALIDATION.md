@@ -1,5 +1,11 @@
 # 最近静态与规划门禁验证结果
 
+## 当前记录：RC evidence rebind（2026-07-18）
+
+在 `0452a0c` 的后续证据工作树上，以下静态命令均实际返回 exit code `0`：`validate_micro_suite.py`、`validate_answer_safety_suite.py`、`validate_b1_suite.py`、`validate_c1_suite.py`、`validate_synthetic_ingestion_suite.py`、`validate_context_pack_suite.py`、`validate_product_baseline.ps1`、`validate_spec_baseline.ps1` 与 `git diff --check`。
+
+这组命令只证明 manifest、artifact hash、PRD/SPEC 基线和 Markdown/隐私静态约束；业务 suite 结果分别由各自 manifest 指向的 immutable JSON 证明，不能由本节替代。下文为历史记录，保留但不覆盖当前 `PROJECT_STATE.md` 和 `CURRENT_HANDOFF.md`。
+
 ## 0. 当前结果：WS-06 Synthetic Ingestion Verified
 
 2026-07-18 +08:00，在 `2d689ea569b0eac8ac1163c9536030628741cd50` 上执行（结果与状态文件待后续证据提交）：

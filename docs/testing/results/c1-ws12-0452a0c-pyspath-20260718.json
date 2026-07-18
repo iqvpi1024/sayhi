@@ -1,0 +1,97 @@
+{
+  "schema_version": "noetide.c1-run-result.v1",
+  "run_id": "c1-af766b833a934108b3abf59da48113d8",
+  "suite_id": "c1_decision_outcome_v1",
+  "manifest_sha256": "b033eb1fc5e5027a328f5a2178aa3c1970170b031372375788e48957e2f27c53",
+  "git_commit": "0452a0c7d68f0bd25162caff3bae67a88b10b763",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_c1_suite",
+    "--output",
+    "docs/testing/results/c1-ws12-0452a0c-pyspath-20260718.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "C1-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/c1_decision_outcome_v1/fixture.json",
+      "sha256": "08888ac9d18fc4fa37b308975a929d51da8e914321e6eb66cb01e526f8aabce0"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/c1_decision_outcome_v1/oracles.json",
+      "sha256": "a5a9107203048b1658d415fd02275f327eea772edbcafc01674f76413f5b7aab"
+    },
+    {
+      "role": "boundary_test_module",
+      "path": "tests/semantic/test_c1_boundaries.py",
+      "sha256": "b8c6def0049b4f6970d900a0a19bbd5b054e21dfc3c878bf62a6990695ad55fc"
+    },
+    {
+      "role": "changeset_test_module",
+      "path": "tests/semantic/test_c1_changesets.py",
+      "sha256": "ee27661f3f5018bb447bb5c4b82d83671fadd2ea545ba5ea3e15036a8558ebe0"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_c1_suite.py",
+      "sha256": "76d11429df8bb35cdef976f7cb55bdaf53e84a244fd95ea2b4b0f737e0a48a39"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c1_suite.py",
+      "sha256": "d7281e32caa68090094babebfbc845a5d91b1bef8af05a99ffd8c2612af5622a"
+    }
+  ],
+  "privacy_scan": {
+    "status": "passed",
+    "matched_patterns": []
+  }
+}

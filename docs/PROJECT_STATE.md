@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `audit_ready_release_candidate` |
+| 当前阶段 | `verifying_release_candidate` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -20,7 +20,7 @@
 | 最终独立审计 | Codex；在 Kimi 内部审计、Debug、全量回归和复审之后 |
 | 正式发布权限 | 禁止推送、合并 `main`、正式 tag、GitHub Release |
 | 当前 Git 分支 | `codex/kimi-end-to-end-release-candidate` |
-| 当前 Git HEAD | `f787625`（C1 official runner 的被测提交；下一次状态提交前） |
+| 当前 Git HEAD | `0452a0c`（C1 suite contract 提交；状态/结果证据提交前） |
 | 工作树 | 用户未跟踪的 `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交 |
 
 ## 3. 真实进度
@@ -29,26 +29,26 @@
 2. `AUDIT-NOETIDE-IMPL-20260718-001` 发现 P0=0、P1=11、P2=5；项目不是可用 Release Candidate，不能声称一键部署、全量验证或公开发布已完成。
 3. `DEC-E2E-EXEC-001`、完整审计、纠偏施工计划和实施提示词已提交于 `0ae4c7e`。
 4. `WS-00` 已完成：动态入口、Matrix、Micro/A1 manifest 和历史 result applicability 已复位为一致的真实状态。
-5. `WS-01` 已完成：提交 `6dd4288` 上的 official Micro runner 生成 `micro-ws01-6dd4288-20260718.json`，49/49 required IDs、exit code `0` 和合成隐私扫描均通过。
-6. `WS-02` 已完成：提交 `85240c5` 上的 official A1 runner 生成 `a1-ws02-85240c5-20260718.json`，35/35 required IDs、artifact binding 与合成隐私扫描均通过。
+5. `WS-01` 的 current regression 已在 `a603085` 重跑：`micro-ws12-a603085-pyspath-20260718.json` 为 49/49 passed。一次未设置 README 所要求 `PYTHONPATH` 的执行 errored，保留为独立失败证据，未被覆盖。
+6. `WS-02` 的 current regression 已在 `a603085` 重跑：`a1-ws12-a603085-pyspath-20260718.json` 为 35/35 passed。
 7. `WS-03` 已完成：提交 `b8910c7` 的包在干净 Python 3.12 venv 从本地安装后，模块入口和 `noetide.exe` 均实际完成合成 Micro 链路；任意文本 intake 被拒绝并返回 exit code `2`。
-8. `WS-06` 已完成：提交 `d7f8bf0` 修复 Source append 耐久性，提交 `2d689ea` 上 official Synthetic Ingestion runner 生成 `synthetic-ingestion-ws06-2d689ea-20260718.json`；4/4 required IDs、exit code `0`、artifact binding 和受阻断网络环境均通过。此前 `2939453` 结果因 validator 工件变更保留为 `superseded`，未被伪装为 current。
-9. `WS-07` 已完成最小私有合成 Context Pack：提交 `f27d686` 上 official runner 生成 `context-pack-ws07-f27d686-20260718.json`；6/6 required IDs、exit code `0`、manifest/fixture/oracle/测试模块/runner/validator binding 均通过。范围仅为私有合成导出、hash/path verifier 和 dry-run round-trip；不包含真实导入、分享导出或 sealed runtime。
+8. `WS-06` 的 current regression 已在 `a603085` 重跑：`synthetic-ingestion-ws12-a603085-pyspath-20260718.json` 为 4/4 passed；此前结果保留为 `superseded`。
+9. `WS-07` 的 current regression 已在 `a603085` 重跑：`context-pack-ws12-a603085-pyspath-20260718.json` 为 6/6 passed。范围仍仅为私有合成导出、hash/path verifier 和 dry-run round-trip。
 10. `WS-08` 已完成 D0/D1 级本地合成安装入口：提交 `aeddff6` 上通过干净 venv、local wheel build、module/console smoke、卸载及重装；真实记录为 `packaging-ws08-aeddff6-20260718.json`。已移除未经裁决的 MIT classifier；D2/D3、签名、用户安装包和公开发布仍 blocked。
 
 ## 4. 当前质量状态
 
 | 项目 | 真实状态 |
 |---|---|
-| Micro L1 原子性与 `CS-AT-031` | current official runner 49/49 passed；P1 已关闭 |
-| A1 current manifest/result binding | current official runner 35/35 passed；P1 已关闭 |
+| Micro L1 原子性与 `CS-AT-031` | `a603085` official runner 49/49 passed；manifest 指向该 result |
+| A1 current manifest/result binding | `a603085` official runner 35/35 passed；manifest 指向该 result |
 | Production runtime / CLI / README | 包内合成 demo 在干净 venv 已验证；完整 Context Pack 与一键脚本仍后置 |
-| B1 Candidate Review | current B1 suite 5/5 passed：持久化候选、保守预算、审查审计均已验证；不自动写入 Canonical |
-| C1 Decision/Outcome | current C1 suite 7/7 passed；runtime/CLI 已提供固定合成 Decision、Outcome、Scenario 路径 |
-| Synthetic Ingestion | current suite executed/passed；4/4 required IDs 的 immutable result 已被 manifest 绑定；一份先前结果保留为 `superseded` |
-| Context Pack | private synthetic narrow contract current suite 6/6 passed；完整 S7/S9 长期范围仍未实现 |
+| B1 Candidate Review | `a603085` suite 5/5 passed；持久化候选、保守预算、审查审计均已验证；不自动写入 Canonical |
+| C1 Decision/Outcome | C1 manifest/fixture/oracle/runner/validator 已补齐；`0452a0c` suite 7/7 passed |
+| Synthetic Ingestion | `a603085` 4/4 passed；manifest 已绑定该 immutable result |
+| Context Pack | `a603085` 6/6 passed；完整 S7/S9 长期范围仍未实现 |
 | Packaging / Windows one-click | D0/D1 synthetic local demo 已验证；D2/D3 与公开发布仍未实现且受 `DQ-005` 限制 |
-| 当前完整 RC suite | 临时全量回归已通过；待 current commit 的最终不可变结果和复审 |
+| 当前完整 RC suite | 已有独立 suite run；待完成状态提交后的静态、CLI、packaging 与 Recovery Record 复验 |
 
 ## 5. 执行链与停止边界
 
@@ -66,14 +66,12 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 6. 未决问题与风险
 
-- B1 进入实现前必须裁决 `DQ-002`、`DQ-011`；它们不能由实施代码、fixture 或默认配置替代产品决定。
-- C1 进入实现前必须裁决 `DQ-006` 且 B1 完成；其现有 Draft 文档和内存原型不构成业务编码授权。
 - 公开发布和正式许可证选择受 `DQ-005` 限制；当前只允许本地合成 D0/D1，不得声称普通用户安装包或 GitHub Release。
-- `WS09-GAP-20260718-001` 已确认：当前可执行 suite/packaging 均有真实证据，但 B1/C1 没有合法 materialized suite，完整 RC suite 无法运行。
-- 关键交付风险是 P1 的合同链、事务边界、验证绑定和部署真实性，而不是缺少更多功能。
+- C1 的 fixture/oracle 仅覆盖当前 7 个固定合成场景；它不等于完整 MVP-C 决策室，也不扩张 `DQ-006`。
+- 当前完整 RC 仍缺状态提交后的安装/一键脚本复验与独立最终审计；不得将本轮 suite run 描述成公开发布资格。
 - 当前 CLI 只接受显式包内合成 demo Source；这不是对真实 ingestion 的实现声明。
 - 未读取工作区外数据；本轮不读取、不修改用户私有未跟踪文件。
 
 ## 7. 下一步唯一建议动作
 
-**由独立审计者执行最终审计；不得推送、合并 main、创建正式 tag 或 GitHub Release。**
+**完成当前 RC 基线的静态、CLI、clean-venv 和一键演示复验，并形成 Recovery Record；不得推送、合并 main、创建正式 tag 或 GitHub Release。**

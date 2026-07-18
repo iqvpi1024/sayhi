@@ -12,10 +12,15 @@
   "suite_artifact_state": "materialized",
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/micro-ws01-6dd4288-20260718.json",
-  "latest_verification_manifest_sha256": "18f8d6eea7c50da11b9d9d9e59d1b940cfc55c7a5970dfaa4e01fda08fe718d2",
-  "latest_verification_result_sha256": "e73701a1363d65a1a591cb524da53ef59c2df876d62531206a3db9f210b78386",
+  "latest_verification_result_path": "docs/testing/results/micro-ws12-a603085-pyspath-20260718.json",
+  "latest_verification_manifest_sha256": "29644fbff7a90fd73aa575bf16fe2143940bee35af356a2e24a65d73b3068bc9",
+  "latest_verification_result_sha256": "9c4c35727878384a135d383b35fa71ce3a24a77da2d001b5c8578dda4c8a569e",
   "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/micro-ws01-6dd4288-20260718.json",
+      "reason": "A later shared-runtime commit was independently rerun at a603085 before this result became current."
+    },
     {
       "applicability": "superseded",
       "path": "docs/testing/results/micro-task009-lf-20260717.json",

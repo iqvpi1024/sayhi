@@ -1,6 +1,6 @@
 # 可执行测试目录
 
-本目录用于保存机器可运行的 fixture、semantic tests 和 integration tests。exact Micro suite 已物化、执行并通过；A1 suite 尚未定义或物化。
+本目录用于保存机器可运行的 fixture、semantic tests 和 integration tests。Micro、A1、B1、C1、Synthetic Ingestion 与 Context Pack 都有独立 manifest；每个 suite 的 current result 必须由自身 manifest 指向，历史 result 不得冒充 current。
 
 规则：
 
@@ -19,6 +19,6 @@
 - `integration/`：当前切片端到端、失败注入和撤销测试。
 - `runner/`：离线 runner、结果聚合和实现适配器协议。
 
-权威 manifest：`tests/micro_suite_manifest.json`。
+权威 manifest 位于 `tests/*_suite_manifest.json`；没有单一 manifest 可替代其余 suite 的 required 集。
 
 物化门禁见 `docs/testing/SUITE_MATERIALIZATION_CHECKLIST.md`。

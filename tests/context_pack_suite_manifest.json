@@ -4,9 +4,10 @@
   "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/context-pack-ws07-f27d686-20260718.json",
-  "latest_verification_manifest_sha256": "a1dcd5626eebd1ab50af9cd19b08b8808c8de4c7518d606767e8926454343deb",
-  "latest_verification_result_sha256": "6ccea61e7811a4476e69dd23e4c48b4dcd1058f6adf1f39187384ce703aedd68",
+  "latest_verification_result_path": "docs/testing/results/context-pack-ws12-a603085-pyspath-20260718.json",
+  "latest_verification_manifest_sha256": "506ba7df4bf3206085eb231cecb4b8eb69c6eb2d5738a37666ab544e55536140",
+  "latest_verification_result_sha256": "223af1c01d0680d2975c1805fb94bb3f7ed9d0ea234f16dee54c5626cd4fc5e9",
+  "historical_verification_results": [{"applicability": "superseded", "path": "docs/testing/results/context-pack-ws07-f27d686-20260718.json", "reason": "A later shared-runtime commit was independently rerun at a603085 before this result became current."}],
   "required_scenario_ids": ["CP-001", "CP-002", "CP-003", "CP-004", "CP-005", "CP-006"],
   "artifacts": [
     {"role": "fixture", "path": "tests/fixtures/context_pack_v1/fixture.json", "sha256": "f5cbae3dd184c0d16c08c9f3ca408cb85a33ea6a890f55de025b58cfdfc38e50"},

@@ -12,10 +12,15 @@
   "suite_artifact_state": "materialized",
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/a1-ws02-85240c5-20260718.json",
-  "latest_verification_manifest_sha256": "ee5190070652b342b6c39f8371de37fa557c9125be02263f02f160899b0da01b",
-  "latest_verification_result_sha256": "f6aa2440df0fcdf76970881a45847a70f55c4c40c5cd88919838b6fc7ed6b7e5",
+  "latest_verification_result_path": "docs/testing/results/a1-ws12-a603085-pyspath-20260718.json",
+  "latest_verification_manifest_sha256": "66ae60d3cdfaac5ac2006ddd5aae9375cd30a3f6f94e7601cc4c80789b460a72",
+  "latest_verification_result_sha256": "598899384b09fb13cf4e470244b194f040dfd94a88bf808bb3854679882d3812",
   "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/a1-ws02-85240c5-20260718.json",
+      "reason": "A later shared-runtime commit was independently rerun at a603085 before this result became current."
+    },
     {
       "applicability": "superseded",
       "path": "docs/testing/results/a1-ws02-2375fc7-20260718.json",
