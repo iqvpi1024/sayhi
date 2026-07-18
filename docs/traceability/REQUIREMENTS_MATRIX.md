@@ -162,6 +162,6 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-103` | fixed synthetic Episode candidate/publish、day/phase Derived summary、stale/rebuild/Derived-evidence rejection | `SPEC-B2-EPISODE-SUMMARY-001` §4-§19；S1 §5/§6；S2 §9-§14；S3 §6/§8/§14；S5 §6/§11；S6 §4-§14；S7 §7 | `B2-001/002/003/004/005/006/007/008` | `store.py`、`episodes.py` completed; `summaries.py` pending | `B2-TASK-001/002 directed tests passed; B2 official suite not_executed` |
+| `FR-103` | fixed synthetic Episode candidate/publish、day/phase Derived summary、stale/rebuild/Derived-evidence rejection | `SPEC-B2-EPISODE-SUMMARY-001` §4-§19；S1 §5/§6；S2 §9-§14；S3 §6/§8/§14；S5 §6/§11；S6 §4-§14；S7 §7 | `B2-001/002/003/004/005/006/007/008` | `store.py`、`episodes.py`、`summaries.py` completed; adapter pending | `B2-TASK-001/002/003 directed tests passed; B2 official suite not_executed` |
 
 状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`。B2 fixture、oracle、manifest、runner、ADR 和 Implementation Plan 已物化；`B2-TASK-001/002` 代码已完成，`B2-TASK-003` 及后续仍 pending。

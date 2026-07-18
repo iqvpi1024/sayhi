@@ -31,6 +31,7 @@
 8. `PLAN-MVP-B-B2-IMPL-001` 与任务卡已批准；只授权从 `B2-TASK-001` 开始。
 9. `B2-TASK-001` 已完成 Episode/Derived storage foundation；定向 3/3 passed，B2 official suite 仍为 `not_executed`。
 10. `B2-TASK-002` 已完成 fixed synthetic Episode 的 ChangeSet propose/approve/publish/revert 边界；定向 5/5 passed，补偿 revision 保留 Ledger 历史，B2 official suite 仍为 `not_executed`。
+11. `B2-TASK-003` 已完成 deterministic day/phase Derived projector/reader；stale、delete/rebuild、unavailable receipt 与 Derived-evidence 拒绝均有定向证明，B2 official suite 仍为 `not_executed`。
 
 ## 4. 真实验证结果
 
@@ -45,6 +46,7 @@
 | Release 附件 digest | GitHub API 与本地构建 SHA-256 一致 |
 | 独立公开发布终审 | `PUBLIC_PREVIEW_V0.1.3_INDEPENDENT_AUDIT.md`：P0=0、P1=0 |
 | B2-TASK-002 | `b2-task002-6944b22-20260719.json`：定向 5/5 passed；全量 semantic regression 103 passed、B2 contract 8 skipped；B2 official suite `not_executed` |
+| B2-TASK-003 | `b2-task003-c2fba31-20260719.json`：定向 4/4 passed；全量 semantic regression 107 passed、B2 contract 8 skipped；B2 official suite `not_executed` |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -56,4 +58,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 `B2-TASK-003`：实现 deterministic Derived summary projector/reader，并证明 stale、rebuild、unavailable 与 Derived-evidence 禁止边界。**
+**执行 `B2-TASK-004`：实现 B2 testing adapter，使八个既有 contract case 能以独立临时数据库加载。**

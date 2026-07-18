@@ -27,7 +27,7 @@ suite_manifest: tests/b2_suite_manifest.json
 implementation_plan: docs/planning/MVP_B_B2_IMPLEMENTATION_PLAN.md
 task_cards: docs/planning/MVP_B_B2_TASK_CARDS.md
 next_role: Implementer
-next_single_action: B2-TASK-003
+next_single_action: B2-TASK-004
 scope_in:
   - fixed synthetic Episode, Derived summary, freshness and traceability boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B2 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B2-TASK-003 is implemented and its task-scoped verification is recorded
+stop_condition: B2-TASK-004 is implemented and its task-scoped verification is recorded
 ```
 
 ## 当前事实
@@ -48,4 +48,5 @@ stop_condition: B2-TASK-003 is implemented and its task-scoped verification is r
 - 真实验证详情见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`；A1/C1 历史失败结果保留，当前绑定结果分别为 35/35 和 7/7。
 - 独立公开发布终审已完成，P0=0、P1=0；记录见 `docs/reviews/PUBLIC_PREVIEW_V0.1.3_INDEPENDENT_AUDIT.md`。
 - B2-TASK-001 已完成，定向 3/3 storage tests passed；B2 official suite 仍未执行。
-- B2-TASK-002 已完成，定向 5/5 ChangeSet tests 与 configured-adapter semantic regression 103 passed；B2 official suite 的 8 个 contract case 仍 `not_executed`，因为 adapter 属于 pending B2-TASK-004。下一轮只允许执行 B2-TASK-003。
+- B2-TASK-002 已完成，定向 5/5 ChangeSet tests 与 configured-adapter semantic regression 103 passed；B2 official suite 的 8 个 contract case 仍 `not_executed`，因为 adapter 属于 pending B2-TASK-004。
+- B2-TASK-003 已完成，定向 4/4 summary tests 与 configured-adapter semantic regression 107 passed；下一轮只允许执行 B2-TASK-004。

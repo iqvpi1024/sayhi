@@ -1,0 +1,14 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "B2-TASK-003",
+  "git_commit": "c2fba31",
+  "applicability": "current_for_task",
+  "environment": {"platform": "Windows-11", "python": "3.12.8", "sqlite": "3.45.3", "dependencies": "stdlib_only"},
+  "checks": [
+    {"command": "$env:PYTHONPATH = \"$PWD/src\"; python -m unittest tests.semantic.test_b2_task_002_episodes tests.semantic.test_b2_task_003_summaries -v", "exit_code": 0, "result": "9/9 passed"},
+    {"command": "python tools/validate_b2_suite.py", "exit_code": 0, "result": "B2 artifacts materialized and hash-bound; official suite not executed"},
+    {"command": "$env:PYTHONPATH = \"$PWD/src\"; $env:NOETIDE_MICRO_ADAPTER = \"noetide_micro.testing_adapter\"; $env:NOETIDE_ANSWER_ADAPTER = \"noetide_micro.answer_testing_adapter\"; python -m unittest discover -s tests/semantic -q", "exit_code": 0, "result": "107 passed; 8 B2 contract tests skipped pending B2-TASK-004 adapter"},
+    {"command": "powershell -File tools/validate_product_baseline.ps1; powershell -File tools/validate_spec_baseline.ps1; git diff --check", "exit_code": 0, "result": "baseline static validation and whitespace check passed"}
+  ],
+  "b2_suite_status": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false, "official_runner": "not_executed"}
+}
