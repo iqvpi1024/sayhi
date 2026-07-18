@@ -53,4 +53,4 @@
 
 exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。`micro-task009-lf-20260717.json` 在提交 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de` 上以 exit code `0` 实际执行，49 个 required result IDs 均为 `passed`，隐私扫描为 `passed`，原始字节使用 LF；因此 `suite_executed=true`、`suite_passed=true`。该结论只覆盖已定义的 Micro 合同，不替代后续 Gate Review 与 Recovery Point。
 
-当前 A1 的 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` 已物化为独立 manifest、11 个 `AS-*` 场景和 24 个唯一 upstream refs，共 35 个 required result IDs。当前状态严格为 `suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`；业务实现从 Approved Plan 的 `AS-TASK-001` 开始，完整 runner 只能在 `AS-TASK-008` 运行，不能复用 Micro pass。
+当前 A1 的 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` 已物化为独立 manifest、11 个 `AS-*` 场景和 24 个唯一 upstream refs，共 35 个 required result IDs。当前 A1 official runner 在 `8556eea` 实际通过 35/35，当前绑定结果为 `docs/testing/results/a1-release-8556eea-20260719.json`。C1 official runner 在同一提交实际通过 7/7，当前绑定结果为 `docs/testing/results/c1-release-8556eea-20260719.json`；历史失败结果保留为诊断证据，未被改写。

@@ -103,9 +103,9 @@ required job 的 skip、取消或缺失不能合并为 green。公共发布使�
 
 ## 9. 当前状态
 
-当前已达到 D1 合成预览：版本化 ZIP 可在 Windows/Python 3.12 环境中解压后执行单个 PowerShell 启动命令，验证记录见 `PUBLIC_PREVIEW_V0.1.0_VERIFICATION.md`。它不下载或处理真实个人数据。
+当前已发布 D1 合成预览：`v0.1.3-synthetic-preview` 同时提供 Windows/Python 3.12 源码 ZIP 与自带 runtime 的 Windows portable ZIP。portable ZIP 解压后可运行 `Noetide Start.cmd`，不下载或处理真实个人数据；验证记录见 `PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。
 
-D2/D3 仍未完成：没有签名安装包、升级/卸载、普通用户首次设置界面、真实数据生产合同或已发布的 GitHub Release。任何对外说明必须称为 `v0.1.0-synthetic-preview`，不能简称“完整一键部署”。
+D2/D3 仍未完成：没有签名安装包、升级/卸载、普通用户首次设置界面或真实数据生产合同。虽然 GitHub prerelease 已发布，任何对外说明仍必须称为 D1 合成预览，不能简称“完整一键部署”。
 
 ## 10. 模型责任链
 
