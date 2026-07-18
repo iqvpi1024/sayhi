@@ -94,19 +94,19 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 | FR-305 | `boundary_only_deferred` | S4 §2、§12-§16、§20 | 家庭授权/数字遗产工作流 suite `TBD`；当前明确非目标 | `TBD` | `not_executed` |
 | FR-306 | `boundary_only_deferred` | S8 §2、§4-§9、§20 | A2A/互操作能力 suite `TBD`；`MCP-AT-025` 只证明未知协议不能旁路 | `TBD` | `not_executed` |
 
-## 4.1 Active Slice：MVP-A Answer Safety
+## 4.1 Historical Slice：MVP-A Answer Safety
 
-本节是 `SLICE-MVP-A-ANSWER-SAFETY-001` 的唯一 active-slice 追踪。上表 Coverage Level 继续描述整条 FR 的长期状态；A1 只选择其中固定合成子集，不把 FR-008/010 的全部未来范围声明为已实现。
+本节保留 `SLICE-MVP-A-ANSWER-SAFETY-001` 的窄范围追踪。上表 Coverage Level 继续描述整条 FR 的长期状态；A1 只选择其中固定合成子集，不把 FR-008/010 的全部未来范围声明为已实现。
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Exact Upstream Test Ref | Implementation Module | Verification Result |
 |---|---|---|---|---|---|---|
-| `FR-002` | CoverageWindow、直接 Source evidence 和 Derived exclusion | S1 §5.3/§6.2；S2 §6.5-§6.8、§11；S7 §5 | `AS-005/008/010` | `SOM-AT-009`、`BTE-AT-012/013/034`、`SIP-AT-006`、`HTH-AT-006/007/008/009/013` | `TBD` | `not_executed/current` |
-| `FR-008` | 六态 AnswerEnvelope 与 verification scope | S1 §6.4；S2 §6.8-§7.3、§14 | `AS-001/002/003/004/005/006/007/008/009` | `SOM-AT-008/009/018/021`、`BTE-AT-012/013/020/021/024/025/026/027/030/034` | `TBD` | `not_executed/current` |
-| `FR-010` | 同 claim/时间/perspective 冲突检测和并列呈现 | S1 §13；S2 §5.3、§13 | `AS-004` | `SOM-AT-021`、`BTE-AT-030` | `TBD` | `not_executed/current` |
+| `FR-002` | CoverageWindow、直接 Source evidence 和 Derived exclusion | S1 §5.3/§6.2；S2 §6.5-§6.8、§11；S7 §5 | `AS-005/008/010` | `SOM-AT-009`、`BTE-AT-012/013/034`、`SIP-AT-006`、`HTH-AT-006/007/008/009/013` | `src/noetide_micro/answers.py` | `a1-ws02-85240c5-20260718.json: passed/current` |
+| `FR-008` | 六态 AnswerEnvelope 与 verification scope | S1 §6.4；S2 §6.8-§7.3、§14 | `AS-001/002/003/004/005/006/007/008/009` | `SOM-AT-008/009/018/021`、`BTE-AT-012/013/020/021/024/025/026/027/030/034` | `src/noetide_micro/answers.py` | `a1-ws02-85240c5-20260718.json: passed/current` |
+| `FR-010` | 同 claim/时间/perspective 冲突检测和并列呈现 | S1 §13；S2 §5.3、§13 | `AS-004` | `SOM-AT-021`、`BTE-AT-030` | `src/noetide_micro/answers.py` | `a1-ws02-85240c5-20260718.json: passed/current` |
 
 Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独归属某一 FR。exact scenario-to-upstream 映射以 `docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` §7 为唯一权威；本节必须与其机械一致。
 
-当前状态：`traceable=true`、`suite_defined=true`、`suite_materialized=true`、`implementation_module=TBD`、`verification_result=not_executed`。A1 manifest 固定 35 个 required result IDs；业务模块只能在 `AS-TASK-001..007` 完成后按真实路径回填。
+历史 A1 状态：`traceable=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`；`src/noetide_micro/answers.py` 已由固定合成 runner 的 35 个 required result IDs 验证。该结果不扩大 A1 或 FR 的长期范围。
 
 ## 5. 验证结果语义
 
@@ -122,4 +122,12 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 `MICRO_MVP_ACCEPTANCE.md` §6 的 `micro_required_contract_slices` 是唯一 required upstream Test Ref 映射：10 个 MM 场景与 39 个去重后的 SOM/BTE/CS/PAP/SHP/IMM tests。Matrix 的长期 FR Test Ref 不是 Micro runner required 清单。进入 Micro 实现前只物化该映射；任何未列测试和 `boundary_only_deferred` FR 都不得借“完善架构”被隐式提升。
 
-当前 A1 的唯一 required 映射是 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` §7 和 `tests/answer_safety_suite_manifest.json`：11 个 `AS-*` 场景、24 个唯一 upstream refs，共 35 个 result IDs。Suite 已物化但未执行；其旧临时 runner 输出不是当前 Verification Result。A1 实施授权已被 `PLAN-NOETIDE-E2E-RC-001` 的 `WS-02` 取代；Matrix 长期 FR 行、旧 Micro required 集和其他 SPEC tests 均不得被隐式并入 A1。
+当前 A1 的唯一 required 映射是 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` §7 和 `tests/answer_safety_suite_manifest.json`：11 个 `AS-*` 场景、24 个唯一 upstream refs，共 35 个 result IDs；提交 `85240c5` 的官方结果为 `passed/current`。A1 实施授权已被 `PLAN-NOETIDE-E2E-RC-001` 的 `WS-02` 取代；Matrix 长期 FR 行、旧 Micro required 集和其他 SPEC tests 均不得被隐式并入 A1。
+
+## 4.2 Active Workstream：WS-06 Synthetic Ingestion
+
+`WS-06` 仅证明 S9 §4-§7、§14 的四条合成 Source append 失败/重试边界，不声称完整 S9 31 项验收测试、连接器或真实迁移已完成。
+
+| PRD Requirement | Workstream Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-001` | explicit synthetic Source append、durable stored receipt、reject/duplicate/idempotency/subject-ref failures | S9 §4-§7、§14 | `SI-001/002/003/004` | `src/noetide_micro/importer.py`、`src/noetide_micro/store.py` | `synthetic-ingestion-ws06-2d689ea-20260718.json: 4/4 passed/current` |

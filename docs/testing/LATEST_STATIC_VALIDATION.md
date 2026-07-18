@@ -1,6 +1,23 @@
 # 最近静态与规划门禁验证结果
 
-## 0. 当前结果：A1 Development Ready
+## 0. 当前结果：WS-06 Synthetic Ingestion Verified
+
+2026-07-18 +08:00，在 `2d689ea569b0eac8ac1163c9536030628741cd50` 上执行（结果与状态文件待后续证据提交）：
+
+| 检查 | 实际命令 | 环境 | Exit Code | 真实结果 |
+|---|---|---|---:|---|
+| Synthetic Ingestion preflight | `python .\\tools\\validate_synthetic_ingestion_suite.py` | Windows 11；Python 3.12.8；SQLite 3.45.3；stdlib only | 0 | manifest、fixture、oracle、测试模块、runner、validator 与 current immutable result 的 hash/binding 通过；4 个 required IDs 均为 passed |
+| Synthetic Ingestion semantic tests | `python -m unittest -v tests.semantic.test_connector` | 同上；`PYTHONPATH=D:\\sayhi\\src` | 0 | 4 tests passed |
+| Python compile | `python -m py_compile src\\noetide_micro\\importer.py src\\noetide_micro\\store.py tests\\runner\\run_synthetic_ingestion_suite.py tools\\validate_synthetic_ingestion_suite.py` | 同上 | 0 | passed |
+| Product baseline | `powershell -ExecutionPolicy Bypass -File .\\tools\\validate_product_baseline.ps1` | Windows PowerShell 5.1 | 0 | PRD v0.4 immutable hash 与 PRD v0.5 current baseline 静态通过；不是业务测试 |
+| SPEC / Trace baseline | `powershell -ExecutionPolicy Bypass -File .\\tools\\validate_spec_baseline.ps1` | Windows PowerShell 5.1 | 0 | 275 tests、133 invariants、32 FR rows、隐私与 Markdown 静态检查通过；不是业务测试 |
+| Diff guard | `git diff --check` | Git 2.54.0.windows.1 | 0 | passed |
+
+官方业务结果：`docs/testing/results/synthetic-ingestion-ws06-2d689ea-20260718.json`。其记录的 runner 命令为 `python -m tests.runner.run_synthetic_ingestion_suite --output docs\\testing\\results\\synthetic-ingestion-ws06-2d689ea-20260718.json`，网络被 runner 显式阻断，exit code `0`。此前 `2939453` 结果保留为 `superseded`，原因是其前置 validator 工件在接受前变更，不能再作为 current 结果。
+
+未执行：完整 RC suite、B1、C1、Portability、one-click packaging 与最终审计。它们均不得描述为通过。
+
+## 1. 历史记录：A1 Development Ready
 
 2026-07-17 20:00 +08:00，起始 HEAD `99b7e57087059774d37ceec6cafc0af12cccbe90` + 当前 suite/planning 工作树：
 

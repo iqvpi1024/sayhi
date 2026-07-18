@@ -1,0 +1,77 @@
+{
+  "schema_version": "noetide.synthetic-ingestion-run-result.v1",
+  "run_id": "synthetic-ingestion-a43f5700e714491fbc7828ed70f27639",
+  "suite_id": "synthetic_ingestion_v1",
+  "manifest_sha256": "f4727c1ef1c397c29a5b10e2b2612e554922200e20f098506de2d4cb4248d71a",
+  "applicability": "current",
+  "git_commit": "29394534d478ede701ded3b722669af6d3c4ee48",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_synthetic_ingestion_suite",
+    "--output",
+    "docs\\testing\\results\\synthetic-ingestion-ws06-2939453-20260718.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "SI-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "SI-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "SI-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "SI-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/synthetic_ingestion_v1/fixture.json",
+      "sha256": "3858e4c5bf441149155f9415ee346311eb7da3d57f6efed36e585c622134afa5"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/synthetic_ingestion_v1/oracles.json",
+      "sha256": "5e5e621a67cbce366cadc45401865ebaad5b2cf76c77b284479cc719289fe0c7"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_connector.py",
+      "sha256": "6298c414aa9e11c74a974f0a7b2b95f2da840306f652ba9c7f2c97ae8439cc6b"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_synthetic_ingestion_suite.py",
+      "sha256": "cfaa96e385982867082955ac56d9691d408aab01309a13287ce1fb8e6e6c988c"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_synthetic_ingestion_suite.py",
+      "sha256": "6116a38cc84c422ed55289a5d7d2187756a8834cbf7ecfd3eda2952499f82531"
+    }
+  ],
+  "privacy_scan": {
+    "status": "passed",
+    "matched_patterns": []
+  }
+}

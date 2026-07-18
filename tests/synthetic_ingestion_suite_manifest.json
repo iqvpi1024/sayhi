@@ -1,12 +1,12 @@
 {
   "schema_version": "noetide.synthetic-ingestion-suite-manifest.v1",
   "suite_id": "synthetic_ingestion_v1",
-  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "not_applicable",
-  "latest_verification_result_path": null,
-  "latest_verification_manifest_sha256": null,
-  "latest_verification_result_sha256": null,
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/synthetic-ingestion-ws06-2d689ea-20260718.json",
+  "latest_verification_manifest_sha256": "8e418750f620b48a518e6d766544f0b7d8ece4be2c0ddc473213b5684b8e479c",
+  "latest_verification_result_sha256": "9e2ad08f33e59b9a006b60a48391994fe6b70a9be131a3e0e4cd626f66af037d",
   "historical_verification_results": [
     {"applicability": "superseded", "path": "docs/testing/results/synthetic-ingestion-ws06-2939453-20260718.json", "reason": "The suite preflight validator changed before its result could be accepted as current; artifact binding requires a new official run."}
   ],

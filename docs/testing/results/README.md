@@ -1,6 +1,6 @@
 # Verification Results
 
-本目录保存实际业务 suite 的不可改写运行结果。当前 Micro 结果为 `micro-task009-lf-20260717.json`，状态 `passed/current`；A1 尚无 suite 和 result，状态为 `not_executed`。
+本目录保存实际业务 suite 的不可改写运行结果。当前 Micro 结果为 `micro-ws01-6dd4288-20260718.json`（49/49，`passed/current`）；A1 为 `a1-ws02-85240c5-20260718.json`（35/35，`passed/current`）；Synthetic Ingestion 为 `synthetic-ingestion-ws06-2d689ea-20260718.json`（4/4，`passed/current`）。`synthetic-ingestion-ws06-2939453-20260718.json` 因 validator 工件更新为 `superseded`，保留供审计。这些结果只证明各自窄范围合同，不等于完整 PRD 已实现。
 
 规则：
 
