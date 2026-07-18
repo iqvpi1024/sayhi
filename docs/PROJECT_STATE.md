@@ -29,6 +29,7 @@
 6. `ADR-0004` 与 `ARCH-B2-EPISODE-SUMMARY-001` 已接受 SQLite 分层持久化与 Derived rebuild 边界；suite 尚未物化。
 7. B2 fixture、oracle、manifest、adapter protocol、offline runner 与 validator 已物化；尚未执行 B2 业务测试。
 8. `PLAN-MVP-B-B2-IMPL-001` 与任务卡已批准；只授权从 `B2-TASK-001` 开始。
+9. `B2-TASK-001` 已完成 Episode/Derived storage foundation；定向 3/3 passed，B2 official suite 仍为 `not_executed`。
 
 ## 4. 真实验证结果
 
@@ -53,4 +54,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 `B2-TASK-001`：建立 Episode 与 Derived summary 的最小 storage foundation。**
+**执行 `B2-TASK-002`：实现 fixed Episode candidate 的 ChangeSet publish/revert 边界。**

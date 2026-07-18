@@ -1,0 +1,40 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "B2-TASK-001",
+  "git_commit": "38bfc6f",
+  "applicability": "current_for_task",
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "dependencies": "stdlib_only"
+  },
+  "checks": [
+    {
+      "command": "PYTHONPATH=src python -m unittest tests.semantic.test_b2_task_001_store -v",
+      "exit_code": 0,
+      "result": "3/3 passed"
+    },
+    {
+      "command": "python tools/validate_b2_suite.py",
+      "exit_code": 0,
+      "result": "suite materialized; business suite not executed"
+    },
+    {
+      "command": "PYTHONPATH=src python -m unittest discover -s tests/semantic -v",
+      "exit_code": 0,
+      "result": "98 tests OK; 8 B2 contract tests skipped because adapter is not configured"
+    },
+    {
+      "command": "powershell -File tools/validate_product_baseline.ps1; powershell -File tools/validate_spec_baseline.ps1; git diff --check",
+      "exit_code": 0,
+      "result": "baseline/static checks passed"
+    }
+  ],
+  "b2_suite_status": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  }
+}

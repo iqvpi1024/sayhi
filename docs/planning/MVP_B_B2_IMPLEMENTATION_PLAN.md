@@ -23,7 +23,7 @@
 
 | Task | 交付物 | Contract / Test | 完成条件 | 状态 |
 |---|---|---|---|---|
-| `B2-TASK-001` | schema/store 的 Episode 与 Derived summary logical layer | §4、§7、`B2-001/002/005/008` | foreign key、PRAGMA、migration/idempotent seed 行为可测 | `pending` |
+| `B2-TASK-001` | schema/store 的 Episode 与 Derived summary logical layer | §4、§7、`B2-001/002/005/008` | foreign key、PRAGMA、migration/idempotent seed 行为可测 | `completed` |
 | `B2-TASK-002` | `episodes.py` 的 fixed candidate 校验与 ChangeSet publish/revert | §4-§9、`B2-001/002/004/008` | 直接 Source/Entity/time refs 校验；无半写；补偿后历史保留 | `pending` |
 | `B2-TASK-003` | `summaries.py` 的 deterministic projector/reader | §4-§13、`B2-003/004/005/006/007` | fresh/stale/unavailable 与 dependency/rebuild 边界满足合同 | `pending` |
 | `B2-TASK-004` | `b2_testing_adapter.py` 与 B2 contract 集成 | §17、`B2-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `pending` |
