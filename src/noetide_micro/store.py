@@ -318,6 +318,15 @@ class SemanticStore:
         ).fetchone()
         return json.loads(row[0]) if row else None
 
+    def ledger_records_of_type(self, record_type: str) -> list[JsonObject]:
+        return [
+            json.loads(row[0])
+            for row in self._connection.execute(
+                "SELECT payload_json FROM ledger_records WHERE record_type = ? ORDER BY rowid",
+                (record_type,),
+            )
+        ]
+
     def put_ledger_record(
         self, record_id: str, record_type: str, payload: Mapping[str, Any], revision_id: str | None = None
     ) -> None:
