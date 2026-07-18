@@ -20,3 +20,9 @@
 ## 结论与限制
 
 该资产可以让有 Python 3.12 的 Windows 用户在解压后用一个 PowerShell 命令启动本地合成演示。它不是签名安装包，不支持升级/卸载、真实个人数据、普通用户生产部署或完整 D2/D3 发布承诺。
+
+## Git 引用
+
+- `main` 与 `codex/kimi-end-to-end-release-candidate` 已推送到 GitHub。
+- annotated tag `v0.1.0-synthetic-preview` 已推送，指向生成该 archive 的 `6fa49c0`。
+- GitHub Release 页面与附件上传需要单独的 GitHub 网页或 CLI 登录；SSH push 成功不代表 Release 已创建。

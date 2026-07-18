@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: public_preview_prepared
+current_phase: github_release_pending_auth
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -15,9 +15,9 @@ audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
 current_workstream: PUBLIC-PREVIEW
-current_workstream_status: verified_ready_to_publish
+current_workstream_status: git_refs_pushed_release_auth_pending
 next_role: Release Manager
-next_single_action: push_preview_branch_and_tag_then_create_github_release
+next_single_action: authenticate_github_then_create_release_and_upload_verified_assets
 final_target: published_synthetic_preview
 final_auditor: Codex
 public_release_allowed: true
@@ -40,7 +40,7 @@ scope_out:
   - real personal data and production D2/D3 claims
 blockers:
   - D2 production installer and real-data contracts remain out of scope
-stop_condition: tag, push, and GitHub synthetic-preview Release are verifiably published
+stop_condition: GitHub synthetic-preview Release and verified assets are published
 ```
 
 ## 当前事实
@@ -48,6 +48,7 @@ stop_condition: tag, push, and GitHub synthetic-preview Release are verifiably p
 - `AUDIT-NOETIDE-IMPL-20260718-001` 的 P1=11、P2=5 是当前纠偏输入；不得将旧 Gate 或历史 result 当成关闭证据。
 - `WS-03` 已在干净 Python 3.12 venv 从本地安装验证模块入口和 console script；CLI 不导入 testing adapter 或仓库 tests 路径。
 - C1 已补齐可执行 fixture、oracle、artifact binding 和 validator；它只证明批准的 7 个合成场景，不扩大 MVP-C 产品范围。
+- `main`、RC branch 与 `v0.1.0-synthetic-preview` annotated tag 已通过 SSH 推送；GitHub Release 仍需网页/CLI 登录后上传 ZIP 和 checksum。
 - `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 和 `tests/results/` 是用户未跟踪内容；不得读取、修改或提交。
 
 ## WS-00 / WS-01 结果

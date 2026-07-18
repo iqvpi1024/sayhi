@@ -12,14 +12,14 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `public_preview_prepared` |
+| 当前阶段 | `github_release_pending_auth` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
 | 最终目标 | `audit_ready_release_candidate` |
 | 最终独立审计 | Codex；在 Kimi 内部审计、Debug、全量回归和复审之后 |
 | 正式发布权限 | 产品负责人已最高授权；仅发布 MIT 合成预览，不得扩大为真实个人资料产品 |
-| 当前 Git 分支 | `codex/kimi-end-to-end-release-candidate` |
+| 当前 Git 分支 | `main`（已推送） |
 | 最近被测实现提交 | `7f0bb28`（最终 Context Pack regression；后续审计记录仅更新文档，不改实现） |
 | 工作树 | 用户未跟踪的 `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交 |
 
@@ -47,7 +47,7 @@
 | C1 Decision/Outcome | C1 manifest/fixture/oracle/runner/validator 已补齐；`5a324f9` suite 7/7 passed，未映射 integration failure 也会使 runner 失败 |
 | Synthetic Ingestion | `a603085` 4/4 passed；manifest 已绑定该 immutable result |
 | Context Pack | `7f0bb28` 6/6 passed；完整 S7/S9 长期范围仍未实现 |
-| Packaging / Windows one-click | D1 public synthetic preview ZIP 已在解压目录验证；D2 生产安装仍未实现 |
+| Packaging / Windows one-click | D1 public synthetic preview ZIP 已在解压目录验证；tag 和 main 已推送；GitHub Release asset 上传待认证 |
 | 当前完整 RC suite | suite、CLI、packaging、静态与恢复记录均已复验；最终独立审查 P0/P1=0 |
 
 ## 5. 执行链与停止边界
@@ -74,4 +74,4 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 7. 下一步唯一建议动作
 
-**创建不可移动 preview tag、推送已验证提交和 tag，并在 GitHub 发布仅含合成预览资产的 Release。**
+**完成 GitHub 登录后创建 `v0.1.0-synthetic-preview` Release，并上传已校验 ZIP 与 `SHA256SUMS.txt`。**
