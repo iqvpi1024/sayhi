@@ -6,15 +6,15 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": false,
-    "suite_passed": false
+    "suite_executed": true,
+    "suite_passed": true
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "not_applicable",
-  "latest_verification_result_path": null,
-  "latest_verification_manifest_sha256": null,
-  "latest_verification_result_sha256": null,
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/micro-ws01-6dd4288-20260718.json",
+  "latest_verification_manifest_sha256": "18f8d6eea7c50da11b9d9d9e59d1b940cfc55c7a5970dfaa4e01fda08fe718d2",
+  "latest_verification_result_sha256": "e73701a1363d65a1a591cb524da53ef59c2df876d62531206a3db9f210b78386",
   "historical_verification_results": [
     {
       "applicability": "superseded",
