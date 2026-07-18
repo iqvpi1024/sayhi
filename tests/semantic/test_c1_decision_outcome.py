@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import tempfile
 import unittest
+from pathlib import Path
 
+from noetide_micro.c1 import C1ChangeSetService
 from noetide_micro.decision import DecisionService
 from noetide_micro.outcome import OutcomeService, CalibrationService
+from noetide_micro.runtime import demo_fixture
 from noetide_micro.scenario import ScenarioService
+from noetide_micro.store import SemanticStore
 
 
 class C1DecisionOutcomeTests(unittest.TestCase):
@@ -14,10 +19,19 @@ class C1DecisionOutcomeTests(unittest.TestCase):
 
     def setUp(self) -> None:
         self.now = "2031-10-15T02:00:00Z"
-        self.decision_svc = DecisionService(None, {}, self.now)
-        self.outcome_svc = OutcomeService(None, {}, self.now)
-        self.calibration_svc = CalibrationService()
-        self.scenario_svc = ScenarioService(None, {}, self.now)
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.store = SemanticStore(Path(self.temp.name) / "c1.sqlite3")
+        self.addCleanup(self.store.close)
+        self.store.seed_rev_010(demo_fixture())
+        self.writer = C1ChangeSetService(self.store, self.now)
+        self.decision_svc = DecisionService(self.store, {}, self.now)
+        self.outcome_svc = OutcomeService(self.store, {}, self.now)
+        self.calibration_svc = CalibrationService(self.now)
+        self.scenario_svc = ScenarioService(self.store, {}, self.now)
+
+    def publish_decision(self, decision):
+        return self.writer.publish(decision, "person_alpha")
 
     def test_c1_001_create_decision(self) -> None:
         """Decision can be created with question and options."""
@@ -62,6 +76,13 @@ class C1DecisionOutcomeTests(unittest.TestCase):
 
     def test_c1_004_create_outcome(self) -> None:
         """Outcome can be created and linked to Decision."""
+        self.publish_decision(self.decision_svc.create(
+            decision_id="decision_001",
+            question="Should I change jobs?",
+            options=["stay", "leave"],
+            constraints=["financial stability"],
+            assumptions=["market stable"],
+        ))
         outcome = self.outcome_svc.create(
             outcome_id="outcome_001",
             decision_ref="decision_001",
@@ -78,6 +99,7 @@ class C1DecisionOutcomeTests(unittest.TestCase):
             "decision_001", "Q?", ["a", "b"], [], []
         )
         decision = self.decision_svc.set_predicted_outcome(decision, "success")
+        self.publish_decision(decision)
         outcome = self.outcome_svc.create("outcome_001", "decision_001", "success", [])
         calibration = self.calibration_svc.calibrate(decision, outcome)
         self.assertEqual(calibration["calibration_status"], "accurate")
@@ -88,6 +110,7 @@ class C1DecisionOutcomeTests(unittest.TestCase):
             "decision_001", "Q?", ["a", "b"], [], []
         )
         decision = self.decision_svc.set_predicted_outcome(decision, "success")
+        self.publish_decision(decision)
         outcome = self.outcome_svc.create("outcome_001", "decision_001", "failure", [])
         calibration = self.calibration_svc.calibrate(decision, outcome)
         self.assertEqual(calibration["calibration_status"], "inaccurate")
@@ -97,6 +120,7 @@ class C1DecisionOutcomeTests(unittest.TestCase):
         decision = self.decision_svc.create(
             "decision_001", "Q?", ["a", "b"], [], []
         )
+        self.publish_decision(decision)
         outcome = self.outcome_svc.create("outcome_001", "decision_001", "success", [])
         calibration = self.calibration_svc.calibrate(decision, outcome)
         self.assertEqual(calibration["calibration_status"], "no_prediction")

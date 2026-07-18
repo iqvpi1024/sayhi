@@ -75,6 +75,7 @@ def main() -> int:
             [
                 unittest.defaultTestLoader.loadTestsFromName("tests.semantic.test_c1_boundaries"),
                 unittest.defaultTestLoader.loadTestsFromName("tests.semantic.test_c1_changesets"),
+                unittest.defaultTestLoader.loadTestsFromName("tests.semantic.test_c1_decision_outcome"),
             ]
         )
         result = Result()
@@ -82,7 +83,11 @@ def main() -> int:
     finally:
         socket.socket, socket.create_connection = original_socket, original_connection
     rows = [{"test_id": item, **result.rows.get(item, {"individual_test_result": "errored", "detail": "scenario result missing"})} for item in required]
-    passed = all(item["individual_test_result"] == "passed" for item in rows)
+    passed = (
+        all(item["individual_test_result"] == "passed" for item in rows)
+        and not result.errors
+        and not result.failures
+    )
     artifact = {
         "schema_version": "noetide.c1-run-result.v1",
         "run_id": f"c1-{uuid.uuid4().hex}",

@@ -13,6 +13,7 @@ ROLES = {
     "oracle",
     "boundary_test_module",
     "changeset_test_module",
+    "integration_test_module",
     "offline_runner",
     "suite_preflight_validator",
 }

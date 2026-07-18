@@ -66,7 +66,7 @@ class ScenarioService:
 
         return {
             "comparison_id": "comparison_001",
-            "scenarios": [s["scenario_id"] for s in scenarios],
+            "scenarios": [s["assertion_id"] for s in scenarios],
             "kinds": list(kinds),
             "results": results,
             "divergence": len(set(results.values())) > 1,
