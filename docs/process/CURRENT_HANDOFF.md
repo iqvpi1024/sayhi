@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: remediation_candidate_review
+current_phase: remediation_synthetic_ingestion
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,19 +14,19 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-04
-current_workstream_status: in_progress
+current_workstream: WS-06
+current_workstream_status: suite_materialization_pending
 next_role: Implementer
-next_single_action: WS-04_b1_candidate_review_contract_and_implementation
+next_single_action: WS-06_synthetic_ingestion_suite_materialization
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
 git_branch: codex/kimi-end-to-end-release-candidate
-git_head: b8910c7
+git_head: d7f8bf0
 suite_status:
   micro_current: passed_at_6dd4288
   a1_current: passed_at_85240c5
-  b1_current: not_materialized
+  b1_current: blocked_by_dq_002_dq_011
   c1_current: not_materialized
   synthetic_ingestion_current: not_materialized
   portability_current: not_executed
@@ -54,4 +54,4 @@ stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 3. 当前未提交代码改动与其验证状态明确可追溯。
 4. 当前 required suite 的 `defined/materialized/executed/passed` 四态与真实执行一致。
 
-以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。`WS-03` 的 clean-venv package/CLI 验证已通过。下一步只能开始 `WS-04`，不得把 Micro/A1/CLI 结果外推到 B1、C1、ingestion、portability 或部署。
+以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。`WS-03` 的 clean-venv package/CLI 验证已通过。B1 在 `DQ-002`、`DQ-011` 裁决前暂停；`WS-06` 的 durable importer 定向测试通过，下一步仅物化其 suite/runner，不得把定向测试外推为完整 ingestion 验证。
