@@ -7,6 +7,8 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from noetide_micro.store import SeedConflictError
 from noetide_micro.testing_adapter import create_system
+from noetide_micro.candidate_aggregator import CandidateAggregator, CandidateEnvelope
+from noetide_micro.review_budget import ReviewBudget, ReviewBudgetService
 
 JsonObject = dict[str, Any]
 DEFAULT_DATA_DIR = Path.home() / ".noetide" / "data"
@@ -255,6 +257,83 @@ def _digest_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+
+
+def cmd_review(args):
+    data_dir = Path(args.data_dir) if args.data_dir else DEFAULT_DATA_DIR
+    if not data_dir.exists():
+        print('Data dir missing. Run init first.')
+        return 1
+
+    agg = CandidateAggregator()
+
+    c1 = CandidateEnvelope(
+        candidate_id='candidate_contact_001',
+        candidate_kind='state',
+        source_refs=[{'source_id': 'src_micro_001', 'locator': {'start': 0, 'end': 58}}],
+        proposed_value='no_contact',
+        valid_time_candidate=None,
+        risk_level='medium',
+        review_priority='high',
+        value_factors={
+            'target_ref': 'state_contact_001',
+            'goal_impact': 0.8,
+            'change_scope': 0.5,
+            'urgency': 0.9,
+            'uncertainty': 0.2,
+            'historical_acceptance': 0.7,
+        },
+        confirmation_policy='single_confirmation',
+    )
+    agg.add_candidate(c1)
+
+    c2 = CandidateEnvelope(
+        candidate_id='candidate_closeness_001',
+        candidate_kind='assertion',
+        source_refs=[{'source_id': 'src_history_001'}],
+        proposed_value='synthetic_closeness_baseline',
+        valid_time_candidate=None,
+        risk_level='high',
+        review_priority='normal',
+        value_factors={
+            'target_ref': 'assertion_closeness_001',
+            'goal_impact': 0.3,
+            'change_scope': 0.2,
+            'urgency': 0.4,
+            'uncertainty': 0.6,
+            'historical_acceptance': 0.5,
+        },
+        confirmation_policy='automatic_forbidden',
+    )
+    agg.add_candidate(c2)
+
+    budget = ReviewBudget(max_items_per_session=args.max_items)
+    service = ReviewBudgetService(budget)
+    items = agg.list_review_items()
+    selected = service.filter_candidates(items)
+
+    print('=== Review Queue ===')
+    print('Total candidates:', len(items))
+    print('Selected for review:', len(selected))
+    print('Budget remaining:', service.get_budget_status()['remaining'])
+    print()
+
+    for item in selected:
+        print('Candidate:', item['candidate_id'])
+        print('  Kind:', item['candidate_kind'])
+        print('  Proposed value:', item['proposed_value'])
+        print('  Value score:', round(item['value_score'], 2))
+        print('  Risk level:', item['risk_level'])
+        print('  Review priority:', item['review_priority'])
+        print('  Confirmation policy:', item['confirmation_policy'])
+        print('  Sources:', item['source_count'])
+        print()
+
+    if service.get_suppressed():
+        print('Suppressed candidates:', len(service.get_suppressed()))
+
+    return 0
+
 def main():
     parser = argparse.ArgumentParser(prog="noetide", description="Noetide CLI")
     parser.add_argument("--data-dir", help="Data directory")
@@ -298,6 +377,10 @@ def main():
     timeline_p = subparsers.add_parser("timeline", help="Show relationship timeline")
     timeline_p.set_defaults(func=cmd_timeline)
 
+    review_p = subparsers.add_parser("review", help="Review candidate queue")
+    review_p.add_argument("--max-items", type=int, default=3, help="Max items per session")
+    review_p.set_defaults(func=cmd_review)
+
     export_p = subparsers.add_parser("export", help="Export data")
     export_p.add_argument("--output", required=True, help="Output file path")
     export_p.set_defaults(func=cmd_export)
@@ -311,3 +394,4 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
