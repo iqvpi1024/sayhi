@@ -268,6 +268,104 @@ class SemanticStore:
         if cursor.rowcount != 1:
             raise KeyError(view_name)
 
+    def put_episode_record(
+        self,
+        episode_id: str,
+        object_revision: str,
+        episode_kind: str,
+        valid_start: str,
+        valid_end: str,
+        recorded_at: str,
+        synthetic_profile_id: str,
+        source_refs: list[Mapping[str, Any]],
+    ) -> None:
+        """Persist B2 metadata after its Canonical Episode was published."""
+        canonical = self.canonical_object(episode_id)
+        if canonical.get("object_type") != "episode":
+            raise ValueError("episode record requires a Canonical Episode")
+        if not source_refs:
+            raise ValueError("episode record requires at least one direct Source reference")
+        self._connection.execute(
+            "INSERT INTO episodes (episode_id, object_revision, episode_kind, valid_start, valid_end, "
+            "recorded_at, synthetic_profile_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (episode_id, object_revision, episode_kind, valid_start, valid_end, recorded_at, synthetic_profile_id),
+        )
+        for ref in source_refs:
+            self._connection.execute(
+                "INSERT INTO episode_source_refs (episode_id, source_id, locator_json) VALUES (?, ?, ?)",
+                (episode_id, ref["source_id"], _canonical_json(ref["locator"])),
+            )
+
+    def episode_record(self, episode_id: str) -> JsonObject:
+        row = self._connection.execute(
+            "SELECT object_revision, episode_kind, valid_start, valid_end, recorded_at, synthetic_profile_id "
+            "FROM episodes WHERE episode_id = ?",
+            (episode_id,),
+        ).fetchone()
+        if row is None:
+            raise KeyError(episode_id)
+        refs = [
+            {"source_id": source_id, "locator": json.loads(locator_json)}
+            for source_id, locator_json in self._connection.execute(
+                "SELECT source_id, locator_json FROM episode_source_refs WHERE episode_id = ? ORDER BY source_id, locator_json",
+                (episode_id,),
+            )
+        ]
+        return {
+            "episode_id": episode_id,
+            "object_revision": row[0],
+            "episode_kind": row[1],
+            "valid_start": row[2],
+            "valid_end": row[3],
+            "recorded_at": row[4],
+            "synthetic_profile_id": row[5],
+            "source_refs": refs,
+        }
+
+    def put_summary_projection(
+        self,
+        projection_id: str,
+        projection_kind: str,
+        data_revision: str,
+        view_revision: str,
+        freshness_status: str,
+        dependency_set: Mapping[str, Any],
+        payload: Mapping[str, Any],
+        generated_at: str,
+        generator_policy_id: str,
+    ) -> None:
+        self._connection.execute(
+            "INSERT INTO summary_projections (projection_id, projection_kind, data_revision, view_revision, "
+            "freshness_status, dependency_json, payload_json, generated_at, generator_policy_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (projection_id, projection_kind, data_revision, view_revision, freshness_status,
+             _canonical_json(dependency_set), _canonical_json(payload), generated_at, generator_policy_id),
+        )
+
+    def summary_projection(self, projection_id: str) -> JsonObject:
+        row = self._connection.execute(
+            "SELECT projection_kind, data_revision, view_revision, freshness_status, dependency_json, payload_json, "
+            "generated_at, generator_policy_id FROM summary_projections WHERE projection_id = ?",
+            (projection_id,),
+        ).fetchone()
+        if row is None:
+            raise KeyError(projection_id)
+        return {
+            "projection_id": projection_id,
+            "projection_kind": row[0],
+            "data_revision": row[1],
+            "view_revision": row[2],
+            "freshness_status": row[3],
+            "dependency_set": json.loads(row[4]),
+            "payload": json.loads(row[5]),
+            "generated_at": row[6],
+            "generator_policy_id": row[7],
+        }
+
+    def delete_summary_projections(self) -> int:
+        """Delete all B2 Derived rows without touching Canonical or Ledger data."""
+        return self._connection.execute("DELETE FROM summary_projections").rowcount
+
     def ledger_records_for(self, record_type: str, changeset_id: str) -> list[JsonObject]:
         rows = self._connection.execute(
             "SELECT payload_json FROM ledger_records WHERE record_type = ? ORDER BY rowid", (record_type,)

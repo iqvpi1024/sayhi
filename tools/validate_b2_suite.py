@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "tests/b2_suite_manifest.json"
 REQUIRED = [f"B2-{index:03d}" for index in range(1, 9)]
-ROLES = {"fixture", "oracle", "scenario_plan", "adapter_protocol", "business_test_module", "offline_runner", "suite_preflight_validator"}
+ROLES = {"fixture", "oracle", "scenario_plan", "adapter_protocol", "business_test_module", "storage_tests", "offline_runner", "suite_preflight_validator"}
 
 
 def digest(path: Path) -> str:

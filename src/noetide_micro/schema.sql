@@ -75,3 +75,42 @@ CREATE TABLE IF NOT EXISTS coverage_windows (
     gaps_json TEXT NOT NULL,
     export_completeness TEXT NOT NULL CHECK (export_completeness IN ('complete', 'partial', 'unknown'))
 );
+
+-- B2 additive: Canonical Episode metadata and explicit Derived summary storage.
+-- Business publication, clustering and rebuild policy remain in later B2 tasks.
+CREATE TABLE IF NOT EXISTS episodes (
+    episode_id TEXT PRIMARY KEY REFERENCES canonical_objects(object_id),
+    object_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    episode_kind TEXT NOT NULL CHECK (episode_kind IN ('synthetic_relationship_event', 'synthetic_project_event')),
+    valid_start TEXT NOT NULL,
+    valid_end TEXT NOT NULL,
+    recorded_at TEXT NOT NULL,
+    synthetic_profile_id TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS episode_source_refs (
+    episode_id TEXT NOT NULL REFERENCES episodes(episode_id),
+    source_id TEXT NOT NULL REFERENCES source_records(source_id),
+    locator_json TEXT NOT NULL,
+    PRIMARY KEY (episode_id, source_id, locator_json)
+);
+
+CREATE TABLE IF NOT EXISTS summary_projections (
+    projection_id TEXT PRIMARY KEY,
+    projection_kind TEXT NOT NULL CHECK (projection_kind IN ('day_summary', 'phase_summary')),
+    data_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    view_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    freshness_status TEXT NOT NULL CHECK (freshness_status IN ('fresh', 'stale', 'rebuilding', 'unavailable')),
+    dependency_json TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    generated_at TEXT NOT NULL,
+    generator_policy_id TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS derived_rebuild_receipts (
+    receipt_id TEXT PRIMARY KEY,
+    projection_id TEXT NOT NULL REFERENCES summary_projections(projection_id),
+    data_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    status TEXT NOT NULL CHECK (status IN ('rebuilt', 'failed')),
+    payload_json TEXT NOT NULL
+);
