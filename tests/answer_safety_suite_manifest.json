@@ -77,12 +77,12 @@
     {
       "role": "offline_runner",
       "path": "tests/runner/run_answer_safety_suite.py",
-      "sha256": "817550890aab80331886c3e376ac0508fdc2e5fe69c394940a1121223f175988"
+      "sha256": "d82f5636966fae0166165c9d29a0e2cc39b696ccf0afbb8fca59f0d91c914ee0"
     },
     {
       "role": "suite_preflight_validator",
       "path": "tools/validate_answer_safety_suite.py",
-      "sha256": "22d148abf40aae7b56d8c64f0b49f80ae7e21634d397b9281f58c61fd825f036"
+      "sha256": "ea5afe76c52ceba2f18d5584d7b9c736c09bfbcda24ddc38a3998efb0c4f86f6"
     }
   ],
   "artifact_digest_strategy": {

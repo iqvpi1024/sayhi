@@ -214,6 +214,7 @@ def validate_manifest(v: Validation, manifest: Mapping[str, Any]) -> None:
             v.equal(result.get("exit_code"), 0, "current result exit code")
             v.equal(len(result.get("required_results", [])), 35, "current required result count")
             v.require(all(item.get("individual_test_result") == "passed" for item in result.get("required_results", [])), "current required results")
+            v.equal(result.get("bound_artifacts"), manifest.get("artifacts"), "current result artifact binding")
             v.equal(result.get("manifest_sha256"), manifest.get("latest_verification_manifest_sha256"), "result manifest binding")
             v.equal(sha256_file(ROOT / result_path), manifest.get("latest_verification_result_sha256"), "result raw hash")
     baseline = manifest.get("baseline", {})
