@@ -11,6 +11,10 @@ from noetide_micro.runtime import demo_fixture
 from noetide_micro.scenario import ScenarioService
 from noetide_micro.store import SemanticStore
 
+def scenario(identifier):
+ def decorate(method): method._noetide_scenario_id=identifier; return method
+ return decorate
+
 
 class C1ChangeSetTests(unittest.TestCase):
     def setUp(self):
@@ -18,6 +22,7 @@ class C1ChangeSetTests(unittest.TestCase):
         self.store=SemanticStore(Path(self.temp.name)/"c1.sqlite3");self.addCleanup(self.store.close);self.store.seed_rev_010(demo_fixture())
         self.writer=C1ChangeSetService(self.store,"2031-10-15T02:00:00Z")
 
+    @scenario("C1-005")
     def test_decision_and_outcome_publish_through_changesets(self):
         decision=DecisionService(self.store,{},"2031-10-15T02:00:00Z").create("decision_synthetic","question",["a"],[],[],"a")
         decision=self.writer.publish(decision,"person_alpha")
@@ -27,11 +32,13 @@ class C1ChangeSetTests(unittest.TestCase):
         self.assertIsNotNone(self.store.ledger_record("changeset_c1_decision_synthetic"))
         self.assertIsNotNone(self.store.ledger_record("changeset_c1_outcome_synthetic"))
 
+    @scenario("C1-006")
     def test_duplicate_or_invalid_outcome_fails_without_revision(self):
         before=self.store.current_revision()
         self.assertRaises(ValueError,self.writer.publish,{"object_type":"outcome","outcome_id":"outcome_bad","decision_ref":"missing"},"person_alpha")
         self.assertEqual(self.store.current_revision(),before)
 
+    @scenario("C1-007")
     def test_predicted_scenario_publishes_as_assertion(self):
         scenario=ScenarioService(self.store,{},"2031-10-15T02:00:00Z").create("scenario_synthetic","decision_synthetic","baseline",["assumption"],"projection")
         published=self.writer.publish(scenario,"person_alpha")
