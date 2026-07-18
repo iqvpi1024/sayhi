@@ -1,76 +1,57 @@
 # 当前模型交接包
 
-## 1. 权威状态
+本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。聊天中的“继续”不改变 `next_single_action`。
 
-本文件是下一执行模型的当前入口，不替代 AGENTS.md、PRD、SPEC、ADR、suite、Approved Plan 或 Task Cards。聊天中的“继续”不能替代 
-ext_single_action。
-
-`yaml
-handoff_id: HANDOFF-MVP-A-AS-008
-slice_id: SLICE-MVP-A-ANSWER-SAFETY-001
-current_phase: implementing
+```yaml
+handoff_id: HANDOFF-NOETIDE-E2E-RC-001
+slice_id: SLICE-NOETIDE-E2E-RC-001
+current_phase: remediation_micro_l1
 product_baseline:
   path: PRDv05.md
   version: 0.5
   canonical_lf_sha256: 34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7
-decision_refs:
-  - DEC-MVP-A-AS-001
-spec_refs:
-  - SPEC-SOM-001@0.6
-  - SPEC-BTE-001@0.5
-  - SPEC-CS-001@0.4
-  - SPEC-HTH-001@0.5
-  - SPEC-SIP-001@0.3
-traceability_ref: docs/traceability/REQUIREMENTS_MATRIX.md#41-active-slicemvp-a-answer-safety
-acceptance_ref: docs/testing/MVP_A_ANSWER_SAFETY_ACCEPTANCE.md
-adr_refs:
-  - ADR-0002
-architecture_ref: docs/architecture/MVP_A_ANSWER_SAFETY_ARCHITECTURE.md
-suite_manifest: tests/answer_safety_suite_manifest.json
-suite_flags:
-  suite_defined: true
-  suite_materialized: true
-  suite_executed: true
-  suite_passed: true
-implementation_plan: docs/planning/MVP_A_ANSWER_SAFETY_IMPLEMENTATION_PLAN.md
-implementation_plan_status: approved
-task_cards: docs/planning/MVP_A_ANSWER_SAFETY_TASK_CARDS.md
-task_cards_status: approved_companion
-verification_result: docs/testing/AS-TASK-008_VERIFICATION.json
-gate_review: docs/reviews/MVP_A_ANSWER_SAFETY_DEVELOPMENT_READINESS_GATE_2026-07-17.md
-git_branch: codex/mvp-a-answer-safety-planning
-git_commit: d504928
-verification_commit: d504928
-git_recovery_tag: mvp-a-answer-safety-development-ready-v0.1-approved
-scope_in:
-  - AS-TASK-009 A1 full runner verification
-  - AS-TASK-010 A1 final Gate Review
-scope_out:
-  - PRD, Product Decision, Approved SPEC, Acceptance expected and materialized oracle changes
-  - old Micro fixture, oracle, historical result and tag changes
-  - UI, API, permission runtime, MCP, deployment and public release
-open_blockers: []
+decision_ref: DEC-E2E-EXEC-001
+audit_input: AUDIT-NOETIDE-IMPL-20260718-001
+implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
+implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
+current_workstream: WS-01
+current_workstream_status: verification_pending
 next_role: Implementer
-next_single_action: AS-TASK-009
-`
+next_single_action: WS-01_official_micro_runner_verification
+final_target: audit_ready_release_candidate
+final_auditor: Codex
+public_release_allowed: false
+git_branch: codex/kimi-end-to-end-release-candidate
+git_head: 0ae4c7e
+suite_status:
+  micro_current: superseded_by_dirty_shared_implementation
+  a1_current: not_executed
+  b1_current: not_materialized
+  c1_current: not_materialized
+  synthetic_ingestion_current: not_materialized
+  portability_current: not_executed
+scope_in:
+  - WS-00 through WS-12 under PLAN-NOETIDE-E2E-RC-001
+  - continuous development, testing, Kimi internal audit, debug, full regression, and Kimi re-review
+scope_out:
+  - PRD and Approved SPEC changes to fit implementation
+  - real personal data and any workspace-external reads
+  - user untracked private files
+  - push, main merge, formal tag, GitHub Release, and public release
+stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
+```
 
-## 2. 当前状态
+## 当前事实
 
-- AS-TASK-001..008: completed
-- AS-TASK-009: in_progress
-- AS-TASK-010: pending
+- `AUDIT-NOETIDE-IMPL-20260718-001` 的 P1=11、P2=5 是当前纠偏输入；不得将旧 Gate 或历史 result 当成关闭证据。
+- 当前 `changesets.py` 有未提交、未验证的 WS-01 实验改动。它既不是完成证据，也不得被静默丢弃。
+- `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 和 `tests/results/` 是用户未跟踪内容；不得读取、修改或提交。
 
-## 3. AS-TASK-009 目标
+## WS-00 结果
 
-使用官方 runner 执行完整 A1 suite，验证 35/35 required result IDs 通过，并生成不可变 Verification Result artifact。
+1. Requirements Matrix、Micro/A1 manifest、Verification Result、Git commit 和本交接包使用同一真实状态。
+2. 历史 result 仅标为历史或 `superseded`，不删除、不覆盖、不冒充 current。
+3. 当前未提交代码改动与其验证状态明确可追溯。
+4. 当前 required suite 的 `defined/materialized/executed/passed` 四态与真实执行一致。
 
-## 4. AS-TASK-010 目标
-
-A1 最终 Gate Review：确认所有 P0/P1 关闭，Micro 回归通过，创建 Recovery Point。
-
-## 5. 验证记录
-
-- A1 runner: 35/35 passed (a1_run_result_20260718_006.json)
-- Micro regression: 18/18 passed (TASK-001..008)
-- Answer contract: 11/11 passed
-- Verification artifact: docs/testing/AS-TASK-008_VERIFICATION.json
+以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；当前仅缺 official Micro runner 的不可变 result，不能把定向测试替代为 full-suite passed。

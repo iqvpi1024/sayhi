@@ -92,6 +92,16 @@ class MicroRelationshipContractTests(unittest.TestCase):
             }
         return result
 
+    def _mutate_changeset(self, system: Any, mutate: Callable[[dict[str, Any]], None]) -> None:
+        store = system.store
+        try:
+            changeset = store.ledger_record("changeset_micro_001")
+            self.assertIsNotNone(changeset)
+            mutate(changeset)
+            store.replace_ledger_record("changeset_micro_001", changeset)
+        finally:
+            store.close()
+
     @scenario("MM-001")
     def test_mm_001_source_append(self) -> None:
         before = self.system.canonical_snapshot()
@@ -277,6 +287,41 @@ class MicroRelationshipContractTests(unittest.TestCase):
         retry = self.system.propose_retry(changeset["changeset_id"])
         self.assertNotEqual(retry["changeset_id"], changeset["changeset_id"])
         self.assertEqual(retry["retry_of"], changeset["changeset_id"])
+
+    def test_mm_009_cs_at_031_preflight_failures_are_terminal_and_atomic(self) -> None:
+        cases: list[tuple[str, str, Callable[[dict[str, Any]], None]]] = []
+
+        def mismatched_before_digest(changeset: dict[str, Any]) -> None:
+            changeset["proposals"][0]["before_digest"] = "0" * 64
+
+        def dangling_evidence_ref(changeset: dict[str, Any]) -> None:
+            changeset["proposals"][1]["after_value"]["evidence_refs"][0]["source_id"] = "src_missing_001"
+
+        def protected_path_change(changeset: dict[str, Any]) -> None:
+            changeset["protected_paths"].remove("relationship.origin")
+
+        cases.extend(
+            [
+                ("digest", "conflicted", mismatched_before_digest),
+                ("dangling", "failed", dangling_evidence_ref),
+                ("protected", "failed", protected_path_change),
+            ]
+        )
+        for suffix, expected_status, mutate in cases:
+            with self.subTest(case=suffix):
+                system = self._create_system(f"cs031-{suffix}")
+                changeset = self._propose(system)
+                system.approve_changeset(changeset["changeset_id"], "person_alpha")
+                before = system.canonical_snapshot()
+                self._mutate_changeset(system, mutate)
+                receipt = system.publish_changeset(changeset["changeset_id"], f"cs031-{suffix}")
+                self.assertEqual(receipt["status"], expected_status)
+                self.assertIsNone(receipt["published_revision"])
+                self.assertEqual(system.canonical_snapshot(), before)
+                attempt = system.get_publish_attempts(changeset["changeset_id"])[0]
+                self.assertEqual(attempt["preflight_result"], "conflict" if suffix == "digest" else "failed")
+                retry = system.propose_retry(changeset["changeset_id"])
+                self.assertNotEqual(retry["changeset_id"], changeset["changeset_id"])
 
     @scenario("MM-010")
     def test_mm_010_l2_failure_is_safe_and_reconcilable(self) -> None:

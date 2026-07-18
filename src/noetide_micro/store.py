@@ -189,6 +189,12 @@ class SemanticStore:
             raise KeyError(object_id)
         return json.loads(row[0])
 
+    def canonical_object_or_none(self, object_id: str) -> JsonObject | None:
+        row = self._connection.execute(
+            "SELECT payload_json FROM canonical_objects WHERE object_id = ?", (object_id,)
+        ).fetchone()
+        return json.loads(row[0]) if row else None
+
     def replace_canonical_object(self, object_id: str, payload: Mapping[str, Any]) -> None:
         cursor = self._connection.execute(
             "UPDATE canonical_objects SET object_revision = ?, payload_json = ? WHERE object_id = ?",

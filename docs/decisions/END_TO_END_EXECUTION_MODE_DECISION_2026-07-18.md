@@ -50,5 +50,4 @@ public_release_before_independent_audit: false
 
 ## 完成边界
 
-连续执行只到 `audit_ready_release_candidate`。独立审计、Debug 复审、合并到 GitHub 默认分支、正式版本 tag 和 GitHub Release 不由开发代理自行完成。
-
+连续执行只到 `audit_ready_release_candidate`。在交接前，实施代理必须连续完成开发、测试、内部审计、Debug、全量回归和内部复审；内部审计与复审不能替代独立审计。Codex 只在该候选形成后进行最终独立审计。合并到 GitHub 默认分支、正式版本 tag 和 GitHub Release 均不由实施代理自行完成。

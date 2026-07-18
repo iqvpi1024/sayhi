@@ -46,7 +46,9 @@
 | `WS-07` | Portability | Context Pack JSON/Markdown/Source/checksums/import verifier | export 可独立读取，round-trip 不丢 required/unknown 字段 |
 | `WS-08` | Packaging | install metadata、license、module/console entry、one-click scripts | 新建干净 venv 后本地安装、启动、卸载和重装可复现 |
 | `WS-09` | 完整验证 | suite、CLI、package、privacy、recovery rehearsal | 所有 required 同一 RC commit 通过，无 required skip |
-| `WS-10` | 审计交接 | Release Candidate record、diff、风险、复验命令 | `audit_ready_release_candidate`，工作树只含明确交付物 |
+| `WS-10` | Kimi 内部审计 | finding 台账、独立复验命令、范围和风险核对 | 当前 RC 无 P0/P1，所有声明均有可复现证据 |
+| `WS-11` | Debug 与全量回归 | P0/P1 修复、完整 result、失败保留记录 | WS-10 finding 关闭或诚实降级，所有 required 同一 commit 通过 |
+| `WS-12` | Kimi 复审与审计交接 | RC record、diff、风险、复验命令、handoff | `audit_ready_release_candidate`，交给 Codex 最终独立审计 |
 
 ## 4. WS-00 状态与证据复位
 
@@ -157,12 +159,16 @@ git diff --check
 
 每项记录 command、cwd、Python/SQLite/OS、commit、exit code、result artifact 和 SHA-256。required 结果必须来自同一 RC commit，不能跨 run 拼接。
 
-## 14. WS-10 审计交接包
+## 14. WS-10 至 WS-12：内部审计、Debug、复审与交接
 
-Kimi 完成后必须留下：
+`WS-10` 必须在与实现分离的审计步骤中逐项复验 P1/P2、manifest/result binding、CLI、package、portability、隐私边界和文档声明。发现 P0/P1 后进入 `WS-11`，不得把失败改写为通过。
 
-- `docs/PROJECT_STATE.md`：phase=`verified` 或真实失败状态。
-- `docs/process/CURRENT_HANDOFF.md`：next_role=`Independent Auditor`。
+`WS-11` 修复经内部审计确认的问题，并从干净环境执行全部 §13 Required Verification。每次修复后的 result 必须绑定同一 RC commit；不得拼接旧 run。
+
+`WS-12` 复审通过后必须留下：
+
+- `docs/PROJECT_STATE.md`：phase=`audit_ready_release_candidate` 或真实失败状态。
+- `docs/process/CURRENT_HANDOFF.md`：next_role=`Independent Auditor`，final_auditor=`Codex`。
 - current Requirements Matrix。
 - 每套 suite current immutable result。
 - Release Candidate Recovery Record，包含 commit、复验命令和已知 P2/P3。
@@ -182,5 +188,4 @@ Kimi 完成后必须留下：
 7. 一键脚本在声明平台实际验证通过。
 8. 没有读取/提交真实个人数据和用户私有目录。
 9. 项目状态、handoff、matrix、manifest、result 和 Git commit 一致。
-10. 未合并 `main`、未推正式 tag、未发布 GitHub Release，等待独立审计。
-
+10. 已完成 Kimi 内部审计、Debug、全量回归和复审；未合并 `main`、未推正式 tag、未发布 GitHub Release，等待 Codex 独立审计。

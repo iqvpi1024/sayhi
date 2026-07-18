@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import copy
 import hashlib
-from typing import Any, Callable, Mapping
+import json
+from typing import Any, Mapping
 
 from .candidate import CHANGESET_ID, ContactCandidateBuilder
 from .store import SemanticStore
@@ -12,6 +13,13 @@ from .views import CoreViewProjector
 
 
 JsonObject = dict[str, Any]
+_PROTECTED_PATHS = {
+    "relationship.origin",
+    "state[relationship.role].value",
+    "assertion[relationship.trust].value",
+    "assertion[relationship.closeness].value",
+    "hypothesis[relationship.personality]",
+}
 
 
 class ChangeSetService:
@@ -34,55 +42,61 @@ class ChangeSetService:
 
         observed_revision = self._store.current_revision()
         attempt_id = _attempt_id(changeset_id, idempotency_key)
+        self._record_attempt(changeset, attempt_id, idempotency_key, observed_revision)
         if observed_revision != changeset["base_revision"]:
             return self._terminal_failure(
                 changeset, binding_id, attempt_id, "conflict", observed_revision, "conflicted"
             )
 
-        attempt = {
-            "attempt_id": attempt_id,
-            "changeset_id": changeset_id,
-            "idempotency_key_digest": _digest_text(idempotency_key),
-            "observed_data_revision": observed_revision,
-            "preflight_result": "passed",
-            "status": "recorded",
-        }
-        self._store.put_ledger_record(attempt_id, "publish_attempt", attempt)
+        preflight_result, terminal_status = self._preflight(changeset)
+        if terminal_status is not None:
+            return self._terminal_failure(
+                changeset,
+                binding_id,
+                attempt_id,
+                preflight_result,
+                observed_revision,
+                terminal_status,
+            )
+        self._set_attempt_preflight(attempt_id, "passed", observed_revision)
+
         try:
             with self._store.transaction():
                 self._publish_atomic(changeset, failure_points)
+                receipt_id = "receipt_publish_001"
+                receipt = {
+                    "receipt_id": receipt_id,
+                    "changeset_id": changeset_id,
+                    "publish_attempt_id": attempt_id,
+                    "status": "published",
+                    "preflight_result": "passed",
+                    "published_revision": "rev_011",
+                    "view_results": [],
+                }
+                published = copy.deepcopy(changeset)
+                published.update(
+                    {"status": "published", "published_revision": "rev_011", "receipt_id": receipt_id}
+                )
+                self._store.replace_ledger_record(changeset_id, published, "rev_011")
+                self._store.put_ledger_record(receipt_id, "receipt", receipt, "rev_011")
+                self._store.put_ledger_record(
+                    "audit:changeset_micro_001:published",
+                    "audit_event",
+                    {"changeset_id": changeset_id, "event_type": "published", "revision": "rev_011"},
+                    "rev_011",
+                )
+                self._store.put_ledger_record(
+                    binding_id, "idempotency", {"changeset_id": changeset_id, "receipt_id": receipt_id}
+                )
         except Exception:
             return self._terminal_failure(
-                changeset, binding_id, attempt_id, "failed", observed_revision, "failed"
+                changeset, binding_id, attempt_id, "passed", observed_revision, "failed"
             )
 
-        receipt_id = "receipt_publish_001"
-        receipt = {
-            "receipt_id": receipt_id,
-            "changeset_id": changeset_id,
-            "publish_attempt_id": attempt_id,
-            "status": "published",
-            "preflight_result": "passed",
-            "published_revision": "rev_011",
-            "view_results": [],
-        }
-        published = copy.deepcopy(changeset)
-        published.update({"status": "published", "published_revision": "rev_011", "receipt_id": receipt_id})
-        with self._store.transaction():
-            self._store.replace_ledger_record(changeset_id, published, "rev_011")
-            self._store.put_ledger_record(receipt_id, "receipt", receipt, "rev_011")
-            self._store.put_ledger_record(
-                "audit:changeset_micro_001:published",
-                "audit_event",
-                {"changeset_id": changeset_id, "event_type": "published", "revision": "rev_011"},
-                "rev_011",
-            )
-            self._store.put_ledger_record(
-                binding_id, "idempotency", {"changeset_id": changeset_id, "receipt_id": receipt_id}
-            )
+        # L2 projection is rebuildable and intentionally outside the L1 commit boundary.
         view_results = CoreViewProjector(self._store, self._fixture).project("rev_011", failure_points)
         receipt["view_results"] = view_results
-        self._store.replace_ledger_record(receipt_id, receipt, "rev_011")
+        self._store.replace_ledger_record("receipt_publish_001", receipt, "rev_011")
         return receipt
 
     def attempts(self, changeset_id: str) -> list[JsonObject]:
@@ -117,23 +131,22 @@ class ChangeSetService:
                 "retry_of": changeset_id,
             }
         )
-        self._store.put_ledger_record(retry_id, "changeset", retry)
+        with self._store.transaction():
+            self._store.put_ledger_record(retry_id, "changeset", retry)
         return retry
 
     def revert(self, changeset_id: str, idempotency_key: str) -> JsonObject:
+        binding_id = _binding_id(changeset_id, idempotency_key)
+        existing_binding = self._store.ledger_record(binding_id)
+        if existing_binding is not None:
+            return self._required_receipt(existing_binding["receipt_id"])
         changeset = self._drafts.get(changeset_id)
         if changeset["status"] != "published":
             raise RuntimeError("only a published ChangeSet may be reverted")
         if self._store.current_revision() != "rev_011":
             raise RuntimeError("compensation requires the published revision as its base")
+
         receipt_id = "receipt_compensation_001"
-        existing = self._store.ledger_record(receipt_id)
-        if existing is not None:
-            return existing
-        restored = copy.deepcopy(self._fixture_state("state_contact_001"))
-        restored["object_revision"] = "rev_012"
-        restored["recorded_at"] = self._now
-        restored["recorded_by"] = "user"
         compensation = {
             "changeset_id": "changeset_compensation_001",
             "base_revision": "rev_011",
@@ -156,6 +169,11 @@ class ChangeSetService:
             "published_revision": "rev_012",
             "view_results": [],
         }
+        restored = self._fixture_state("state_contact_001")
+        restored["object_revision"] = "rev_012"
+        restored["recorded_at"] = self._now
+        restored["recorded_by"] = "user"
+
         with self._store.transaction():
             self._store.delete_canonical_object("state_contact_002")
             self._store.replace_canonical_object("state_contact_001", restored)
@@ -173,6 +191,10 @@ class ChangeSetService:
                 {"changeset_id": changeset_id, "event_type": "reverted", "revision": "rev_012"},
                 "rev_012",
             )
+            self._store.put_ledger_record(
+                binding_id, "idempotency", {"changeset_id": changeset_id, "receipt_id": receipt_id}
+            )
+
         receipt["view_results"] = CoreViewProjector(self._store, self._fixture).project("rev_012", set())
         self._store.replace_ledger_record(receipt_id, receipt, "rev_012")
         return receipt
@@ -180,12 +202,82 @@ class ChangeSetService:
     def audit_events(self, changeset_id: str) -> list[JsonObject]:
         return self._store.ledger_records_for("audit_event", changeset_id)
 
+    def _record_attempt(
+        self, changeset: Mapping[str, Any], attempt_id: str, idempotency_key: str, observed_revision: str
+    ) -> None:
+        attempt = {
+            "attempt_id": attempt_id,
+            "changeset_id": changeset["changeset_id"],
+            "idempotency_key_digest": _digest_text(idempotency_key),
+            "observed_data_revision": observed_revision,
+            "preflight_result": "pending",
+            "status": "recorded",
+        }
+        with self._store.transaction():
+            self._store.put_ledger_record(attempt_id, "publish_attempt", attempt)
+
+    def _preflight(self, changeset: Mapping[str, Any]) -> tuple[str, str | None]:
+        proposals = changeset.get("proposals")
+        if not isinstance(proposals, list) or len(proposals) != 2:
+            return "failed", "failed"
+        end, add = proposals
+        if end.get("operation") != "end" or add.get("operation") != "add":
+            return "failed", "failed"
+        if set(changeset.get("protected_paths", [])) != _PROTECTED_PATHS:
+            return "failed", "failed"
+        if end.get("target_ref", {}).get("object_id") != "state_contact_001":
+            return "failed", "failed"
+        if add.get("target_ref", {}).get("object_id") != "state_contact_002":
+            return "failed", "failed"
+        try:
+            old_state = self._store.canonical_object("state_contact_001")
+        except KeyError:
+            return "failed", "failed"
+        if end.get("before_digest") != _canonical_digest(old_state):
+            return "conflict", "conflicted"
+        if self._store.canonical_object_or_none("state_contact_002") is not None:
+            return "conflict", "conflicted"
+        if add.get("before_digest") != "absent":
+            return "conflict", "conflicted"
+        for proposal in proposals:
+            after_value = proposal.get("after_value")
+            if not isinstance(after_value, Mapping):
+                return "failed", "failed"
+            if after_value.get("object_type") != "state":
+                return "failed", "failed"
+            if after_value.get("state_id") != proposal.get("target_ref", {}).get("object_id"):
+                return "failed", "failed"
+            subject_ref = after_value.get("subject_ref")
+            if isinstance(subject_ref, Mapping):
+                if subject_ref.get("object_type") != "relationship":
+                    return "failed", "failed"
+                relationship_id = subject_ref.get("object_id")
+            elif isinstance(subject_ref, str):
+                relationship_id = subject_ref
+            else:
+                return "failed", "failed"
+            if not isinstance(relationship_id, str) or self._store.canonical_object_or_none(relationship_id) is None:
+                return "failed", "failed"
+            for evidence_ref in after_value.get("evidence_refs", []):
+                source_id = evidence_ref.get("source_id")
+                if not isinstance(source_id, str) or self._store.seeded_source(source_id) is None:
+                    return "failed", "failed"
+        return "passed", None
+
+    def _set_attempt_preflight(
+        self, attempt_id: str, preflight_result: str, observed_revision: str
+    ) -> None:
+        attempt = self._required_receipt(attempt_id)
+        attempt["preflight_result"] = preflight_result
+        attempt["observed_data_revision"] = observed_revision
+        with self._store.transaction():
+            self._store.replace_ledger_record(attempt_id, attempt)
+
     def _publish_atomic(self, changeset: Mapping[str, Any], failure_points: set[str]) -> None:
         if self._store.current_revision() != changeset["base_revision"]:
             raise RuntimeError("stale base revision")
-        proposals = changeset["proposals"]
-        old_state = proposals[0]["after_value"]
-        new_state = proposals[1]["after_value"]
+        old_state = changeset["proposals"][0]["after_value"]
+        new_state = changeset["proposals"][1]["after_value"]
         self._store.replace_canonical_object("state_contact_001", old_state)
         self._store.replace_evidence_refs("state_contact_001", old_state["evidence_refs"])
         if "l1.proposal.2" in failure_points:
@@ -204,16 +296,6 @@ class ChangeSetService:
         status: str,
     ) -> JsonObject:
         receipt_id = f"receipt_{status}_{_digest_text(attempt_id)[:12]}"
-        attempt = self._store.ledger_record(attempt_id)
-        if attempt is None:
-            attempt = {
-                "attempt_id": attempt_id,
-                "changeset_id": changeset["changeset_id"],
-                "idempotency_key_digest": _digest_text(binding_id),
-                "observed_data_revision": observed_revision,
-                "preflight_result": preflight_result,
-                "status": "recorded",
-            }
         receipt = {
             "receipt_id": receipt_id,
             "changeset_id": changeset["changeset_id"],
@@ -226,8 +308,10 @@ class ChangeSetService:
         terminal = copy.deepcopy(changeset)
         terminal.update({"status": status, "published_revision": None, "receipt_id": receipt_id})
         with self._store.transaction():
-            if self._store.ledger_record(attempt_id) is None:
-                self._store.put_ledger_record(attempt_id, "publish_attempt", attempt)
+            attempt = self._required_receipt(attempt_id)
+            attempt["preflight_result"] = preflight_result
+            attempt["observed_data_revision"] = observed_revision
+            self._store.replace_ledger_record(attempt_id, attempt)
             self._store.replace_ledger_record(changeset["changeset_id"], terminal)
             self._store.put_ledger_record(receipt_id, "receipt", receipt)
             self._store.put_ledger_record(
@@ -251,6 +335,11 @@ class ChangeSetService:
                 if item.get("state_id") == state_id
             )
         )
+
+
+def _canonical_digest(value: Mapping[str, Any]) -> str:
+    encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _digest_text(value: str) -> str:

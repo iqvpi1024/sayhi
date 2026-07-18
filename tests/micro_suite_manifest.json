@@ -6,15 +6,24 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": true,
-    "suite_passed": true
+    "suite_executed": false,
+    "suite_passed": false
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "passed",
-  "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/micro-task009-lf-20260717.json",
-  "latest_verification_manifest_sha256": "ad0f9283fd1d2258dbd9125297cf44d4d07e072551ab209847e9190f9b8e5450",
-  "latest_verification_result_sha256": "20fabfafb061c20fcf1d941c0e84b191ea9bb32be28769aadeaab961a10f2817",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_applicable",
+  "latest_verification_result_path": null,
+  "latest_verification_manifest_sha256": null,
+  "latest_verification_result_sha256": null,
+  "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/micro-task009-lf-20260717.json",
+      "manifest_sha256": "ad0f9283fd1d2258dbd9125297cf44d4d07e072551ab209847e9190f9b8e5450",
+      "result_sha256": "20fabfafb061c20fcf1d941c0e84b191ea9bb32be28769aadeaab961a10f2817",
+      "reason": "Current shared implementation has unverified changes; a current official runner result is required."
+    }
+  ],
   "baseline": {
     "product_path": "PRDv05.md",
     "product_version": "0.5",
@@ -68,7 +77,7 @@
     {
       "role": "business_test_module",
       "path": "tests/semantic/test_micro_relationship_contract.py",
-      "sha256": "5c747b0737de44881babe698fd951c8f5cfb048afe41b6d97c8a3af0efb4a5d0"
+      "sha256": "eaeef672758b4c747848d33e4da6dc9253f8574c6ac90dec3d2edb2ee30009d9"
     },
     {
       "role": "offline_runner",

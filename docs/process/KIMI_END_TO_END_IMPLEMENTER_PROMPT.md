@@ -7,7 +7,7 @@
 
 工作区：D:\sayhi
 
-本轮采用连续执行模式。不要每完成一个任务就暂停，也不要要求用户逐项批准。你必须从恢复状态、修复、补全、测试、打包一直执行到 audit_ready_release_candidate，然后停止等待独立审计。质量检查点必须保留并实际通过，不能把“无需人工 Gate”理解成可以跳过测试、隐私、ChangeSet 或发布证据。
+本轮采用连续执行模式。不要每完成一个任务就暂停，也不要要求用户逐项批准。你必须从恢复状态、修复、补全、测试、内部审计、Debug、全量回归、复审和打包一直执行到 audit_ready_release_candidate，然后停止等待 Codex 最终独立审计。质量检查点必须保留并实际通过，不能把“无需人工 Gate”理解成可以跳过测试、隐私、ChangeSet 或发布证据。
 
 开始前严格读取：
 1. AGENTS.md
@@ -25,7 +25,7 @@
 
 执行要求：
 - 从当前 HEAD 创建 codex/kimi-end-to-end-release-candidate 分支。
-- 连续完成 WS-00..WS-10；每个 Workstream 测试失败后直接修复并重跑，不停下来询问常规问题。
+- 连续完成 WS-00..WS-12；每个 Workstream 测试失败后直接修复并重跑，不停下来询问常规问题。
 - 关闭 E2E-P1-001..011，处理 E2E-P2-001..005，不能只改文档状态。
 - 不修改 PRDv05.md、历史 PRD、Approved SPEC 或既有 expected oracle 来迎合代码。
 - 如确需合同变更，按 CHANGE_CONTROL 创建新版本、重新物化 suite，并保留旧历史。
@@ -35,7 +35,7 @@
 - 未运行测试记 not_executed；失败测试保留真实结果；不得用 pytest 数量代替 required manifest 结果。
 - 使用 apply_patch 修改文件。不要用 Set-Content、重定向或脚本绕过编辑规则。
 - 不安装不必要依赖，不引入 ORM、Web API、多租户、多 Agent、A2A、真实连接器、同步或通用图数据库。
-- 每个 Workstream 形成范围单一 commit。不要推送、不要移动旧 tag、不要合并 main、不要创建正式 GitHub Release。
+- WS-10 必须是 Kimi 内部审计，WS-11 必须是 Debug 与全量回归，WS-12 必须是 Kimi 复审和交接给 Codex；这三步都不得省略或由静态检查替代。每个 Workstream 形成范围单一 commit。不要推送、不要移动旧 tag、不要合并 main、不要创建正式 GitHub Release。
 
 必须完成的最终验证：
 - Product/SPEC validators 全部 exit 0。
@@ -48,4 +48,3 @@
 
 不得报告“全部完成”，除非 PLAN §15 十条 Definition of Done 全部有证据。完成后更新 PROJECT_STATE 和 CURRENT_HANDOFF，next_role 必须是 Independent Auditor，并用中文汇报：提交列表、关闭的 Finding、真实测试结果、仍存在风险、RC commit、未推送/未发布状态。然后停止。
 ```
-

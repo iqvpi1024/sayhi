@@ -549,7 +549,20 @@ $privacyErrorsBefore = $errors.Count
 foreach ($file in $privacyFiles | Sort-Object -Property FullName -Unique) {
     $content = Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8
     foreach ($patternName in $privacyPatterns.Keys) {
-        if ([regex]::IsMatch($content, $privacyPatterns[$patternName])) {
+        $matches = [regex]::Matches($content, $privacyPatterns[$patternName])
+        $hasPrivacyMatch = $false
+        foreach ($match in $matches) {
+            $isPublicGitSshRemote = $false
+            if ($patternName -eq 'email-like address' -and $match.Value -match '(?i)^git@(?:github\.com|ssh\.github\.com|gitlab\.com|bitbucket\.org)$') {
+                $nextIndex = $match.Index + $match.Length
+                $isPublicGitSshRemote = $nextIndex -lt $content.Length -and $content[$nextIndex] -in ':', '/'
+            }
+            if (-not $isPublicGitSshRemote) {
+                $hasPrivacyMatch = $true
+                break
+            }
+        }
+        if ($hasPrivacyMatch) {
             $relative = $file.FullName.Substring($root.Length).TrimStart('\', '/')
             Add-Error "Privacy heuristic '$patternName' matched in $relative"
         }
