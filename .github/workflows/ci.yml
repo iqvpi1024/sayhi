@@ -1,0 +1,49 @@
+name: Validate Synthetic Preview
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  contract-and-semantic-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate contracts
+        shell: pwsh
+        run: |
+          python ./tools/validate_micro_suite.py
+          python ./tools/validate_answer_safety_suite.py
+          python ./tools/validate_b1_suite.py
+          python ./tools/validate_c1_suite.py
+          python ./tools/validate_synthetic_ingestion_suite.py
+          python ./tools/validate_context_pack_suite.py
+          ./tools/validate_product_baseline.ps1
+          ./tools/validate_spec_baseline.ps1
+      - name: Run semantic regression
+        shell: pwsh
+        run: |
+          $env:PYTHONPATH = "$PWD/src"
+          $env:NOETIDE_MICRO_ADAPTER = "noetide_micro.testing_adapter"
+          $env:NOETIDE_ANSWER_ADAPTER = "noetide_micro.answer_testing_adapter"
+          python -m unittest discover -s tests/semantic -v
+
+  windows-preview-smoke:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build public preview archive
+        shell: pwsh
+        run: .\scripts\build-public-preview.ps1 -OutputDirectory .\dist
+      - name: Run synthetic preview smoke
+        shell: pwsh
+        run: .\scripts\run-synthetic-demo.ps1 -InstallRoot .\tmp\ci-demo -Recreate

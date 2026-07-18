@@ -35,3 +35,12 @@ exports/
 *.sqlite
 *.sqlite3
 
+# User-local files explicitly outside this repository's delivery scope
+.workbuddy/
+Review-report/
+/test.py
+/test2.py
+/test_output.txt
+/tests/results/
+/src/*.egg-info/
+
