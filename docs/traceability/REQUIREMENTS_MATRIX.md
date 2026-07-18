@@ -131,3 +131,11 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | PRD Requirement | Workstream Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
 | `FR-001` | explicit synthetic Source append、durable stored receipt、reject/duplicate/idempotency/subject-ref failures | S9 §4-§7、§14 | `SI-001/002/003/004` | `src/noetide_micro/importer.py`、`src/noetide_micro/store.py` | `synthetic-ingestion-ws06-2d689ea-20260718.json: 4/4 passed/current` |
+
+## 4.3 Workstream：WS-07 Context Pack Portability
+
+`WS-07` 仅实现 owner-private synthetic Context Pack 的结构化导出与 dry-run verifier。它不声称完成分享导出、真实迁移、sealed runtime、删除或完整 S7/S9 27/31 项验收。
+
+| PRD Requirement | Workstream Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-303` | JSON/Markdown/Source/Ledger/manifest/checksums、unknown extension semantic round-trip、hash/path rejection | S7 §5-§16；S9 §5、§13-§14 | `CP-001/002/003/004/005/006` | `src/noetide_micro/portability.py`、`src/noetide_micro/store.py` | `context-pack-ws07-f27d686-20260718.json: 6/6 passed/current` |

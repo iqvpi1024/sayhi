@@ -1,8 +1,12 @@
 {
   "schema_version": "noetide.context-pack-suite-manifest.v1",
   "suite_id": "context_pack_portability_v1",
-  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
-  "latest_verification_result": "not_executed",
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/context-pack-ws07-f27d686-20260718.json",
+  "latest_verification_manifest_sha256": "a1dcd5626eebd1ab50af9cd19b08b8808c8de4c7518d606767e8926454343deb",
+  "latest_verification_result_sha256": "6ccea61e7811a4476e69dd23e4c48b4dcd1058f6adf1f39187384ce703aedd68",
   "required_scenario_ids": ["CP-001", "CP-002", "CP-003", "CP-004", "CP-005", "CP-006"],
   "artifacts": [
     {"role": "fixture", "path": "tests/fixtures/context_pack_v1/fixture.json", "sha256": "f5cbae3dd184c0d16c08c9f3ca408cb85a33ea6a890f55de025b58cfdfc38e50"},

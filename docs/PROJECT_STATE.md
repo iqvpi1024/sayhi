@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `remediation_portability` |
+| 当前阶段 | `remediation_c1_and_packaging` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -20,7 +20,7 @@
 | 最终独立审计 | Codex；在 Kimi 内部审计、Debug、全量回归和复审之后 |
 | 正式发布权限 | 禁止推送、合并 `main`、正式 tag、GitHub Release |
 | 当前 Git 分支 | `codex/kimi-end-to-end-release-candidate` |
-| 当前 Git HEAD | `2d689ea`（WS-06 official runner 的被测提交；下一次状态提交前） |
+| 当前 Git HEAD | `f27d686`（WS-07 official runner 的被测提交；下一次状态提交前） |
 | 工作树 | 用户未跟踪的 `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交 |
 
 ## 3. 真实进度
@@ -33,6 +33,7 @@
 6. `WS-02` 已完成：提交 `85240c5` 上的 official A1 runner 生成 `a1-ws02-85240c5-20260718.json`，35/35 required IDs、artifact binding 与合成隐私扫描均通过。
 7. `WS-03` 已完成：提交 `b8910c7` 的包在干净 Python 3.12 venv 从本地安装后，模块入口和 `noetide.exe` 均实际完成合成 Micro 链路；任意文本 intake 被拒绝并返回 exit code `2`。
 8. `WS-06` 已完成：提交 `d7f8bf0` 修复 Source append 耐久性，提交 `2d689ea` 上 official Synthetic Ingestion runner 生成 `synthetic-ingestion-ws06-2d689ea-20260718.json`；4/4 required IDs、exit code `0`、artifact binding 和受阻断网络环境均通过。此前 `2939453` 结果因 validator 工件变更保留为 `superseded`，未被伪装为 current。
+9. `WS-07` 已完成最小私有合成 Context Pack：提交 `f27d686` 上 official runner 生成 `context-pack-ws07-f27d686-20260718.json`；6/6 required IDs、exit code `0`、manifest/fixture/oracle/测试模块/runner/validator binding 均通过。范围仅为私有合成导出、hash/path verifier 和 dry-run round-trip；不包含真实导入、分享导出或 sealed runtime。
 
 ## 4. 当前质量状态
 
@@ -44,7 +45,7 @@
 | B1 Candidate Review | 因 `DQ-002`、`DQ-011` 仍 deferred 暂停；不得自行选择默认预算或自动权限 |
 | C1 Decision/Outcome | 未完成原型，缺持久化 ChangeSet 和审计闭环 |
 | Synthetic Ingestion | current suite executed/passed；4/4 required IDs 的 immutable result 已被 manifest 绑定；一份先前结果保留为 `superseded` |
-| Context Pack | 未满足最小可移植合同 |
+| Context Pack | private synthetic narrow contract current suite 6/6 passed；完整 S7/S9 长期范围仍未实现 |
 | Packaging / Windows one-click | 未验证，不能宣称可用 |
 | 当前完整 RC suite | `not_executed` |
 
@@ -71,4 +72,4 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 7. 下一步唯一建议动作
 
-**由 Implementer 继续 `WS-07`：只依据 S7/S9 与 approved plan 物化最小 Context Pack portability 合同、suite 和 implementation；B1 在 `DQ-002`、`DQ-011` 裁决前保持暂停。**
+**由 Implementer 继续未被 B1 门禁阻塞的 `WS-05/C1` 纠偏：先核验现有 C1 原型与 Approved plan 的差异，再只实现已授权的持久化 ChangeSet、审计和 suite；B1 在 `DQ-002`、`DQ-011` 裁决前保持暂停。**

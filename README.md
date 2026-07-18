@@ -8,8 +8,9 @@
 - 一个 `relationship.contact: active -> no_contact` ChangeSet 的提案、确认、原子发布与补偿撤销。
 - `person_card` 与 `relationship_timeline` 两个 Core View。
 - 本地 SQLite，Python 3.12 标准库，无网络访问。
+- 可导出 owner-private 的合成 Context Pack（JSON、Markdown、Source/Ledger 清单和 SHA-256）；不支持真实数据导入或分享导出。
 
-不包含：真实数据导入、通用 NLP、权限 runtime、MCP、连接器、同步、财务、健康、决策工作流、完整 Context Pack 或公开发布。
+不包含：真实数据导入、通用 NLP、权限 runtime、MCP、连接器、同步、财务、健康、决策工作流、分享导出、完整长期迁移或公开发布。
 
 ## 本地运行
 
