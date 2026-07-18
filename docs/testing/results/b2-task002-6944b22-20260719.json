@@ -1,0 +1,59 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "B2-TASK-002",
+  "git_commit": "6944b22",
+  "applicability": "current_for_task",
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "dependencies": "stdlib_only"
+  },
+  "checks": [
+    {
+      "command": "PYTHONPATH=src python -m py_compile src/noetide_micro/episodes.py src/noetide_micro/store.py",
+      "exit_code": 0,
+      "result": "syntax compilation passed"
+    },
+    {
+      "command": "PYTHONPATH=src python -m unittest tests.semantic.test_b2_task_002_episodes -v",
+      "exit_code": 0,
+      "result": "5/5 passed"
+    },
+    {
+      "command": "python tools/validate_b2_suite.py",
+      "exit_code": 0,
+      "result": "suite materialized and all artifact hashes match; B2 business suite not executed"
+    },
+    {
+      "command": "$env:PYTHONPATH = \"$PWD/src\"; $env:NOETIDE_MICRO_ADAPTER = \"noetide_micro.testing_adapter\"; $env:NOETIDE_ANSWER_ADAPTER = \"noetide_micro.answer_testing_adapter\"; python -m unittest discover -s tests/semantic -v",
+      "exit_code": 0,
+      "result": "103 tests passed; 8 B2 contract tests skipped because B2 adapter belongs to pending B2-TASK-004"
+    },
+    {
+      "command": "powershell -File tools/validate_product_baseline.ps1; powershell -File tools/validate_spec_baseline.ps1",
+      "exit_code": 0,
+      "result": "product and specification baseline static validation passed"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "no whitespace errors"
+    }
+  ],
+  "non_acceptance_attempts": [
+    {
+      "command": "$env:PYTHONPATH = \"$PWD/src\"; python -m unittest discover -s tests/semantic -v",
+      "exit_code": 1,
+      "result": "environment was incomplete: existing Micro and Answer Safety contract tests require their configured adapters; this run is not used as verification"
+    }
+  ],
+  "b2_suite_status": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false,
+    "official_runner": "not_executed",
+    "reason": "B2-TASK-004 adapter and B2-TASK-005 official runner binding are pending"
+  }
+}
