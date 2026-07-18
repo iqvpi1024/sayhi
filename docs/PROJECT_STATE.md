@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `remediation_c1_and_packaging` |
+| 当前阶段 | `remediation_packaging` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -43,7 +43,7 @@
 | A1 current manifest/result binding | current official runner 35/35 passed；P1 已关闭 |
 | Production runtime / CLI / README | 包内合成 demo 在干净 venv 已验证；完整 Context Pack 与一键脚本仍后置 |
 | B1 Candidate Review | 因 `DQ-002`、`DQ-011` 仍 deferred 暂停；不得自行选择默认预算或自动权限 |
-| C1 Decision/Outcome | 未完成原型，缺持久化 ChangeSet 和审计闭环 |
+| C1 Decision/Outcome | blocked：`DQ-006` 未裁决、B1 未完成，且 C1 Plan/Task Cards 仍为 Draft；现有内存原型不得作为授权实现 |
 | Synthetic Ingestion | current suite executed/passed；4/4 required IDs 的 immutable result 已被 manifest 绑定；一份先前结果保留为 `superseded` |
 | Context Pack | private synthetic narrow contract current suite 6/6 passed；完整 S7/S9 长期范围仍未实现 |
 | Packaging / Windows one-click | 未验证，不能宣称可用 |
@@ -66,10 +66,11 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 ## 6. 未决问题与风险
 
 - B1 进入实现前必须裁决 `DQ-002`、`DQ-011`；它们不能由实施代码、fixture 或默认配置替代产品决定。
+- C1 进入实现前必须裁决 `DQ-006` 且 B1 完成；其现有 Draft 文档和内存原型不构成业务编码授权。
 - 关键交付风险是 P1 的合同链、事务边界、验证绑定和部署真实性，而不是缺少更多功能。
 - 当前 CLI 只接受显式包内合成 demo Source；这不是对真实 ingestion 的实现声明。
 - 未读取工作区外数据；本轮不读取、不修改用户私有未跟踪文件。
 
 ## 7. 下一步唯一建议动作
 
-**由 Implementer 继续未被 B1 门禁阻塞的 `WS-05/C1` 纠偏：先核验现有 C1 原型与 Approved plan 的差异，再只实现已授权的持久化 ChangeSet、审计和 suite；B1 在 `DQ-002`、`DQ-011` 裁决前保持暂停。**
+**由 Implementer 继续独立的 `WS-08`：修复安装元数据、许可证边界与 Windows 一键本地安装/启动脚本，并在干净 Python 3.12 venv 中实际验证；B1/C1 门禁保持暂停。**

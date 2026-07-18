@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: remediation_c1_and_packaging
+current_phase: remediation_packaging
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,10 +14,10 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-05
+current_workstream: WS-08
 current_workstream_status: readiness_check_pending
 next_role: Implementer
-next_single_action: WS-05_c1_authorization_and_gap_check
+next_single_action: WS-08_packaging_and_one_click_readiness
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
@@ -54,4 +54,4 @@ stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 3. 当前未提交代码改动与其验证状态明确可追溯。
 4. 当前 required suite 的 `defined/materialized/executed/passed` 四态与真实执行一致。
 
-以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。`WS-03` 的 clean-venv package/CLI 验证已通过。`WS-06` 的 durable importer 已由提交 `2d689ea` 上的 official runner 验证 4/4 required IDs；其 manifest、fixture、oracle、测试模块、runner、validator 和 immutable result 均绑定。`WS-07` 已由提交 `f27d686` 上的 official runner 验证 6/6 private synthetic Context Pack 场景。B1 在 `DQ-002`、`DQ-011` 裁决前暂停；下一步核验未被 B1 阻塞的 C1 纠偏授权，不得借此实现 B1 语义。
+以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。`WS-03` 的 clean-venv package/CLI 验证已通过。`WS-06` 的 durable importer 已由提交 `2d689ea` 上的 official runner 验证 4/4 required IDs；其 manifest、fixture、oracle、测试模块、runner、validator 和 immutable result 均绑定。`WS-07` 已由提交 `f27d686` 上的 official runner 验证 6/6 private synthetic Context Pack 场景。B1 因 `DQ-002`、`DQ-011` 暂停；C1 因 `DQ-006`、B1 依赖和 Draft Plan 暂停。下一步独立处理 `WS-08`，不得借包装工作实现受阻业务语义。

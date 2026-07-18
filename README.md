@@ -14,6 +14,16 @@
 
 ## 本地运行
 
+Windows 上可用一个命令准备**仅含合成数据**的本地演示：
+
+```powershell
+.\scripts\run-synthetic-demo.ps1 -Recreate
+```
+
+这只达到开发/审计级 D0/D1；不下载真实数据，不是普通用户安装包或 GitHub Release。许可证和公开发布状态见 `docs/releases/ONE_CLICK_DELIVERY_PLAN.md`。
+
+手动等价流程：
+
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python -m pip install .
