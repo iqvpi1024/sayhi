@@ -19,8 +19,8 @@ release:
 ci_runs:
   - 29654926812
   - 29654930604
-next_role: Independent Auditor
-next_single_action: perform_independent_public_preview_audit
+next_role: Product Architect
+next_single_action: select_next_product_slice_through_product_decision
 scope_in:
   - published v0.1.3 synthetic source and portable assets
   - release metadata, checksums, CI evidence, documentation claims and privacy boundary
@@ -29,7 +29,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: independent audit records no P0/P1, or a new immutable corrective release is published
+stop_condition: next product slice has an approved Product Decision and scope boundary
 ```
 
 ## 当前事实
@@ -39,3 +39,4 @@ stop_condition: independent audit records no P0/P1, or a new immutable correctiv
 - portable 包只初始化合成 SQLite 数据，启动 smoke 返回 `Current revision: rev_010`。
 - `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交。
 - 真实验证详情见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`；A1/C1 历史失败结果保留，当前绑定结果分别为 35/35 和 7/7。
+- 独立公开发布终审已完成，P0=0、P1=0；记录见 `docs/reviews/PUBLIC_PREVIEW_V0.1.3_INDEPENDENT_AUDIT.md`。

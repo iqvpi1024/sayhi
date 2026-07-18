@@ -36,6 +36,7 @@
 | tag 构建 portable smoke | exit code `0`，初始化后 `Current revision: rev_010` |
 | GitHub Actions | `29654926812`、`29654930604` 均为 `success` |
 | Release 附件 digest | GitHub API 与本地构建 SHA-256 一致 |
+| 独立公开发布终审 | `PUBLIC_PREVIEW_V0.1.3_INDEPENDENT_AUDIT.md`：P0=0、P1=0 |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -47,4 +48,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**对 `v0.1.3-synthetic-preview` 执行独立公开发布终审；若发现 P0/P1，创建新修复版本，不移动已发布 tag 或附件。**
+**在新的 Product Decision 中选择下一条产品切片；不得以发布预览为由扩张 D1 合成范围。**
