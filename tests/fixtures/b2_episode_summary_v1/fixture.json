@@ -1,0 +1,78 @@
+{
+  "fixture_id": "b2_episode_summary_v1",
+  "schema_version": "noetide.b2-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "b2_episode_summary_v1",
+  "determinism": {
+    "clock": "2032-02-20T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "cases": [
+    {
+      "scenario_id": "B2-001",
+      "database_identity": "b2_case_001",
+      "initial_data_revision": "rev_020",
+      "source_records": [{"source_id": "src_b2_event_001", "content": "synthetic episode event alpha", "synthetic": true}],
+      "entity_refs": ["person_alpha", "person_beta"],
+      "episode_candidate": {"episode_id": "episode_b2_001", "episode_kind": "synthetic_relationship_event", "participant_refs": ["person_alpha", "person_beta"], "valid_time": {"start": "2032-02-18T00:00:00Z", "end": "2032-02-19T00:00:00Z"}, "source_refs": ["src_b2_event_001"], "synthetic_profile_id": "b2_episode_summary_v1"},
+      "operation": "publish_episode"
+    },
+    {
+      "scenario_id": "B2-002",
+      "database_identity": "b2_case_002",
+      "initial_data_revision": "rev_020",
+      "source_records": [],
+      "entity_refs": ["person_alpha"],
+      "episode_candidate": {"episode_id": "episode_b2_invalid", "episode_kind": "synthetic_relationship_event", "participant_refs": ["person_alpha"], "valid_time": null, "source_refs": [], "synthetic_profile_id": "b2_episode_summary_v1"},
+      "operation": "publish_episode"
+    },
+    {
+      "scenario_id": "B2-003",
+      "database_identity": "b2_case_003",
+      "initial_data_revision": "rev_021",
+      "published_episode_ids": ["episode_b2_001"],
+      "operation": "build_summaries"
+    },
+    {
+      "scenario_id": "B2-004",
+      "database_identity": "b2_case_004",
+      "initial_data_revision": "rev_021",
+      "published_episode_ids": ["episode_b2_001"],
+      "existing_projection_ids": ["summary_b2_day_001", "summary_b2_phase_001"],
+      "operation": "revert_episode"
+    },
+    {
+      "scenario_id": "B2-005",
+      "database_identity": "b2_case_005",
+      "initial_data_revision": "rev_021",
+      "published_episode_ids": ["episode_b2_001"],
+      "existing_projection_ids": ["summary_b2_day_001", "summary_b2_phase_001"],
+      "operation": "delete_and_rebuild_summaries"
+    },
+    {
+      "scenario_id": "B2-006",
+      "database_identity": "b2_case_006",
+      "initial_data_revision": "rev_021",
+      "projection_id": "summary_b2_day_001",
+      "operation": "use_summary_as_evidence"
+    },
+    {
+      "scenario_id": "B2-007",
+      "database_identity": "b2_case_007",
+      "initial_data_revision": "rev_021",
+      "published_episode_ids": ["episode_b2_001"],
+      "failure_point": "summary_projector.before_write",
+      "operation": "build_summaries"
+    },
+    {
+      "scenario_id": "B2-008",
+      "database_identity": "b2_case_008",
+      "initial_data_revision": "rev_020",
+      "external_text": "unapproved non-synthetic input",
+      "synthetic_profile_id": "unexpected_profile",
+      "operation": "submit_candidate"
+    }
+  ]
+}

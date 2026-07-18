@@ -1,0 +1,30 @@
+{
+  "schema_version": "noetide.b2-suite-manifest.v1",
+  "suite_id": "b2_episode_summary_v1",
+  "slice_id": "SLICE-MVP-B-EPISODE-SUMMARY-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_applicable",
+  "latest_verification_result_path": null,
+  "required_scenario_ids": ["B2-001", "B2-002", "B2-003", "B2-004", "B2-005", "B2-006", "B2-007", "B2-008"],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": ["DEC-MVP-B-EPISODE-SUMMARY-001"],
+    "contract_ref": "SPEC-B2-EPISODE-SUMMARY-001",
+    "adr_refs": ["ADR-0004"],
+    "architecture_ref": "ARCH-B2-EPISODE-SUMMARY-001"
+  },
+  "artifacts": [
+    {"role": "fixture", "path": "tests/fixtures/b2_episode_summary_v1/fixture.json", "sha256": "337da34eb1d4ad2ca4d614dfc4f7efba8b750fafc847117775e1e10e3bc632d2"},
+    {"role": "oracle", "path": "tests/fixtures/b2_episode_summary_v1/oracles.json", "sha256": "bcd8f15a25e871ec39c55bc206761e9bf0a8d69b35fd5548b49b28c61dd101e3"},
+    {"role": "scenario_plan", "path": "tests/integration/b2_episode_summary_scenarios.json", "sha256": "83c570514da7f6cd7220e0eceefc63acc1608dcdda9fd52441e23ac291b0b4aa"},
+    {"role": "adapter_protocol", "path": "tests/runner/b2_episode_summary_adapter_protocol.py", "sha256": "32343c425015d2d0f7606c4c114d57a02c1158ca001fe654ef8be994452eab84"},
+    {"role": "business_test_module", "path": "tests/semantic/test_b2_episode_summary_contract.py", "sha256": "60a0c50187fc920a1ed5817835197e3b9dacfffd392c728011470862c94365bf"},
+    {"role": "offline_runner", "path": "tests/runner/run_b2_suite.py", "sha256": "04771fc0fb705fecc384637407860e44cd5cc081cdb3335c146352e610b40d40"},
+    {"role": "suite_preflight_validator", "path": "tools/validate_b2_suite.py", "sha256": "366db1684fb95fef5ef45f6f654adf97408e4967b6e3529d980988c4e7a3f95c"}
+  ],
+  "privacy": {"synthetic_only": true, "external_network": false, "workspace_external_reads": false, "real_personal_data": false}
+}

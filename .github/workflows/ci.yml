@@ -24,6 +24,7 @@ jobs:
           python ./tools/validate_c1_suite.py
           python ./tools/validate_synthetic_ingestion_suite.py
           python ./tools/validate_context_pack_suite.py
+          python ./tools/validate_b2_suite.py
           ./tools/validate_product_baseline.ps1
           ./tools/validate_spec_baseline.ps1
       - name: Run semantic regression

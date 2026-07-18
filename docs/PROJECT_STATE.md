@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-B-EPISODE-SUMMARY-001` |
-| 当前阶段 | `architecture_decided` |
+| 当前阶段 | `suite_materialized` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -27,6 +27,7 @@
 4. GitHub Actions 对 `main` 和 tag 的两个 run 均通过，包含 Linux 合同/语义回归与 Windows portable smoke。
 5. `DEC-MVP-B-EPISODE-SUMMARY-001` 与 `SPEC-B2-EPISODE-SUMMARY-001` 已定义 B2 Episode 与分层摘要的仅合成、Derived-only 合同；追踪已建立，尚未开始业务代码。
 6. `ADR-0004` 与 `ARCH-B2-EPISODE-SUMMARY-001` 已接受 SQLite 分层持久化与 Derived rebuild 边界；suite 尚未物化。
+7. B2 fixture、oracle、manifest、adapter protocol、offline runner 与 validator 已物化；尚未执行 B2 业务测试。
 
 ## 4. 真实验证结果
 
@@ -51,4 +52,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**物化 B2 的 fixture、oracle、manifest、offline runner 和 validator。**
+**为 B2 创建可回溯至合同与 suite 的 Implementation Plan 和 Task Cards。**
