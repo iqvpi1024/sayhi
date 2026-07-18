@@ -1,0 +1,43 @@
+{
+  "suite_id": "c1_decision_outcome_v1",
+  "network": "blocked",
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "C1-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ]
+}
