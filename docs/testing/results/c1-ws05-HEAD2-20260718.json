@@ -1,0 +1,60 @@
+{
+  "schema_version": "noetide.c1-run-result.v1",
+  "run_id": "c1-989eb1b82de24d13ac2e8ece8d584991",
+  "suite_id": "c1_decision_outcome_v1",
+  "manifest_sha256": "a54a3e4c83beed4be209e3bfbbaefe3c8d2be0698025b8ce980d4abec55c2d3a",
+  "git_commit": "927f7be14af6aed1bdfd8a16c7095feb5523f1f9",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_c1_suite",
+    "--output",
+    "docs\\testing\\results\\c1-ws05-HEAD2-20260718.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "C1-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ]
+}
