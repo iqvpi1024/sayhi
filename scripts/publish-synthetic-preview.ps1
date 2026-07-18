@@ -2,7 +2,8 @@
 param(
     [string]$Version = "0.1.3",
     [string]$Tag = "v0.1.3-synthetic-preview",
-    [string]$OutputDirectory = (Join-Path $PSScriptRoot "..\dist")
+    [string]$OutputDirectory = (Join-Path $PSScriptRoot "..\dist"),
+    [switch]$BuildOnly
 )
 
 $ErrorActionPreference = "Stop"
@@ -28,7 +29,10 @@ try {
         throw "required release files are missing"
     }
 
-    if ($PSCmdlet.ShouldProcess("GitHub release $Tag", "create release and upload verified preview assets")) {
+    if ($BuildOnly) {
+        Write-Output "Built and verified release assets without creating a GitHub Release."
+    }
+    elseif ($PSCmdlet.ShouldProcess("GitHub release $Tag", "create release and upload verified preview assets")) {
         & $gh.Source release create $Tag $archive $checksums $portableArchive $portableChecksums --title "Noetide v$Version Synthetic Preview" --notes-file $notes --prerelease --verify-tag
         if ($LASTEXITCODE -ne 0) { throw "GitHub Release creation failed" }
     }
