@@ -1,0 +1,17 @@
+{
+  "schema_version": "noetide.synthetic-ingestion-suite-manifest.v1",
+  "suite_id": "synthetic_ingestion_v1",
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_applicable",
+  "latest_verification_result_path": null,
+  "latest_verification_result_sha256": null,
+  "required_scenario_ids": ["SI-001", "SI-002", "SI-003", "SI-004"],
+  "artifacts": [
+    {"role": "fixture", "path": "tests/fixtures/synthetic_ingestion_v1/fixture.json", "sha256": "3858e4c5bf441149155f9415ee346311eb7da3d57f6efed36e585c622134afa5"},
+    {"role": "oracle", "path": "tests/fixtures/synthetic_ingestion_v1/oracles.json", "sha256": "5e5e621a67cbce366cadc45401865ebaad5b2cf76c77b284479cc719289fe0c7"},
+    {"role": "business_test_module", "path": "tests/semantic/test_connector.py", "sha256": "6298c414aa9e11c74a974f0a7b2b95f2da840306f652ba9c7f2c97ae8439cc6b"},
+    {"role": "offline_runner", "path": "tests/runner/run_synthetic_ingestion_suite.py", "sha256": "aa1ac7ea9324ec87d9daa5a0cf7835000b141c09a22654eae8a30633861b21d3"}
+  ],
+  "privacy": {"synthetic_only": true, "external_network": false, "workspace_external_reads": false, "real_personal_data": false}
+}

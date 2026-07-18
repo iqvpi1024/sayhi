@@ -1,0 +1,9 @@
+{
+  "fixture_id": "synthetic_ingestion_v1",
+  "scenarios": {
+    "SI-001": {"status": "stored", "durable_source": true, "durable_receipt": true},
+    "SI-002": {"status": "rejected", "failure": "synthetic_declaration_required", "durable_source": false},
+    "SI-003": {"duplicate_status": "duplicate", "mismatch_status": "rejected", "mismatch_failure": "idempotency_mismatch"},
+    "SI-004": {"status": "rejected", "failure": "invalid_subject_ref", "durable_source": false}
+  }
+}

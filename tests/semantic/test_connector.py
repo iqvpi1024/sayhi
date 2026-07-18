@@ -3,9 +3,22 @@ from __future__ import annotations
 import tempfile
 import unittest
 from pathlib import Path
+import json
 
 from noetide_micro.importer import SyntheticImporter
 from noetide_micro.store import SemanticStore
+
+
+ROOT = Path(__file__).resolve().parents[2]
+FIXTURE = ROOT / "tests/fixtures/synthetic_ingestion_v1/fixture.json"
+ORACLES = ROOT / "tests/fixtures/synthetic_ingestion_v1/oracles.json"
+
+
+def scenario(scenario_id):
+    def decorate(method):
+        method._noetide_scenario_id = scenario_id
+        return method
+    return decorate
 
 
 class SyntheticImporterTests(unittest.TestCase):
@@ -15,26 +28,43 @@ class SyntheticImporterTests(unittest.TestCase):
         self.store = SemanticStore(Path(self.temp.name) / "import.sqlite3")
         self.addCleanup(self.store.close)
         self.importer = SyntheticImporter(self.store, "2031-10-15T02:00:00Z")
+        self.fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
+        self.oracles = json.loads(ORACLES.read_text(encoding="utf-8"))["scenarios"]
 
+    def case(self, scenario_id):
+        return next(item for item in self.fixture["cases"] if item["scenario_id"] == scenario_id)
+
+    @scenario("SI-001")
     def test_stored_means_durable_source_and_receipt(self) -> None:
-        receipt = self.importer.import_text("synthetic_record_001", "source_001", [], synthetic=True)
-        self.assertEqual(receipt["status"], "stored")
-        self.assertIsNotNone(self.store.seeded_source("source_001"))
-        self.assertEqual(self.store.append_receipt("receipt_source_001")["status"], "stored")
+        case = self.case("SI-001")
+        expected = self.oracles["SI-001"]
+        receipt = self.importer.import_text(case["text"], case["source_id"], case["subject_refs"], synthetic=case["synthetic_declaration"])
+        self.assertEqual(receipt["status"], expected["status"])
+        self.assertEqual(self.store.seeded_source(case["source_id"]) is not None, expected["durable_source"])
+        self.assertEqual(self.store.append_receipt(receipt["receipt_id"]) is not None, expected["durable_receipt"])
 
+    @scenario("SI-002")
     def test_requires_explicit_synthetic_declaration(self) -> None:
-        receipt = self.importer.import_text("synthetic_record_002", "source_002", [], synthetic=False)
-        self.assertEqual((receipt["status"], receipt["failure"]), ("rejected", "synthetic_declaration_required"))
-        self.assertIsNone(self.store.seeded_source("source_002"))
+        case = self.case("SI-002")
+        expected = self.oracles["SI-002"]
+        receipt = self.importer.import_text(case["text"], case["source_id"], case["subject_refs"], synthetic=case["synthetic_declaration"])
+        self.assertEqual((receipt["status"], receipt["failure"]), (expected["status"], expected["failure"]))
+        self.assertEqual(self.store.seeded_source(case["source_id"]) is not None, expected["durable_source"])
 
+    @scenario("SI-003")
     def test_duplicate_and_mismatch_are_distinct(self) -> None:
-        self.importer.import_text("synthetic_record_003", "source_003", [], synthetic=True)
-        duplicate = self.importer.import_text("synthetic_record_003", "source_003", [], synthetic=True)
-        mismatch = self.importer.import_text("synthetic_record_changed", "source_003", [], synthetic=True)
-        self.assertEqual(duplicate["status"], "duplicate")
-        self.assertEqual((mismatch["status"], mismatch["failure"]), ("rejected", "idempotency_mismatch"))
+        case = self.case("SI-003")
+        expected = self.oracles["SI-003"]
+        self.importer.import_text(case["text"], case["source_id"], case["subject_refs"], synthetic=True)
+        duplicate = self.importer.import_text(case["text"], case["source_id"], case["subject_refs"], synthetic=True)
+        mismatch = self.importer.import_text("synthetic_record_changed", case["source_id"], case["subject_refs"], synthetic=True)
+        self.assertEqual(duplicate["status"], expected["duplicate_status"])
+        self.assertEqual((mismatch["status"], mismatch["failure"]), (expected["mismatch_status"], expected["mismatch_failure"]))
 
+    @scenario("SI-004")
     def test_invalid_subject_ref_rejects_without_write(self) -> None:
-        receipt = self.importer.import_text("synthetic_record_004", "source_004", ["missing_subject"], synthetic=True)
-        self.assertEqual((receipt["status"], receipt["failure"]), ("rejected", "invalid_subject_ref"))
-        self.assertIsNone(self.store.seeded_source("source_004"))
+        case = self.case("SI-004")
+        expected = self.oracles["SI-004"]
+        receipt = self.importer.import_text(case["text"], case["source_id"], case["subject_refs"], synthetic=case["synthetic_declaration"])
+        self.assertEqual((receipt["status"], receipt["failure"]), (expected["status"], expected["failure"]))
+        self.assertEqual(self.store.seeded_source(case["source_id"]) is not None, expected["durable_source"])

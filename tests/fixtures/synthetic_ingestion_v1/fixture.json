@@ -1,0 +1,12 @@
+{
+  "fixture_id": "synthetic_ingestion_v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "clock": "2031-10-15T02:00:00Z",
+  "cases": [
+    {"scenario_id": "SI-001", "text": "synthetic_record_001", "source_id": "source_001", "subject_refs": [], "synthetic_declaration": true},
+    {"scenario_id": "SI-002", "text": "synthetic_record_002", "source_id": "source_002", "subject_refs": [], "synthetic_declaration": false},
+    {"scenario_id": "SI-003", "text": "synthetic_record_003", "source_id": "source_003", "subject_refs": [], "synthetic_declaration": true},
+    {"scenario_id": "SI-004", "text": "synthetic_record_004", "source_id": "source_004", "subject_refs": ["missing_subject"], "synthetic_declaration": true}
+  ]
+}
