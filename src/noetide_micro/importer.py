@@ -1,120 +1,87 @@
-"""Synthetic data importer for MVP-C connector slice."""
+"""Durable synthetic-only Source import for the Release Candidate."""
 
 from __future__ import annotations
 
 import hashlib
+import sqlite3
 from typing import Any, Mapping
+
+from .store import SemanticStore
+
 
 JsonObject = dict[str, Any]
 
 
 class SyntheticImporter:
-    """Import synthetic data through the Ingestion Contract.
+    """Append an explicitly declared synthetic Source without semantic inference."""
 
-    This is a proof-of-concept importer that only accepts synthetic data.
-    No real personal data, no third-party APIs, no network access.
-    """
-
-    def __init__(self, store: Any, fixture: Mapping[str, Any], now: str) -> None:
+    def __init__(self, store: SemanticStore, now: str) -> None:
         self._store = store
-        self._fixture = fixture
         self._now = now
 
-    def import_text(self, text: str, source_id: str, declared_subject_refs: list[str]) -> JsonObject:
-        """Import a synthetic text source into the Source Vault.
+    def import_text(
+        self, text: str, source_id: str, declared_subject_refs: list[str], *, synthetic: bool
+    ) -> JsonObject:
+        if not synthetic:
+            return self._rejected(source_id, "synthetic_declaration_required")
+        if not source_id or not isinstance(text, str) or not isinstance(declared_subject_refs, list):
+            return self._rejected(source_id, "invalid_request")
+        if len(set(declared_subject_refs)) != len(declared_subject_refs):
+            return self._rejected(source_id, "duplicate_subject_ref")
+        for subject_ref in declared_subject_refs:
+            if not isinstance(subject_ref, str) or self._store.canonical_object_or_none(subject_ref) is None:
+                return self._rejected(source_id, "invalid_subject_ref")
 
-        Args:
-            text: The text content (must be synthetic/declared)
-            source_id: Unique source identifier
-            declared_subject_refs: Subject references declared by user
-
-        Returns:
-            Append receipt
-        """
-        # Validate synthetic
-        if not self._is_synthetic(text):
-            raise ValueError("only synthetic data may be imported")
-
-        content_bytes = text.encode("utf-8")
-        content_hash = hashlib.sha256(content_bytes).hexdigest()
+        payload = text.encode("utf-8")
+        digest = hashlib.sha256(payload).hexdigest()
+        existing = self._store.seeded_source(source_id)
+        if existing is not None:
+            if existing.get("content_hash") == digest and existing.get("source_system") == "synthetic_importer_v1":
+                return self._receipt(source_id, "duplicate", digest, len(payload), None)
+            return self._rejected(source_id, "idempotency_mismatch")
 
         source = {
             "source_id": source_id,
+            "append_receipt_id": f"receipt_{source_id}",
             "source_kind": "synthetic_text",
-            "source_system": "synthetic_importer",
+            "source_system": "synthetic_importer_v1",
             "inline_content": text,
-            "content_hash": content_hash,
-            "byte_length": len(content_bytes),
+            "content_hash": digest,
+            "byte_length": len(payload),
             "source_created_at": "unknown",
             "ingested_at": self._now,
-            "language": "zh-CN",
-            "source_timezone": "Asia/Shanghai",
+            "language": "unknown",
+            "source_timezone": "unknown",
             "locator_scheme": "text_utf8_byte_range_v1",
-            "append_receipt_id": f"receipt_{source_id}",
+            "locator": {"start_byte": 0, "end_byte_exclusive": len(payload)},
             "policy_profile_ref": "owner_intake_private_v1",
-            "policy_resolution_status": "declared",
-            "owner_ref": "person_alpha",
+            "policy_resolution_status": "declared" if declared_subject_refs else "provisional",
+            "owner_ref": "synthetic_owner_001",
             "subject_refs": declared_subject_refs,
-            "recorder_ref": "person_alpha",
+            "recorder_ref": "synthetic_owner_001",
             "sensitivity": "private",
             "compartments": ["personal"],
-            "third_party_present": True,
+            "third_party_present": "unknown" if not declared_subject_refs else True,
             "retention_policy_ref": "user_controlled_v1",
             "retention_state": "active",
-            "locator": {"start_byte": 0, "end_byte_exclusive": len(content_bytes)},
         }
-
-        receipt = {
-            "receipt_id": f"receipt_{source_id}",
-            "source_id": source_id,
-            "status": "stored",
-            "hash_algorithm": "sha256",
-            "byte_length": len(content_bytes),
-            "media_type": "text/plain; charset=utf-8",
-            "ingested_at": self._now,
-            "locator_scheme": "text_utf8_byte_range_v1",
-            "coverage_raw_status": "absent",
-            "policy_profile_ref": "owner_intake_private_v1",
-            "policy_resolution_status": "declared",
-            "effective_policy": {
-                "owner_ref": "person_alpha",
-                "recorder_ref": "person_alpha",
-                "subject_refs": declared_subject_refs,
-                "sensitivity": "private",
-                "compartments": ["personal"],
-                "third_party_present": True,
-                "retention_policy_ref": "user_controlled_v1",
-                "retention_state": "active",
-            },
-            "failure": None,
-            "actor": "user",
-        }
-
+        receipt = self._receipt(source_id, "stored", digest, len(payload), None)
+        try:
+            self._store.append_source(source, receipt)
+        except sqlite3.Error:
+            return self._rejected(source_id, "storage_failure")
         return receipt
 
-    def _is_synthetic(self, text: str) -> bool:
-        """Check if text is synthetic (contains only declared synthetic markers)."""
-        # For this proof-of-concept, we accept any text that doesn't contain
-        # obvious real personal data patterns (phone, email, real names)
-        # In production, this would be more sophisticated
-        import re
+    def _receipt(self, source_id: str, status: str, digest: str, byte_length: int, failure: str | None) -> JsonObject:
+        return {
+            "receipt_id": f"receipt_{source_id}", "source_id": source_id, "status": status,
+            "hash_algorithm": "sha256", "content_hash": digest, "byte_length": byte_length,
+            "media_type": "text/plain; charset=utf-8", "ingested_at": self._now,
+            "locator_scheme": "text_utf8_byte_range_v1", "coverage_raw_status": "absent",
+            "policy_profile_ref": "owner_intake_private_v1", "policy_resolution_status": "declared",
+            "effective_policy": {"sensitivity": "private", "compartments": ["personal"]},
+            "failure": failure, "actor": "synthetic_importer_v1",
+        }
 
-        # Reject if contains phone numbers
-        if re.search(r'\b1[3-9]\d{9}\b', text):
-            return False
-
-        # Reject if contains email addresses
-        if re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', text):
-            return False
-
-        # Accept if contains synthetic markers or is short enough
-        synthetic_markers = ["person_", "synthetic_", "test_", "example_"]
-        if any(marker in text for marker in synthetic_markers):
-            return True
-
-        # Accept if explicitly marked
-        if text.startswith("[SYNTHETIC]"):
-            return True
-
-        # Default: accept for testing (in production would reject)
-        return True
+    def _rejected(self, source_id: str, failure: str) -> JsonObject:
+        return self._receipt(source_id, "rejected", "", 0, failure)

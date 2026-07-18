@@ -1,72 +1,40 @@
-"""Connector integration tests for MVP-C."""
-
 from __future__ import annotations
 
+import tempfile
 import unittest
+from pathlib import Path
 
 from noetide_micro.importer import SyntheticImporter
+from noetide_micro.store import SemanticStore
 
 
-class ConnectorTests(unittest.TestCase):
-    """Integration tests for synthetic data importer."""
-
+class SyntheticImporterTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.importer = SyntheticImporter(None, {}, "2031-10-15T02:00:00Z")
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.store = SemanticStore(Path(self.temp.name) / "import.sqlite3")
+        self.addCleanup(self.store.close)
+        self.importer = SyntheticImporter(self.store, "2031-10-15T02:00:00Z")
 
-    def test_connector_001_import_synthetic_text(self) -> None:
-        """Synthetic text can be imported."""
-        receipt = self.importer.import_text(
-            "person_alpha and person_beta had a meeting.",
-            "synthetic_meeting_001",
-            ["person_alpha", "person_beta"],
-        )
+    def test_stored_means_durable_source_and_receipt(self) -> None:
+        receipt = self.importer.import_text("synthetic_record_001", "source_001", [], synthetic=True)
         self.assertEqual(receipt["status"], "stored")
-        self.assertEqual(receipt["source_id"], "synthetic_meeting_001")
-        self.assertEqual(receipt["hash_algorithm"], "sha256")
+        self.assertIsNotNone(self.store.seeded_source("source_001"))
+        self.assertEqual(self.store.append_receipt("receipt_source_001")["status"], "stored")
 
-    def test_connector_002_reject_phone_number(self) -> None:
-        """Real phone numbers are rejected."""
-        with self.assertRaises(ValueError):
-            self.importer.import_text(
-                "Call me at 13800138000",
-                "real_phone_001",
-                ["person_alpha"],
-            )
+    def test_requires_explicit_synthetic_declaration(self) -> None:
+        receipt = self.importer.import_text("synthetic_record_002", "source_002", [], synthetic=False)
+        self.assertEqual((receipt["status"], receipt["failure"]), ("rejected", "synthetic_declaration_required"))
+        self.assertIsNone(self.store.seeded_source("source_002"))
 
-    def test_connector_003_reject_email(self) -> None:
-        """Real email addresses are rejected."""
-        with self.assertRaises(ValueError):
-            self.importer.import_text(
-                "Email me at test@example.com",
-                "real_email_001",
-                ["person_alpha"],
-            )
+    def test_duplicate_and_mismatch_are_distinct(self) -> None:
+        self.importer.import_text("synthetic_record_003", "source_003", [], synthetic=True)
+        duplicate = self.importer.import_text("synthetic_record_003", "source_003", [], synthetic=True)
+        mismatch = self.importer.import_text("synthetic_record_changed", "source_003", [], synthetic=True)
+        self.assertEqual(duplicate["status"], "duplicate")
+        self.assertEqual((mismatch["status"], mismatch["failure"]), ("rejected", "idempotency_mismatch"))
 
-    def test_connector_004_explicit_synthetic_marker(self) -> None:
-        """Explicit [SYNTHETIC] marker is accepted."""
-        receipt = self.importer.import_text(
-            "[SYNTHETIC] This is a test scenario.",
-            "synthetic_test_001",
-            ["person_alpha"],
-        )
-        self.assertEqual(receipt["status"], "stored")
-
-    def test_connector_005_receipt_has_required_fields(self) -> None:
-        """Receipt contains all required fields per Ingestion Contract."""
-        receipt = self.importer.import_text(
-            "synthetic_event_001",
-            "synthetic_event_001",
-            ["person_alpha"],
-        )
-        required_fields = [
-            "receipt_id", "source_id", "status", "hash_algorithm",
-            "byte_length", "media_type", "ingested_at", "locator_scheme",
-            "policy_profile_ref", "policy_resolution_status", "effective_policy",
-            "actor",
-        ]
-        for field in required_fields:
-            self.assertIn(field, receipt)
-
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_invalid_subject_ref_rejects_without_write(self) -> None:
+        receipt = self.importer.import_text("synthetic_record_004", "source_004", ["missing_subject"], synthetic=True)
+        self.assertEqual((receipt["status"], receipt["failure"]), ("rejected", "invalid_subject_ref"))
+        self.assertIsNone(self.store.seeded_source("source_004"))
