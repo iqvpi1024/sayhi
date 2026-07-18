@@ -1,6 +1,6 @@
 # 版本与支持
 
-当前公开版本为 `v0.1.0-synthetic-preview`。
+当前公开预览版本以 GitHub Releases 页面中的最新 `synthetic-preview` prerelease 为准。
 
 | 项目 | 当前承诺 |
 |---|---|

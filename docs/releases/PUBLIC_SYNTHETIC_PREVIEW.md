@@ -1,8 +1,8 @@
-# v0.1.1 Synthetic Preview
+# v0.1.3 Synthetic Preview
 
 ## 交付范围
 
-`v0.1.1-synthetic-preview` 是 Windows-first、Python 3.12、Local-first 的合成演示。它证明固定的 Source append、RelationshipState ChangeSet、Core View、补偿撤销、若干合成验证和 private Context Pack 边界。
+`v0.1.3-synthetic-preview` 是 Windows-first、Python 3.12、Local-first 的合成演示。它证明固定的 Source append、RelationshipState ChangeSet、Core View、补偿撤销、若干合成验证和 private Context Pack 边界。
 
 它不是完整 PRD 产品，也不接受真实个人资料。公开预览不实现真实导入、权限 runtime、MCP runtime、连接器、同步、分享、数字遗产或多 Agent。
 
@@ -22,11 +22,11 @@ Set-ExecutionPolicy -Scope Process Bypass
 发布压缩包旁提供 `SHA256SUMS.txt`。在 PowerShell 中执行：
 
 ```powershell
-Get-FileHash .\Noetide-synthetic-preview-v0.1.1.zip -Algorithm SHA256
+Get-FileHash .\Noetide-synthetic-preview-v0.1.3.zip -Algorithm SHA256
 ```
 
 将输出与 `SHA256SUMS.txt` 对照。校验不匹配时不要运行该压缩包。
 
 ## 发布维护
 
-维护者在已完成 GitHub CLI 登录后，执行 `scripts\publish-synthetic-preview.ps1`。脚本从 `v0.1.1-synthetic-preview` tag 重建资产、生成 checksum，并创建 GitHub Release；它不会移动 tag。
+维护者在已完成 GitHub CLI 登录后，执行 `scripts\publish-synthetic-preview.ps1`。脚本从 `v0.1.3-synthetic-preview` tag 重建源码和 portable 资产、生成 checksum，并创建 GitHub prerelease；它不会移动 tag。

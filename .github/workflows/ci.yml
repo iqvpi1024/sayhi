@@ -50,7 +50,7 @@ jobs:
       - name: Build and smoke self-contained portable preview
         shell: pwsh
         run: |
-          .\scripts\build-portable-preview.ps1 -OutputDirectory .\tmp\portable -Version 0.1.2
-          Expand-Archive .\tmp\portable\Noetide-synthetic-preview-v0.1.2-win64.zip -DestinationPath .\tmp\portable-extracted
-          .\tmp\portable-extracted\Noetide-synthetic-preview-v0.1.2-win64\scripts\setup-synthetic-preview.ps1 -DataDirectory .\tmp\portable-data
-          & .\tmp\portable-extracted\Noetide-synthetic-preview-v0.1.2-win64\scripts\Noetide Console.cmd status
+          .\scripts\build-portable-preview.ps1 -OutputDirectory .\tmp\portable -Version 0.1.3
+          Expand-Archive .\tmp\portable\Noetide-synthetic-preview-v0.1.3-win64.zip -DestinationPath .\tmp\portable-extracted
+          .\tmp\portable-extracted\Noetide-synthetic-preview-v0.1.3-win64\scripts\setup-synthetic-preview.ps1 -DataDirectory .\tmp\portable-data
+          & '.\tmp\portable-extracted\Noetide-synthetic-preview-v0.1.3-win64\scripts\Noetide Console.cmd' status

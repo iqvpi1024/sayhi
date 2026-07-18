@@ -1,6 +1,6 @@
 # 识海 Noetide
 
-识海是一个 Local-first、User-owned、Correctable、Portable 的 Personal Context & Growth Engine。本仓库公开提供 `v0.1.1-synthetic-preview`：它只演示一条已批准的合成 Micro 链路，不接收真实个人数据，也不声称实现完整 PRD。
+识海是一个 Local-first、User-owned、Correctable、Portable 的 Personal Context & Growth Engine。本仓库公开提供 `v0.1.3-synthetic-preview`：它只演示一条已批准的合成 Micro 链路，不接收真实个人数据，也不声称实现完整 PRD。
 
 ## 当前可运行范围
 
@@ -21,6 +21,8 @@ Windows 上可用一个命令准备**仅含合成数据**的本地演示：
 ```
 
 这只达到合成预览级 D1；不下载真实数据，也不是普通用户生产安装包。许可证、校验和限制见 `docs/releases/PUBLIC_SYNTHETIC_PREVIEW.md`。
+
+Windows 试用者也可以下载 self-contained portable ZIP，解压后双击 `Noetide Start.cmd`。该包自带 Python runtime，只创建合成 SQLite 数据；它同样是 D1 合成预览，不是签名的生产安装包。
 
 手动等价流程：
 

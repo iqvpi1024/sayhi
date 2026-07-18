@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$OutputDirectory = (Join-Path $PSScriptRoot "..\dist"),
-    [string]$Version = "0.1.2",
+    [string]$Version = "0.1.3",
     [string]$Ref = "HEAD",
     [string]$RuntimeCache = (Join-Path $env:TEMP "noetide-python-3.12.10-embed-amd64.zip")
 )
