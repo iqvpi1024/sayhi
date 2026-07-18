@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: remediation_a1_binding
+current_phase: remediation_runtime_cli
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,10 +14,10 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-02
+current_workstream: WS-03
 current_workstream_status: in_progress
 next_role: Implementer
-next_single_action: WS-02_a1_current_binding_and_fail_closed_revision
+next_single_action: WS-03_production_runtime_and_cli
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
@@ -25,7 +25,7 @@ git_branch: codex/kimi-end-to-end-release-candidate
 git_head: 0ae4c7e
 suite_status:
   micro_current: passed_at_6dd4288
-  a1_current: not_executed
+  a1_current: passed_at_85240c5
   b1_current: not_materialized
   c1_current: not_materialized
   synthetic_ingestion_current: not_materialized
@@ -54,4 +54,4 @@ stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 3. 当前未提交代码改动与其验证状态明确可追溯。
 4. 当前 required suite 的 `defined/materialized/executed/passed` 四态与真实执行一致。
 
-以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。下一步只能开始 `WS-02`，不得把该 Micro 结果外推到 A1、B1、C1、ingestion、portability 或部署。
+以上四项已完成。`WS-01` 已实现单一 L1 事务、终态失败回执和 `CS-AT-031` 三种预检失败覆盖；提交 `6dd4288` 的 official runner result 已通过 49/49 required IDs。`WS-02` 的 A1 runner 在提交 `85240c5` 通过 35/35 required IDs。下一步只能开始 `WS-03`，不得把 Micro/A1 结果外推到 B1、C1、ingestion、portability 或部署。

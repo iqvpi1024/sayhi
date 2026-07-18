@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `remediation_a1_binding` |
+| 当前阶段 | `remediation_runtime_cli` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -29,14 +29,15 @@
 2. `AUDIT-NOETIDE-IMPL-20260718-001` 发现 P0=0、P1=11、P2=5；项目不是可用 Release Candidate，不能声称一键部署、全量验证或公开发布已完成。
 3. `DEC-E2E-EXEC-001`、完整审计、纠偏施工计划和实施提示词已提交于 `0ae4c7e`。
 4. `WS-00` 已完成：动态入口、Matrix、Micro/A1 manifest 和历史 result applicability 已复位为一致的真实状态。
-5. `WS-01` 已完成：提交 `6dd4288` 上的 official Micro runner 生成 `micro-ws01-6dd4288-20260718.json`，49/49 required IDs、exit code `0` 和合成隐私扫描均通过。A1 manifest 仍如实为 `suite_executed=false`、`suite_passed=false`。
+5. `WS-01` 已完成：提交 `6dd4288` 上的 official Micro runner 生成 `micro-ws01-6dd4288-20260718.json`，49/49 required IDs、exit code `0` 和合成隐私扫描均通过。
+6. `WS-02` 已完成：提交 `85240c5` 上的 official A1 runner 生成 `a1-ws02-85240c5-20260718.json`，35/35 required IDs、artifact binding 与合成隐私扫描均通过。
 
 ## 4. 当前质量状态
 
 | 项目 | 真实状态 |
 |---|---|
 | Micro L1 原子性与 `CS-AT-031` | current official runner 49/49 passed；P1 已关闭 |
-| A1 current manifest/result binding | 发现 P1；尚未关闭 |
+| A1 current manifest/result binding | current official runner 35/35 passed；P1 已关闭 |
 | Production runtime / CLI / README | 发现 P1；不可作为用户可用流程 |
 | B1 Candidate Review | 未完成原型，缺合同闭环 |
 | C1 Decision/Outcome | 未完成原型，缺持久化 ChangeSet 和审计闭环 |
@@ -68,4 +69,4 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 7. 下一步唯一建议动作
 
-**由 Implementer 完成 `WS-02`：将 A1 manifest、runner、result 与当前实现建立同提交可复现绑定，并修复固定 evaluator 的 fail-closed 边界。**
+**由 Implementer 完成 `WS-03`：建立 production runtime 与 CLI，确保 README 的干净环境流程不导入 test adapter、不依赖仓库 tests 路径，并使用非 0 exit code 表达失败。**

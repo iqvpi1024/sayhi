@@ -6,15 +6,15 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": false,
-    "suite_passed": false
+    "suite_executed": true,
+    "suite_passed": true
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "not_applicable",
-  "latest_verification_result_path": null,
-  "latest_verification_manifest_sha256": null,
-  "latest_verification_result_sha256": null,
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/a1-ws02-85240c5-20260718.json",
+  "latest_verification_manifest_sha256": "ee5190070652b342b6c39f8371de37fa557c9125be02263f02f160899b0da01b",
+  "latest_verification_result_sha256": "f6aa2440df0fcdf76970881a45847a70f55c4c40c5cd88919838b6fc7ed6b7e5",
   "historical_verification_results": [
     {
       "applicability": "superseded",
@@ -147,7 +147,7 @@
       "UI API deployment and public release"
     ]
   },
-  "implementation_module": "TBD",
+  "implementation_module": "src/noetide_micro/answers.py",
   "privacy": {
     "synthetic_only": true,
     "external_network": false,
