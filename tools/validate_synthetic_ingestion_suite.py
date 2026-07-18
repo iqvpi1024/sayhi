@@ -68,7 +68,10 @@ def main() -> int:
         print("FAILED: " + "; ".join(errors))
         return 1
     print("PASSED: Synthetic Ingestion suite materialized with 4 scenarios")
-    print("NOT_EXECUTED: Synthetic Ingestion business runner")
+    if flags == passed_flags:
+        print("PASSED: Synthetic Ingestion current business runner result is bound")
+    else:
+        print("NOT_EXECUTED: Synthetic Ingestion business runner")
     return 0
 
 
