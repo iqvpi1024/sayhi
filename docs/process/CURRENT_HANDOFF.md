@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-B-EPISODE-SUMMARY-001
 slice_id: SLICE-MVP-B-EPISODE-SUMMARY-001
-current_phase: product_decided
+current_phase: traceable
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -20,8 +20,9 @@ ci_runs:
   - 29654926812
   - 29654930604
 decision_ref: DEC-MVP-B-EPISODE-SUMMARY-001
-next_role: Specification Reviewer
-next_single_action: review_s1_s2_s3_s5_s6_s7_applicability_for_b2
+spec_contract: SPEC-B2-EPISODE-SUMMARY-001
+next_role: System Architect
+next_single_action: create_minimal_b2_adr_and_architecture_view
 scope_in:
   - fixed synthetic Episode, Derived summary, freshness and traceability boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B2 traceability
@@ -30,7 +31,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: applicable SPEC sections are reviewed and B2 traceability is complete
+stop_condition: B2 minimal ADR and architecture view are accepted without expanding scope
 ```
 
 ## 当前事实
@@ -41,4 +42,4 @@ stop_condition: applicable SPEC sections are reviewed and B2 traceability is com
 - `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交。
 - 真实验证详情见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`；A1/C1 历史失败结果保留，当前绑定结果分别为 35/35 和 7/7。
 - 独立公开发布终审已完成，P0=0、P1=0；记录见 `docs/reviews/PUBLIC_PREVIEW_V0.1.3_INDEPENDENT_AUDIT.md`。
-- B2 当前只处于 `product_decided`；不得在 SPEC、suite、ADR 和 Implementation Plan 完成前编写 Episode/Summary 业务代码。
+- B2 已完成 product decision、SPEC applicability、slice contract 和 traceability；不得在 ADR、suite 和 Implementation Plan 完成前编写 Episode/Summary 业务代码。

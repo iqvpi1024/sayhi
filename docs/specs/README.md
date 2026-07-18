@@ -295,3 +295,11 @@ Semantic Object Model
 当前状态：PRD v0.5 Compatibility Review 已完成；开发前一致性修订将 S1/S2/S6 分别升为 v0.6/v0.5/v0.5，其余保持 S3-S5 v0.4、S7-S8 v0.3、S9 v0.4，均为当前 `Approved`。当前兼容结论以 `docs/reviews/MICRO_PRE_ADR_SPEC_CONSISTENCY_REVIEW_2026-07-16.md` 为准。Micro exact suite 已物化但未执行/通过；九份 SPEC 全量 suite 仍未物化。`DQ-011..013` 继续 deferred，并采用各 SPEC 明示的最保守临时行为。
 
 兼容静态验证与追踪复核通过后，当前切片恢复到 `traceable`。下一步唯一建议动作才是只为 `SLICE-MICRO-RELATIONSHIP-001` 编制必要的最小 ADR；不得借 ADR 选择长期数据库、扩展 Micro 范围或提前编码。
+
+## 8. 已批准切片合同
+
+基础九份 SPEC 之外，可为已 Product Decision 的窄切片建立组合合同；它只能细化已批准基础边界，不能新增产品范围或取代九份基础 SPEC。
+
+| Slice Contract | 状态 | 作用 |
+|---|---|---|
+| `B2_EPISODE_SUMMARY_SLICE_CONTRACT.md` | `Approved for B2 slice` | 固定合成 Episode、Derived day/phase summary、stale/rebuild 与不可作证边界；不授权真实数据、模型摘要或权限 runtime。 |

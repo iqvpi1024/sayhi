@@ -155,3 +155,13 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | Requirement Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|
 | `FR-202`、`FR-204` 的 C1 合成子集 | S1 §5.2、§6.4、§6.9；S3 §5-§9 | `C1-001/002/003/004/005/006/007` | `src/noetide_micro/c1.py`、`decision.py`、`outcome.py`、`scenario.py` | `c1-ws12-5a324f9-pyspath-20260718.json: 7/7 passed/current` |
+
+## 4.6 Active Slice：B2 Episode 与分层摘要
+
+`SLICE-MVP-B-EPISODE-SUMMARY-001` 只实现 FR-103 的固定合成子集。它不将摘要变成事实、证据或 ChangeSet trigger，也不代表 Episode、分层摘要或 FR-103 的长期范围完成。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-103` | fixed synthetic Episode candidate/publish、day/phase Derived summary、stale/rebuild/Derived-evidence rejection | `SPEC-B2-EPISODE-SUMMARY-001` §4-§19；S1 §5/§6；S2 §9-§14；S3 §6/§8/§14；S5 §6/§11；S6 §4-§14；S7 §7 | `B2-001/002/003/004/005/006/007/008` | `TBD` | `not_executed` |
+
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。B2 fixture、oracle、manifest、runner、ADR、Implementation Plan 和业务代码均尚未创建。
