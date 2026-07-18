@@ -32,8 +32,8 @@ class ScenarioService:
             raise ValueError("scenario_kind must be baseline, optimistic, or pessimistic")
 
         scenario = {
-            "scenario_id": scenario_id,
-            "object_type": "scenario",
+            "assertion_id": scenario_id,
+            "object_type": "assertion",
             "schema_version": "noetide.semantic.v1",
             "object_revision": "rev_001",
             "owner_ref": "person_alpha",

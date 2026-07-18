@@ -24,6 +24,9 @@ class OutcomeService:
         side_effects: list[str],
     ) -> JsonObject:
         """Create an Outcome object linked to a Decision."""
+        decision = self._store.canonical_object_or_none(decision_ref)
+        if decision is None or decision.get("object_type") != "decision":
+            raise ValueError("invalid_decision_ref")
         outcome = {
             "outcome_id": outcome_id,
             "object_type": "outcome",

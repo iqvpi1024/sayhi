@@ -26,6 +26,8 @@ class DecisionService:
         choice: str | None = None,
     ) -> JsonObject:
         """Create a Decision object. If choice is provided, status is 'decided'."""
+        if not question or not options or (choice is not None and choice not in options):
+            raise ValueError("invalid_decision_choice")
         decision = {
             "decision_id": decision_id,
             "object_type": "decision",
