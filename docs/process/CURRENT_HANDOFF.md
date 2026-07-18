@@ -5,22 +5,22 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: audit_ready_release_candidate
+current_phase: public_preview_prepared
 product_baseline:
   path: PRDv05.md
   version: 0.5
   canonical_lf_sha256: 34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7
-decision_ref: DEC-E2E-EXEC-001
+decision_ref: DEC-PUBLIC-PREVIEW-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-12
-current_workstream_status: independent_audit_passed
-next_role: Product Owner or Release Manager
-next_single_action: retain_local_rc_until_explicit_follow_up_scope_or_public_release_authorization
-final_target: audit_ready_release_candidate
+current_workstream: PUBLIC-PREVIEW
+current_workstream_status: verified_ready_to_publish
+next_role: Release Manager
+next_single_action: push_preview_branch_and_tag_then_create_github_release
+final_target: published_synthetic_preview
 final_auditor: Codex
-public_release_allowed: false
+public_release_allowed: true
 git_branch: codex/kimi-end-to-end-release-candidate
 verified_implementation_commit: 7f0bb28
 suite_status:
@@ -37,10 +37,10 @@ scope_out:
   - PRD and Approved SPEC changes to fit implementation
   - real personal data and any workspace-external reads
   - user untracked private files
-  - push, main merge, formal tag, GitHub Release, and public release
+  - real personal data and production D2/D3 claims
 blockers:
-  - DQ-005 blocks D2/D3 public release and final license selection
-stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
+  - D2 production installer and real-data contracts remain out of scope
+stop_condition: tag, push, and GitHub synthetic-preview Release are verifiably published
 ```
 
 ## 当前事实

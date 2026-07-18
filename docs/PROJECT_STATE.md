@@ -12,13 +12,13 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `audit_ready_release_candidate` |
+| 当前阶段 | `public_preview_prepared` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
 | 最终目标 | `audit_ready_release_candidate` |
 | 最终独立审计 | Codex；在 Kimi 内部审计、Debug、全量回归和复审之后 |
-| 正式发布权限 | 禁止推送、合并 `main`、正式 tag、GitHub Release |
+| 正式发布权限 | 产品负责人已最高授权；仅发布 MIT 合成预览，不得扩大为真实个人资料产品 |
 | 当前 Git 分支 | `codex/kimi-end-to-end-release-candidate` |
 | 最近被测实现提交 | `7f0bb28`（最终 Context Pack regression；后续审计记录仅更新文档，不改实现） |
 | 工作树 | 用户未跟踪的 `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交 |
@@ -47,7 +47,7 @@
 | C1 Decision/Outcome | C1 manifest/fixture/oracle/runner/validator 已补齐；`5a324f9` suite 7/7 passed，未映射 integration failure 也会使 runner 失败 |
 | Synthetic Ingestion | `a603085` 4/4 passed；manifest 已绑定该 immutable result |
 | Context Pack | `7f0bb28` 6/6 passed；完整 S7/S9 长期范围仍未实现 |
-| Packaging / Windows one-click | D0/D1 synthetic local demo 已验证；D2/D3 与公开发布仍未实现且受 `DQ-005` 限制 |
+| Packaging / Windows one-click | D1 public synthetic preview ZIP 已在解压目录验证；D2 生产安装仍未实现 |
 | 当前完整 RC suite | suite、CLI、packaging、静态与恢复记录均已复验；最终独立审查 P0/P1=0 |
 
 ## 5. 执行链与停止边界
@@ -66,7 +66,7 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 6. 未决问题与风险
 
-- 公开发布和正式许可证选择受 `DQ-005` 限制；当前只允许本地合成 D0/D1，不得声称普通用户安装包或 GitHub Release。
+- MIT 合成预览发布由 `DEC-PUBLIC-PREVIEW-001` 决定；D2 生产安装、真实个人数据和完整 D3 产品承诺仍未实现。
 - C1 的 fixture/oracle 仅覆盖当前 7 个固定合成场景；它不等于完整 MVP-C 决策室，也不扩张 `DQ-006`。
 - 当前完整 RC 仍缺状态提交后的安装/一键脚本复验与独立最终审计；不得将本轮 suite run 描述成公开发布资格。
 - 当前 CLI 只接受显式包内合成 demo Source；这不是对真实 ingestion 的实现声明。
@@ -74,4 +74,4 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 ## 7. 下一步唯一建议动作
 
-**保留当前本地 RC，等待明确的后续范围或公开发布授权；不得自行推送、合并 main、创建正式 tag 或 GitHub Release。**
+**创建不可移动 preview tag、推送已验证提交和 tag，并在 GitHub 发布仅含合成预览资产的 Release。**

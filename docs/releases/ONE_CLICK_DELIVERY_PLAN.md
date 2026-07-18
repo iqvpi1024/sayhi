@@ -103,9 +103,9 @@ required job 的 skip、取消或缺失不能合并为 green。公共发布使�
 
 ## 9. 当前状态
 
-当前仅达到 Micro 工程 Recovery Point，尚未达到 `D0`。仓库没有用户 UI、安装包、发布构建或 Product Release；任何文档不得声称已经可以一键部署。
+当前已达到 D1 合成预览：版本化 ZIP 可在 Windows/Python 3.12 环境中解压后执行单个 PowerShell 启动命令，验证记录见 `PUBLIC_PREVIEW_V0.1.0_VERIFICATION.md`。它不下载或处理真实个人数据。
 
-当前 A1 处于 `implementation_planned`，下一动作是 `AS-TASK-001`，不是部署。A1 suite 已物化但未执行；A1 只需保证未来 runtime 决策不会破坏本地、离线、可测试和可移植边界。
+D2/D3 仍未完成：没有签名安装包、升级/卸载、普通用户首次设置界面、真实数据生产合同或已发布的 GitHub Release。任何对外说明必须称为 `v0.1.0-synthetic-preview`，不能简称“完整一键部署”。
 
 ## 10. 模型责任链
 
