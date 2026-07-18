@@ -1,0 +1,83 @@
+{
+  "schema_version": "noetide.context-pack-run-result.v1",
+  "run_id": "context-pack-b74116d765614865a7062f06f50f2c5b",
+  "suite_id": "context_pack_portability_v1",
+  "manifest_sha256": "0a960f0451a3752e11aa85e4374a83c36622547b65f9c4c1d5b9f379e81dd8c2",
+  "git_commit": "7f0bb285569fa1ccb782230d64e40c785bcbf3b1",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_context_pack_suite",
+    "--output",
+    "docs/testing/results/context-pack-ws12-7f0bb28-pyspath-20260718.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "CP-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "CP-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "CP-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "CP-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "CP-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "CP-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/context_pack_v1/fixture.json",
+      "sha256": "f5cbae3dd184c0d16c08c9f3ca408cb85a33ea6a890f55de025b58cfdfc38e50"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/context_pack_v1/oracles.json",
+      "sha256": "9b3e0e9866fdbcfe5ec19336304827f73a0c11afbd8920f81c645fb004f1ee84"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_portability.py",
+      "sha256": "07bf80efaeb00460f7af25bcd2e00bb7dbd110760550337503f940132f0c5d16"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_context_pack_suite.py",
+      "sha256": "62cdd1b9dac9b10d3b09578fcc896ab6808dbeec7cd2dcb6caba45c99e932343"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_context_pack_suite.py",
+      "sha256": "7db152c0fdd3e0638346ac90d4b813fadffdad7c995e7bd30d7247c4970b57b2"
+    }
+  ]
+}

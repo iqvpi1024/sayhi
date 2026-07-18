@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: verifying_release_candidate
+current_phase: audit_ready_release_candidate
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,22 +14,22 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-11
-current_workstream_status: verification_evidence_being_rebound
-next_role: Release Candidate Verifier
-next_single_action: run_static_cli_packaging_and_recovery_verification
+current_workstream: WS-12
+current_workstream_status: independent_audit_passed
+next_role: Product Owner or Release Manager
+next_single_action: retain_local_rc_until_explicit_follow_up_scope_or_public_release_authorization
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
 git_branch: codex/kimi-end-to-end-release-candidate
-verified_implementation_commit: 5a324f9
+verified_implementation_commit: 7f0bb28
 suite_status:
   micro_current: passed_at_a603085
   a1_current: passed_at_a603085
   b1_current: passed_at_a603085
   c1_current: passed_at_5a324f9
   synthetic_ingestion_current: passed_at_a603085
-  portability_current: passed_at_a603085
+  portability_current: passed_at_7f0bb28
 scope_in:
   - WS-00 through WS-12 under PLAN-NOETIDE-E2E-RC-001
   - continuous development, testing, Kimi internal audit, debug, full regression, and Kimi re-review

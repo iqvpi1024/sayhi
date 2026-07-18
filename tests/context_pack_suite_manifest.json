@@ -1,9 +1,12 @@
 {
   "schema_version": "noetide.context-pack-suite-manifest.v1",
   "suite_id": "context_pack_portability_v1",
-  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "not_applicable",
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/context-pack-ws12-7f0bb28-pyspath-20260718.json",
+  "latest_verification_manifest_sha256": "0a960f0451a3752e11aa85e4374a83c36622547b65f9c4c1d5b9f379e81dd8c2",
+  "latest_verification_result_sha256": "6246db68e60b885250626da720cef25f65f36ada53e75ab51c14169745ff5536",
   "historical_verification_results": [
     {"applicability": "superseded", "path": "docs/testing/results/context-pack-ws07-f27d686-20260718.json", "reason": "A later shared-runtime commit was independently rerun at a603085 before this result became current."},
     {"applicability": "superseded", "path": "docs/testing/results/context-pack-ws12-a603085-pyspath-20260718.json", "reason": "The bound business test module changed during whitespace hygiene; a new immutable run is required."}

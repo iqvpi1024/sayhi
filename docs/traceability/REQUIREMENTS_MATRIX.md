@@ -138,7 +138,7 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Workstream Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-303` | JSON/Markdown/Source/Ledger/manifest/checksums、unknown extension semantic round-trip、hash/path rejection | S7 §5-§16；S9 §5、§13-§14 | `CP-001/002/003/004/005/006` | `src/noetide_micro/portability.py`、`src/noetide_micro/store.py` | `context-pack-ws07-f27d686-20260718.json: 6/6 passed/current` |
+| `FR-303` | JSON/Markdown/Source/Ledger/manifest/checksums、unknown extension semantic round-trip、hash/path rejection | S7 §5-§16；S9 §5、§13-§14 | `CP-001/002/003/004/005/006` | `src/noetide_micro/portability.py`、`src/noetide_micro/store.py` | `context-pack-ws12-7f0bb28-pyspath-20260718.json: 6/6 passed/current` |
 
 ## 4.4 Workstream：WS-04 B1 Candidate Review
 

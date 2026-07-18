@@ -4,7 +4,7 @@
 |---|---|
 | Record ID | `RC-RECOVERY-20260718-001` |
 | 分支 | `codex/kimi-end-to-end-release-candidate` |
-| 被测实现提交 | `5a324f9` |
+| 被测实现提交 | `7f0bb28` |
 | 产品基线 | `PRDv05.md` v0.5，Approved |
 | 发布权限 | 未授权推送、合并 `main`、正式 tag 或 GitHub Release |
 
@@ -15,7 +15,7 @@
 - B1 Candidate Review：5/5 required IDs passed，`a603085`。
 - C1 Decision/Outcome：7/7 required IDs passed，`5a324f9`；未映射 C1 integration test 失败会使 runner 失败。
 - Synthetic Ingestion：4/4 required IDs passed，`a603085`。
-- Context Pack：6/6 required IDs passed，`a603085`。
+- Context Pack：6/6 required IDs passed，`7f0bb28`。
 - 完整 semantic discovery：在 `PYTHONPATH=src` 及两个 test-only adapter 注入下 87/87 passed。
 - Windows D0/D1 合成一键演示：local wheel、isolated venv、module 和 console smoke passed，记录见 `docs/testing/results/packaging-ws12-cdf1de6-20260718.json`。
 - 静态基线、六个 suite validator 与 `git diff --check` 均实际返回 exit code `0`。
