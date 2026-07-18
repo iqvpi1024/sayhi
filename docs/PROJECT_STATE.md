@@ -12,7 +12,7 @@
 | 日期 | 2026-07-18 |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前切片 | `SLICE-NOETIDE-E2E-RC-001` |
-| 当前阶段 | `remediation_c1` |
+| 当前阶段 | `final_regression_and_reaudit` |
 | 权威执行决定 | `DEC-E2E-EXEC-001` |
 | 权威审计输入 | `AUDIT-NOETIDE-IMPL-20260718-001` |
 | 权威施工计划 | `PLAN-NOETIDE-E2E-RC-001` |
@@ -20,7 +20,7 @@
 | 最终独立审计 | Codex；在 Kimi 内部审计、Debug、全量回归和复审之后 |
 | 正式发布权限 | 禁止推送、合并 `main`、正式 tag、GitHub Release |
 | 当前 Git 分支 | `codex/kimi-end-to-end-release-candidate` |
-| 当前 Git HEAD | `f27d686`（WS-07 official runner 的被测提交；下一次状态提交前） |
+| 当前 Git HEAD | `f787625`（C1 official runner 的被测提交；下一次状态提交前） |
 | 工作树 | 用户未跟踪的 `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交 |
 
 ## 3. 真实进度
@@ -44,11 +44,11 @@
 | A1 current manifest/result binding | current official runner 35/35 passed；P1 已关闭 |
 | Production runtime / CLI / README | 包内合成 demo 在干净 venv 已验证；完整 Context Pack 与一键脚本仍后置 |
 | B1 Candidate Review | current B1 suite 5/5 passed：持久化候选、保守预算、审查审计均已验证；不自动写入 Canonical |
-| C1 Decision/Outcome | `DQ-006` 已裁决；仍依赖 B1 完成，现有内存原型不得作为完成证据 |
+| C1 Decision/Outcome | current C1 suite 7/7 passed；runtime/CLI 已提供固定合成 Decision、Outcome、Scenario 路径 |
 | Synthetic Ingestion | current suite executed/passed；4/4 required IDs 的 immutable result 已被 manifest 绑定；一份先前结果保留为 `superseded` |
 | Context Pack | private synthetic narrow contract current suite 6/6 passed；完整 S7/S9 长期范围仍未实现 |
 | Packaging / Windows one-click | D0/D1 synthetic local demo 已验证；D2/D3 与公开发布仍未实现且受 `DQ-005` 限制 |
-| 当前完整 RC suite | `not_executed` |
+| 当前完整 RC suite | 临时全量回归已通过；待 current commit 的最终不可变结果和复审 |
 
 ## 5. 执行链与停止边界
 
