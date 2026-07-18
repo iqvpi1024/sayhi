@@ -1,1 +1,17 @@
-{"schema_version":"noetide.c1-suite-manifest.v1","suite_id":"c1_decision_outcome_v1","flags":{"suite_defined":true,"suite_materialized":true,"suite_executed":true,"suite_passed":true},"latest_verification_result":"passed","latest_verification_result_path":"docs/testing/results/c1-ws05-21c97a2-20260718.json","latest_verification_manifest_sha256":"396a27a5511bbd037540788a2e297134e5f0a16d8be9c062c939a0bbe4b14517","latest_verification_result_sha256":"6763b80a6c0cd14c700a14745196a666b95c80d325c49b07d332f9f42237741c","required_scenario_ids":["C1-001","C1-002","C1-003","C1-004","C1-005","C1-006","C1-007"],"privacy":{"synthetic_only":true,"external_network":false,"workspace_external_reads":false,"real_personal_data":false}}
+{
+  "schema_version": "noetide.c1-suite-manifest.v1",
+  "suite_id": "c1_decision_outcome_v1",
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_applicable",
+  "required_scenario_ids": ["C1-001", "C1-002", "C1-003", "C1-004", "C1-005", "C1-006", "C1-007"],
+  "artifacts": [
+    {"role": "fixture", "path": "tests/fixtures/c1_decision_outcome_v1/fixture.json", "sha256": "08888ac9d18fc4fa37b308975a929d51da8e914321e6eb66cb01e526f8aabce0"},
+    {"role": "oracle", "path": "tests/fixtures/c1_decision_outcome_v1/oracles.json", "sha256": "a5a9107203048b1658d415fd02275f327eea772edbcafc01674f76413f5b7aab"},
+    {"role": "boundary_test_module", "path": "tests/semantic/test_c1_boundaries.py", "sha256": "b8c6def0049b4f6970d900a0a19bbd5b054e21dfc3c878bf62a6990695ad55fc"},
+    {"role": "changeset_test_module", "path": "tests/semantic/test_c1_changesets.py", "sha256": "ee27661f3f5018bb447bb5c4b82d83671fadd2ea545ba5ea3e15036a8558ebe0"},
+    {"role": "offline_runner", "path": "tests/runner/run_c1_suite.py", "sha256": "76d11429df8bb35cdef976f7cb55bdaf53e84a244fd95ea2b4b0f737e0a48a39"},
+    {"role": "suite_preflight_validator", "path": "tools/validate_c1_suite.py", "sha256": "d7281e32caa68090094babebfbc845a5d91b1bef8af05a99ffd8c2612af5622a"}
+  ],
+  "privacy": {"synthetic_only": true, "external_network": false, "workspace_external_reads": false, "real_personal_data": false}
+}

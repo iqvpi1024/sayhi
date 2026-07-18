@@ -1,0 +1,6 @@
+{
+  "fixture_id": "c1_decision_outcome_v1",
+  "synthetic": true,
+  "clock": "2031-10-15T02:00:00Z",
+  "required_scenario_ids": ["C1-001", "C1-002", "C1-003", "C1-004", "C1-005", "C1-006", "C1-007"]
+}

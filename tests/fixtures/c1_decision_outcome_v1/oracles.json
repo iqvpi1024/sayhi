@@ -1,0 +1,11 @@
+{
+  "suite_id": "c1_decision_outcome_v1",
+  "expected_scenario_result": "passed",
+  "assertions": [
+    "choice_must_be_option",
+    "outcome_requires_existing_decision",
+    "scenario_is_predicted_assertion",
+    "decision_and_outcome_publish_through_changesets",
+    "invalid_write_preserves_revision"
+  ]
+}
