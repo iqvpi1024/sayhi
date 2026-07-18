@@ -34,6 +34,7 @@
 7. `WS-03` 已完成：提交 `b8910c7` 的包在干净 Python 3.12 venv 从本地安装后，模块入口和 `noetide.exe` 均实际完成合成 Micro 链路；任意文本 intake 被拒绝并返回 exit code `2`。
 8. `WS-06` 已完成：提交 `d7f8bf0` 修复 Source append 耐久性，提交 `2d689ea` 上 official Synthetic Ingestion runner 生成 `synthetic-ingestion-ws06-2d689ea-20260718.json`；4/4 required IDs、exit code `0`、artifact binding 和受阻断网络环境均通过。此前 `2939453` 结果因 validator 工件变更保留为 `superseded`，未被伪装为 current。
 9. `WS-07` 已完成最小私有合成 Context Pack：提交 `f27d686` 上 official runner 生成 `context-pack-ws07-f27d686-20260718.json`；6/6 required IDs、exit code `0`、manifest/fixture/oracle/测试模块/runner/validator binding 均通过。范围仅为私有合成导出、hash/path verifier 和 dry-run round-trip；不包含真实导入、分享导出或 sealed runtime。
+10. `WS-08` 已完成 D0/D1 级本地合成安装入口：提交 `aeddff6` 上通过干净 venv、local wheel build、module/console smoke、卸载及重装；真实记录为 `packaging-ws08-aeddff6-20260718.json`。已移除未经裁决的 MIT classifier；D2/D3、签名、用户安装包和公开发布仍 blocked。
 
 ## 4. 当前质量状态
 
@@ -46,7 +47,7 @@
 | C1 Decision/Outcome | blocked：`DQ-006` 未裁决、B1 未完成，且 C1 Plan/Task Cards 仍为 Draft；现有内存原型不得作为授权实现 |
 | Synthetic Ingestion | current suite executed/passed；4/4 required IDs 的 immutable result 已被 manifest 绑定；一份先前结果保留为 `superseded` |
 | Context Pack | private synthetic narrow contract current suite 6/6 passed；完整 S7/S9 长期范围仍未实现 |
-| Packaging / Windows one-click | 未验证，不能宣称可用 |
+| Packaging / Windows one-click | D0/D1 synthetic local demo 已验证；D2/D3 与公开发布仍未实现且受 `DQ-005` 限制 |
 | 当前完整 RC suite | `not_executed` |
 
 ## 5. 执行链与停止边界
@@ -67,10 +68,11 @@ Kimi 在执行链内不得跳过任何测试或用静态检查代替业务验证
 
 - B1 进入实现前必须裁决 `DQ-002`、`DQ-011`；它们不能由实施代码、fixture 或默认配置替代产品决定。
 - C1 进入实现前必须裁决 `DQ-006` 且 B1 完成；其现有 Draft 文档和内存原型不构成业务编码授权。
+- 公开发布和正式许可证选择受 `DQ-005` 限制；当前只允许本地合成 D0/D1，不得声称普通用户安装包或 GitHub Release。
 - 关键交付风险是 P1 的合同链、事务边界、验证绑定和部署真实性，而不是缺少更多功能。
 - 当前 CLI 只接受显式包内合成 demo Source；这不是对真实 ingestion 的实现声明。
 - 未读取工作区外数据；本轮不读取、不修改用户私有未跟踪文件。
 
 ## 7. 下一步唯一建议动作
 
-**由 Implementer 继续独立的 `WS-08`：修复安装元数据、许可证边界与 Windows 一键本地安装/启动脚本，并在干净 Python 3.12 venv 中实际验证；B1/C1 门禁保持暂停。**
+**执行 `WS-09` 当前可运行验证并形成 gap 记录：重跑所有可物化的 suite、CLI、package、privacy 与恢复检查；B1/C1 required suite 必须诚实标记 blocked，不能拼接或伪造完整 RC 通过。**

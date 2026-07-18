@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: remediation_packaging
+current_phase: verification_gap_assessment
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,10 +14,10 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: WS-08
-current_workstream_status: readiness_check_pending
+current_workstream: WS-09
+current_workstream_status: partial_verification_pending
 next_role: Implementer
-next_single_action: WS-08_packaging_and_one_click_readiness
+next_single_action: WS-09_current_suite_and_gap_verification
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
