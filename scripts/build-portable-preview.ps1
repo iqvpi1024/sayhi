@@ -27,6 +27,7 @@ try {
     $bundleName = "Noetide-synthetic-preview-v$Version-win64"
     $bundleRoot = Join-Path $stageRoot $bundleName
     try {
+        New-Item -ItemType Directory -Force -Path $stageRoot | Out-Null
         $sourceArchive = Join-Path $stageRoot "source.zip"
         $sourceRoot = Join-Path $stageRoot "source"
         & $git.Source -C $repoRoot archive --format=zip --output=$sourceArchive $Ref -- src/noetide_micro LICENSE README.md SUPPORT.md scripts/portable
