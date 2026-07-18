@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-NOETIDE-E2E-RC-001
 slice_id: SLICE-NOETIDE-E2E-RC-001
-current_phase: blocked_product_decisions_after_ws09
+current_phase: remediation_b1
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -14,10 +14,10 @@ decision_ref: DEC-E2E-EXEC-001
 audit_input: AUDIT-NOETIDE-IMPL-20260718-001
 implementation_plan: docs/planning/END_TO_END_CORRECTIVE_DELIVERY_PLAN.md
 implementation_plan_id: PLAN-NOETIDE-E2E-RC-001
-current_workstream: product_decision_gate
-current_workstream_status: blocked
+current_workstream: WS-04
+current_workstream_status: implementation_pending
 next_role: Implementer
-next_single_action: product_owner_decide_dq_002_dq_011_dq_006
+next_single_action: WS-04_b1_contract_materialization_and_implementation
 final_target: audit_ready_release_candidate
 final_auditor: Codex
 public_release_allowed: false
@@ -39,8 +39,6 @@ scope_out:
   - user untracked private files
   - push, main merge, formal tag, GitHub Release, and public release
 blockers:
-  - DQ-002 and DQ-011 block B1 Candidate Review
-  - DQ-006 and B1 completion block C1 Decision-Outcome
   - DQ-005 blocks D2/D3 public release and final license selection
 stop_condition: hand over only after WS-12 reaches audit_ready_release_candidate
 ```
