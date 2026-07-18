@@ -77,7 +77,7 @@
     {
       "role": "suite_preflight_validator",
       "path": "tools/validate_answer_safety_suite.py",
-      "sha256": "ccb72cb52ed607bc616d11cbae17ced0ccfa4852d128c44b983a743a40b88510"
+      "sha256": "22d148abf40aae7b56d8c64f0b49f80ae7e21634d397b9281f58c61fd825f036"
     }
   ],
   "artifact_digest_strategy": {

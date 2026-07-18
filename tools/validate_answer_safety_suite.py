@@ -507,7 +507,10 @@ def main() -> int:
         return 1
     print("PASSED: Answer Safety suite materialized with 11 scenarios + 24 upstream refs = 35 result IDs")
     print("PASSED: fixture/oracle hashes, locators, digests, AST, stdlib, privacy, and four-state contract")
-    print("NOT_EXECUTED: Answer Safety business runner")
+    if manifest.get("flags", {}).get("suite_executed"):
+        print("PASSED: Answer Safety current business runner result is bound")
+    else:
+        print("NOT_EXECUTED: Answer Safety business runner")
     return 0
 
 
