@@ -1,0 +1,1 @@
+{"suite_id":"b1_candidate_review_v1","assertions":["critical_never_suppressed","suppression_preserves_evidence","ledger_only","collision_fail_closed","review_event_audited"]}
