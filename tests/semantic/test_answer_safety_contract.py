@@ -176,6 +176,21 @@ class AnswerSafetyContractTests(unittest.TestCase):
         self.assertEqual(second, first)
         self.assertEqual(middle, expected_snapshot)
         self.assertEqual(system.layer_snapshot(), expected_snapshot)
+        request = copy.deepcopy(self._case("AS-010")["query_requests"][0])
+        request["claim_ref"] = "synthetic_claim_not_present"
+        wrong_claim = system.evaluator.evaluate(request)
+        self.assertEqual(wrong_claim["answer_status"], "unknown")
+        self.assertEqual(wrong_claim["reason_codes"], ["claim_ref_mismatch"])
+        request = copy.deepcopy(self._case("AS-010")["query_requests"][0])
+        request["valid_time"] = "not-a-time"
+        malformed_time = system.evaluator.evaluate(request)
+        self.assertEqual(malformed_time["answer_status"], "unknown")
+        self.assertEqual(malformed_time["reason_codes"], ["invalid_valid_time"])
+        request = copy.deepcopy(self._case("AS-010")["query_requests"][0])
+        request["coverage_window_refs"] = ["coverage_not_present"]
+        missing_coverage = system.evaluator.evaluate(request)
+        self.assertEqual(missing_coverage["answer_status"], "unknown")
+        self.assertEqual(missing_coverage["reason_codes"], ["invalid_coverage_scope"])
 
     @scenario("AS-011")
     def test_as_011_result_write_failure_cannot_publish_pass(self) -> None:

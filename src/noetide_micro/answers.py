@@ -1,4 +1,5 @@
 from __future__ import annotations
+from datetime import datetime
 import json
 from typing import Any, Mapping
 
@@ -13,6 +14,9 @@ class AnswerEvaluator:
         self.data_revision = self.initial['data_revision']
 
     def evaluate(self, query_request):
+        validation_error = self._query_validation_error(query_request)
+        if validation_error is not None:
+            return self._invalid_query_answer(query_request, validation_error)
         qid = query_request['query_id']
         claim_ref = query_request['claim_ref']
         predicate = query_request['predicate']
@@ -41,7 +45,7 @@ class AnswerEvaluator:
         selected_assertion = None
         for obj in self.initial.get('canonical_objects', []):
             if obj.get('object_type') == 'assertion':
-                if obj.get('predicate') == predicate:
+                if obj.get('predicate') == predicate and self._matches_claim(obj, claim_ref):
                     selected_assertion = obj
                     for er in obj.get('evidence_refs', []):
                         evidence_refs.append({
@@ -66,6 +70,17 @@ class AnswerEvaluator:
                 ['unreviewed_candidate_present'], 'not_applicable'
             )
 
+        matching_predicate_exists = any(
+            obj.get('object_type') == 'assertion' and obj.get('predicate') == predicate
+            for obj in self.initial.get('canonical_objects', [])
+        )
+        if matching_predicate_exists and not selected_assertion:
+            return self._make_answer(
+                query_request, 'unknown', None, None,
+                [], coverage_windows,
+                ['claim_ref_mismatch'], 'not_applicable'
+            )
+
         # AS-007: coverage sufficient but no assertion = unknown
         if coverage_result['status'] == 'ok' and not selected_assertion:
             return self._make_answer(
@@ -75,8 +90,12 @@ class AnswerEvaluator:
             )
 
         # AS-004: conflict detection for multiple assertions with same predicate and overlapping valid_time
-        assertions = [obj for obj in self.initial.get('canonical_objects', [])
-                      if obj.get('object_type') == 'assertion' and obj.get('predicate') == predicate]
+        assertions = [
+            obj for obj in self.initial.get('canonical_objects', [])
+            if obj.get('object_type') == 'assertion'
+            and obj.get('predicate') == predicate
+            and self._matches_claim(obj, claim_ref)
+        ]
         if len(assertions) > 1:
             conflict = self._evaluate_conflict(assertions, valid_time)
             if conflict['is_conflict']:
@@ -145,6 +164,56 @@ class AnswerEvaluator:
             evidence_refs, coverage_windows,
             ['no_matching_assertion'], 'not_applicable'
         )
+
+    def _query_validation_error(self, query_request):
+        if not isinstance(query_request, Mapping):
+            return 'invalid_query_contract'
+        for field in ('query_id', 'claim_ref', 'predicate', 'subject_ref'):
+            if not isinstance(query_request.get(field), str) or not query_request[field]:
+                return 'invalid_query_contract'
+        scope = query_request.get('verification_scope')
+        if scope not in {'record_accuracy', 'statement_occurrence', 'viewpoint', 'world_claim'}:
+            return 'invalid_verification_scope'
+        valid_time = query_request.get('valid_time')
+        if valid_time != 'current':
+            if not isinstance(valid_time, str):
+                return 'invalid_valid_time'
+            try:
+                datetime.strptime(valid_time, '%Y-%m-%dT%H:%M:%SZ')
+            except ValueError:
+                return 'invalid_valid_time'
+        coverage_refs = query_request.get('coverage_window_refs', [])
+        if not isinstance(coverage_refs, list) or not all(isinstance(item, str) for item in coverage_refs):
+            return 'invalid_coverage_scope'
+        known_coverage = {
+            window['coverage_window_id'] for window in self.initial.get('coverage_windows', [])
+        }
+        if not set(coverage_refs).issubset(known_coverage):
+            return 'invalid_coverage_scope'
+        return None
+
+    @staticmethod
+    def _matches_claim(assertion, claim_ref):
+        return any(
+            evidence.get('claim_ref') == claim_ref
+            for evidence in assertion.get('evidence_refs', [])
+        )
+
+    def _invalid_query_answer(self, query_request, reason_code):
+        valid_time = query_request.get('valid_time') if isinstance(query_request, Mapping) else None
+        return {
+            'answer_status': 'unknown',
+            'answer_value': None,
+            'verification_scope': None,
+            'valid_time': {'requested': valid_time, 'resolved': None},
+            'recorded_as_of': 'current',
+            'evaluated_at': self.clock,
+            'evidence_refs': [],
+            'coverage': {'window_refs': [], 'gaps': [], 'sufficient': False},
+            'reason_codes': [reason_code],
+            'data_revision': self.data_revision,
+            'assessment_policy_ref': 'not_applicable',
+        }
 
     def _evaluate_coverage(self, valid_time, coverage_windows):
         if not coverage_windows:

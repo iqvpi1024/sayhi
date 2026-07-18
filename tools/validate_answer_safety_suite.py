@@ -433,6 +433,7 @@ def validate_python_contract(v: Validation) -> None:
         "os.replace(temporary, output)",
         "ResultArtifactWriteError",
         "result.output.before_atomic_replace",
+        "verify_bound_artifacts",
     ):
         v.require(required in runner_text, f"runner missing safety mechanism: {required}")
     test_text = TEST_PATH.read_text(encoding="utf-8")

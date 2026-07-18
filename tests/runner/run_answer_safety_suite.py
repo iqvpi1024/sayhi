@@ -153,6 +153,17 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def verify_bound_artifacts(manifest: Mapping[str, Any]) -> None:
+    for artifact in manifest.get("artifacts", []):
+        relative = artifact.get("path")
+        expected_hash = artifact.get("sha256")
+        if not isinstance(relative, str) or not isinstance(expected_hash, str):
+            raise RuntimeError("invalid_manifest_artifact")
+        path = ROOT / relative
+        if not path.is_file() or sha256_file(path) != expected_hash:
+            raise RuntimeError(f"artifact_hash_mismatch:{relative}")
+
+
 def _privacy_matches(blob: str) -> list[str]:
     patterns = {
         "email-like": re.compile(r"(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b"),
@@ -174,6 +185,7 @@ def main() -> int:
         raise SystemExit("result output already exists; result records are immutable")
     relative_output = resolved_output.relative_to(ROOT)
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    verify_bound_artifacts(manifest)
     scenarios = json.loads(SCENARIOS_PATH.read_text(encoding="utf-8"))["scenarios"]
     started_at = utc_now()
     run_id = f"answer-safety-{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}-{uuid.uuid4().hex[:8]}"
