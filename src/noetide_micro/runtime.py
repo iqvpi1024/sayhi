@@ -16,6 +16,7 @@ from .c1 import C1ChangeSetService
 from .decision import DecisionService
 from .outcome import OutcomeService
 from .scenario import ScenarioService
+from .b1 import CandidateReviewService
 
 
 JsonObject = dict[str, Any]
@@ -125,6 +126,12 @@ class LocalMicroRuntime:
             return existing
         scenario = ScenarioService(self._store, self.fixture, _CLOCK).create("scenario_demo_001", "decision_demo_001", "baseline", ["synthetic assumption"], "synthetic projection")
         return C1ChangeSetService(self._store, _CLOCK).publish(scenario, "person_alpha")
+
+    def review_candidates(self) -> list[JsonObject]:
+        service = CandidateReviewService(self._store, _CLOCK)
+        candidate = {"candidate_id": "candidate_demo_001", "candidate_kind": "state", "source_refs": [{"source_id": "src_history_001"}], "proposed_value": "no_contact", "target_ref": {"object_type": "state", "object_id": "state_contact_001"}, "model_or_rule_version": "synthetic_rule_v1", "risk_level": "medium", "review_priority": "normal", "confirmation_policy": "single_confirmation"}
+        service.submit(candidate)
+        return service.list_candidates()
 
 
 def open_runtime(data_dir: str | Path) -> LocalMicroRuntime:

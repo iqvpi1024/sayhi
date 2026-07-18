@@ -99,6 +99,12 @@ def cmd_c1(args: argparse.Namespace) -> int:
     print(f"{value['object_type']}: {value.get('decision_id') or value.get('outcome_id') or value.get('assertion_id')}")
     return 0
 
+def cmd_review(args: argparse.Namespace) -> int:
+    candidates = _with_runtime(args, lambda runtime: runtime.review_candidates())
+    for candidate in candidates:
+        print(f"{candidate['candidate_id']}: {candidate['status']}")
+    return 0
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="noetide")
@@ -128,6 +134,8 @@ def main(argv: list[str] | None = None) -> int:
     for name in ("decision", "outcome", "scenario"):
         command = commands.add_parser(name)
         command.set_defaults(handler=cmd_c1)
+    review = commands.add_parser("review")
+    review.set_defaults(handler=cmd_review)
     args = parser.parse_args(argv)
     try:
         return args.handler(args)
