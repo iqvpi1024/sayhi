@@ -1,7 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$OutputDirectory = (Join-Path $PSScriptRoot "..\dist"),
-    [string]$Version = "0.1.0"
+    [string]$Version = "0.1.0",
+    [string]$Ref = "HEAD"
 )
 
 $ErrorActionPreference = "Stop"
@@ -16,7 +17,7 @@ try {
     $archiveName = "Noetide-synthetic-preview-v$Version.zip"
     $archivePath = Join-Path $outputPath $archiveName
     Remove-Item -LiteralPath $archivePath -Force -ErrorAction SilentlyContinue
-    & $git.Source -C $repoRoot archive --format=zip --prefix="Noetide-synthetic-preview-v$Version/" --output=$archivePath HEAD
+    & $git.Source -C $repoRoot archive --format=zip --prefix="Noetide-synthetic-preview-v$Version/" --output=$archivePath $Ref
     if ($LASTEXITCODE -ne 0) { throw "git archive failed" }
 
     $hash = (Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant()

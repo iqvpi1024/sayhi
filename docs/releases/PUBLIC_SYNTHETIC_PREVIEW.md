@@ -26,3 +26,7 @@ Get-FileHash .\Noetide-synthetic-preview-v0.1.0.zip -Algorithm SHA256
 ```
 
 将输出与 `SHA256SUMS.txt` 对照。校验不匹配时不要运行该压缩包。
+
+## 发布维护
+
+维护者在已完成 GitHub CLI 登录后，执行 `scripts\publish-synthetic-preview.ps1`。脚本从 `v0.1.0-synthetic-preview` tag 重建资产、生成 checksum，并创建 GitHub Release；它不会移动 tag。
