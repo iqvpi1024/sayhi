@@ -12,6 +12,10 @@ from .intake import IntakeService
 from .queries import CanonicalQueries
 from .store import SemanticStore
 from .views import CoreViewReader
+from .c1 import C1ChangeSetService
+from .decision import DecisionService
+from .outcome import OutcomeService
+from .scenario import ScenarioService
 
 
 JsonObject = dict[str, Any]
@@ -95,6 +99,32 @@ class LocalMicroRuntime:
 
     def source(self, source_id: str) -> JsonObject | None:
         return self._store.seeded_source(source_id)
+
+    def create_demo_decision(self) -> JsonObject:
+        existing = self._store.canonical_object_or_none("decision_demo_001")
+        if existing is not None:
+            return existing
+        decision = DecisionService(self._store, self.fixture, _CLOCK).create("decision_demo_001", "synthetic choice", ["option_a", "option_b"], [], [], "option_a")
+        return C1ChangeSetService(self._store, _CLOCK).publish(decision, "person_alpha")
+
+    def create_demo_outcome(self) -> JsonObject:
+        existing = self._store.canonical_object_or_none("outcome_demo_001")
+        if existing is not None:
+            return existing
+        decision = self._store.canonical_object_or_none("decision_demo_001")
+        if decision is None:
+            self.create_demo_decision()
+        outcome = OutcomeService(self._store, self.fixture, _CLOCK).create("outcome_demo_001", "decision_demo_001", "synthetic actual", [])
+        return C1ChangeSetService(self._store, _CLOCK).publish(outcome, "person_alpha")
+
+    def create_demo_scenario(self) -> JsonObject:
+        if self._store.canonical_object_or_none("decision_demo_001") is None:
+            self.create_demo_decision()
+        existing = self._store.canonical_object_or_none("scenario_demo_001")
+        if existing is not None:
+            return existing
+        scenario = ScenarioService(self._store, self.fixture, _CLOCK).create("scenario_demo_001", "decision_demo_001", "baseline", ["synthetic assumption"], "synthetic projection")
+        return C1ChangeSetService(self._store, _CLOCK).publish(scenario, "person_alpha")
 
 
 def open_runtime(data_dir: str | Path) -> LocalMicroRuntime:

@@ -94,6 +94,11 @@ def cmd_view(args: argparse.Namespace) -> int:
     print(view["payload"])
     return 0
 
+def cmd_c1(args: argparse.Namespace) -> int:
+    value = _with_runtime(args, lambda runtime: getattr(runtime, f"create_demo_{args.command}")())
+    print(f"{value['object_type']}: {value.get('decision_id') or value.get('outcome_id') or value.get('assertion_id')}")
+    return 0
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="noetide")
@@ -120,6 +125,9 @@ def main(argv: list[str] | None = None) -> int:
     for name, view_name in (("person-card", "person_card"), ("timeline", "relationship_timeline")):
         command = commands.add_parser(name)
         command.set_defaults(handler=cmd_view, view_name=view_name)
+    for name in ("decision", "outcome", "scenario"):
+        command = commands.add_parser(name)
+        command.set_defaults(handler=cmd_c1)
     args = parser.parse_args(argv)
     try:
         return args.handler(args)
