@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-B-EPISODE-SUMMARY-001` |
-| 当前阶段 | `recovery_point_published` |
+| 当前工作切片 | `SLICE-MVP-B-COMMITMENT-001` |
+| 当前阶段 | `product_decided` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -34,6 +34,7 @@
 11. `B2-TASK-003` 已完成 deterministic day/phase Derived projector/reader；stale、delete/rebuild、unavailable receipt 与 Derived-evidence 拒绝均有定向证明，B2 official suite 仍为 `not_executed`。
 12. `B2-TASK-004/005` 已完成 adapter 与 official runner；B2 8/8 passed，manifest 已绑定 current immutable result。
 13. B2 Gate Review 结论 `P0=0`、`P1=0`；recovery tag `b2-episode-summary-rp-20260719` 已推送。
+14. `DEC-MVP-B-COMMITMENT-001` 已选择 B3 的固定合成 Commitment 生命周期切片；尚未开始 B3 代码或 suite 物化。
 
 ## 4. 真实验证结果
 
@@ -61,4 +62,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**在新的 Product Decision 中选择下一条已批准的窄切片；不得因 B2 通过而扩展 FR-103 的长期范围。**
+**执行 B3 Commitment 的 S1/S2/S3/S5/S6/S7 applicability review，并在发现产品歧义时回到 Decision。**

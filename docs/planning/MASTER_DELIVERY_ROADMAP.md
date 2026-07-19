@@ -9,7 +9,7 @@
 | Product Baseline | `PRDv05.md` v0.5 Approved |
 | Date | 2026-07-19 |
 | Latest Public Release | `v0.1.3-synthetic-preview` (D1 synthetic preview) |
-| Current Active Slice | `SLICE-MVP-B-EPISODE-SUMMARY-001` |
+| Current Active Slice | `SLICE-MVP-B-COMMITMENT-001` |
 
 本路线图只规定交付顺序、切片边界和门禁。它不替代 PRD、Product Decision、SPEC、ADR、suite 或单切片 Implementation Plan，也不授权提前实现后续能力。
 
@@ -120,7 +120,7 @@ Product Baseline
 | `B5-MULTILINGUAL` | FR-108；原文与翻译对照 | Source/portability 合同 | 覆盖所有语言 |
 | `B6-SHADOW-MIGRATION` | 合成/匿名化复杂数据影子迁移与压力测试 | B1-B5 | 真实历史迁移、全连接器 |
 
-当前 B2 已由 `DEC-MVP-B-EPISODE-SUMMARY-001` 选择，处于 `product_decided`；只允许进入适用 SPEC 复核与追踪，尚未授权业务代码。
+当前 B2 已完成并发布 `b2-episode-summary-rp-20260719` recovery point。当前 B3 已由 `DEC-MVP-B-COMMITMENT-001` 选择，处于 `product_decided`；只允许进入适用 SPEC 复核与追踪，尚未授权业务代码。
 
 进入 B1 前重开 `DQ-002` 和 `DQ-011`。任何默认自动处理范围必须由 Product Decision 明确，不得由模型置信度替代。
 

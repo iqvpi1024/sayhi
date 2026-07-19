@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-B-EPISODE-SUMMARY-001
-slice_id: SLICE-MVP-B-EPISODE-SUMMARY-001
-current_phase: recovery_point_published
+handoff_id: HANDOFF-MVP-B-COMMITMENT-001
+slice_id: SLICE-MVP-B-COMMITMENT-001
+current_phase: product_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -19,24 +19,24 @@ release:
 ci_runs:
   - 29654926812
   - 29654930604
-decision_ref: DEC-MVP-B-EPISODE-SUMMARY-001
-spec_contract: SPEC-B2-EPISODE-SUMMARY-001
-adr_ref: ADR-0004
-architecture_ref: ARCH-B2-EPISODE-SUMMARY-001
-suite_manifest: tests/b2_suite_manifest.json
-implementation_plan: docs/planning/MVP_B_B2_IMPLEMENTATION_PLAN.md
-task_cards: docs/planning/MVP_B_B2_TASK_CARDS.md
-next_role: Implementer
-next_single_action: select_next_product_slice
+decision_ref: DEC-MVP-B-COMMITMENT-001
+spec_contract: absent_pending_applicability_review
+adr_ref: absent_pending_applicability_review
+architecture_ref: absent_pending_applicability_review
+suite_manifest: absent_pending_materialization
+implementation_plan: absent_pending_planning
+task_cards: absent_pending_planning
+next_role: Product_Spec_Reviewer
+next_single_action: review_B3_Commitment_applicability
 scope_in:
-  - fixed synthetic Episode, Derived summary, freshness and traceability boundary
-  - S1/S2/S3/S5/S6/S7 applicability review and B2 traceability
+  - fixed synthetic Commitment lifecycle and Derived due-status boundary
+  - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
 scope_out:
   - real personal data
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: a new Product Decision selects the next narrow slice
+stop_condition: B3 applicability review identifies no unresolved product ambiguity or records it explicitly
 ```
 
 ## 当前事实
@@ -52,3 +52,4 @@ stop_condition: a new Product Decision selects the next narrow slice
 - B2-TASK-003 已完成，定向 4/4 summary tests 与 configured-adapter semantic regression 107 passed；下一轮只允许执行 B2-TASK-004。
 - B2-TASK-004/005 已完成：official runner 8/8 passed，current result 已绑定。下一步只允许创建并复核 B2 recovery point。
 - B2 recovery point `b2-episode-summary-rp-20260719` 已推送并指向审计提交；B2 切片完成，下一步必须回到 Product Decision。
+- `DEC-MVP-B-COMMITMENT-001` 已选择 B3；本轮只允许进行 applicability review，禁止 B3 业务代码。
