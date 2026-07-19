@@ -165,3 +165,13 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `FR-103` | fixed synthetic Episode candidate/publish、day/phase Derived summary、stale/rebuild/Derived-evidence rejection | `SPEC-B2-EPISODE-SUMMARY-001` §4-§19；S1 §5/§6；S2 §9-§14；S3 §6/§8/§14；S5 §6/§11；S6 §4-§14；S7 §7 | `B2-001/002/003/004/005/006/007/008` | `store.py`、`episodes.py`、`summaries.py`、`b2_testing_adapter.py` | `b2-a810513-20260719.json: 8/8 passed/current` |
 
 状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。B2 仅完成 FR-103 的固定合成切片，完整长期范围仍为 deferred。
+
+## 4.7 Active Slice：B3 Commitment
+
+`SLICE-MVP-B-COMMITMENT-001` 只实现 FR-104 的固定合成子集：受控 Commitment 生命周期和 Derived due-status。它不代表真实提醒、自动处理、日历连接器或完整 FR-104。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-104` | fixed synthetic Commitment candidate、publish、complete/cancel、compensation revert、Derived due-status | `SPEC-B3-COMMITMENT-001` §2-§8；S1 §5/§6；S2 时间语义；S3 §5-§14；S5 §6.5；S6 §4-§14；S7 §7 | `B3-001/002/003/004/005/006/007/008` | `TBD` | `not_executed` |
+
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。B3 仅授权进入 ADR 与 Architecture View；不得开始 suite/业务代码。

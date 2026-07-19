@@ -37,6 +37,7 @@
 14. `DEC-MVP-B-COMMITMENT-001` 已选择 B3 的固定合成 Commitment 生命周期切片；尚未开始 B3 代码或 suite 物化。
 15. B3 applicability review 结论为 `pass_with_slice_contract_required`；基础 SPEC 不足以直接授权 Commitment 业务实现。
 16. `SPEC-B3-COMMITMENT-001` 与合同复核已完成；尚未建立 B3 traceability、ADR、suite 或代码。
+17. B3 FR-104 traceability 已建立；尚未物化 B3 suite 或实现。
 
 ## 4. 真实验证结果
 
@@ -64,4 +65,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**建立 B3 的 FR-104 traceability，将切片合同、B3-001..008 与未来模块/验证状态连接。**
+**为 B3 Commitment 建立最小 ADR 与 Architecture View，决定当前切片的持久化/Derived 边界但不补写产品语义。**
