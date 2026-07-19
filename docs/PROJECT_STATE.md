@@ -35,6 +35,7 @@
 12. `B2-TASK-004/005` 已完成 adapter 与 official runner；B2 8/8 passed，manifest 已绑定 current immutable result。
 13. B2 Gate Review 结论 `P0=0`、`P1=0`；recovery tag `b2-episode-summary-rp-20260719` 已推送。
 14. `DEC-MVP-B-COMMITMENT-001` 已选择 B3 的固定合成 Commitment 生命周期切片；尚未开始 B3 代码或 suite 物化。
+15. B3 applicability review 结论为 `pass_with_slice_contract_required`；基础 SPEC 不足以直接授权 Commitment 业务实现。
 
 ## 4. 真实验证结果
 
@@ -62,4 +63,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 B3 Commitment 的 S1/S2/S3/S5/S6/S7 applicability review，并在发现产品歧义时回到 Decision。**
+**起草并审查 B3 Commitment slice contract，闭合字段、状态机、Derived due-status 与可执行验收后再进入 Traceability。**
