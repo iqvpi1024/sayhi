@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-B-COMMITMENT-001` |
-| 当前阶段 | `spec_approved` |
+| 当前阶段 | `architecture_decided` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -25,15 +25,8 @@
 2. A1 suite 完整性绑定已修复，官方 runner 在 `8556eea` 实际通过 35/35；C1 runner 场景映射已修复，官方 runner 在同一提交实际通过 7/7。
 3. `v0.1.3-synthetic-preview` 已发布源码 ZIP、Windows portable ZIP 及各自 SHA-256 校验文件。portable 包自带 Python runtime，解压后可初始化合成 SQLite 并读取 `rev_010`。
 4. GitHub Actions 对 `main` 和 tag 的两个 run 均通过，包含 Linux 合同/语义回归与 Windows portable smoke。
-5. `DEC-MVP-B-EPISODE-SUMMARY-001` 与 `SPEC-B2-EPISODE-SUMMARY-001` 已定义 B2 Episode 与分层摘要的仅合成、Derived-only 合同；追踪已建立，尚未开始业务代码。
-6. `ADR-0004` 与 `ARCH-B2-EPISODE-SUMMARY-001` 已接受 SQLite 分层持久化与 Derived rebuild 边界。
-7. B2 fixture、oracle、manifest、adapter protocol、offline runner 与 validator 已物化；尚未执行 B2 业务测试。
-8. `PLAN-MVP-B-B2-IMPL-001` 与任务卡已批准；只授权从 `B2-TASK-001` 开始。
-9. `B2-TASK-001` 已完成 Episode/Derived storage foundation；定向 3/3 passed，B2 official suite 仍为 `not_executed`。
-10. `B2-TASK-002` 已完成 fixed synthetic Episode 的 ChangeSet propose/approve/publish/revert 边界；定向 5/5 passed，补偿 revision 保留 Ledger 历史，B2 official suite 仍为 `not_executed`。
-11. `B2-TASK-003` 已完成 deterministic day/phase Derived projector/reader；stale、delete/rebuild、unavailable receipt 与 Derived-evidence 拒绝均有定向证明，B2 official suite 仍为 `not_executed`。
-12. `B2-TASK-004/005` 已完成 adapter 与 official runner；B2 8/8 passed，manifest 已绑定 current immutable result。
-13. B2 Gate Review 结论 `P0=0`、`P1=0`；recovery tag `b2-episode-summary-rp-20260719` 已推送。
+5. B2 Episode/summary 已完成合同、ADR、suite、实现、官方 runner、Gate Review 与 recovery point；它只证明 FR-103 的固定合成切片。
+6. B2 official suite 的 `B2-001..008` 为 8/8 passed/current；recovery tag `b2-episode-summary-rp-20260719` 已推送。
 14. `DEC-MVP-B-COMMITMENT-001` 已选择 B3 的固定合成 Commitment 生命周期切片；尚未开始 B3 代码或 suite 物化。
 15. B3 applicability review 结论为 `pass_with_slice_contract_required`；基础 SPEC 不足以直接授权 Commitment 业务实现。
 16. `SPEC-B3-COMMITMENT-001` 与合同复核已完成；尚未建立 B3 traceability、ADR、suite 或代码。
@@ -46,7 +39,7 @@
 |---|---|
 | Product / SPEC baseline validator | exit code `0` |
 | Micro、A1、B1、C1、Synthetic Ingestion、Context Pack suite validator | 全部 exit code `0` |
-| 全量 semantic regression | 87/87 passed |
+| 全量 semantic regression | B2 current verification 时 107/107 passed |
 | D1 source demo | exit code `0`，初始化后 `Current revision: rev_010` |
 | tag 构建 portable smoke | exit code `0`，初始化后 `Current revision: rev_010` |
 | GitHub Actions | `29654926812`、`29654930604` 均为 `success` |

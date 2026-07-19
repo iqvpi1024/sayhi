@@ -35,6 +35,6 @@
 
 ## 5. 当前状态
 
-上一完成切片的最新 Gate 为 `MICRO_MVP_IMPLEMENTATION_GATE_2026-07-17.md`：P0=0、P1=0，Recovery Point 已发布。
+历史 Micro/A1 等 Gate 保留当时审计价值。最新完成切片 Gate 为 `B2_EPISODE_SUMMARY_GATE_REVIEW_2026-07-19.md`：P0=0、P1=0，B2 recovery point 已发布。
 
-当前 A1 已通过 Product Gate、SPEC Applicability Review、Pre-Suite Gate、Suite Materialization Gate 和 Development Readiness Gate。最新门禁 P0=0、P1=0，只允许从 Approved Plan/Task Cards 的 `AS-TASK-001` 开始；A1 business Verification 仍为 `not_executed`。
+当前 B3 处于 `architecture_decided`，尚无 suite materialization 或业务验证结果；其动态状态以 `docs/PROJECT_STATE.md` 与 `docs/process/CURRENT_HANDOFF.md` 为准。
