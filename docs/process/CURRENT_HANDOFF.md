@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-B-COMMITMENT-001
 slice_id: SLICE-MVP-B-COMMITMENT-001
-current_phase: product_decided
+current_phase: spec_approved
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -26,8 +26,8 @@ architecture_ref: absent_pending_applicability_review
 suite_manifest: absent_pending_materialization
 implementation_plan: absent_pending_planning
 task_cards: absent_pending_planning
-next_role: Slice_Contract_Author
-next_single_action: author_B3_Commitment_slice_contract
+next_role: Traceability_Author
+next_single_action: establish_B3_Commitment_traceability
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B3 slice contract is approved and traceability can be established without unrecorded product ambiguity
+stop_condition: B3 traceability maps FR-104, contract invariants and B3 scenarios without claiming unexecuted verification
 ```
 
 ## 当前事实
@@ -54,3 +54,4 @@ stop_condition: B3 slice contract is approved and traceability can be establishe
 - B2 recovery point `b2-episode-summary-rp-20260719` 已推送并指向审计提交；B2 切片完成，下一步必须回到 Product Decision。
 - `DEC-MVP-B-COMMITMENT-001` 已选择 B3；本轮只允许进行 applicability review，禁止 B3 业务代码。
 - B3 applicability review 已完成，结论为 `pass_with_slice_contract_required`；下一轮只允许起草切片合同，禁止 fixture/oracle/ADR/业务代码。
+- B3 slice contract 已批准；下一轮只允许建立 traceability，禁止 ADR、suite 物化和业务代码。

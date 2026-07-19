@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-B-COMMITMENT-001` |
-| 当前阶段 | `product_decided` |
+| 当前阶段 | `spec_approved` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -36,6 +36,7 @@
 13. B2 Gate Review 结论 `P0=0`、`P1=0`；recovery tag `b2-episode-summary-rp-20260719` 已推送。
 14. `DEC-MVP-B-COMMITMENT-001` 已选择 B3 的固定合成 Commitment 生命周期切片；尚未开始 B3 代码或 suite 物化。
 15. B3 applicability review 结论为 `pass_with_slice_contract_required`；基础 SPEC 不足以直接授权 Commitment 业务实现。
+16. `SPEC-B3-COMMITMENT-001` 与合同复核已完成；尚未建立 B3 traceability、ADR、suite 或代码。
 
 ## 4. 真实验证结果
 
@@ -63,4 +64,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**起草并审查 B3 Commitment slice contract，闭合字段、状态机、Derived due-status 与可执行验收后再进入 Traceability。**
+**建立 B3 的 FR-104 traceability，将切片合同、B3-001..008 与未来模块/验证状态连接。**
