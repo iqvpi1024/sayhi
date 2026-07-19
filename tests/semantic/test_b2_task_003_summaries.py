@@ -38,7 +38,7 @@ class B2Task003SummaryTests(unittest.TestCase):
 
     def test_builds_fresh_day_and_phase_projections_from_direct_dependencies(self) -> None:
         result = self.summaries.build_for_episode("episode_b2_001")
-        self.assertEqual(result, {"status": "fresh", "projection_ids": ["summary_b2_day_001", "summary_b2_phase_001"], "data_revision": "rev_b2_021", "view_revision": "rev_b2_021"})
+        self.assertEqual(result, {"status": "fresh", "projection_ids": ["summary_b2_day_001", "summary_b2_phase_001"], "data_revision": "rev_021", "view_revision": "rev_021"})
         phase = self.store.summary_projection("summary_b2_phase_001")
         self.assertEqual(phase["freshness_status"], "fresh")
         self.assertEqual(phase["dependency_set"]["episode_refs"], ["episode_b2_001"])
@@ -51,7 +51,7 @@ class B2Task003SummaryTests(unittest.TestCase):
         stale = self.summaries.read("summary_b2_day_001")
         self.assertEqual(stale["status"], "stale")
         rebuilt = self.summaries.rebuild_existing()
-        self.assertEqual(rebuilt, {"status": "fresh", "data_revision": "rev_b2_022"})
+        self.assertEqual(rebuilt, {"status": "fresh", "data_revision": "rev_022"})
         self.assertEqual(self.store.summary_projection("summary_b2_day_001")["dependency_set"]["episode_refs"], [])
 
     def test_delete_and_rebuild_uses_canonical_episode_not_old_derived_payload(self) -> None:
@@ -66,7 +66,7 @@ class B2Task003SummaryTests(unittest.TestCase):
         self.summaries.build_for_episode("episode_b2_001")
         self.assertEqual(self.summaries.reject_derived_evidence("summary_b2_day_001"), {"status": "rejected", "reason_code": "derived_evidence_forbidden"})
         self.summaries.inject_rebuild_failure()
-        self.assertEqual(self.summaries.rebuild_existing(), {"status": "unavailable", "reason_code": "summary_rebuild_failed", "data_revision": "rev_b2_021"})
+        self.assertEqual(self.summaries.rebuild_existing(), {"status": "unavailable", "reason_code": "summary_rebuild_failed", "data_revision": "rev_021"})
         self.assertEqual(self.store.canonical_object("episode_b2_001")["object_type"], "episode")
         self.assertEqual(self.store.summary_projection("summary_b2_day_001")["freshness_status"], "unavailable")
         self.assertTrue(any(receipt["status"] == "failed" for receipt in self.store.derived_rebuild_receipts()))

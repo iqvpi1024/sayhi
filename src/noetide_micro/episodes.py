@@ -75,7 +75,7 @@ class EpisodeChangeSetService:
         candidate = proposal["after_value"]
         if self._store.canonical_object_or_none(candidate["episode_id"]) is not None:
             return self._fail(changeset, "conflicted", "episode_already_exists")
-        revision = "rev_b2_021"
+        revision = "rev_021"
         published = copy.deepcopy(candidate)
         published["object_revision"] = revision
         published["recorded_at"] = self._now
@@ -108,17 +108,17 @@ class EpisodeChangeSetService:
 
     def revert(self, changeset_id: str) -> JsonObject:
         changeset = self._required_changeset(changeset_id)
-        if changeset["status"] != "published" or self._store.current_revision() != "rev_b2_021":
+        if changeset["status"] != "published" or self._store.current_revision() != "rev_021":
             raise RuntimeError("Episode compensation requires the current published B2 revision")
         episode_id = changeset["proposals"][0]["after_value"]["episode_id"]
-        revision = "rev_b2_022"
+        revision = "rev_022"
         compensation_id = f"changeset_b2_compensation_{episode_id}"
         receipt_id = f"receipt_b2_{episode_id}_revert"
         reverted = copy.deepcopy(changeset)
         reverted.update({"status": "reverted", "rollback_reference": compensation_id})
         compensation = {
             "changeset_id": compensation_id,
-            "base_revision": "rev_b2_021",
+            "base_revision": "rev_021",
             "actor": "user",
             "status": "published",
             "published_revision": revision,

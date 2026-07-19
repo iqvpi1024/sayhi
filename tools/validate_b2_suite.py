@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "tests/b2_suite_manifest.json"
 REQUIRED = [f"B2-{index:03d}" for index in range(1, 9)]
-ROLES = {"fixture", "oracle", "scenario_plan", "adapter_protocol", "business_test_module", "storage_tests", "episode_changeset_tests", "summary_projection_tests", "offline_runner", "suite_preflight_validator"}
+ROLES = {"fixture", "oracle", "scenario_plan", "adapter_protocol", "business_test_module", "storage_tests", "episode_changeset_tests", "summary_projection_tests", "testing_adapter", "offline_runner", "suite_preflight_validator"}
 
 
 def digest(path: Path) -> str:
@@ -20,9 +20,10 @@ def main() -> int:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     errors: list[str] = []
     flags = manifest.get("flags")
-    expected_flags = {"suite_defined": True, "suite_materialized": True, "suite_executed": False, "suite_passed": False}
-    if flags != expected_flags:
-        errors.append("B2 must be materialized but not executed")
+    materialized_flags = {"suite_defined": True, "suite_materialized": True, "suite_executed": False, "suite_passed": False}
+    passed_flags = {"suite_defined": True, "suite_materialized": True, "suite_executed": True, "suite_passed": True}
+    if flags not in (materialized_flags, passed_flags):
+        errors.append("invalid B2 suite flags")
     if manifest.get("required_scenario_ids") != REQUIRED:
         errors.append("required scenario IDs mismatch")
     artifacts = manifest.get("artifacts", [])
@@ -53,10 +54,23 @@ def main() -> int:
                     decorated.append(getattr(decorator.args[0], "value", None))
     if decorated != REQUIRED:
         errors.append("semantic scenario decorators mismatch")
+    if flags == passed_flags:
+        result_path = ROOT / manifest.get("latest_verification_result_path", "")
+        if not result_path.is_file() or digest(result_path) != manifest.get("latest_verification_result_sha256"):
+            errors.append("current result hash mismatch")
+        else:
+            result = json.loads(result_path.read_text(encoding="utf-8"))
+            if result.get("manifest_sha256") != manifest.get("latest_verification_manifest_sha256"):
+                errors.append("current result manifest binding mismatch")
+            if result.get("bound_artifacts") != artifacts:
+                errors.append("current result artifact binding mismatch")
+            rows = result.get("required_results", [])
+            if [row.get("test_id") for row in rows] != REQUIRED or not all(row.get("individual_test_result") == "passed" for row in rows):
+                errors.append("current required results mismatch")
     if errors:
         print("FAILED: " + "; ".join(errors))
         return 1
-    print("PASSED: B2 Episode/Summary suite materialized; no business test was executed")
+    print("PASSED: B2 Episode/Summary suite materialized and current business runner result is bound" if flags == passed_flags else "PASSED: B2 Episode/Summary suite materialized; no business test was executed")
     return 0
 
 
