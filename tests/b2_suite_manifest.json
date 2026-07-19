@@ -3,11 +3,17 @@
   "suite_id": "b2_episode_summary_v1",
   "slice_id": "SLICE-MVP-B-EPISODE-SUMMARY-001",
   "suite_artifact_version": "1.0.0",
-  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": false, "suite_passed": false},
+  "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "not_applicable",
-  "latest_verification_result_path": null,
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/b2-a810513-20260719.json",
+  "latest_verification_manifest_sha256": "017ce34fe8b2912845be16794c6a945d633756ce20166cc2c3b935077ecea40d",
+  "latest_verification_result_sha256": "e61d998b828e6d6a620941f6edf3600740db6d9a08055c50d88f06f888393038",
+  "historical_verification_results": [
+    {"applicability": "failed", "path": "docs/testing/results/b2-attempt.json", "reason": "Initial adapter bootstrap did not preload fixture-declared published Episodes before snapshot."},
+    {"applicability": "superseded", "path": "docs/testing/results/b2-attempt2.json", "reason": "Passed before the adapter/revision alignment commit and is not current for a810513."}
+  ],
   "required_scenario_ids": ["B2-001", "B2-002", "B2-003", "B2-004", "B2-005", "B2-006", "B2-007", "B2-008"],
   "baseline": {
     "product_path": "PRDv05.md",

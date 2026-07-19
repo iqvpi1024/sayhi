@@ -1,0 +1,120 @@
+{
+  "schema_version": "noetide.b2-run-result.v1",
+  "run_id": "b2-853c569a57d9498ca36e71e0fe47d868",
+  "suite_id": "b2_episode_summary_v1",
+  "manifest_sha256": "c595c6e9f5334b96c7b87dd6c875a08bfad819b8691e06d9c3c0cd7fe415f74d",
+  "git_commit": "45f42d23a2c7372fce10cd76a88cca4a3f972699",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_b2_suite",
+    "--adapter",
+    "noetide_micro.b2_testing_adapter",
+    "--output",
+    "docs/testing/results/b2-attempt.json"
+  ],
+  "exit_code": 1,
+  "run_result": "failed",
+  "required_results": [
+    {
+      "test_id": "B2-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B2-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B2-003",
+      "individual_test_result": "failed",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 53, in test_b2_003_build_summaries\n    def test_b2_003_build_summaries(self) -> None: self.run_contract_case(\"B2-003\")\n                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 44, in run_contract_case\n    self.assertEqual(after.get(layer), before.get(layer), f\"{scenario_id}: {layer} changed\")\nAssertionError: Lists differ: ['episode_b2_001'] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n'episode_b2_001'\n\n- ['episode_b2_001']\n+ [] : B2-003: episodes changed\n"
+    },
+    {
+      "test_id": "B2-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B2-005",
+      "individual_test_result": "failed",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 59, in test_b2_005_rebuild_equivalence\n    def test_b2_005_rebuild_equivalence(self) -> None: self.run_contract_case(\"B2-005\")\n                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 44, in run_contract_case\n    self.assertEqual(after.get(layer), before.get(layer), f\"{scenario_id}: {layer} changed\")\nAssertionError: Lists differ: ['episode_b2_001'] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n'episode_b2_001'\n\n- ['episode_b2_001']\n+ [] : B2-005: episodes changed\n"
+    },
+    {
+      "test_id": "B2-006",
+      "individual_test_result": "failed",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 62, in test_b2_006_derived_evidence_rejected\n    def test_b2_006_derived_evidence_rejected(self) -> None: self.run_contract_case(\"B2-006\")\n                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 44, in run_contract_case\n    self.assertEqual(after.get(layer), before.get(layer), f\"{scenario_id}: {layer} changed\")\nAssertionError: Lists differ: ['episode_b2_001'] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n'episode_b2_001'\n\n- ['episode_b2_001']\n+ [] : B2-006: episodes changed\n"
+    },
+    {
+      "test_id": "B2-007",
+      "individual_test_result": "failed",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 65, in test_b2_007_rebuild_failure\n    def test_b2_007_rebuild_failure(self) -> None: self.run_contract_case(\"B2-007\")\n                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\sayhi\\tests\\semantic\\test_b2_episode_summary_contract.py\", line 44, in run_contract_case\n    self.assertEqual(after.get(layer), before.get(layer), f\"{scenario_id}: {layer} changed\")\nAssertionError: Lists differ: ['episode_b2_001'] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n'episode_b2_001'\n\n- ['episode_b2_001']\n+ [] : B2-007: episodes changed\n"
+    },
+    {
+      "test_id": "B2-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/b2_episode_summary_v1/fixture.json",
+      "sha256": "337da34eb1d4ad2ca4d614dfc4f7efba8b750fafc847117775e1e10e3bc632d2"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/b2_episode_summary_v1/oracles.json",
+      "sha256": "bcd8f15a25e871ec39c55bc206761e9bf0a8d69b35fd5548b49b28c61dd101e3"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/b2_episode_summary_scenarios.json",
+      "sha256": "83c570514da7f6cd7220e0eceefc63acc1608dcdda9fd52441e23ac291b0b4aa"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/b2_episode_summary_adapter_protocol.py",
+      "sha256": "32343c425015d2d0f7606c4c114d57a02c1158ca001fe654ef8be994452eab84"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_b2_episode_summary_contract.py",
+      "sha256": "60a0c50187fc920a1ed5817835197e3b9dacfffd392c728011470862c94365bf"
+    },
+    {
+      "role": "storage_tests",
+      "path": "tests/semantic/test_b2_task_001_store.py",
+      "sha256": "81cf4ab18661b152ea33e5220a032601cccc356e800542c691786a06f02c52bc"
+    },
+    {
+      "role": "episode_changeset_tests",
+      "path": "tests/semantic/test_b2_task_002_episodes.py",
+      "sha256": "9a4c14e835a5f66d03366b5cfbdb8408e5f5988763d61e470d65a959b0148f57"
+    },
+    {
+      "role": "summary_projection_tests",
+      "path": "tests/semantic/test_b2_task_003_summaries.py",
+      "sha256": "7959fb3a83297e02f353d2e5f6469cecde0c83d5d748d3a95e7f773c3ddf5ce3"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_b2_suite.py",
+      "sha256": "04771fc0fb705fecc384637407860e44cd5cc081cdb3335c146352e610b40d40"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_b2_suite.py",
+      "sha256": "d628d97bd201b937b1255ba691f1a539fc0b460116eb81b3be83438efc61ea59"
+    }
+  ]
+}

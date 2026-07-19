@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-B-EPISODE-SUMMARY-001
 slice_id: SLICE-MVP-B-EPISODE-SUMMARY-001
-current_phase: implementing
+current_phase: review_passed
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -27,7 +27,7 @@ suite_manifest: tests/b2_suite_manifest.json
 implementation_plan: docs/planning/MVP_B_B2_IMPLEMENTATION_PLAN.md
 task_cards: docs/planning/MVP_B_B2_TASK_CARDS.md
 next_role: Implementer
-next_single_action: B2-TASK-004
+next_single_action: publish_b2_recovery_point
 scope_in:
   - fixed synthetic Episode, Derived summary, freshness and traceability boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B2 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B2-TASK-004 is implemented and its task-scoped verification is recorded
+stop_condition: B2 recovery tag is pushed and resolves to the reviewed commit
 ```
 
 ## 当前事实
@@ -50,3 +50,4 @@ stop_condition: B2-TASK-004 is implemented and its task-scoped verification is r
 - B2-TASK-001 已完成，定向 3/3 storage tests passed；B2 official suite 仍未执行。
 - B2-TASK-002 已完成，定向 5/5 ChangeSet tests 与 configured-adapter semantic regression 103 passed；B2 official suite 的 8 个 contract case 仍 `not_executed`，因为 adapter 属于 pending B2-TASK-004。
 - B2-TASK-003 已完成，定向 4/4 summary tests 与 configured-adapter semantic regression 107 passed；下一轮只允许执行 B2-TASK-004。
+- B2-TASK-004/005 已完成：official runner 8/8 passed，current result 已绑定。下一步只允许创建并复核 B2 recovery point。

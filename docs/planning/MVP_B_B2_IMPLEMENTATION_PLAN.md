@@ -26,9 +26,9 @@
 | `B2-TASK-001` | schema/store 的 Episode 与 Derived summary logical layer | §4、§7、`B2-001/002/005/008` | foreign key、PRAGMA、migration/idempotent seed 行为可测 | `completed` |
 | `B2-TASK-002` | `episodes.py` 的 fixed candidate 校验与 ChangeSet publish/revert | §4-§9、`B2-001/002/004/008` | 直接 Source/Entity/time refs 校验；无半写；补偿后历史保留 | `completed`；定向 5/5 passed，见 `b2-task002-6944b22-20260719.json` |
 | `B2-TASK-003` | `summaries.py` 的 deterministic projector/reader | §4-§13、`B2-003/004/005/006/007` | fresh/stale/unavailable 与 dependency/rebuild 边界满足合同 | `completed`；定向 4/4 passed，见 `b2-task003-c2fba31-20260719.json` |
-| `B2-TASK-004` | `b2_testing_adapter.py` 与 B2 contract 集成 | §17、`B2-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `pending` |
-| `B2-TASK-005` | B2 official runner、existing regression 与 immutable result | §17、§19 | B2 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `pending` |
-| `B2-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process §6-§7 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
+| `B2-TASK-004` | `b2_testing_adapter.py` 与 B2 contract 集成 | §17、`B2-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `completed`；官方 runner 8/8 passed |
+| `B2-TASK-005` | B2 official runner、existing regression 与 immutable result | §17、§19 | B2 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `completed`；`b2-a810513-20260719.json` current/passed |
+| `B2-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process §6-§7 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `completed`；待本提交 tag/push 复核 |
 
 ## 3. 允许文件边界
 

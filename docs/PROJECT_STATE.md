@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-B-EPISODE-SUMMARY-001` |
-| 当前阶段 | `implementing` |
+| 当前阶段 | `review_passed` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -32,6 +32,8 @@
 9. `B2-TASK-001` 已完成 Episode/Derived storage foundation；定向 3/3 passed，B2 official suite 仍为 `not_executed`。
 10. `B2-TASK-002` 已完成 fixed synthetic Episode 的 ChangeSet propose/approve/publish/revert 边界；定向 5/5 passed，补偿 revision 保留 Ledger 历史，B2 official suite 仍为 `not_executed`。
 11. `B2-TASK-003` 已完成 deterministic day/phase Derived projector/reader；stale、delete/rebuild、unavailable receipt 与 Derived-evidence 拒绝均有定向证明，B2 official suite 仍为 `not_executed`。
+12. `B2-TASK-004/005` 已完成 adapter 与 official runner；B2 8/8 passed，manifest 已绑定 current immutable result。
+13. B2 Gate Review 结论 `P0=0`、`P1=0`；只待创建并推送 recovery tag。
 
 ## 4. 真实验证结果
 
@@ -47,6 +49,7 @@
 | 独立公开发布终审 | `PUBLIC_PREVIEW_V0.1.3_INDEPENDENT_AUDIT.md`：P0=0、P1=0 |
 | B2-TASK-002 | `b2-task002-6944b22-20260719.json`：定向 5/5 passed；全量 semantic regression 103 passed、B2 contract 8 skipped；B2 official suite `not_executed` |
 | B2-TASK-003 | `b2-task003-c2fba31-20260719.json`：定向 4/4 passed；全量 semantic regression 107 passed、B2 contract 8 skipped；B2 official suite `not_executed` |
+| B2 官方 suite | `b2-a810513-20260719.json`：8/8 passed/current；全量 semantic regression 107 passed |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -58,4 +61,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 `B2-TASK-004`：实现 B2 testing adapter，使八个既有 contract case 能以独立临时数据库加载。**
+**创建并远端复核 `b2-episode-summary-rp-20260719` recovery tag。**
