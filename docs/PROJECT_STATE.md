@@ -38,6 +38,7 @@
 15. B3 applicability review 结论为 `pass_with_slice_contract_required`；基础 SPEC 不足以直接授权 Commitment 业务实现。
 16. `SPEC-B3-COMMITMENT-001` 与合同复核已完成；尚未建立 B3 traceability、ADR、suite 或代码。
 17. B3 FR-104 traceability 已建立；尚未物化 B3 suite 或实现。
+18. `ADR-0005` 与 `ARCH-B3-COMMITMENT-001` 已接受；未创建 B3 fixture、oracle、runner 或代码。
 
 ## 4. 真实验证结果
 
@@ -65,4 +66,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**为 B3 Commitment 建立最小 ADR 与 Architecture View，决定当前切片的持久化/Derived 边界但不补写产品语义。**
+**物化 B3 executable suite：固定合成 fixture、oracle、manifest、adapter protocol、offline runner 与 preflight validator。**

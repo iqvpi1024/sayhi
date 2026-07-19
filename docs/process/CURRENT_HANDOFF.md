@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-B-COMMITMENT-001
 slice_id: SLICE-MVP-B-COMMITMENT-001
-current_phase: traceable
+current_phase: architecture_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -26,8 +26,8 @@ architecture_ref: absent_pending_applicability_review
 suite_manifest: absent_pending_materialization
 implementation_plan: absent_pending_planning
 task_cards: absent_pending_planning
-next_role: Architect
-next_single_action: decide_B3_Commitment_architecture
+next_role: Suite_Materializer
+next_single_action: materialize_B3_Commitment_suite
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B3 ADR and Architecture View are accepted without adding product semantics
+stop_condition: B3 fixture/oracle/manifest/runner are materialized and remain not_executed
 ```
 
 ## 当前事实
@@ -56,3 +56,4 @@ stop_condition: B3 ADR and Architecture View are accepted without adding product
 - B3 applicability review 已完成，结论为 `pass_with_slice_contract_required`；下一轮只允许起草切片合同，禁止 fixture/oracle/ADR/业务代码。
 - B3 slice contract 已批准；下一轮只允许建立 traceability，禁止 ADR、suite 物化和业务代码。
 - B3 traceability 已建立；下一轮只允许 ADR/Architecture View，禁止 suite 物化和业务代码。
+- B3 ADR/Architecture View 已接受；下一轮只允许 suite 物化，禁止业务代码。
