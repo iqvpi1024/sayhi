@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-B-COMMITMENT-001
 slice_id: SLICE-MVP-B-COMMITMENT-001
-current_phase: suite_materialized
+current_phase: implementation_planned
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -24,10 +24,10 @@ spec_contract: SPEC-B3-COMMITMENT-001
 adr_ref: ADR-0005
 architecture_ref: ARCH-B3-COMMITMENT-001
 suite_manifest: tests/b3_suite_manifest.json (materialized, not_executed)
-implementation_plan: absent_pending_planning
-task_cards: absent_pending_planning
-next_role: Implementation_Planner
-next_single_action: draft_B3_implementation_plan
+implementation_plan: PLAN-MVP-B-B3-IMPL-001 (docs/planning/MVP_B_B3_IMPLEMENTATION_PLAN.md)
+task_cards: docs/planning/MVP_B_B3_TASK_CARDS.md
+next_role: Implementer
+next_single_action: execute_B3_TASK_001
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B3 Implementation Plan is drafted and recorded; business code remains forbidden
+stop_condition: B3-TASK-001 storage foundation complete with targeted tests recorded; later tasks remain forbidden
 ```
 
 ## 当前事实
@@ -58,3 +58,4 @@ stop_condition: B3 Implementation Plan is drafted and recorded; business code re
 - B3 traceability 已建立；下一轮只允许 ADR/Architecture View，禁止 suite 物化和业务代码。
 - B3 ADR/Architecture View 已接受；下一轮只允许 suite 物化，禁止业务代码。
 - B3 suite 已物化：preflight validator exit 0，contract module 8 skipped（无 adapter）；下一轮只允许 Implementation Plan，禁止业务代码。
+- B3 Implementation Plan 与任务卡已建立；下一轮只允许 B3-TASK-001，禁止 TASK-002 及以后。

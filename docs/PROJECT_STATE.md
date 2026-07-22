@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-B-COMMITMENT-001` |
-| 当前阶段 | `suite_materialized` |
+| 当前阶段 | `implementation_planned` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -33,6 +33,7 @@
 17. B3 FR-104 traceability 已建立；尚未物化 B3 suite 或实现。
 18. `ADR-0005` 与 `ARCH-B3-COMMITMENT-001` 已接受；未创建 B3 fixture、oracle、runner 或代码。
 19. B3 executable suite 已物化：`tests/fixtures/b3_commitment_v1/`、`tests/integration/b3_commitment_scenarios.json`、`tests/runner/b3_commitment_adapter_protocol.py`、`tests/semantic/test_b3_commitment_contract.py`、`tests/runner/run_b3_suite.py`、`tools/validate_b3_suite.py`、`tests/b3_suite_manifest.json`；无 adapter，业务测试保持 `not_executed`。
+20. `PLAN-MVP-B-B3-IMPL-001` 与 B3 任务卡已建立（B3-TASK-001..006，全部 `pending`）；尚未开始业务代码。
 
 ## 4. 真实验证结果
 
@@ -62,4 +63,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**起草 B3 Implementation Plan（TASK 卡、交付物与验收条件）；不得开始业务代码。**
+**执行 B3-TASK-001：Commitment / due projection storage foundation（schema/store 窄范围实现与定向测试）。**
