@@ -1,0 +1,33 @@
+{
+  "schema_version": "noetide.b3-task-result.v1",
+  "run_id": "b3-task002-59364ed-20260722",
+  "task_id": "B3-TASK-002",
+  "slice_id": "SLICE-MVP-B-COMMITMENT-001",
+  "git_commit": "59364ed",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "b3_official_suite": "not_executed",
+  "verifications": [
+    {
+      "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_b3_task_002_commitments -v",
+      "exit_code": 0,
+      "result": "8/8 passed (publish/invalid fail-closed/complete/cancel-reason/compensation revert/terminal guard/layer isolation/idempotency)"
+    },
+    {
+      "command": "configured-adapter unittest discover -s tests/semantic",
+      "exit_code": 0,
+      "result": "128 tests OK; 8 B3 contract tests skipped pending B3-TASK-004 adapter"
+    },
+    {
+      "command": "python tools/validate_b3_suite.py",
+      "exit_code": 0,
+      "result": "B3 suite materialized; no business test was executed"
+    }
+  ]
+}
