@@ -155,3 +155,12 @@ CREATE TABLE IF NOT EXISTS due_rebuild_receipts (
     status TEXT NOT NULL CHECK (status IN ('rebuilt', 'failed')),
     payload_json TEXT NOT NULL
 );
+
+-- A2 additive: current_state Core View rebuild receipts (non-evidence).
+CREATE TABLE IF NOT EXISTS a2_view_rebuild_receipts (
+    receipt_id TEXT PRIMARY KEY,
+    view_name TEXT NOT NULL,
+    data_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    status TEXT NOT NULL CHECK (status IN ('rebuilt', 'failed')),
+    payload_json TEXT NOT NULL
+);

@@ -1,0 +1,33 @@
+{
+  "schema_version": "noetide.a2-task-result.v1",
+  "run_id": "a2-task001-b8c1649-20260722",
+  "task_id": "A2-TASK-001",
+  "slice_id": "SLICE-MVP-A-CURRENT-STATE-001",
+  "git_commit": "b8c1649",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "a2_official_suite": "not_executed",
+  "verifications": [
+    {
+      "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_a2_task_001_store -v",
+      "exit_code": 0,
+      "result": "5/5 passed (schema/PRAGMA, receipt persistence, stale+delete isolation, canonical/ledger untouched, receipt FK)"
+    },
+    {
+      "command": "configured-adapter unittest discover -s tests/semantic",
+      "exit_code": 0,
+      "result": "145 tests OK; 8 A2 contract tests skipped pending A2-TASK-003 adapter"
+    },
+    {
+      "command": "python tools/validate_a2_suite.py",
+      "exit_code": 0,
+      "result": "A2 suite materialized; no business test was executed"
+    }
+  ]
+}

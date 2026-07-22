@@ -604,6 +604,51 @@ class SemanticStore:
             self._connection.execute("DELETE FROM due_rebuild_receipts")
             return self._connection.execute("DELETE FROM due_status_projections").rowcount
 
+    # A2 additive: current_state Core View projection helpers (Derived only).
+
+    def upsert_projection(
+        self, view_name: str, data_revision: str, view_revision: str, freshness_status: str, payload: Mapping[str, Any]
+    ) -> None:
+        """Insert or replace a Derived projection row; required for views absent from the seed."""
+        self._connection.execute(
+            "INSERT INTO projection_rows (view_name, data_revision, view_revision, freshness_status, payload_json) "
+            "VALUES (?, ?, ?, ?, ?) ON CONFLICT(view_name) DO UPDATE SET data_revision=excluded.data_revision, "
+            "view_revision=excluded.view_revision, freshness_status=excluded.freshness_status, "
+            "payload_json=excluded.payload_json",
+            (view_name, data_revision, view_revision, freshness_status, _canonical_json(payload)),
+        )
+
+    def put_a2_view_receipt(
+        self, receipt_id: str, view_name: str, data_revision: str, status: str, payload: Mapping[str, Any]
+    ) -> None:
+        self._connection.execute(
+            "INSERT INTO a2_view_rebuild_receipts (receipt_id, view_name, data_revision, status, payload_json) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (receipt_id, view_name, data_revision, status, _canonical_json(payload)),
+        )
+
+    def a2_view_receipts(self) -> list[JsonObject]:
+        return [
+            {"receipt_id": row[0], "view_name": row[1], "data_revision": row[2], "status": row[3], "payload": json.loads(row[4])}
+            for row in self._connection.execute(
+                "SELECT receipt_id, view_name, data_revision, status, payload_json "
+                "FROM a2_view_rebuild_receipts ORDER BY receipt_id"
+            )
+        ]
+
+    def mark_current_state_stale(self, data_revision: str) -> int:
+        return self._connection.execute(
+            "UPDATE projection_rows SET freshness_status = 'stale' "
+            "WHERE view_name = 'current_state' AND view_revision != ? AND freshness_status = 'fresh'",
+            (data_revision,),
+        ).rowcount
+
+    def delete_current_state_projection(self) -> int:
+        """Delete the A2 Derived view row and its receipts without touching Canonical or Ledger data."""
+        with self.transaction():
+            self._connection.execute("DELETE FROM a2_view_rebuild_receipts WHERE view_name = 'current_state'")
+            return self._connection.execute("DELETE FROM projection_rows WHERE view_name = 'current_state'").rowcount
+
     def ledger_records_for(self, record_type: str, changeset_id: str) -> list[JsonObject]:
         rows = self._connection.execute(
             "SELECT payload_json FROM ledger_records WHERE record_type = ? ORDER BY rowid", (record_type,)
