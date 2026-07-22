@@ -50,6 +50,7 @@
 34. A2-TASK-001 已完成：a2_view_rebuild_receipts 表与 upsert/stale/delete 辅助；定向 5/5 passed，regression 145 OK（8 A2 contract skipped）；A2 official suite 仍 `not_executed`。
 35. A2-TASK-002 已完成：`current_state.py` 实现当前有效纯函数、build/read/stale/rebuild/失败降级/不作证；定向 6/6 passed，regression 151 OK；A2 official suite 仍 `not_executed`。
 36. A2-TASK-003 已完成：`a2_testing_adapter.py` 完整实现 adapter protocol，contract 8/8 passed；fixture/oracle 未修改；official runner 属 A2-TASK-004。
+37. A2-TASK-004 已完成：official runner `a2-20260722.json` 同一次 run 8/8 passed/current；configured-adapter regression 151 OK 无 skip；9 个 suite validator 全 PASSED；manifest 已绑定 current result。
 
 ## 4. 真实验证结果
 
@@ -76,6 +77,7 @@
 | A2-TASK-001 | `a2-task001-20260722.json`：定向 5/5 passed；configured-adapter regression 145 OK；A2 official suite `not_executed` |
 | A2-TASK-002 | `a2-task002-20260722.json`：定向 6/6 passed；configured-adapter regression 151 OK；A2 official suite `not_executed` |
 | A2-TASK-003 | `a2-task003-20260722.json`：contract 8/8 passed（adapter）；official runner 未执行 |
+| A2 官方 suite | `a2-20260722.json`：8/8 passed/current；全量 regression 151 OK；manifest 已绑定 |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -87,4 +89,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A2-TASK-004：运行 A2 official runner、全量回归与 validator，真实 8/8 后绑定 manifest current result。**
+**执行 A2-TASK-005：A2 Gate Review（P0/P1 审计）、状态/追踪同步与 recovery point。**

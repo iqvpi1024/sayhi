@@ -1,0 +1,38 @@
+{
+  "schema_version": "noetide.a2-task-result.v1",
+  "run_id": "a2-task004-fce11c8-20260722",
+  "task_id": "A2-TASK-004",
+  "slice_id": "SLICE-MVP-A-CURRENT-STATE-001",
+  "git_commit": "fce11c8",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "a2_official_suite": "passed",
+  "verifications": [
+    {
+      "command": "$env:PYTHONPATH='src'; python -m tests.runner.run_a2_suite --adapter noetide_micro.a2_testing_adapter --output docs/testing/results/a2-20260722.json",
+      "exit_code": 0,
+      "result": "8/8 A2 scenarios passed in one run; network blocked"
+    },
+    {
+      "command": "configured-adapter unittest discover -s tests/semantic (micro/answer/b2/b3/a2 adapters)",
+      "exit_code": 0,
+      "result": "151 tests OK, 0 skipped"
+    },
+    {
+      "command": "python tools/validate_{micro,answer_safety,b1,b2,b3,c1,synthetic_ingestion,context_pack,a2}_suite.py",
+      "exit_code": 0,
+      "result": "all 9 suite validators PASSED"
+    },
+    {
+      "command": "powershell -File tools/validate_product_baseline.ps1; git diff --check",
+      "exit_code": 0,
+      "result": "baseline static checks and whitespace check passed"
+    }
+  ]
+}
