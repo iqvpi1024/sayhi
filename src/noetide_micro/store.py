@@ -426,6 +426,184 @@ class SemanticStore:
             self._connection.execute("DELETE FROM derived_rebuild_receipts")
             return self._connection.execute("DELETE FROM summary_projections").rowcount
 
+    # B3 additive: Commitment Canonical metadata and Derived due-status projection storage.
+    # Business lifecycle and projection policy remain in later B3 tasks.
+
+    def put_commitment_record(
+        self,
+        commitment_id: str,
+        object_revision: str,
+        commitment_kind: str,
+        responsible_ref: str,
+        statement_source_id: str,
+        statement_locator: Mapping[str, Any],
+        due_time: str,
+        valid_start: str,
+        valid_end: str | None,
+        recorded_at: str,
+        status: str,
+        cancel_reason: str | None,
+        review_status: str,
+        synthetic_profile_id: str,
+    ) -> None:
+        """Persist B3 metadata after its Canonical Commitment was published."""
+        canonical = self.canonical_object(commitment_id)
+        if canonical.get("object_type") != "commitment":
+            raise ValueError("commitment record requires a Canonical Commitment")
+        if not responsible_ref or not statement_source_id or not due_time:
+            raise ValueError("commitment record requires responsible_ref, direct Source and due_time")
+        if status == "cancelled" and not cancel_reason:
+            raise ValueError("cancelled commitment requires a non-empty cancel_reason")
+        self._connection.execute(
+            "INSERT INTO commitments (commitment_id, object_revision, commitment_kind, responsible_ref, "
+            "statement_source_id, statement_locator_json, due_time, valid_start, valid_end, recorded_at, "
+            "status, cancel_reason, review_status, synthetic_profile_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (commitment_id, object_revision, commitment_kind, responsible_ref, statement_source_id,
+             _canonical_json(statement_locator), due_time, valid_start, valid_end, recorded_at,
+             status, cancel_reason, review_status, synthetic_profile_id),
+        )
+
+    def commitment_record(self, commitment_id: str) -> JsonObject:
+        row = self._connection.execute(
+            "SELECT object_revision, commitment_kind, responsible_ref, statement_source_id, statement_locator_json, "
+            "due_time, valid_start, valid_end, recorded_at, status, cancel_reason, review_status, synthetic_profile_id "
+            "FROM commitments WHERE commitment_id = ?",
+            (commitment_id,),
+        ).fetchone()
+        if row is None:
+            raise KeyError(commitment_id)
+        return {
+            "commitment_id": commitment_id,
+            "object_revision": row[0],
+            "commitment_kind": row[1],
+            "responsible_ref": row[2],
+            "statement_source_id": row[3],
+            "statement_locator": json.loads(row[4]),
+            "due_time": row[5],
+            "valid_start": row[6],
+            "valid_end": row[7],
+            "recorded_at": row[8],
+            "status": row[9],
+            "cancel_reason": row[10],
+            "review_status": row[11],
+            "synthetic_profile_id": row[12],
+        }
+
+    def commitment_records(self) -> list[JsonObject]:
+        return [self.commitment_record(row[0]) for row in self._connection.execute(
+            "SELECT commitment_id FROM commitments ORDER BY commitment_id"
+        )]
+
+    def update_commitment_status(
+        self, commitment_id: str, object_revision: str, status: str, cancel_reason: str | None = None
+    ) -> None:
+        """Update Commitment lifecycle fields after a ChangeSet published a new revision."""
+        if status == "cancelled" and not cancel_reason:
+            raise ValueError("cancelled commitment requires a non-empty cancel_reason")
+        cursor = self._connection.execute(
+            "UPDATE commitments SET object_revision = ?, status = ?, cancel_reason = ? WHERE commitment_id = ?",
+            (object_revision, status, cancel_reason, commitment_id),
+        )
+        if cursor.rowcount != 1:
+            raise KeyError(commitment_id)
+
+    def put_due_status_projection(
+        self,
+        projection_id: str,
+        commitment_id: str,
+        data_revision: str,
+        view_revision: str,
+        freshness_status: str,
+        due_status: str,
+        clock_instant: str,
+        payload: Mapping[str, Any],
+        generated_at: str,
+        generator_policy_id: str,
+    ) -> None:
+        self._connection.execute(
+            "INSERT INTO due_status_projections (projection_id, commitment_id, data_revision, view_revision, "
+            "freshness_status, due_status, clock_instant, payload_json, generated_at, generator_policy_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (projection_id, commitment_id, data_revision, view_revision, freshness_status, due_status,
+             clock_instant, _canonical_json(payload), generated_at, generator_policy_id),
+        )
+
+    def replace_due_status_projection(
+        self, projection_id: str, commitment_id: str, data_revision: str, view_revision: str,
+        freshness_status: str, due_status: str, clock_instant: str, payload: Mapping[str, Any],
+        generated_at: str, generator_policy_id: str,
+    ) -> None:
+        self._connection.execute(
+            "INSERT INTO due_status_projections (projection_id, commitment_id, data_revision, view_revision, "
+            "freshness_status, due_status, clock_instant, payload_json, generated_at, generator_policy_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(projection_id) DO UPDATE SET "
+            "commitment_id=excluded.commitment_id, data_revision=excluded.data_revision, "
+            "view_revision=excluded.view_revision, freshness_status=excluded.freshness_status, "
+            "due_status=excluded.due_status, clock_instant=excluded.clock_instant, "
+            "payload_json=excluded.payload_json, generated_at=excluded.generated_at, "
+            "generator_policy_id=excluded.generator_policy_id",
+            (projection_id, commitment_id, data_revision, view_revision, freshness_status, due_status,
+             clock_instant, _canonical_json(payload), generated_at, generator_policy_id),
+        )
+
+    def due_status_projection(self, projection_id: str) -> JsonObject:
+        row = self._connection.execute(
+            "SELECT commitment_id, data_revision, view_revision, freshness_status, due_status, clock_instant, "
+            "payload_json, generated_at, generator_policy_id FROM due_status_projections WHERE projection_id = ?",
+            (projection_id,),
+        ).fetchone()
+        if row is None:
+            raise KeyError(projection_id)
+        return {
+            "projection_id": projection_id,
+            "commitment_id": row[0],
+            "data_revision": row[1],
+            "view_revision": row[2],
+            "freshness_status": row[3],
+            "due_status": row[4],
+            "clock_instant": row[5],
+            "payload": json.loads(row[6]),
+            "generated_at": row[7],
+            "generator_policy_id": row[8],
+        }
+
+    def due_status_projections(self) -> list[JsonObject]:
+        return [self.due_status_projection(row[0]) for row in self._connection.execute(
+            "SELECT projection_id FROM due_status_projections ORDER BY projection_id"
+        )]
+
+    def mark_due_status_projections_stale(self, data_revision: str) -> int:
+        return self._connection.execute(
+            "UPDATE due_status_projections SET data_revision = ?, freshness_status = 'stale' "
+            "WHERE view_revision != ? AND freshness_status = 'fresh'",
+            (data_revision, data_revision),
+        ).rowcount
+
+    def put_due_rebuild_receipt(
+        self, receipt_id: str, projection_id: str, data_revision: str, status: str, payload: Mapping[str, Any]
+    ) -> None:
+        self._connection.execute(
+            "INSERT INTO due_rebuild_receipts (receipt_id, projection_id, data_revision, status, payload_json) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (receipt_id, projection_id, data_revision, status, _canonical_json(payload)),
+        )
+
+    def due_rebuild_receipts(self) -> list[JsonObject]:
+        return [
+            {"receipt_id": row[0], "projection_id": row[1], "data_revision": row[2], "status": row[3], "payload": json.loads(row[4])}
+            for row in self._connection.execute(
+                "SELECT receipt_id, projection_id, data_revision, status, payload_json "
+                "FROM due_rebuild_receipts ORDER BY receipt_id"
+            )
+        ]
+
+    def delete_due_status_projections(self) -> int:
+        """Delete all B3 Derived rows without touching Canonical or Ledger data."""
+        with self.transaction():
+            self._connection.execute("DELETE FROM due_rebuild_receipts")
+            return self._connection.execute("DELETE FROM due_status_projections").rowcount
+
     def ledger_records_for(self, record_type: str, changeset_id: str) -> list[JsonObject]:
         rows = self._connection.execute(
             "SELECT payload_json FROM ledger_records WHERE record_type = ? ORDER BY rowid", (record_type,)

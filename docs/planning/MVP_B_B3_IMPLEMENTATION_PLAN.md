@@ -23,7 +23,7 @@
 
 | Task | 交付物 | Contract / Test | 完成条件 | 状态 |
 |---|---|---|---|---|
-| `B3-TASK-001` | schema/store 的 Commitment 与 Derived due projection logical layer | §2、§5、`B3-001/002` | foreign key、PRAGMA、重复初始化行为可测 | `pending` |
+| `B3-TASK-001` | schema/store 的 Commitment 与 Derived due projection logical layer | §2、§5、`B3-001/002` | foreign key、PRAGMA、重复初始化行为可测 | `completed`；定向 5/5 passed，见 `b3-task001-20260722.json` |
 | `B3-TASK-002` | `commitments.py` 的 fixed candidate 校验与 ChangeSet publish/complete/cancel/revert | §2-§6、`B3-001/002/004/005/006` | direct locator 校验；cancel 必须带原因；无半写；补偿后历史保留 | `pending` |
 | `B3-TASK-003` | `due_status.py` 的 deterministic projector/reader | §3-§7、`B3-003/004/007/008` | upcoming/due/overdue/closed 确定性；stale/unavailable；Derived 不作证 | `pending` |
 | `B3-TASK-004` | `b3_testing_adapter.py` 与 B3 contract 集成 | §7-§8、`B3-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `pending` |

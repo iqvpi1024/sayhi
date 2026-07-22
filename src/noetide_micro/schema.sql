@@ -114,3 +114,44 @@ CREATE TABLE IF NOT EXISTS derived_rebuild_receipts (
     status TEXT NOT NULL CHECK (status IN ('rebuilt', 'failed')),
     payload_json TEXT NOT NULL
 );
+
+-- B3 additive: Canonical Commitment metadata and explicit Derived due-status storage.
+-- Business lifecycle and projection policy remain in later B3 tasks.
+CREATE TABLE IF NOT EXISTS commitments (
+    commitment_id TEXT PRIMARY KEY REFERENCES canonical_objects(object_id),
+    object_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    commitment_kind TEXT NOT NULL CHECK (commitment_kind IN ('synthetic_obligation')),
+    responsible_ref TEXT NOT NULL,
+    statement_source_id TEXT NOT NULL REFERENCES source_records(source_id),
+    statement_locator_json TEXT NOT NULL,
+    due_time TEXT NOT NULL,
+    valid_start TEXT NOT NULL,
+    valid_end TEXT,
+    recorded_at TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('open', 'completed', 'cancelled')),
+    cancel_reason TEXT,
+    review_status TEXT NOT NULL CHECK (review_status IN ('unreviewed', 'user_confirmed')),
+    synthetic_profile_id TEXT NOT NULL,
+    CHECK (status != 'cancelled' OR (cancel_reason IS NOT NULL AND cancel_reason != ''))
+);
+
+CREATE TABLE IF NOT EXISTS due_status_projections (
+    projection_id TEXT PRIMARY KEY,
+    commitment_id TEXT NOT NULL REFERENCES commitments(commitment_id),
+    data_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    view_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    freshness_status TEXT NOT NULL CHECK (freshness_status IN ('fresh', 'stale', 'rebuilding', 'unavailable')),
+    due_status TEXT NOT NULL CHECK (due_status IN ('upcoming', 'due', 'overdue', 'closed')),
+    clock_instant TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    generated_at TEXT NOT NULL,
+    generator_policy_id TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS due_rebuild_receipts (
+    receipt_id TEXT PRIMARY KEY,
+    projection_id TEXT NOT NULL REFERENCES due_status_projections(projection_id),
+    data_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    status TEXT NOT NULL CHECK (status IN ('rebuilt', 'failed')),
+    payload_json TEXT NOT NULL
+);

@@ -1,0 +1,38 @@
+{
+  "schema_version": "noetide.b3-task-result.v1",
+  "run_id": "b3-task001-639be2877d13-20260722",
+  "task_id": "B3-TASK-001",
+  "slice_id": "SLICE-MVP-B-COMMITMENT-001",
+  "git_commit": "8f4044c",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "b3_official_suite": "not_executed",
+  "verifications": [
+    {
+      "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_b3_task_001_store -v",
+      "exit_code": 0,
+      "result": "5/5 passed (schema/PRAGMA, canonical+direct source FK, cancelled-reason, derived delete isolation, projection FK)"
+    },
+    {
+      "command": "$env:PYTHONPATH='src'; $env:NOETIDE_MICRO_ADAPTER='noetide_micro.testing_adapter'; $env:NOETIDE_ANSWER_ADAPTER='noetide_micro.answer_testing_adapter'; $env:NOETIDE_B2_ADAPTER='noetide_micro.b2_testing_adapter'; python -m unittest discover -s tests/semantic",
+      "exit_code": 0,
+      "result": "120 tests OK; 8 B3 contract tests skipped pending B3-TASK-004 adapter"
+    },
+    {
+      "command": "python tools/validate_b3_suite.py",
+      "exit_code": 0,
+      "result": "B3 suite materialized; no business test was executed"
+    },
+    {
+      "command": "powershell -File tools/validate_product_baseline.ps1",
+      "exit_code": 0,
+      "result": "product baseline static checks passed"
+    }
+  ]
+}
