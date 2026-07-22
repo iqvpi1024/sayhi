@@ -1,0 +1,14 @@
+{
+  "oracle_id": "a2_current_state_v1",
+  "schema_version": "noetide.a2-oracle.v1",
+  "scenarios": {
+    "A2-001": {"result": {"status": "fresh", "view_name": "current_state", "object_ids": ["assertion_a2_001", "person_delta", "person_epsilon", "relationship_a2_001", "state_a2_contact_current"], "object_count": 5, "data_revision": "rev_020", "view_revision": "rev_020"}, "forbidden_mutations": ["canonical_objects", "revisions", "source_records", "ledger_entries"]},
+    "A2-002": {"result": {"status": "failed", "reason_code": "a2_preflight_invalid", "projection_absent": true, "data_revision": "rev_020"}, "forbidden_mutations": ["canonical_objects", "revisions", "source_records", "projections"]},
+    "A2-003": {"result": {"status": "fresh", "object_ids": ["assertion_a2_001", "person_delta", "person_epsilon", "relationship_a2_001", "state_a2_contact_current"], "revisions_aligned": true, "data_revision": "rev_020", "view_revision": "rev_020"}, "forbidden_mutations": ["canonical_objects", "revisions", "source_records"]},
+    "A2-004": {"result": {"status": "stale", "masquerades_as_current": false, "data_revision": "rev_021", "view_revision": "rev_020"}, "forbidden_mutations": ["source_records", "historical_revisions", "hypotheses"]},
+    "A2-005": {"result": {"status": "fresh", "rebuild_equivalent": true, "object_ids": ["assertion_a2_001", "person_delta", "person_epsilon", "relationship_a2_001", "state_a2_contact_current", "state_a2_contact_new"], "object_count": 6, "data_revision": "rev_021", "view_revision": "rev_021"}, "forbidden_mutations": ["canonical_objects", "revisions", "source_records"]},
+    "A2-006": {"result": {"status": "fresh", "rebuild_equivalent": true, "data_revision": "rev_020", "view_revision": "rev_020"}, "forbidden_mutations": ["canonical_objects", "revisions", "source_records"]},
+    "A2-007": {"result": {"status": "unavailable", "reason_code": "a2_rebuild_failed", "canonical_readable": true, "data_revision": "rev_020"}, "forbidden_mutations": ["canonical_objects", "revisions", "source_records"]},
+    "A2-008": {"result": {"status": "rejected", "reason_code": "derived_evidence_forbidden", "canonical_unchanged": true, "data_revision": "rev_020"}, "forbidden_mutations": ["canonical_objects", "revisions", "source_records", "ledger_entries"]}
+  }
+}

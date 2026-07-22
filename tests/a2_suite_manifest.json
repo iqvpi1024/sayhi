@@ -1,0 +1,80 @@
+{
+  "schema_version": "noetide.a2-suite-manifest.v1",
+  "suite_id": "a2_current_state_v1",
+  "slice_id": "SLICE-MVP-A-CURRENT-STATE-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_executed",
+  "required_scenario_ids": [
+    "A2-001",
+    "A2-002",
+    "A2-003",
+    "A2-004",
+    "A2-005",
+    "A2-006",
+    "A2-007",
+    "A2-008"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-A-CURRENT-STATE-001"
+    ],
+    "contract_ref": "SPEC-A2-CURRENT-STATE-001",
+    "adr_refs": [
+      "ADR-0006"
+    ],
+    "architecture_ref": "ARCH-A2-CURRENT-STATE-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/a2_current_state_v1/fixture.json",
+      "sha256": "8d94378657e35c2cb946a5551c40b9af7b74147fa75a79ea528ab7586d38a42e"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/a2_current_state_v1/oracles.json",
+      "sha256": "0b0d8e28a98174d5677976c074904df48b7ee6f93e464c2a09a7a75495151f16"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/a2_current_state_scenarios.json",
+      "sha256": "eef640bc64eafd5e889fb9a15eeaf7f49955e350bab92bbea1768a65974cc9c4"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/a2_current_state_adapter_protocol.py",
+      "sha256": "3819800bcc024cd850959e18e6b3cdce7d309d6ba686d92e167cfd7ff52da417"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_a2_current_state_contract.py",
+      "sha256": "432ed3cb2e8e62e4138bdfc556a4460c650b283e236461d2fbe80ad0179e41c0"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_a2_suite.py",
+      "sha256": "8f80210a67a4889089d95dce48c0e24b4759d532d029149dc198e76158ff6382"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_a2_suite.py",
+      "sha256": "17f95ff895820ecae24cc02a8d2889a55cda06b67c52caec34077c8a41042693"
+    }
+  ],
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}

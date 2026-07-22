@@ -1,0 +1,34 @@
+{
+  "fixture_id": "a2_current_state_v1",
+  "schema_version": "noetide.a2-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "a2_current_state_v1",
+  "determinism": {
+    "clock": "2032-04-10T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "shared_sources": [
+    {"source_id": "src_a2_stmt_001", "content": "synthetic current state statement alpha", "synthetic": true}
+  ],
+  "canonical_snapshot": [
+    {"object_id": "person_delta", "object_type": "entity", "valid_time": {"start": "2032-01-01T00:00:00Z", "end": null}},
+    {"object_id": "person_epsilon", "object_type": "entity", "valid_time": {"start": "2032-01-01T00:00:00Z", "end": null}},
+    {"object_id": "relationship_a2_001", "object_type": "relationship", "valid_time": {"start": "2032-02-01T00:00:00Z", "end": null}},
+    {"object_id": "state_a2_contact_current", "object_type": "state", "valid_time": {"start": "2032-04-01T00:00:00Z", "end": null}},
+    {"object_id": "state_a2_contact_history", "object_type": "state", "valid_time": {"start": "2032-03-01T00:00:00Z", "end": "2032-04-01T00:00:00Z"}},
+    {"object_id": "assertion_a2_001", "object_type": "assertion", "valid_time": {"start": "2032-04-02T00:00:00Z", "end": null}}
+  ],
+  "canonical_change": {"object_id": "state_a2_contact_new", "object_type": "state", "valid_time": {"start": "2032-04-09T00:00:00Z", "end": null}},
+  "cases": [
+    {"scenario_id": "A2-001", "database_identity": "a2_case_001", "initial_data_revision": "rev_020", "operation": "build_view"},
+    {"scenario_id": "A2-002", "database_identity": "a2_case_002", "initial_data_revision": "rev_020", "synthetic_profile_id": "unexpected_profile", "unknown_view": "current_state_v2", "operation": "invalid_attempts"},
+    {"scenario_id": "A2-003", "database_identity": "a2_case_003", "initial_data_revision": "rev_020", "pre_build": true, "operation": "read_view"},
+    {"scenario_id": "A2-004", "database_identity": "a2_case_004", "initial_data_revision": "rev_020", "pre_build": true, "apply_canonical_change": true, "operation": "publish_and_read_stale"},
+    {"scenario_id": "A2-005", "database_identity": "a2_case_005", "initial_data_revision": "rev_020", "pre_build": true, "apply_canonical_change": true, "operation": "rebuild_after_stale"},
+    {"scenario_id": "A2-006", "database_identity": "a2_case_006", "initial_data_revision": "rev_020", "pre_build": true, "operation": "delete_and_rebuild"},
+    {"scenario_id": "A2-007", "database_identity": "a2_case_007", "initial_data_revision": "rev_020", "pre_build": true, "failure_point": "a2_projector.before_write", "operation": "rebuild_failure"},
+    {"scenario_id": "A2-008", "database_identity": "a2_case_008", "initial_data_revision": "rev_020", "pre_build": true, "operation": "misuse_derived"}
+  ]
+}

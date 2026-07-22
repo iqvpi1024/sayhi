@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-CURRENT-STATE-001
 slice_id: SLICE-MVP-A-CURRENT-STATE-001
-current_phase: architecture_decided
+current_phase: suite_materialized
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -23,11 +23,11 @@ decision_ref: DEC-MVP-A-CURRENT-STATE-001
 spec_contract: SPEC-A2-CURRENT-STATE-001
 adr_ref: ADR-0006
 architecture_ref: ARCH-A2-CURRENT-STATE-001
-suite_manifest: absent_pending_materialization
+suite_manifest: tests/a2_suite_manifest.json (materialized, not_executed)
 implementation_plan: absent_pending_planning
 task_cards: absent_pending_planning
-next_role: Suite_Materializer
-next_single_action: materialize_A2_suite
+next_role: Implementation_Planner
+next_single_action: draft_A2_implementation_plan
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: A2 fixture/oracle/manifest/runner materialized and remain not_executed
+stop_condition: A2 Implementation Plan recorded; business code remains forbidden
 ```
 
 ## 当前事实
@@ -56,7 +56,7 @@ stop_condition: A2 fixture/oracle/manifest/runner materialized and remain not_ex
 - B3 applicability review 已完成，结论为 `pass_with_slice_contract_required`；下一轮只允许起草切片合同，禁止 fixture/oracle/ADR/业务代码。
 - B3 slice contract 已批准；下一轮只允许建立 traceability，禁止 ADR、suite 物化和业务代码。
 - B3 traceability 已建立；下一轮只允许 ADR/Architecture View，禁止 suite 物化和业务代码。
-- B3 ADR/Architecture View 已接受；下一轮只允许 suite 物化，禁止业务代码。
+- B3 ADR/Architecture View 已接受；A2 suite 已物化（validator exit 0，contract 8 skipped）；下一轮只允许 Implementation Plan，禁止业务代码。
 - B3 suite 已物化：preflight validator exit 0，contract module 8 skipped（无 adapter）；下一轮只允许 Implementation Plan，禁止业务代码。
 - B3 Implementation Plan 与任务卡已建立；下一轮只允许 B3-TASK-001，禁止 TASK-002 及以后。
 - B3-TASK-001 已完成：定向 5/5 passed，regression 120 OK；下一轮只允许 B3-TASK-002。
@@ -65,4 +65,4 @@ stop_condition: A2 fixture/oracle/manifest/runner materialized and remain not_ex
 - B3-TASK-004 已完成：contract 8/8 passed（adapter）；下一轮只允许 B3-TASK-005 official runner 与绑定。
 - B3-TASK-005 已完成：official 8/8 passed/current 已绑定；regression 132 OK；下一轮只允许 B3-TASK-006 Gate Review 与 recovery point。
 - B3-TASK-006 已完成：Gate Review P0=0/P1=0；切片 verified；recovery tag `b3-commitment-rp-20260722` 已推送。
-- `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2；applicability review 结论 `pass_with_slice_contract_required`；`SPEC-A2-CURRENT-STATE-001` 已批准（A2-CONTRACT-REVIEW-001）；traceability 已建立；`ADR-0006`/`ARCH-A2-CURRENT-STATE-001` 已接受；下一轮只允许 suite 物化，禁止业务代码。
+- `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2；applicability review 结论 `pass_with_slice_contract_required`；`SPEC-A2-CURRENT-STATE-001` 已批准（A2-CONTRACT-REVIEW-001）；traceability 已建立；`ADR-0006`/`ARCH-A2-CURRENT-STATE-001` 已接受；A2 suite 已物化（validator exit 0，contract 8 skipped）；下一轮只允许 Implementation Plan，禁止业务代码。
