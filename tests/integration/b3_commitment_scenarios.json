@@ -1,0 +1,15 @@
+{
+  "suite_id": "b3_commitment_v1",
+  "fixture_ref": "tests/fixtures/b3_commitment_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/b3_commitment_v1/oracles.json",
+  "scenarios": [
+    {"scenario_id": "B3-001", "contract_refs": ["B3-INV-001"]},
+    {"scenario_id": "B3-002", "contract_refs": ["B3-INV-001", "B3-INV-006"]},
+    {"scenario_id": "B3-003", "contract_refs": ["B3-INV-004"]},
+    {"scenario_id": "B3-004", "contract_refs": ["B3-INV-001", "B3-INV-004"]},
+    {"scenario_id": "B3-005", "contract_refs": ["B3-INV-003", "B3-INV-006"]},
+    {"scenario_id": "B3-006", "contract_refs": ["B3-INV-001", "B3-INV-003"]},
+    {"scenario_id": "B3-007", "contract_refs": ["B3-INV-004", "B3-INV-007"]},
+    {"scenario_id": "B3-008", "contract_refs": ["B3-INV-002", "B3-INV-005"]}
+  ]
+}

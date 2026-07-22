@@ -1,0 +1,80 @@
+{
+  "schema_version": "noetide.b3-suite-manifest.v1",
+  "suite_id": "b3_commitment_v1",
+  "slice_id": "SLICE-MVP-B-COMMITMENT-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_executed",
+  "required_scenario_ids": [
+    "B3-001",
+    "B3-002",
+    "B3-003",
+    "B3-004",
+    "B3-005",
+    "B3-006",
+    "B3-007",
+    "B3-008"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-B-COMMITMENT-001"
+    ],
+    "contract_ref": "SPEC-B3-COMMITMENT-001",
+    "adr_refs": [
+      "ADR-0005"
+    ],
+    "architecture_ref": "ARCH-B3-COMMITMENT-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/b3_commitment_v1/fixture.json",
+      "sha256": "837c62d66e991cf151e2ce84b769018a847e6319df2f6a1ac12f5d33f321f5e1"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/b3_commitment_v1/oracles.json",
+      "sha256": "df3b8b696a07a56c9455a45f4d99b3d98061b4e947ed5e4e1b74dac823ba54ee"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/b3_commitment_scenarios.json",
+      "sha256": "f917c67245d503bf85a31936b1488f8cd0614b11d200d428dbed88c0232ac98f"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/b3_commitment_adapter_protocol.py",
+      "sha256": "78d4514ed5d6db555fc12e88f491e9830a3af708bca383739c240a469c32263e"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_b3_commitment_contract.py",
+      "sha256": "c228a99161901382d3d42869ab8d7e4dd42e76a7176057dc2ee2d2aab7985165"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_b3_suite.py",
+      "sha256": "bda919f2e1cee37104875602ed6dcad39cad31cd970d8de3487e001d413997ef"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_b3_suite.py",
+      "sha256": "14b5e59ce180fa8e9fe70a645b88515f9d15cc609e135b968b45a76b414ceb0a"
+    }
+  ],
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}

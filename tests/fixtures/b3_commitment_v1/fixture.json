@@ -1,0 +1,87 @@
+{
+  "fixture_id": "b3_commitment_v1",
+  "schema_version": "noetide.b3-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "b3_commitment_v1",
+  "determinism": {
+    "clock": "2032-03-10T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "shared_entities": [
+    {"entity_id": "person_gamma", "entity_kind": "synthetic_person", "synthetic": true}
+  ],
+  "shared_sources": [
+    {"source_id": "src_b3_stmt_001", "content": "synthetic commitment statement alpha", "synthetic": true},
+    {"source_id": "src_b3_stmt_002", "content": "synthetic commitment statement beta", "synthetic": true}
+  ],
+  "cases": [
+    {
+      "scenario_id": "B3-001",
+      "database_identity": "b3_case_001",
+      "initial_data_revision": "rev_020",
+      "commitment_candidate": {"commitment_id": "commitment_b3_001", "commitment_kind": "synthetic_obligation", "responsible_ref": "person_gamma", "statement_locator": "src_b3_stmt_001", "due_time": "2032-03-12T09:00:00Z", "valid_time": {"start": "2032-03-10T09:00:00Z", "end": null}, "synthetic_profile_id": "b3_commitment_v1"},
+      "operation": "publish_commitment"
+    },
+    {
+      "scenario_id": "B3-002",
+      "database_identity": "b3_case_002",
+      "initial_data_revision": "rev_020",
+      "commitment_candidate": {"commitment_id": "commitment_b3_invalid", "commitment_kind": "synthetic_obligation", "responsible_ref": null, "statement_locator": null, "due_time": null, "valid_time": null, "synthetic_profile_id": "unexpected_profile"},
+      "operation": "publish_commitment"
+    },
+    {
+      "scenario_id": "B3-003",
+      "database_identity": "b3_case_003",
+      "initial_data_revision": "rev_021",
+      "published_commitment_ids": ["commitment_b3_001"],
+      "projection_id": "due_b3_001",
+      "clock_readings": ["2032-03-10T09:00:00Z", "2032-03-12T09:00:00Z", "2032-03-14T09:00:00Z"],
+      "operation": "read_due_status"
+    },
+    {
+      "scenario_id": "B3-004",
+      "database_identity": "b3_case_004",
+      "initial_data_revision": "rev_021",
+      "published_commitment_ids": ["commitment_b3_001"],
+      "existing_projection_ids": ["due_b3_001"],
+      "operation": "complete_commitment"
+    },
+    {
+      "scenario_id": "B3-005",
+      "database_identity": "b3_case_005",
+      "initial_data_revision": "rev_021",
+      "published_commitment_ids": ["commitment_b3_001"],
+      "existing_projection_ids": ["due_b3_001"],
+      "cancel_attempts": [{"cancel_reason": "synthetic plan changed"}, {"cancel_reason": null}],
+      "operation": "cancel_commitment"
+    },
+    {
+      "scenario_id": "B3-006",
+      "database_identity": "b3_case_006",
+      "initial_data_revision": "rev_022",
+      "published_commitment_ids": ["commitment_b3_001"],
+      "terminal_status": "completed",
+      "operation": "revert_commitment"
+    },
+    {
+      "scenario_id": "B3-007",
+      "database_identity": "b3_case_007",
+      "initial_data_revision": "rev_021",
+      "published_commitment_ids": ["commitment_b3_001"],
+      "existing_projection_ids": ["due_b3_001"],
+      "failure_point": "due_projector.before_write",
+      "operation": "delete_rebuild_and_fail_projection"
+    },
+    {
+      "scenario_id": "B3-008",
+      "database_identity": "b3_case_008",
+      "initial_data_revision": "rev_021",
+      "published_commitment_ids": ["commitment_b3_001"],
+      "projection_id": "due_b3_001",
+      "relationship_change": {"relationship_id": "relationship_b3_001", "new_state": "synthetic_drift"},
+      "operation": "misuse_derived"
+    }
+  ]
+}

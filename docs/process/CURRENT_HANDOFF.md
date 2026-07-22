@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-B-COMMITMENT-001
 slice_id: SLICE-MVP-B-COMMITMENT-001
-current_phase: architecture_decided
+current_phase: suite_materialized
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -20,14 +20,14 @@ ci_runs:
   - 29654926812
   - 29654930604
 decision_ref: DEC-MVP-B-COMMITMENT-001
-spec_contract: absent_pending_applicability_review
-adr_ref: absent_pending_applicability_review
-architecture_ref: absent_pending_applicability_review
-suite_manifest: absent_pending_materialization
+spec_contract: SPEC-B3-COMMITMENT-001
+adr_ref: ADR-0005
+architecture_ref: ARCH-B3-COMMITMENT-001
+suite_manifest: tests/b3_suite_manifest.json (materialized, not_executed)
 implementation_plan: absent_pending_planning
 task_cards: absent_pending_planning
-next_role: Suite_Materializer
-next_single_action: materialize_B3_Commitment_suite
+next_role: Implementation_Planner
+next_single_action: draft_B3_implementation_plan
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B3 fixture/oracle/manifest/runner are materialized and remain not_executed
+stop_condition: B3 Implementation Plan is drafted and recorded; business code remains forbidden
 ```
 
 ## 当前事实
@@ -57,3 +57,4 @@ stop_condition: B3 fixture/oracle/manifest/runner are materialized and remain no
 - B3 slice contract 已批准；下一轮只允许建立 traceability，禁止 ADR、suite 物化和业务代码。
 - B3 traceability 已建立；下一轮只允许 ADR/Architecture View，禁止 suite 物化和业务代码。
 - B3 ADR/Architecture View 已接受；下一轮只允许 suite 物化，禁止业务代码。
+- B3 suite 已物化：preflight validator exit 0，contract module 8 skipped（无 adapter）；下一轮只允许 Implementation Plan，禁止业务代码。

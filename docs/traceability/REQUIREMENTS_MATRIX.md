@@ -172,6 +172,6 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-104` | fixed synthetic Commitment candidate、publish、complete/cancel、compensation revert、Derived due-status | `SPEC-B3-COMMITMENT-001` §2-§8；S1 §5/§6；S2 时间语义；S3 §5-§14；S5 §6.5；S6 §4-§14；S7 §7 | `B3-001/002/003/004/005/006/007/008` | `TBD` | `not_executed` |
+| `FR-104` | fixed synthetic Commitment candidate、publish、complete/cancel、compensation revert、Derived due-status | `SPEC-B3-COMMITMENT-001` §2-§8；S1 §5/§6；S2 时间语义；S3 §5-§14；S5 §6.5；S6 §4-§14；S7 §7 | `B3-001/002/003/004/005/006/007/008`（fixture/oracle/manifest 已物化于 `tests/b3_suite_manifest.json`） | `TBD` | `not_executed` |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。B3 仅授权进入 ADR 与 Architecture View；不得开始 suite/业务代码。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`。B3 suite 已物化但无 adapter，合同测试保持 skipped；仅授权进入 Implementation Plan，不得开始业务代码。

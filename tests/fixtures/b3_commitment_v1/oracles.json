@@ -1,0 +1,14 @@
+{
+  "oracle_id": "b3_commitment_v1",
+  "schema_version": "noetide.b3-oracle.v1",
+  "scenarios": {
+    "B3-001": {"result": {"status": "published", "commitment_id": "commitment_b3_001", "commitment_status": "open", "review_status": "user_confirmed", "statement_locator": "src_b3_stmt_001", "data_revision": "rev_021"}, "forbidden_mutations": ["source_records", "relationship_states", "assertions", "hypotheses"]},
+    "B3-002": {"result": {"status": "failed", "reason_code": "commitment_preflight_invalid", "data_revision": "rev_020"}, "forbidden_mutations": ["commitments", "due_projections", "revisions", "source_records"]},
+    "B3-003": {"result": {"status": "fresh", "due_statuses": ["upcoming", "due", "overdue"], "projection_id": "due_b3_001", "data_revision": "rev_021", "view_revision": "rev_021"}, "forbidden_mutations": ["commitments", "revisions", "source_records"]},
+    "B3-004": {"result": {"status": "completed", "commitment_id": "commitment_b3_001", "data_revision": "rev_022", "due_projection_status": "stale"}, "forbidden_mutations": ["source_records", "relationship_states", "assertions", "hypotheses"]},
+    "B3-005": {"result": {"status": "cancelled", "commitment_id": "commitment_b3_001", "cancel_reason": "synthetic plan changed", "data_revision": "rev_022", "rejected_attempt": {"status": "failed", "reason_code": "cancel_reason_required", "data_revision": "rev_022"}}, "forbidden_mutations": ["source_records", "relationship_states", "assertions", "hypotheses"]},
+    "B3-006": {"result": {"status": "open", "commitment_id": "commitment_b3_001", "data_revision": "rev_023", "history_retained": ["published", "completed", "compensation_reverted"]}, "forbidden_mutations": ["source_records", "historical_revisions", "ledger_entries"]},
+    "B3-007": {"result": {"status": "unavailable", "reason_code": "due_projection_rebuild_failed", "canonical_readable": true, "rebuild_equivalent_before_failure": true, "data_revision": "rev_021"}, "forbidden_mutations": ["commitments", "revisions", "source_records"]},
+    "B3-008": {"result": {"status": "rejected", "reason_code": "derived_evidence_forbidden", "commitment_unchanged": true, "data_revision": "rev_021"}, "forbidden_mutations": ["commitments", "revisions", "source_records", "relationship_states"]}
+  }
+}
