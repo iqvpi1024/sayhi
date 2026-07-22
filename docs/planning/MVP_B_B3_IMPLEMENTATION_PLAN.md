@@ -26,7 +26,7 @@
 | `B3-TASK-001` | schema/store 的 Commitment 与 Derived due projection logical layer | §2、§5、`B3-001/002` | foreign key、PRAGMA、重复初始化行为可测 | `completed`；定向 5/5 passed，见 `b3-task001-20260722.json` |
 | `B3-TASK-002` | `commitments.py` 的 fixed candidate 校验与 ChangeSet publish/complete/cancel/revert | §2-§6、`B3-001/002/004/005/006` | direct locator 校验；cancel 必须带原因；无半写；补偿后历史保留 | `completed`；定向 8/8 passed，见 `b3-task002-20260722.json` |
 | `B3-TASK-003` | `due_status.py` 的 deterministic projector/reader | §3-§7、`B3-003/004/007/008` | upcoming/due/overdue/closed 确定性；stale/unavailable；Derived 不作证 | `completed`；定向 4/4 passed，见 `b3-task003-20260722.json` |
-| `B3-TASK-004` | `b3_testing_adapter.py` 与 B3 contract 集成 | §7-§8、`B3-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `pending` |
+| `B3-TASK-004` | `b3_testing_adapter.py` 与 B3 contract 集成 | §7-§8、`B3-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `completed`；contract 8/8 passed（adapter），见 `b3-task004-20260722.json` |
 | `B3-TASK-005` | B3 official runner、existing regression 与 immutable result | §7-§8 | B3 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `pending` |
 | `B3-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
 
