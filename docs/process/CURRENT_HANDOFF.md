@@ -27,7 +27,7 @@ suite_manifest: tests/b3_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-B-B3-IMPL-001 (docs/planning/MVP_B_B3_IMPLEMENTATION_PLAN.md)
 task_cards: docs/planning/MVP_B_B3_TASK_CARDS.md
 next_role: Implementer
-next_single_action: execute_B3_TASK_005
+next_single_action: execute_B3_TASK_006_gate_review
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B3 official runner 8/8 bound and full regression green; Gate Review remains TASK-006
+stop_condition: B3 Gate Review P0/P1=0 recorded and recovery point created/pushed
 ```
 
 ## 当前事实
@@ -63,3 +63,4 @@ stop_condition: B3 official runner 8/8 bound and full regression green; Gate Rev
 - B3-TASK-002 已完成：定向 8/8 passed，regression 128 OK；下一轮只允许 B3-TASK-003。
 - B3-TASK-003 已完成：定向 4/4 passed，regression 132 OK；下一轮只允许 B3-TASK-004。
 - B3-TASK-004 已完成：contract 8/8 passed（adapter）；下一轮只允许 B3-TASK-005 official runner 与绑定。
+- B3-TASK-005 已完成：official 8/8 passed/current 已绑定；regression 132 OK；下一轮只允许 B3-TASK-006 Gate Review 与 recovery point。

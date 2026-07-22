@@ -1,0 +1,38 @@
+{
+  "schema_version": "noetide.b3-task-result.v1",
+  "run_id": "b3-task005-9acba9e-20260722",
+  "task_id": "B3-TASK-005",
+  "slice_id": "SLICE-MVP-B-COMMITMENT-001",
+  "git_commit": "9acba9e",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "b3_official_suite": "passed",
+  "verifications": [
+    {
+      "command": "$env:PYTHONPATH='src'; python -m tests.runner.run_b3_suite --adapter noetide_micro.b3_testing_adapter --output docs/testing/results/b3-20260722.json",
+      "exit_code": 0,
+      "result": "8/8 B3 scenarios passed in one run; network blocked"
+    },
+    {
+      "command": "configured-adapter unittest discover -s tests/semantic (micro/answer/b2/b3 adapters)",
+      "exit_code": 0,
+      "result": "132 tests OK, 0 skipped"
+    },
+    {
+      "command": "python tools/validate_{micro,answer_safety,b1,b2,c1,synthetic_ingestion,context_pack,b3}_suite.py",
+      "exit_code": 0,
+      "result": "all 8 suite validators PASSED"
+    },
+    {
+      "command": "powershell -File tools/validate_product_baseline.ps1; git diff --check",
+      "exit_code": 0,
+      "result": "baseline static checks and whitespace check passed"
+    }
+  ]
+}

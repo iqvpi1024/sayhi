@@ -1,40 +1,71 @@
 {
-  "schema_version": "noetide.b3-suite-manifest.v1",
+  "schema_version": "noetide.b3-run-result.v1",
+  "run_id": "b3-c3662a819a684890ae85981f44950ba9",
   "suite_id": "b3_commitment_v1",
-  "slice_id": "SLICE-MVP-B-COMMITMENT-001",
-  "suite_artifact_version": "1.0.0",
-  "flags": {
-    "suite_defined": true,
-    "suite_materialized": true,
-    "suite_executed": true,
-    "suite_passed": true
+  "manifest_sha256": "59eae017246b0e92364c87e85175c40d5977644b41156015f34cb75473f00104",
+  "git_commit": "9acba9e9a83e6333470c0cf63131f9c5e18a0687",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
   },
-  "suite_artifact_state": "materialized",
-  "latest_verification_result": "passed",
-  "latest_run_applicability": "current",
-  "required_scenario_ids": [
-    "B3-001",
-    "B3-002",
-    "B3-003",
-    "B3-004",
-    "B3-005",
-    "B3-006",
-    "B3-007",
-    "B3-008"
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_b3_suite",
+    "--adapter",
+    "noetide_micro.b3_testing_adapter",
+    "--output",
+    "docs/testing/results/b3-20260722.json"
   ],
-  "baseline": {
-    "product_path": "PRDv05.md",
-    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
-    "decision_refs": [
-      "DEC-MVP-B-COMMITMENT-001"
-    ],
-    "contract_ref": "SPEC-B3-COMMITMENT-001",
-    "adr_refs": [
-      "ADR-0005"
-    ],
-    "architecture_ref": "ARCH-B3-COMMITMENT-001"
-  },
-  "artifacts": [
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "B3-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B3-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B3-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B3-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B3-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B3-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B3-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B3-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
     {
       "role": "fixture",
       "path": "tests/fixtures/b3_commitment_v1/fixture.json",
@@ -90,14 +121,5 @@
       "path": "src/noetide_micro/b3_testing_adapter.py",
       "sha256": "8a537bcf11fdfef2d505b8d3732bf6e659ad92ce92fd01f9c828001e382fc0db"
     }
-  ],
-  "privacy": {
-    "synthetic_only": true,
-    "external_network": false,
-    "workspace_external_reads": false,
-    "real_personal_data": false
-  },
-  "latest_verification_result_path": "docs/testing/results/b3-20260722.json",
-  "latest_verification_manifest_sha256": "59eae017246b0e92364c87e85175c40d5977644b41156015f34cb75473f00104",
-  "latest_verification_result_sha256": "5e8b7dfea2a0684c589fc53f21ec9e0ba44a634a5518fa7dcd8334bdcacc262f"
+  ]
 }
