@@ -27,7 +27,7 @@ suite_manifest: tests/b3_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-B-B3-IMPL-001 (docs/planning/MVP_B_B3_IMPLEMENTATION_PLAN.md)
 task_cards: docs/planning/MVP_B_B3_TASK_CARDS.md
 next_role: Implementer
-next_single_action: execute_B3_TASK_003
+next_single_action: execute_B3_TASK_004
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B3-TASK-003 due-status projector complete with targeted tests recorded; TASK-004+ remain forbidden
+stop_condition: B3-TASK-004 adapter complete; official runner execution remains TASK-005 only
 ```
 
 ## 当前事实
@@ -61,3 +61,4 @@ stop_condition: B3-TASK-003 due-status projector complete with targeted tests re
 - B3 Implementation Plan 与任务卡已建立；下一轮只允许 B3-TASK-001，禁止 TASK-002 及以后。
 - B3-TASK-001 已完成：定向 5/5 passed，regression 120 OK；下一轮只允许 B3-TASK-002。
 - B3-TASK-002 已完成：定向 8/8 passed，regression 128 OK；下一轮只允许 B3-TASK-003。
+- B3-TASK-003 已完成：定向 4/4 passed，regression 132 OK；下一轮只允许 B3-TASK-004。
