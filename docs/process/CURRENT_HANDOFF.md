@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-CURRENT-STATE-001
 slice_id: SLICE-MVP-A-CURRENT-STATE-001
-current_phase: spec_applicability_reviewed
+current_phase: slice_contract_approved
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -20,14 +20,14 @@ ci_runs:
   - 29654926812
   - 29654930604
 decision_ref: DEC-MVP-A-CURRENT-STATE-001
-spec_contract: absent_pending_applicability_review
+spec_contract: SPEC-A2-CURRENT-STATE-001
 adr_ref: absent_pending_applicability_review
 architecture_ref: absent_pending_applicability_review
 suite_manifest: absent_pending_materialization
 implementation_plan: absent_pending_planning
 task_cards: absent_pending_planning
-next_role: Contract_Drafter
-next_single_action: draft_A2_slice_contract
+next_role: Traceability_Maintainer
+next_single_action: establish_A2_traceability
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: A2 slice contract approved; traceability is the next gate
+stop_condition: A2 traceability recorded; ADR/architecture is the next gate
 ```
 
 ## 当前事实
@@ -65,4 +65,4 @@ stop_condition: A2 slice contract approved; traceability is the next gate
 - B3-TASK-004 已完成：contract 8/8 passed（adapter）；下一轮只允许 B3-TASK-005 official runner 与绑定。
 - B3-TASK-005 已完成：official 8/8 passed/current 已绑定；regression 132 OK；下一轮只允许 B3-TASK-006 Gate Review 与 recovery point。
 - B3-TASK-006 已完成：Gate Review P0=0/P1=0；切片 verified；recovery tag `b3-commitment-rp-20260722` 已推送。
-- `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2；applicability review 结论 `pass_with_slice_contract_required`；下一轮只允许起草 slice contract，禁止 fixture/oracle/ADR/业务代码。
+- `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2；applicability review 结论 `pass_with_slice_contract_required`；`SPEC-A2-CURRENT-STATE-001` 已批准（A2-CONTRACT-REVIEW-001）；下一轮只允许 traceability。
