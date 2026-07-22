@@ -606,6 +606,15 @@ class SemanticStore:
 
     # A2 additive: current_state Core View projection helpers (Derived only).
 
+    def canonical_object_summaries(self) -> list[JsonObject]:
+        """Read-only listing of Canonical objects for Derived projection computation."""
+        return [
+            {"object_id": row[0], "object_type": row[1], "object_revision": row[2], "payload": json.loads(row[3])}
+            for row in self._connection.execute(
+                "SELECT object_id, object_type, object_revision, payload_json FROM canonical_objects ORDER BY object_id"
+            )
+        ]
+
     def upsert_projection(
         self, view_name: str, data_revision: str, view_revision: str, freshness_status: str, payload: Mapping[str, Any]
     ) -> None:

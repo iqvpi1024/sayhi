@@ -48,6 +48,7 @@
 32. A2 executable suite 已物化（fixture/oracle/scenarios/protocol/contract module/runner/validator/manifest）；preflight validator exit 0，contract 8 skipped（无 adapter），业务测试保持 `not_executed`。
 33. `PLAN-MVP-A-A2-IMPL-001` 与 A2 任务卡已建立（A2-TASK-001..005）。
 34. A2-TASK-001 已完成：a2_view_rebuild_receipts 表与 upsert/stale/delete 辅助；定向 5/5 passed，regression 145 OK（8 A2 contract skipped）；A2 official suite 仍 `not_executed`。
+35. A2-TASK-002 已完成：`current_state.py` 实现当前有效纯函数、build/read/stale/rebuild/失败降级/不作证；定向 6/6 passed，regression 151 OK；A2 official suite 仍 `not_executed`。
 
 ## 4. 真实验证结果
 
@@ -72,6 +73,7 @@
 | B3-TASK-004 | `b3-task004-20260722.json`：contract 8/8 passed（adapter）；official runner 未执行 |
 | B3 官方 suite | `b3-20260722.json`：8/8 passed/current；全量 regression 132 OK；manifest 已绑定 |
 | A2-TASK-001 | `a2-task001-20260722.json`：定向 5/5 passed；configured-adapter regression 145 OK；A2 official suite `not_executed` |
+| A2-TASK-002 | `a2-task002-20260722.json`：定向 6/6 passed；configured-adapter regression 151 OK；A2 official suite `not_executed` |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -83,4 +85,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A2-TASK-002：current_state projector/reader（fresh/stale/rebuild/失败降级/不作证与定向测试）。**
+**执行 A2-TASK-003：`a2_testing_adapter.py`，完整实现 adapter protocol 接入 A2 contract。**
