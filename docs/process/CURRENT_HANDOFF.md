@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-B-COMMITMENT-001
-slice_id: SLICE-MVP-B-COMMITMENT-001
-current_phase: slice_verified
+handoff_id: HANDOFF-MVP-A-CURRENT-STATE-001
+slice_id: SLICE-MVP-A-CURRENT-STATE-001
+current_phase: product_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -19,15 +19,15 @@ release:
 ci_runs:
   - 29654926812
   - 29654930604
-decision_ref: DEC-MVP-B-COMMITMENT-001
-spec_contract: SPEC-B3-COMMITMENT-001
-adr_ref: ADR-0005
-architecture_ref: ARCH-B3-COMMITMENT-001
-suite_manifest: tests/b3_suite_manifest.json (materialized, not_executed)
-implementation_plan: PLAN-MVP-B-B3-IMPL-001 (docs/planning/MVP_B_B3_IMPLEMENTATION_PLAN.md)
-task_cards: docs/planning/MVP_B_B3_TASK_CARDS.md
-next_role: Product_Decider
-next_single_action: choose_next_slice_via_product_decision
+decision_ref: DEC-MVP-A-CURRENT-STATE-001
+spec_contract: absent_pending_applicability_review
+adr_ref: absent_pending_applicability_review
+architecture_ref: absent_pending_applicability_review
+suite_manifest: absent_pending_materialization
+implementation_plan: absent_pending_planning
+task_cards: absent_pending_planning
+next_role: Spec_Reviewer
+next_single_action: run_A2_spec_applicability_review
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: B3 slice verified with recovery point; new work requires a new Product Decision
+stop_condition: A2 applicability review recorded; slice contract drafting is the next gate
 ```
 
 ## 当前事实
@@ -64,4 +64,5 @@ stop_condition: B3 slice verified with recovery point; new work requires a new P
 - B3-TASK-003 已完成：定向 4/4 passed，regression 132 OK；下一轮只允许 B3-TASK-004。
 - B3-TASK-004 已完成：contract 8/8 passed（adapter）；下一轮只允许 B3-TASK-005 official runner 与绑定。
 - B3-TASK-005 已完成：official 8/8 passed/current 已绑定；regression 132 OK；下一轮只允许 B3-TASK-006 Gate Review 与 recovery point。
-- B3-TASK-006 已完成：Gate Review P0=0/P1=0；切片 verified；新工作必须从新 Product Decision 开始。
+- B3-TASK-006 已完成：Gate Review P0=0/P1=0；切片 verified；recovery tag `b3-commitment-rp-20260722` 已推送。
+- `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2；下一轮只允许 S1/S2/S3/S6/S7 applicability review，禁止 A2 业务代码。
