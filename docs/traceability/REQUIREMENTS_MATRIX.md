@@ -186,4 +186,4 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `FR-008` | 复用 A1 freshness/六态语义，不重复实现；视图不得伪装 current | `SPEC-A2-CURRENT-STATE-001` §4-§5；S1 §3；S2 §6.8-§7.3 | `A2-003/004/008` | `TBD` | `not_executed` |
 | `FR-105` | current_state 的 stale 检测与重建等价（MVP-A 切片；增量对账/失败队列属 B4） | `SPEC-A2-CURRENT-STATE-001` §3、§5-§7；S3 §8-§14；S6 §6-§14 | `A2-004/005/006/007` | `TBD` | `not_executed` |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。A2 仅授权进入 ADR 与 Architecture View；不得开始 suite 物化或业务代码。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。A2 ADR/Architecture 已接受；仅授权 suite 物化，不得开始业务代码。

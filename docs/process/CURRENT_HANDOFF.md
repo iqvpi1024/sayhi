@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-CURRENT-STATE-001
 slice_id: SLICE-MVP-A-CURRENT-STATE-001
-current_phase: traceability_established
+current_phase: architecture_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -21,13 +21,13 @@ ci_runs:
   - 29654930604
 decision_ref: DEC-MVP-A-CURRENT-STATE-001
 spec_contract: SPEC-A2-CURRENT-STATE-001
-adr_ref: absent_pending_applicability_review
-architecture_ref: absent_pending_applicability_review
+adr_ref: ADR-0006
+architecture_ref: ARCH-A2-CURRENT-STATE-001
 suite_manifest: absent_pending_materialization
 implementation_plan: absent_pending_planning
 task_cards: absent_pending_planning
-next_role: Architecture_Decider
-next_single_action: decide_A2_adr_and_architecture
+next_role: Suite_Materializer
+next_single_action: materialize_A2_suite
 scope_in:
   - fixed synthetic Commitment lifecycle and Derived due-status boundary
   - S1/S2/S3/S5/S6/S7 applicability review and B3 traceability
@@ -36,7 +36,7 @@ scope_out:
   - D2/D3 production installer claims
   - changes to approved PRD or SPEC to fit implementation
   - user untracked private files
-stop_condition: A2 ADR/architecture accepted; suite materialization is the next gate
+stop_condition: A2 fixture/oracle/manifest/runner materialized and remain not_executed
 ```
 
 ## 当前事实
@@ -65,4 +65,4 @@ stop_condition: A2 ADR/architecture accepted; suite materialization is the next 
 - B3-TASK-004 已完成：contract 8/8 passed（adapter）；下一轮只允许 B3-TASK-005 official runner 与绑定。
 - B3-TASK-005 已完成：official 8/8 passed/current 已绑定；regression 132 OK；下一轮只允许 B3-TASK-006 Gate Review 与 recovery point。
 - B3-TASK-006 已完成：Gate Review P0=0/P1=0；切片 verified；recovery tag `b3-commitment-rp-20260722` 已推送。
-- `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2；applicability review 结论 `pass_with_slice_contract_required`；`SPEC-A2-CURRENT-STATE-001` 已批准（A2-CONTRACT-REVIEW-001）；traceability 已建立；下一轮只允许 ADR/Architecture View。
+- `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2；applicability review 结论 `pass_with_slice_contract_required`；`SPEC-A2-CURRENT-STATE-001` 已批准（A2-CONTRACT-REVIEW-001）；traceability 已建立；`ADR-0006`/`ARCH-A2-CURRENT-STATE-001` 已接受；下一轮只允许 suite 物化，禁止业务代码。
