@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-CURRENT-STATE-001` |
-| 当前阶段 | `suite_materialized` |
+| 当前阶段 | `implementation_planned` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -46,6 +46,7 @@
 30. A2 traceability（矩阵 §4.8）已建立。
 31. `ADR-0006` 与 `ARCH-A2-CURRENT-STATE-001` 已接受。
 32. A2 executable suite 已物化（fixture/oracle/scenarios/protocol/contract module/runner/validator/manifest）；preflight validator exit 0，contract 8 skipped（无 adapter），业务测试保持 `not_executed`。
+33. `PLAN-MVP-A-A2-IMPL-001` 与 A2 任务卡已建立（A2-TASK-001..005，全部 `pending`）；尚未开始业务代码。
 
 ## 4. 真实验证结果
 
@@ -80,4 +81,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**起草 A2 Implementation Plan（TASK 卡、交付物与验收条件）；不得开始业务代码。**
+**执行 A2-TASK-001：current_state 投影存储辅助（receipt 表、删除/stale 辅助与定向测试）。**
