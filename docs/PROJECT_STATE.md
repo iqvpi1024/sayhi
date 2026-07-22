@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-CURRENT-STATE-001` |
-| 当前阶段 | `slice_contract_approved` |
+| 当前阶段 | `traceability_established` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -42,7 +42,8 @@
 26. B3-TASK-006 已完成：Gate Review `B3_COMMITMENT_GATE_REVIEW_2026-07-22.md` 结论 P0=0/P1=0；B3 切片 verified，recovery tag `b3-commitment-rp-20260722` 已推送。
 27. `DEC-MVP-A-CURRENT-STATE-001` 已选择 A2 current_state Core View 切片；只授权 applicability review，未授权业务代码。
 28. A2 applicability review `A2-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`。
-29. `SPEC-A2-CURRENT-STATE-001` 与合同复核 `A2-CONTRACT-REVIEW-001`（approved_for_traceability）已完成；下一步只允许 traceability。
+29. `SPEC-A2-CURRENT-STATE-001` 与合同复核 `A2-CONTRACT-REVIEW-001`（approved_for_traceability）已完成。
+30. A2 traceability（矩阵 §4.8）已建立；下一步只允许 ADR/Architecture View。
 
 ## 4. 真实验证结果
 
@@ -77,4 +78,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**建立 A2 traceability（FR-006/FR-008/FR-105 MVP-A 切片 → SPEC-A2 → A2-001..008）；不得 ADR/suite/业务代码。**
+**建立 A2 ADR 与 Architecture View（最小持久/投影设计决定）；不得物化 suite 或编写业务代码。**

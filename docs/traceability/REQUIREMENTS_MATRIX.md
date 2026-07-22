@@ -175,3 +175,15 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `FR-104` | fixed synthetic Commitment candidate、publish、complete/cancel、compensation revert、Derived due-status | `SPEC-B3-COMMITMENT-001` §2-§8；S1 §5/§6；S2 时间语义；S3 §5-§14；S5 §6.5；S6 §4-§14；S7 §7 | `B3-001/002/003/004/005/006/007/008` | `src/noetide_micro/commitments.py`、`due_status.py`、`store.py`、`b3_testing_adapter.py` | `passed`（`docs/testing/results/b3-20260722.json` 8/8 current） |
 
 状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。B3 official suite 8/8 passed/current，Gate Review P0=0/P1=0；切片 verified，下一步回到 Product Decision。
+
+## 4.8 Active Slice：A2 current_state Core View
+
+`SLICE-MVP-A-CURRENT-STATE-001` 只实现 FR-006/FR-008/FR-105 的固定合成 MVP-A 子集：第三个 Core View `current_state` 的构建、stale、重建等价与 Derived 不作证。它不代表通用查询、权限 runtime 或完整 FR-105 对账。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-006` | current_state 发布后更新或失效（fresh/stale/unavailable） | `SPEC-A2-CURRENT-STATE-001` §2-§8；S3 §6.4-§6.5、§8-§14 | `A2-001/003/004/005/007` | `TBD` | `not_executed` |
+| `FR-008` | 复用 A1 freshness/六态语义，不重复实现；视图不得伪装 current | `SPEC-A2-CURRENT-STATE-001` §4-§5；S1 §3；S2 §6.8-§7.3 | `A2-003/004/008` | `TBD` | `not_executed` |
+| `FR-105` | current_state 的 stale 检测与重建等价（MVP-A 切片；增量对账/失败队列属 B4） | `SPEC-A2-CURRENT-STATE-001` §3、§5-§7；S3 §8-§14；S6 §6-§14 | `A2-004/005/006/007` | `TBD` | `not_executed` |
+
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。A2 仅授权进入 ADR 与 Architecture View；不得开始 suite 物化或业务代码。
