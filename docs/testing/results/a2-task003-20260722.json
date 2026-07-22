@@ -1,0 +1,28 @@
+{
+  "schema_version": "noetide.a2-task-result.v1",
+  "run_id": "a2-task003-4b1d110-20260722",
+  "task_id": "A2-TASK-003",
+  "slice_id": "SLICE-MVP-A-CURRENT-STATE-001",
+  "git_commit": "4b1d110",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "a2_official_suite": "not_executed",
+  "verifications": [
+    {
+      "command": "$env:PYTHONPATH='src'; $env:NOETIDE_A2_ADAPTER='noetide_micro.a2_testing_adapter'; python -m unittest tests.semantic.test_a2_current_state_contract -v",
+      "exit_code": 0,
+      "result": "8/8 contract cases passed with adapter; fixture/oracle untouched"
+    },
+    {
+      "command": "python tools/validate_a2_suite.py",
+      "exit_code": 0,
+      "result": "A2 suite materialized; manifest flags remain not_executed pending official runner"
+    }
+  ]
+}

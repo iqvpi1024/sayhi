@@ -25,7 +25,7 @@
 |---|---|---|---|---|
 | `A2-TASK-001` | store 的 current_state 投影辅助（receipt 表、删除/stale 辅助） | §2、§5、`A2-001/006/007` | receipt 持久化、Derived 删除隔离、PRAGMA 行为可测 | `completed`；定向 5/5 passed，见 `a2-task001-20260722.json` |
 | `A2-TASK-002` | `current_state.py` 的 projector/reader（fresh/stale/rebuild/失败降级/不作证） | §2-§7、`A2-001..008` | 当前有效判定确定；stale 不伪装；rebuild 等价；Derived 不作证 | `completed`；定向 6/6 passed，见 `a2-task002-20260722.json` |
-| `A2-TASK-003` | `a2_testing_adapter.py` 与 A2 contract 集成 | §7-§8、`A2-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `pending` |
+| `A2-TASK-003` | `a2_testing_adapter.py` 与 A2 contract 集成 | §7-§8、`A2-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `completed`；contract 8/8 passed（adapter），见 `a2-task003-20260722.json` |
 | `A2-TASK-004` | A2 official runner、existing regression 与 immutable result | §7-§8 | A2 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `pending` |
 | `A2-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
 
