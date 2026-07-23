@@ -194,6 +194,6 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-011` | merge proposal → 确认 → ChangeSet 原子发布；split compensation 等价恢复 | `SPEC-A3-ENTITY-MERGE-001` §2-§9；S1 Entity 状态机/`merged_into`/SOM-AT-017；S3 merge/split operation | `A3-001..008`（suite 已物化于 `tests/a3_suite_manifest.json`） | `TBD` | `not_executed` |
+| `FR-011` | merge proposal → 确认 → ChangeSet 原子发布；split compensation 等价恢复 | `SPEC-A3-ENTITY-MERGE-001` §2-§9；S1 Entity 状态机/`merged_into`/SOM-AT-017；S3 merge/split operation | `A3-001..008`（`tests/a3_suite_manifest.json`，8/8 passed） | `src/noetide_micro/entity_merge.py`、`src/noetide_micro/store.py`、`src/noetide_micro/a3_testing_adapter.py` | `passed` |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`。suite 已物化但无 adapter，合同测试保持 skipped；仅授权 Implementation Plan，不得开始业务代码。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。official runner `a3-20260724.json` 8/8 passed/current 已绑定；Gate Review P0=0/P1=0，切片 verified，recovery tag `a3-entity-merge-rp-20260724`。

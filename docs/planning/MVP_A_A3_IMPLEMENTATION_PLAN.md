@@ -27,7 +27,7 @@
 | `A3-TASK-002` | `entity_merge.py`：merge/split ChangeSet 服务（preflight、原子重定向、split 等价恢复、fail closed） | §2-§7、`A3-001..008` | 原子性可注入失败证明；split 逐字段恢复等价；trust/closeness/人格不变 | `completed`；定向 5/5 passed，regression 161 OK（8 A3 contract skipped） |
 | `A3-TASK-003` | `a3_testing_adapter.py` 与 A3 contract 集成 | §8-§9、`A3-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `completed`；contract 8/8 passed（adapter），regression 169 OK 无 skip |
 | `A3-TASK-004` | A3 official runner、existing regression 与 immutable result | §8-§9 | A3 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `completed`；`a3-20260724.json` 8/8 current/passed，regression 169 OK |
-| `A3-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
+| `A3-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `completed`；Gate Review P0=0/P1=0，见 `docs/reviews/A3_ENTITY_MERGE_GATE_REVIEW_2026-07-24.md` |
 
 ## 3. 允许文件边界
 

@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ENTITY-MERGE-001
 slice_id: SLICE-MVP-A-ENTITY-MERGE-001
-current_phase: implementation_planned
+current_phase: slice_verified
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -20,29 +20,30 @@ latest_recovery_points:
   - b2-episode-summary-rp-20260719
   - b3-commitment-rp-20260722
   - a2-current-state-rp-20260722
+  - a3-entity-merge-rp-20260724
 decision_ref: DEC-MVP-A-ENTITY-MERGE-001
 spec_contract: SPEC-A3-ENTITY-MERGE-001 (approved)
 adr_ref: ADR-0007
+architecture_ref: ARCH-A3-ENTITY-MERGE-001
 suite_manifest: tests/a3_suite_manifest.json (executed, passed, bound)
-implementation_plan: PLAN-MVP-A-A3-IMPL-001 (docs/planning/MVP_A_A3_IMPLEMENTATION_PLAN.md)
-next_role: Implementer
-next_single_action: execute_A3_TASK_005_gate_review
+implementation_plan: PLAN-MVP-A-A3-IMPL-001 (all 5 tasks completed)
+gate_review: docs/reviews/A3_ENTITY_MERGE_GATE_REVIEW_2026-07-24.md (P0=0, P1=0)
+next_role: Product_Decider
+next_single_action: return_to_product_decision_for_next_slice (candidates per docs/planning/MASTER_DELIVERY_ROADMAP.md: A4 access policy, B4 reconciliation - A2+B3 deps now satisfied)
 scope_in:
-  - A3-TASK-004 only: official runner result + manifest binding fields
+  - reading roadmap and open questions to propose the next slice decision
 scope_out:
   - real personal data
-  - any business code, moving existing tags
-  - automatic person merge, fuzzy identity matching, connectors, permissions runtime
-stop_condition: A3 Gate Review P0/P1=0 recorded and recovery point created/pushed
+  - D2/D3 production installer claims
+  - any business code before a new Product Decision exists
+  - moving or reusing any existing tag
+stop_condition: new Product Decision recorded; no implementation may start before it
 ```
 
 ## 当前事实
 
-- A2 切片 verified，recovery tag `a2-current-state-rp-20260722` 已推送；official suite 8/8 passed/current 已绑定。
-- `DEC-MVP-A-ENTITY-MERGE-001`（2026-07-24）选择 A3 作为 active slice，只授权 S1/S2/S3/S6 applicability review。
-- A3 applicability review `A3-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`（2026-07-24）。
-- A3 范围：固定合成两个 Person Entity 的 merge proposal → 用户确认 → ChangeSet 原子发布（引用重定向 + `merged_into` 标记）→ split compensation；历史永不删除；trust/closeness/人格判断不自动修改。
-- A3 非目标：自动合并、模糊身份匹配、真实联系人导入、权限 runtime、UI、非 Person 合并。
-- `SPEC-A3-ENTITY-MERGE-001` 已批准（`A3-CONTRACT-REVIEW-001`，approved_for_traceability，2026-07-24）。
-- 全量 configured-adapter regression 基线：151 OK 无 skip；9 个 suite validator 全 PASSED。
-- 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前仅 D1 合成预览。
+- A3 切片 verified：official runner `a3-20260724.json` 8/8 passed/current 已绑定；Gate Review P0=0/P1=0；recovery tag `a3-entity-merge-rp-20260724` 已推送。
+- 全量 configured-adapter regression 基线：169 OK 无 skip；10 个 suite validator 全 PASSED。
+- 施工前 Change Control 已记录：A3-006/008 fixture 采用 `pre_published` 播种；`split_records` 独立成表保持 `merge_records` 严格只增不改。
+- B4-RECONCILIATION-DIFF 的 A2+B3 依赖均已 verified；A4 需要 S4 applicability review 与相关 Privacy Product Decision。
+- 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。
