@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ENTITY-MERGE-001
 slice_id: SLICE-MVP-A-ENTITY-MERGE-001
-current_phase: suite_materialized
+current_phase: implementation_planned
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -24,16 +24,16 @@ decision_ref: DEC-MVP-A-ENTITY-MERGE-001
 spec_contract: SPEC-A3-ENTITY-MERGE-001 (approved)
 adr_ref: ADR-0007
 suite_manifest: tests/a3_suite_manifest.json (materialized, not_executed)
-implementation_plan: none
-next_role: Planner
-next_single_action: create_A3_implementation_plan_and_task_cards (PLAN-MVP-A-A3-IMPL-001)
+implementation_plan: PLAN-MVP-A-A3-IMPL-001 (docs/planning/MVP_A_A3_IMPLEMENTATION_PLAN.md)
+next_role: Implementer
+next_single_action: execute_A3_TASK_001 (store merge_records helpers per task card)
 scope_in:
-  - A3 implementation plan and task cards only
+  - A3-TASK-001 only: schema.sql, store.py, test_a3_task_001_store.py
 scope_out:
   - real personal data
-  - any A3 business code; fixture/oracle semantic changes (frozen since materialization)
+  - A3-TASK-002+ files, adapter, official runner, fixture/oracle changes
   - automatic person merge, fuzzy identity matching, connectors, permissions runtime
-stop_condition: A3 implementation plan and task cards recorded
+stop_condition: A3-TASK-001 targeted store tests passed and recorded
 ```
 
 ## 当前事实
