@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ENTITY-MERGE-001
 slice_id: SLICE-MVP-A-ENTITY-MERGE-001
-current_phase: product_decided
+current_phase: applicability_reviewed
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -25,21 +25,22 @@ spec_contract: none (applicability review required first)
 adr_ref: none
 suite_manifest: none
 implementation_plan: none
-next_role: Spec_Applicability_Reviewer
-next_single_action: execute_A3_spec_applicability_review (S1/S2/S3/S6 coverage of FR-011 slice)
+next_role: Contract_Drafter
+next_single_action: draft_A3_slice_contract (SPEC-A3-ENTITY-MERGE-001) per A3-SPEC-APPLICABILITY-001 findings
 scope_in:
-  - S1/S2/S3/S6 applicability review for entity merge/split slice
+  - drafting SPEC-A3-ENTITY-MERGE-001 slice contract only
 scope_out:
   - real personal data
-  - any A3 business code, fixture, oracle, ADR or suite before applicability review concludes
+  - any A3 business code, fixture, oracle, ADR or suite before contract approved
   - automatic person merge, fuzzy identity matching, connectors, permissions runtime
-stop_condition: A3 applicability review recorded with explicit conclusion
+stop_condition: A3 slice contract drafted and contract review recorded
 ```
 
 ## 当前事实
 
 - A2 切片 verified，recovery tag `a2-current-state-rp-20260722` 已推送；official suite 8/8 passed/current 已绑定。
 - `DEC-MVP-A-ENTITY-MERGE-001`（2026-07-24）选择 A3 作为 active slice，只授权 S1/S2/S3/S6 applicability review。
+- A3 applicability review `A3-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`（2026-07-24）。
 - A3 范围：固定合成两个 Person Entity 的 merge proposal → 用户确认 → ChangeSet 原子发布（引用重定向 + `merged_into` 标记）→ split compensation；历史永不删除；trust/closeness/人格判断不自动修改。
 - A3 非目标：自动合并、模糊身份匹配、真实联系人导入、权限 runtime、UI、非 Person 合并。
 - 全量 configured-adapter regression 基线：151 OK 无 skip；9 个 suite validator 全 PASSED。
