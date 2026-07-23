@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-APP-SHELL-001
 slice_id: SLICE-MVP-A-APP-SHELL-001
-current_phase: implementation_planned
+current_phase: implementation_in_progress
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -28,15 +28,15 @@ adr_ref: ADR-0009
 suite_manifest: tests/a5_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A5-IMPL-001 (docs/planning/MVP_A_A5_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A5_TASK_001 (app_shell.py presentation-layer pure functions per task card)
+next_single_action: execute_A5_TASK_002 (cli wiring + a5_testing_adapter.py per task card)
 scope_in:
-  - A5-TASK-001 only: app_shell.py, test_a5_task_001_app_shell.py
+  - A5-TASK-002 only: cli.py, a5_testing_adapter.py, test_a5_task_002_adapter.py
 scope_out:
   - real personal data
-  - A5-TASK-002+ files, adapter, official runner, fixture/oracle changes
+  - A5-TASK-003+ steps, official runner, fixture/oracle changes
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A5-TASK-001 targeted presentation tests passed and recorded
+stop_condition: A5-TASK-002 targeted adapter tests passed and recorded; NOETIDE_A5_ADAPTER contract runnable
 ```
 
 ## 当前事实
@@ -51,5 +51,6 @@ stop_condition: A5-TASK-001 targeted presentation tests passed and recorded
 - A4-TASK-002 已完成并验证：access_policy.py 判决器与 oracle 全场景一致，定向 8/8 passed，regression 183 OK（8 A4 contract skipped）。
 - A4-TASK-003 已完成并验证：a4_testing_adapter.py contract 8/8 passed；全量 regression 191 OK 无 skip。
 - A4-TASK-004 已完成并验证：official runner a4-20260724.json 8/8 passed/current，manifest 已绑定，11 validators PASSED。
-- 全量 configured-adapter regression 基线：169 OK 无 skip；10 个 suite validator 全 PASSED。
+- A5-TASK-001 已完成并验证：app_shell.py 呈现层纯函数与零绕过静态扫描辅助，定向 6/6 passed，configured-adapter regression 205 OK（8 A5 contract skipped），PRAGMA 检查通过；official suite 仍 `not_executed`。
+- 全量 configured-adapter regression 基线：205 OK（8 A5 contract skipped，待 A5-TASK-002 adapter）；12 个 suite validator。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。

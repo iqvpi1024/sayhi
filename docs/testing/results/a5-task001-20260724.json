@@ -1,0 +1,53 @@
+{
+ "schema_version": "noetide.a5-task-result.v1",
+ "run_id": "a5-task001-2320515-20260724",
+ "task_id": "A5-TASK-001",
+ "slice_id": "SLICE-MVP-A-APP-SHELL-001",
+ "git_commit": "2320515",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a5_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -c \"import noetide_micro.app_shell as m; a,f = m.shell_write_scan(); print(a, f)\"",
+   "exit_code": 0,
+   "result": "import OK; shell_write_scan forbidden=[] (zero store-write calls statically proven)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_a5_task_001_app_shell -v",
+   "exit_code": 0,
+   "result": "6/6 passed (render_review matches oracle A5-002, render_impact_preview matches oracle A5-003, presentation zero-write on canonical digest, static scan no forbidden calls, two-label validation, output shape has no raw changeset json)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; python -c \"from noetide_micro.store import SemanticStore; ...; print(s.pragma_values())\"",
+   "exit_code": 0,
+   "result": "PRAGMA check OK: foreign_keys=1, journal_mode=delete, synchronous=2 (FULL) per ADR-0001"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_MICRO_ADAPTER='noetide_micro.testing_adapter'; $env:NOETIDE_ANSWER_ADAPTER='noetide_micro.answer_testing_adapter'; $env:NOETIDE_A2_ADAPTER='noetide_micro.a2_testing_adapter'; $env:NOETIDE_A3_ADAPTER='noetide_micro.a3_testing_adapter'; $env:NOETIDE_A4_ADAPTER='noetide_micro.a4_testing_adapter'; $env:NOETIDE_B2_ADAPTER='noetide_micro.b2_testing_adapter'; $env:NOETIDE_B3_ADAPTER='noetide_micro.b3_testing_adapter'; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "205 tests OK (skipped=8); 8 A5 contract tests skipped pending A5-TASK-002 adapter; no regression"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; python tools/validate_a5_suite.py",
+   "exit_code": 0,
+   "result": "A5 suite materialized; no business test was executed"
+  },
+  {
+   "command": "powershell -File tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "product baseline static checks passed (PRD v0.5 hash, FR closure, privacy heuristics)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
