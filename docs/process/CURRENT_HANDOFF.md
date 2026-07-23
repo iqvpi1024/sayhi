@@ -27,15 +27,15 @@ adr_ref: ADR-0008
 suite_manifest: tests/a4_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A4-IMPL-001 (docs/planning/MVP_A_A4_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A4_TASK_004 (official runner, manifest binding, full regression, 11 suite validators per task card)
+next_single_action: execute_A4_TASK_005 (Gate Review, state/trace sync, recovery tag a4-access-policy-rp-20260724)
 scope_in:
-  - A4-TASK-004 only: docs/testing/results/a4-*.json, tests/a4_suite_manifest.json binding fields
+  - A4-TASK-005 only: review doc, state/trace/handoff sync, recovery record
 scope_out:
   - real personal data
   - fixture/oracle/contract module changes, oracle edits to fit implementation
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A4 official runner 8/8 passed in one run, manifest bound, regression and validators clean
+stop_condition: Gate Review P0/P1=0 recorded and recovery tag pushed
 ```
 
 ## 当前事实
@@ -49,5 +49,6 @@ stop_condition: A4 official runner 8/8 passed in one run, manifest bound, regres
 - A4-TASK-001 已完成并验证：store 只读策略标注/digest 辅助，定向 6/6 passed，regression 175 OK（8 A4 contract skipped）。
 - A4-TASK-002 已完成并验证：access_policy.py 判决器与 oracle 全场景一致，定向 8/8 passed，regression 183 OK（8 A4 contract skipped）。
 - A4-TASK-003 已完成并验证：a4_testing_adapter.py contract 8/8 passed；全量 regression 191 OK 无 skip。
+- A4-TASK-004 已完成并验证：official runner a4-20260724.json 8/8 passed/current，manifest 已绑定，11 validators PASSED。
 - 全量 configured-adapter regression 基线：169 OK 无 skip；10 个 suite validator 全 PASSED。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。

@@ -59,6 +59,7 @@
 43. A4-TASK-001 已完成：store 新增只读策略标注辅助（`object_policy_labels`/`policy_labeled_objects`）与 canonical digest 辅助（`canonical_object_digest`/`canonical_layer_digest`）；定向 6/6 passed，configured-adapter regression 175 OK、8 A4 contract skipped；A4 official suite 仍 `not_executed`。
 44. A4-TASK-002 已完成：`access_policy.py` 纯函数判决器（Grant 有效性、最严格交集、sealed 排除、fail closed、零写入）；定向 8/8 passed，regression 183 OK、8 A4 contract skipped；A4 official suite 仍 `not_executed`。
 45. A4-TASK-003 已完成：`a4_testing_adapter.py` 完整实现 adapter protocol，contract 8/8 passed；fixture/oracle/contract module 未修改；official runner 属 A4-TASK-004。
+46. A4-TASK-004 已完成：official runner `a4-20260724.json` 同一次 run 8/8 passed/current；manifest 已绑定 current result；全量 regression 191 OK 无 skip；11 个 suite validator 全 PASSED。
 
 ## 4. 真实验证结果
 
@@ -96,6 +97,7 @@
 | A4-TASK-001 | 定向 6/6 passed（test_a4_task_001_store）；configured-adapter regression 175 OK、8 A4 contract skipped；A4 official suite `not_executed` |
 | A4-TASK-002 | 定向 8/8 passed（test_a4_task_002_access_policy，判决器与 oracle 全场景一致）；configured-adapter regression 183 OK、8 A4 contract skipped；A4 official suite `not_executed` |
 | A4-TASK-003 | contract 8/8 passed（adapter）；全量 regression 191 OK 无 skip；official runner 未执行 |
+| A4 官方 suite | `a4-20260724.json`：同一次 run 8/8 passed/current；全量 regression 191 OK；11 个 suite validator 全 PASSED；manifest 已绑定 |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -107,4 +109,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A4-TASK-004（official runner + manifest 绑定 + 全量 regression + 11 个 suite validator），只允许任务卡列出的文件。**
+**执行 A4-TASK-005（Gate Review + 状态/追踪同步 + recovery tag `a4-access-policy-rp-20260724`）。**

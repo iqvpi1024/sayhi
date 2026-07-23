@@ -1,0 +1,105 @@
+{
+  "schema_version": "noetide.a4-run-result.v1",
+  "run_id": "a4-0e65b77d7df44c83ab2a35b13d7e2e34",
+  "suite_id": "a4_access_policy_v1",
+  "manifest_sha256": "496a3a72557dc84bc8288c53bc9eeede7ddd2ed81f28130d856508e612853b69",
+  "git_commit": "1d353e5175ef231a7101d22508e2565a8dc9b938",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_a4_suite",
+    "--adapter",
+    "noetide_micro.a4_testing_adapter",
+    "--output",
+    "docs/testing/results/a4-20260724.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "A4-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A4-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A4-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A4-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A4-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A4-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A4-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A4-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/a4_access_policy_v1/fixture.json",
+      "sha256": "23f1c3c59eef8c26e0f0b3b7eb04c0a926fd9590a74f53a97d61b1c23614f90d"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/a4_access_policy_v1/oracles.json",
+      "sha256": "474db23768061abf1a88f894049a66ba92ba404be3d890c8b29d2d9596c0df2c"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/a4_access_policy_scenarios.json",
+      "sha256": "9987e6d35f9d791959978a3df4bbe8512b51f73e426425a3f54ad4548280d654"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/a4_access_policy_adapter_protocol.py",
+      "sha256": "03f249fb45af959a3b04160f00393af3d15fee3e3360fabe9b18f24aa9a79186"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_a4_access_policy_contract.py",
+      "sha256": "2becddadd62ca8c96749a3a75e21011c0b47a00b16b34e4d2f0d3b83b034d8d5"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_a4_suite.py",
+      "sha256": "7d8ecf5be4e0794de5ba0ca1252f115aa68ce77322fafdab97cdfeb20aa53608"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_a4_suite.py",
+      "sha256": "a8b3c1b789213343e22e7b327e706257dd0189655a675057f3449590d6c8759d"
+    }
+  ]
+}

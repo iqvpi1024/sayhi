@@ -6,12 +6,15 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": false,
-    "suite_passed": false
+    "suite_executed": true,
+    "suite_passed": true
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "not_executed",
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "latest_verification_result_path": "docs/testing/results/a4-20260724.json",
+  "latest_verification_manifest_sha256": "496a3a72557dc84bc8288c53bc9eeede7ddd2ed81f28130d856508e612853b69",
+  "latest_verification_result_sha256": "3d69cf5001ef24819b0b5103425f6988ce543921990fc6721cbc46f171cbdf67",
   "required_scenario_ids": [
     "A4-001",
     "A4-002",
