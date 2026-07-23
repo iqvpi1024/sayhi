@@ -182,8 +182,8 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-006` | current_state 发布后更新或失效（fresh/stale/unavailable） | `SPEC-A2-CURRENT-STATE-001` §2-§8；S3 §6.4-§6.5、§8-§14 | `A2-001/003/004/005/007`（suite 已物化于 `tests/a2_suite_manifest.json`） | `TBD` | `not_executed` |
-| `FR-008` | 复用 A1 freshness/六态语义，不重复实现；视图不得伪装 current | `SPEC-A2-CURRENT-STATE-001` §4-§5；S1 §3；S2 §6.8-§7.3 | `A2-003/004/008` | `TBD` | `not_executed` |
-| `FR-105` | current_state 的 stale 检测与重建等价（MVP-A 切片；增量对账/失败队列属 B4） | `SPEC-A2-CURRENT-STATE-001` §3、§5-§7；S3 §8-§14；S6 §6-§14 | `A2-004/005/006/007` | `TBD` | `not_executed` |
+| `FR-006` | current_state 发布后更新或失效（fresh/stale/unavailable） | `SPEC-A2-CURRENT-STATE-001` §2-§8；S3 §6.4-§6.5、§8-§14 | `A2-001/003/004/005/007`（`tests/a2_suite_manifest.json`，8/8 passed） | `src/noetide_micro/current_state.py`、`src/noetide_micro/store.py`、`src/noetide_micro/a2_testing_adapter.py` | `passed` |
+| `FR-008` | 复用 A1 freshness/六态语义，不重复实现；视图不得伪装 current | `SPEC-A2-CURRENT-STATE-001` §4-§5；S1 §3；S2 §6.8-§7.3 | `A2-003/004/008` | `src/noetide_micro/current_state.py`、`src/noetide_micro/a2_testing_adapter.py` | `passed` |
+| `FR-105` | current_state 的 stale 检测与重建等价（MVP-A 切片；增量对账/失败队列属 B4） | `SPEC-A2-CURRENT-STATE-001` §3、§5-§7；S3 §8-§14；S6 §6-§14 | `A2-004/005/006/007` | `src/noetide_micro/current_state.py`、`src/noetide_micro/store.py`、`src/noetide_micro/a2_testing_adapter.py` | `passed` |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`。A2 suite 已物化但无 adapter，合同测试保持 skipped；仅授权 Implementation Plan，不得开始业务代码。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。official runner `a2-20260722.json` 8/8 passed/current 已绑定；Gate Review P0=0/P1=0，切片 verified，recovery tag `a2-current-state-rp-20260722`。

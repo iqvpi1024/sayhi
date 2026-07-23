@@ -1,0 +1,120 @@
+{
+  "schema_version": "noetide.a2-run-result.v1",
+  "run_id": "a2-c5d7211da7c14cba91488c67df6a0b56",
+  "suite_id": "a2_current_state_v1",
+  "manifest_sha256": "a898cd28e2a6c31d5d0543c53a0047f3bd9b61aad980035ff9afcc73498c9d9a",
+  "git_commit": "5dd8beae88a9dfbe76150337efa00fc99afadf6f",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_a2_suite",
+    "--adapter",
+    "noetide_micro.a2_testing_adapter",
+    "--output",
+    "docs\\testing\\results\\a2-20260722-r2.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "A2-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A2-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A2-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A2-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A2-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A2-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A2-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A2-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/a2_current_state_v1/fixture.json",
+      "sha256": "8d94378657e35c2cb946a5551c40b9af7b74147fa75a79ea528ab7586d38a42e"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/a2_current_state_v1/oracles.json",
+      "sha256": "0b0d8e28a98174d5677976c074904df48b7ee6f93e464c2a09a7a75495151f16"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/a2_current_state_scenarios.json",
+      "sha256": "eef640bc64eafd5e889fb9a15eeaf7f49955e350bab92bbea1768a65974cc9c4"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/a2_current_state_adapter_protocol.py",
+      "sha256": "3819800bcc024cd850959e18e6b3cdce7d309d6ba686d92e167cfd7ff52da417"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_a2_current_state_contract.py",
+      "sha256": "432ed3cb2e8e62e4138bdfc556a4460c650b283e236461d2fbe80ad0179e41c0"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_a2_suite.py",
+      "sha256": "8f80210a67a4889089d95dce48c0e24b4759d532d029149dc198e76158ff6382"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_a2_suite.py",
+      "sha256": "17f95ff895820ecae24cc02a8d2889a55cda06b67c52caec34077c8a41042693"
+    },
+    {
+      "role": "storage_tests",
+      "path": "tests/semantic/test_a2_task_001_store.py",
+      "sha256": "defaac8fc9358eb80d13857c33a4211da620caf049c92adcf373b7faf0f79e19"
+    },
+    {
+      "role": "projector_tests",
+      "path": "tests/semantic/test_a2_task_002_current_state.py",
+      "sha256": "397571c74d0fd2bf10dac6cc7537ab36b5b0c2045a6bbc1fb3ca5bf92ce18067"
+    },
+    {
+      "role": "testing_adapter",
+      "path": "src/noetide_micro/a2_testing_adapter.py",
+      "sha256": "09fe6863b20c007c0b57546b19d382a96afd13c6b9d5e47f60887af4f0266d78"
+    }
+  ]
+}
