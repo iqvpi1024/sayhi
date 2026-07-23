@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
 slice_id: SLICE-MVP-A-ACCESS-POLICY-001
-current_phase: traceable
+current_phase: adr_accepted
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -23,19 +23,19 @@ latest_recovery_points:
   - a3-entity-merge-rp-20260724
 decision_ref: DEC-MVP-A-ACCESS-POLICY-001
 spec_contract: SPEC-A4-ACCESS-POLICY-001 (approved)
-adr_ref: none
+adr_ref: ADR-0008
 suite_manifest: none
 implementation_plan: none
-next_role: Architect
-next_single_action: draft_A4_ADR_and_architecture (pure-function evaluator, zero-write enforcement)
+next_role: Suite_Materializer
+next_single_action: materialize_A4_suite (fixture/oracle/scenarios/protocol/contract module/runner/validator/manifest; business tests stay not_executed)
 scope_in:
-  - A4 ADR + Architecture View only
+  - A4 suite materialization only (no business code, no adapter)
 scope_out:
   - real personal data
-  - any A4 business code, fixture, oracle or suite before ADR accepted
+  - any A4 business code or adapter; fixture/oracle semantic changes after materialization
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A4 ADR/Architecture accepted
+stop_condition: A4 suite materialized, preflight validator exit 0, contract tests skipped without adapter
 ```
 
 ## 当前事实
