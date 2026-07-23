@@ -1,0 +1,115 @@
+{
+  "oracle_id": "a5_app_shell_v1",
+  "schema_version": "noetide.a5-oracle.v1",
+  "scenarios": {
+    "A5-001": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"}
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments"]
+    },
+    "A5-002": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"},
+          "propose": {"changeset_id": "changeset_micro_001", "status": "proposed"},
+          "review": {"candidate_ref": "changeset_micro_001", "summary_text": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。", "evidence_citations": ["src_micro_001"], "presentation_revision": "a5_shell_v1"}
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments"]
+    },
+    "A5-003": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"},
+          "propose": {"changeset_id": "changeset_micro_001", "status": "proposed"},
+          "preview": {"will_create": ["state_contact_002"], "will_modify": ["state_contact_001"], "views_affected": ["person_card", "relationship_timeline"], "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。", "presentation_revision": "a5_shell_v1"}
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments"]
+    },
+    "A5-004": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"},
+          "propose": {"changeset_id": "changeset_micro_001", "status": "proposed"},
+          "confirm": {"publish_status": "published", "published_revision": "rev_011", "receipt_id": "receipt_publish_001"}
+        },
+        "data_revision": "rev_011"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "A5-005": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"},
+          "propose": {"changeset_id": "changeset_micro_001", "status": "proposed"},
+          "confirm": {"publish_status": "published", "published_revision": "rev_011", "receipt_id": "receipt_publish_001"},
+          "read_view": {
+            "person_card": {"freshness_status": "fresh", "data_revision": "rev_011", "contains_new_state": true},
+            "relationship_timeline": {"freshness_status": "fresh", "data_revision": "rev_011", "history_count": 2}
+          }
+        },
+        "data_revision": "rev_011"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "A5-006": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"},
+          "propose": {"changeset_id": "changeset_micro_001", "status": "proposed"},
+          "confirm": {"publish_status": "published", "published_revision": "rev_011", "receipt_id": "receipt_publish_001"},
+          "receipt": {"receipt_id": "receipt_publish_001", "published_revision": "rev_011"},
+          "history": {"changeset_ids": ["changeset_micro_001"], "receipt_ids": ["receipt_publish_001"], "audit_events": ["published"]}
+        },
+        "data_revision": "rev_011"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "A5-007": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"},
+          "propose": {"changeset_id": "changeset_micro_001", "status": "proposed"},
+          "confirm": {"publish_status": "published", "published_revision": "rev_011", "receipt_id": "receipt_publish_001"},
+          "revert": {"receipt_id": "receipt_compensation_001", "compensation_revision": "rev_012"},
+          "read_view": {
+            "person_card": {"freshness_status": "fresh", "data_revision": "rev_012", "contact_state": "active"},
+            "relationship_timeline": {"freshness_status": "fresh", "data_revision": "rev_012", "history_count": 1}
+          },
+          "history": {"changeset_ids": ["changeset_micro_001", "changeset_compensation_001"], "receipt_ids": ["receipt_publish_001", "receipt_compensation_001"], "audit_events": ["published", "reverted"]}
+        },
+        "data_revision": "rev_012"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "A5-008": {
+      "result": {
+        "status": "journey_step_completed",
+        "step_results": {
+          "record": {"source_id": "src_micro_001", "receipt_id": "receipt_source_micro_001", "store_status": "stored"},
+          "propose": {"changeset_id": "changeset_micro_001", "status": "proposed"},
+          "preview": {"will_create": ["state_contact_002"], "will_modify": ["state_contact_001"], "views_affected": ["person_card", "relationship_timeline"], "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。", "presentation_revision": "a5_shell_v1"},
+          "confirm": {"publish_status": "published", "published_revision": "rev_011", "receipt_id": "receipt_publish_001"},
+          "revert": {"receipt_id": "receipt_compensation_001", "compensation_revision": "rev_012"},
+          "audit": {"preview_matches_publish": true, "zero_bypass": true, "trust_closeness_unchanged": true, "personality_unchanged": true}
+        },
+        "data_revision": "rev_012"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    }
+  }
+}

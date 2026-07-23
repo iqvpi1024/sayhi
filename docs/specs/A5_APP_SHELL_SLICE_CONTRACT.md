@@ -5,7 +5,7 @@
 | 字段 | 值 |
 |---|---|
 | Contract ID | `SPEC-A5-APP-SHELL-001` |
-| 版本 | `0.1` |
+| 版本 | `0.2` |
 | 状态 | `Approved for A5 slice` |
 | 产品基线 | `PRDv05.md` v0.5 |
 | 产品决定 | `DEC-MVP-A-APP-SHELL-001` |
@@ -84,7 +84,7 @@ journey_step_result:
 | `A5-002` | 已生成候选 | `review` | 自然语言呈现含 summary_text 与 evidence_citations；无 ChangeSet JSON 字段暴露 |
 | `A5-003` | 已生成候选 | `preview` | 影响预览列出将创建对象集与受影响视图集 |
 | `A5-004` | 已审查候选 | `confirm` | approve+publish 原子完成；revision 前进；回执生成 |
-| `A5-005` | 发布完成 | `read_view` | current_state 与 person_card fresh 且包含新对象 |
+| `A5-005` | 发布完成 | `read_view` | person_card 与 relationship_timeline fresh 且包含新状态 |
 | `A5-006` | 发布完成 | `receipt` + `history` | 回执可查；历史含发布条目 |
 | `A5-007` | 已发布 | `revert` + `read_view` | 撤销完成；全部 Core View 恢复一致；历史保留撤销条目 |
 | `A5-008` | 全旅程执行后 | 检查预览/发布一致性、零绕过、trust/closeness/人格判断 | 预览对象集==发布对象集；所有写经 ChangeSet；trust/closeness/人格判断不变 |
@@ -92,3 +92,7 @@ journey_step_result:
 ## 8. 完成定义
 
 只有 fixture、oracle、manifest、offline runner、implementation plan 和同一次 immutable `A5-001..008` passed result 存在，且所有 `A5-INV-*` 有正/反证明时，A5 才能标记 `verified`。未执行时必须保持 `not_executed`。
+
+## 9. Change Control 记录
+
+- v0.2（2026-07-24）：`read_view` 的 Core View 集合由 `current_state + person_card` 修订为 `person_card + relationship_timeline`。理由：固定合成 profile `a5_app_shell_v1` 复用 Micro 演示旅程，该旅程实际发布与恢复的 Core View 为 Micro 两视图；`current_state`（A2）是独立 profile 的投影，其固定策略不覆盖 Micro 对象的 `valid_time` 形状，跨 profile 复用会破坏 A2 合同边界。FR-006 的证明不因此减弱：发布使两视图前进到 rev_011、撤销使两视图恢复一致。下游（fixture/oracle/suite）按 v0.2 物化。

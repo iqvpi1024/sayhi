@@ -18,7 +18,7 @@
 
 ## 发现
 
-无 A5 blocking 产品歧义。`read_view` 的 Core View 集合在本切片闭合为 `current_state` 与 `person_card`（A2 已验证的第三个 Core View + Micro 人物卡）；影响预览的一致性比较以对象集/视图集为准，不做自然语言文本等价比较。
+无 A5 blocking 产品歧义。`read_view` 的 Core View 集合初稿为 `current_state + person_card`；v0.2 经 Change Control 修订为 `person_card + relationship_timeline`（Micro 旅程实际发布/恢复的视图），理由见合同 §9；影响预览的一致性比较以对象集/视图集为准，不做自然语言文本等价比较。
 
 ## 下一步
 

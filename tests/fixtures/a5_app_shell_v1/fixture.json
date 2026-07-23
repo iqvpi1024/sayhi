@@ -1,0 +1,33 @@
+{
+  "fixture_id": "a5_app_shell_v1",
+  "schema_version": "noetide.a5-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "a5_app_shell_v1",
+  "determinism": {"clock": "2031-10-15T02:00:00Z", "timezone": "UTC", "random_seed": 0},
+  "initial_data_revision": "rev_010",
+  "journey": {
+    "record": {"expected_source_id": "src_micro_001", "expected_receipt_id": "receipt_source_micro_001"},
+    "propose_source_id": "src_micro_001",
+    "changeset_id": "changeset_micro_001",
+    "approve_actor": "person_alpha",
+    "publish_idempotency_key": "a5_publish_001",
+    "revert_idempotency_key": "a5_revert_001",
+    "expected_publish_receipt_id": "receipt_publish_001",
+    "expected_published_revision": "rev_011",
+    "expected_compensation_receipt_id": "receipt_compensation_001",
+    "expected_compensation_revision": "rev_012",
+    "impact_preview": {"will_create": ["state_contact_002"], "will_modify": ["state_contact_001"], "views_affected": ["person_card", "relationship_timeline"]},
+    "review_presentation": {"candidate_ref": "changeset_micro_001", "evidence_citations": ["src_micro_001"]}
+  },
+  "cases": [
+    {"scenario_id": "A5-001", "steps": ["record"]},
+    {"scenario_id": "A5-002", "steps": ["record", "propose", "review"]},
+    {"scenario_id": "A5-003", "steps": ["record", "propose", "preview"]},
+    {"scenario_id": "A5-004", "steps": ["record", "propose", "confirm"]},
+    {"scenario_id": "A5-005", "steps": ["record", "propose", "confirm", "read_view"]},
+    {"scenario_id": "A5-006", "steps": ["record", "propose", "confirm", "receipt", "history"]},
+    {"scenario_id": "A5-007", "steps": ["record", "propose", "confirm", "revert", "read_view", "history"]},
+    {"scenario_id": "A5-008", "steps": ["record", "propose", "preview", "confirm", "revert", "audit"]}
+  ]
+}

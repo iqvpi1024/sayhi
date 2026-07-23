@@ -14,7 +14,7 @@ synthetic user shell_command (record|review|preview|confirm|read_view|receipt|hi
        review   -> presentation layer (pure function, read-only Candidate Envelope -> NL review items)
        preview  -> presentation layer (impact preview: object sets + view sets)
        confirm  -> runtime.approve + runtime.publish (ChangeSet atomic publish)
-       read_view-> runtime.view (current_state | person_card)
+       read_view-> runtime.view (person_card | relationship_timeline)
        receipt  -> store receipt query (read-only)
        history  -> store changeset history query (read-only)
        revert   -> runtime.revert (ChangeSet compensation)

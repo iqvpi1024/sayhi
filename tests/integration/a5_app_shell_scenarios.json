@@ -1,0 +1,15 @@
+{
+  "suite_id": "a5_app_shell_v1",
+  "fixture_ref": "tests/fixtures/a5_app_shell_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/a5_app_shell_v1/oracles.json",
+  "scenarios": [
+    {"scenario_id": "A5-001", "contract_refs": ["A5-INV-001"]},
+    {"scenario_id": "A5-002", "contract_refs": ["A5-INV-002", "A5-INV-006"]},
+    {"scenario_id": "A5-003", "contract_refs": ["A5-INV-003"]},
+    {"scenario_id": "A5-004", "contract_refs": ["A5-INV-001"]},
+    {"scenario_id": "A5-005", "contract_refs": ["A5-INV-001"]},
+    {"scenario_id": "A5-006", "contract_refs": ["A5-INV-001"]},
+    {"scenario_id": "A5-007", "contract_refs": ["A5-INV-004"]},
+    {"scenario_id": "A5-008", "contract_refs": ["A5-INV-001", "A5-INV-003", "A5-INV-005", "A5-INV-007"]}
+  ]
+}

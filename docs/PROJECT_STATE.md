@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-A-ACCESS-POLICY-001` |
-| 当前阶段 | `slice_verified` |
+| 当前工作切片 | `SLICE-MVP-A-APP-SHELL-001` |
+| 当前阶段 | `implementation_planned` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -61,6 +61,7 @@
 45. A4-TASK-003 已完成：`a4_testing_adapter.py` 完整实现 adapter protocol，contract 8/8 passed；fixture/oracle/contract module 未修改；official runner 属 A4-TASK-004。
 46. A4-TASK-004 已完成：official runner `a4-20260724.json` 同一次 run 8/8 passed/current；manifest 已绑定 current result；全量 regression 191 OK 无 skip；11 个 suite validator 全 PASSED。
 47. A4-TASK-005 已完成：Gate Review `A4_ACCESS_POLICY_GATE_REVIEW_2026-07-24.md` 结论 P0=0/P1=0；A4 切片 verified；recovery tag `a4-access-policy-rp-20260724` 已创建并推送。
+48. `DEC-MVP-A-APP-SHELL-001` 已选择 A5 应用壳切片；applicability review `pass_with_slice_contract_required`；`SPEC-A5-APP-SHELL-001` v0.2 已批准（含 Change Control：read_view 视图集合修订为 person_card+relationship_timeline）；traceability、`ADR-0009`、`ARCH-A5-APP-SHELL-001`、suite 物化与 `PLAN-MVP-A-A5-IMPL-001`（A5-TASK-001..005）已完成；preflight validator exit 0，业务测试 `not_executed`。
 
 ## 4. 真实验证结果
 
@@ -112,4 +113,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**A4 切片已 verified。下一步：Product Decision 选择后续切片（推荐 A5 应用壳：FR-001/005/006/007 可用性，依赖 A1-A4；备选 B4 对账，A2+B3 已满足），按 MASTER_DELIVERY_ROADMAP 执行。**
+**执行 A5-TASK-001（`app_shell.py` 呈现层纯函数），只允许任务卡列出的文件。**

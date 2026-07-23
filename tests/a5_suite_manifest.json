@@ -1,0 +1,80 @@
+{
+  "schema_version": "noetide.a5-suite-manifest.v1",
+  "suite_id": "a5_app_shell_v1",
+  "slice_id": "SLICE-MVP-A-APP-SHELL-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_executed",
+  "required_scenario_ids": [
+    "A5-001",
+    "A5-002",
+    "A5-003",
+    "A5-004",
+    "A5-005",
+    "A5-006",
+    "A5-007",
+    "A5-008"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-A-APP-SHELL-001"
+    ],
+    "contract_ref": "SPEC-A5-APP-SHELL-001",
+    "adr_refs": [
+      "ADR-0009"
+    ],
+    "architecture_ref": "ARCH-A5-APP-SHELL-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/a5_app_shell_v1/fixture.json",
+      "sha256": "2838b3e8c6fa8391d43a4ad26a05535c1db31be3a7ca360d93ff9a2d62c5ff93"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/a5_app_shell_v1/oracles.json",
+      "sha256": "99ee3aef7589103bc8473daa5b128b13d508aa6fb260bb58795988f16cf35f80"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/a5_app_shell_scenarios.json",
+      "sha256": "063d05241073f1ea184fe85e757318f5831143179c5913471b15b813f6c32c12"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/a5_app_shell_adapter_protocol.py",
+      "sha256": "f964bd621bdfd9ea1f90f773bac22f754675a6e477c951c602988ad43a37e7d5"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_a5_app_shell_contract.py",
+      "sha256": "826e61217d9294adcdc8e5eddcaeac1b52b822fb62e85cbcc5e6c1af644c9f89"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_a5_suite.py",
+      "sha256": "9e62b3d1f9426ceedb90ea059a8d204dafd72cb4903b8ee7cd1510804a9e9fae"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_a5_suite.py",
+      "sha256": "627936beb99570c06f2703707f6329b2e6f6e01a1c6afffa73a41bd4337b9a10"
+    }
+  ],
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}

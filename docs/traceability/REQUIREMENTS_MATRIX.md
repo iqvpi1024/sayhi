@@ -216,7 +216,7 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 |---|---|---|---|---|---|
 | `FR-001` | 壳 `record` 命令：Source append + receipt | `SPEC-A5-APP-SHELL-001` §2-§8；S3 导入语义；S7 数据目录 | `A5-001` | `TBD` | `not_executed` |
 | `FR-005` | 自然语言审查与影响预览（Derived 呈现） | `SPEC-A5-APP-SHELL-001` §2-§8；S5 §6.1 Candidate Envelope | `A5-002`、`A5-003`、`A5-008` | `TBD` | `not_executed` |
-| `FR-006` | 发布后 Core View 更新（current_state/person_card fresh） | `SPEC-A5-APP-SHELL-001` §2-§8；S3；A2 视图语义 | `A5-005`、`A5-007` | `TBD` | `not_executed` |
+| `FR-006` | 发布后 Core View 更新（person_card/relationship_timeline fresh） | `SPEC-A5-APP-SHELL-001` §2-§8；S3；A2 视图语义 | `A5-005`、`A5-007` | `TBD` | `not_executed` |
 | `FR-007` | ChangeSet 回执、历史与撤销 | `SPEC-A5-APP-SHELL-001` §2-§8；S3 ChangeSet 语义 | `A5-004`、`A5-006`、`A5-007` | `TBD` | `not_executed` |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。合同已批准（`A5-CONTRACT-REVIEW-001`）；仅授权 ADR/Architecture 与 suite 物化，不得开始业务代码。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`。suite 已物化（`tests/a5_suite_manifest.json`，preflight validator exit 0），合同测试保持 skipped；Implementation Plan `PLAN-MVP-A-A5-IMPL-001` 已批准，仅授权按任务卡施工。
