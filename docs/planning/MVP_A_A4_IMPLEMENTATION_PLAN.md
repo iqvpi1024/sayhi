@@ -24,7 +24,7 @@
 | Task | 交付物 | Contract / Test | 完成条件 | 状态 |
 |---|---|---|---|---|
 | `A4-TASK-001` | store 只读策略标注与 digest 辅助 | §2、`A4-001/007` | 对象标注只读可测；digest 前后一致可断言 | `done` (2026-07-24) |
-| `A4-TASK-002` | `access_policy.py` 纯函数判决器（Grant 有效性、交集/并集、sealed、fail closed、零写入） | §2-§6、`A4-001..008` | 全部 reason_code 与字段集确定；判决不产生 revision | `pending` |
+| `A4-TASK-002` | `access_policy.py` 纯函数判决器（Grant 有效性、交集/并集、sealed、fail closed、零写入） | §2-§6、`A4-001..008` | 全部 reason_code 与字段集确定；判决不产生 revision | `done` (2026-07-24) |
 | `A4-TASK-003` | `a4_testing_adapter.py` 与 A4 contract 集成 | §7-§8、`A4-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `pending` |
 | `A4-TASK-004` | A4 official runner、existing regression 与 immutable result | §7-§8 | A4 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `pending` |
 | `A4-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
