@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-A-CURRENT-STATE-001
-slice_id: SLICE-MVP-A-CURRENT-STATE-001
-current_phase: slice_verified
+handoff_id: HANDOFF-MVP-A-ENTITY-MERGE-001
+slice_id: SLICE-MVP-A-ENTITY-MERGE-001
+current_phase: product_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -16,35 +16,31 @@ release:
   url: https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview
   prerelease: true
   delivery_level: D1_synthetic_preview
-recovery_point:
-  tag: a2-current-state-rp-20260722
-  gate_review: docs/reviews/A2_CURRENT_STATE_GATE_REVIEW_2026-07-22.md (P0=0, P1=0)
-decision_ref: DEC-MVP-A-CURRENT-STATE-001
-spec_contract: SPEC-A2-CURRENT-STATE-001
-adr_ref: ADR-0006
-architecture_ref: ARCH-A2-CURRENT-STATE-001
-suite_manifest: tests/a2_suite_manifest.json (materialized, executed, passed, bound)
-implementation_plan: PLAN-MVP-A-A2-IMPL-001 (all 5 tasks completed)
-next_role: Product_Decider
-next_single_action: return_to_product_decision_for_next_slice (candidates per docs/planning/MASTER_DELIVERY_ROADMAP.md: A3 entity merge, A4 access policy, B4 reconciliation)
+latest_recovery_points:
+  - b2-episode-summary-rp-20260719
+  - b3-commitment-rp-20260722
+  - a2-current-state-rp-20260722
+decision_ref: DEC-MVP-A-ENTITY-MERGE-001
+spec_contract: none (applicability review required first)
+adr_ref: none
+suite_manifest: none
+implementation_plan: none
+next_role: Spec_Applicability_Reviewer
+next_single_action: execute_A3_spec_applicability_review (S1/S2/S3/S6 coverage of FR-011 slice)
 scope_in:
-  - reading roadmap and open questions to propose the next slice decision
+  - S1/S2/S3/S6 applicability review for entity merge/split slice
 scope_out:
   - real personal data
-  - D2/D3 production installer claims
-  - any business code before a new Product Decision exists
-  - moving or reusing any existing tag
-stop_condition: new Product Decision recorded; no implementation may start before it
+  - any A3 business code, fixture, oracle, ADR or suite before applicability review concludes
+  - automatic person merge, fuzzy identity matching, connectors, permissions runtime
+stop_condition: A3 applicability review recorded with explicit conclusion
 ```
 
 ## 当前事实
 
-- `v0.1.3-synthetic-preview` 是已发布的 GitHub prerelease，不得移动、重传或复用该 tag。
-- `.workbuddy/`、`Review-report/`、根目录 `test*.py/test_output.txt` 与 `tests/results/` 不读取、不修改、不提交。
-- B2 recovery point `b2-episode-summary-rp-20260719`、B3 recovery point `b3-commitment-rp-20260722` 均已推送；两切片 verified。
-- A2 切片已完成全流程：Decision → applicability → contract → traceability → ADR-0006/ARCH → suite 物化 → PLAN-MVP-A-A2-IMPL-001 → TASK-001..005。
-- A2 official runner `a2-20260722.json` 8/8 passed/current 已绑定 manifest；`a2-20260722-r2.json` 为同 commit/同 manifest 可复现性重跑（8/8 passed）。
-- A2 Gate Review `A2_CURRENT_STATE_GATE_REVIEW_2026-07-22.md` 结论 P0=0/P1=0；全量 configured-adapter regression 151 OK 无 skip；9 个 suite validator 全 PASSED；product/spec baseline 静态校验 PASSED。
-- A2 recovery tag `a2-current-state-rp-20260722` 已创建并推送；A2 切片 verified。
-- 路线图顺序：B4-RECONCILIATION-DIFF 依赖 A2+B3（两者均已完成）；下一切片必须由新 Product Decision 选择，候选 A3 实体合并、A4 权限、B4 对账。
-- 最终目标仍为 D2/D3 一键部署，见 `docs/releases/ONE_CLICK_DELIVERY_PLAN.md`；当前交付级别仅 D1 合成预览。
+- A2 切片 verified，recovery tag `a2-current-state-rp-20260722` 已推送；official suite 8/8 passed/current 已绑定。
+- `DEC-MVP-A-ENTITY-MERGE-001`（2026-07-24）选择 A3 作为 active slice，只授权 S1/S2/S3/S6 applicability review。
+- A3 范围：固定合成两个 Person Entity 的 merge proposal → 用户确认 → ChangeSet 原子发布（引用重定向 + `merged_into` 标记）→ split compensation；历史永不删除；trust/closeness/人格判断不自动修改。
+- A3 非目标：自动合并、模糊身份匹配、真实联系人导入、权限 runtime、UI、非 Person 合并。
+- 全量 configured-adapter regression 基线：151 OK 无 skip；9 个 suite validator 全 PASSED。
+- 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前仅 D1 合成预览。

@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-A-CURRENT-STATE-001` |
-| 当前阶段 | `slice_verified` |
+| 当前工作切片 | `SLICE-MVP-A-ENTITY-MERGE-001` |
+| 当前阶段 | `product_decided` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -52,6 +52,7 @@
 36. A2-TASK-003 已完成：`a2_testing_adapter.py` 完整实现 adapter protocol，contract 8/8 passed；fixture/oracle 未修改；official runner 属 A2-TASK-004。
 37. A2-TASK-004 已完成：official runner `a2-20260722.json` 同一次 run 8/8 passed/current；configured-adapter regression 151 OK 无 skip；9 个 suite validator 全 PASSED；manifest 已绑定 current result。
 38. A2-TASK-005 已完成：Gate Review `A2_CURRENT_STATE_GATE_REVIEW_2026-07-22.md` 结论 P0=0/P1=0；A2 切片 verified，recovery tag `a2-current-state-rp-20260722` 已推送。
+39. `DEC-MVP-A-ENTITY-MERGE-001` 已选择 A3 实体合并/拆分切片；只授权 applicability review，未授权业务代码。
 
 ## 4. 真实验证结果
 
@@ -92,4 +93,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**A2 切片已 verified 并创建 recovery point；下一步回到 Product Decision，按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 选择下一切片（候选：A3 实体合并、A4 权限、B4 对账），未经新 Decision 不得开始任何业务代码。**
+**执行 A3 SPEC applicability review（S1/S2/S3/S6 对 FR-011 切片的覆盖评估），禁止业务代码。**
