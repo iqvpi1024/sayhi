@@ -26,14 +26,14 @@ adr_ref: ADR-0007
 suite_manifest: tests/a3_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A3-IMPL-001 (docs/planning/MVP_A_A3_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A3_TASK_003 (a3_testing_adapter.py per task card)
+next_single_action: execute_A3_TASK_004 (official runner + manifest binding per task card)
 scope_in:
-  - A3-TASK-003 only: src/noetide_micro/a3_testing_adapter.py
+  - A3-TASK-004 only: official runner result + manifest binding fields
 scope_out:
   - real personal data
-  - A3-TASK-004+ (official runner, manifest binding), fixture/oracle/contract module changes
+  - oracle/fixture changes to fit implementation, A3-TASK-005 (gate review)
   - automatic person merge, fuzzy identity matching, connectors, permissions runtime
-stop_condition: A3 contract 8/8 passed with adapter configured
+stop_condition: A3 official run 8/8 passed/current bound in manifest
 ```
 
 ## 当前事实
