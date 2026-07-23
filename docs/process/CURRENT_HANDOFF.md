@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
 slice_id: SLICE-MVP-A-ACCESS-POLICY-001
-current_phase: suite_materialized
+current_phase: implementation_planned
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -25,17 +25,17 @@ decision_ref: DEC-MVP-A-ACCESS-POLICY-001
 spec_contract: SPEC-A4-ACCESS-POLICY-001 (approved)
 adr_ref: ADR-0008
 suite_manifest: tests/a4_suite_manifest.json (materialized, not_executed)
-implementation_plan: none
-next_role: Planner
-next_single_action: create_A4_implementation_plan_and_task_cards (PLAN-MVP-A-A4-IMPL-001)
+implementation_plan: PLAN-MVP-A-A4-IMPL-001 (docs/planning/MVP_A_A4_IMPLEMENTATION_PLAN.md)
+next_role: Implementer
+next_single_action: execute_A4_TASK_001 (store read-only policy label helpers per task card)
 scope_in:
-  - A4 implementation plan and task cards only
+  - A4-TASK-001 only: store.py read-only helpers, test_a4_task_001_store.py
 scope_out:
   - real personal data
-  - any A4 business code; fixture/oracle semantic changes (frozen since materialization)
+  - A4-TASK-002+ files, adapter, official runner, fixture/oracle changes
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A4 implementation plan and task cards recorded
+stop_condition: A4-TASK-001 targeted store tests passed and recorded
 ```
 
 ## 当前事实

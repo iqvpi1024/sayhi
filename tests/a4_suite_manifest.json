@@ -38,17 +38,17 @@
     {
       "role": "fixture",
       "path": "tests/fixtures/a4_access_policy_v1/fixture.json",
-      "sha256": "2a0c9fb0781ed69162fe45cb0339583d7779b679749f80053cdc4b9e06f7a2bd"
+      "sha256": "23f1c3c59eef8c26e0f0b3b7eb04c0a926fd9590a74f53a97d61b1c23614f90d"
     },
     {
       "role": "oracle",
       "path": "tests/fixtures/a4_access_policy_v1/oracles.json",
-      "sha256": "ea7cc1ef2bea5580166aba6eed014ca5c0dec0f8a4401091cce1a388c544c7fc"
+      "sha256": "474db23768061abf1a88f894049a66ba92ba404be3d890c8b29d2d9596c0df2c"
     },
     {
       "role": "scenario_plan",
       "path": "tests/integration/a4_access_policy_scenarios.json",
-      "sha256": "b4a7241dc098f4368bad7f85240df14dc4f6b59208682b34b2c0e6376f5701f6"
+      "sha256": "9987e6d35f9d791959978a3df4bbe8512b51f73e426425a3f54ad4548280d654"
     },
     {
       "role": "adapter_protocol",
