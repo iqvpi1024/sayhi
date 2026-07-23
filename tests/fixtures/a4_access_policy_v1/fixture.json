@@ -1,0 +1,106 @@
+{
+  "fixture_id": "a4_access_policy_v1",
+  "schema_version": "noetide.a4-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "a4_access_policy_v1",
+  "determinism": {
+    "clock": "2032-06-10T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "initial_data_revision": "rev_040",
+  "callers": [
+    {"caller_ref": "caller_owner", "caller_kind": "owner"},
+    {"caller_ref": "caller_unknown", "caller_kind": "unknown"}
+  ],
+  "known_purposes": ["synthetic_review", "synthetic_export"],
+  "known_compartments": ["personal", "health", "finance"],
+  "policy_labeled_objects": [
+    {"object_id": "obj_normal", "object_type": "entity", "sensitivity": "normal", "compartments": ["personal"], "fields": {"label": "synthetic normal label", "note": "synthetic normal note", "trust": 0.5}},
+    {"object_id": "obj_restricted", "object_type": "assertion", "sensitivity": "restricted", "compartments": ["personal"], "fields": {"label": "synthetic restricted label", "note": "synthetic restricted note", "secret_detail": "synthetic restricted detail"}},
+    {"object_id": "obj_multi", "object_type": "assertion", "sensitivity": "private", "compartments": ["personal", "health"], "fields": {"label": "synthetic multi label", "note": "synthetic multi note", "health_detail": "synthetic health detail"}},
+    {"object_id": "obj_conflict", "object_type": "assertion", "sensitivity": "private", "compartments": ["personal", "finance"], "fields": {"label": "synthetic conflict label", "note": "synthetic conflict note"}},
+    {"object_id": "obj_sealed", "object_type": "entity", "sensitivity": "sealed", "compartments": ["personal"], "fields": {"label": "synthetic sealed label", "note": "synthetic sealed note"}},
+    {"object_id": "obj_no_policy", "object_type": "entity", "sensitivity": "normal", "compartments": ["personal"], "fields": {"label": "synthetic orphan label"}},
+    {"object_id": "obj_legacy", "object_type": "entity", "sensitivity": "normal", "compartments": ["legacy_unknown"], "fields": {"label": "synthetic legacy label"}}
+  ],
+  "compartment_policies": [
+    {"compartment": "personal", "allow_fields": ["label", "note", "trust"], "deny_fields": []},
+    {"compartment": "health", "allow_fields": ["label"], "deny_fields": ["health_detail"]},
+    {"compartment": "finance", "unresolvable": true}
+  ],
+  "grants": [
+    {"grant_id": "grant_a4_full", "caller_ref": "caller_owner", "purpose": "synthetic_review", "actions": ["read", "search", "summarize"], "resource_refs": ["obj_normal"], "allowed_fields": ["label", "note", "trust"], "denied_fields": [], "valid_from": "2032-06-01T00:00:00Z", "valid_until": "2032-06-30T00:00:00Z"},
+    {"grant_id": "grant_a4_partial", "caller_ref": "caller_owner", "purpose": "synthetic_review", "actions": ["read"], "resource_refs": ["obj_restricted"], "allowed_fields": ["label", "note"], "denied_fields": ["secret_detail"], "valid_from": "2032-06-01T00:00:00Z", "valid_until": "2032-06-30T00:00:00Z"},
+    {"grant_id": "grant_a4_health", "caller_ref": "caller_owner", "purpose": "synthetic_review", "actions": ["read"], "resource_refs": ["obj_multi", "obj_conflict"], "allowed_fields": ["label"], "denied_fields": ["health_detail"], "valid_from": "2032-06-01T00:00:00Z", "valid_until": "2032-06-30T00:00:00Z"},
+    {"grant_id": "grant_a4_expired", "caller_ref": "caller_owner", "purpose": "synthetic_review", "actions": ["read"], "resource_refs": ["obj_normal"], "allowed_fields": ["label", "note", "trust"], "denied_fields": [], "valid_from": "2032-05-01T00:00:00Z", "valid_until": "2032-05-31T00:00:00Z"},
+    {"grant_id": "grant_a4_export", "caller_ref": "caller_owner", "purpose": "synthetic_export", "actions": ["read"], "resource_refs": ["obj_normal"], "allowed_fields": ["label", "note"], "denied_fields": [], "valid_from": "2032-06-01T00:00:00Z", "valid_until": "2032-06-30T00:00:00Z"}
+  ],
+  "cases": [
+    {
+      "scenario_id": "A4-001",
+      "database_identity": "a4_case_001",
+      "requests": [
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_normal"], "field_paths": ["label", "note", "trust"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"}
+      ]
+    },
+    {
+      "scenario_id": "A4-002",
+      "database_identity": "a4_case_002",
+      "requests": [
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_restricted"], "field_paths": ["label", "note", "secret_detail"], "authorization_refs": ["grant_a4_partial"], "requested_at": "2032-06-10T09:00:00Z"}
+      ]
+    },
+    {
+      "scenario_id": "A4-003",
+      "database_identity": "a4_case_003",
+      "requests": [
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_multi"], "field_paths": ["label", "health_detail"], "authorization_refs": ["grant_a4_health"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_conflict"], "field_paths": ["label"], "authorization_refs": ["grant_a4_health"], "requested_at": "2032-06-10T09:00:00Z"}
+      ]
+    },
+    {
+      "scenario_id": "A4-004",
+      "database_identity": "a4_case_004",
+      "requests": [
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_normal"], "field_paths": ["label"], "authorization_refs": ["grant_a4_expired"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_normal"], "field_paths": ["label"], "authorization_refs": ["grant_a4_export"], "requested_at": "2032-06-10T09:00:00Z"}
+      ]
+    },
+    {
+      "scenario_id": "A4-005",
+      "database_identity": "a4_case_005",
+      "requests": [
+        {"caller_ref": "caller_unknown", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_normal"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_delete", "action": "read", "resource_refs": ["obj_normal"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_legacy"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_no_policy"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"}
+      ]
+    },
+    {
+      "scenario_id": "A4-006",
+      "database_identity": "a4_case_006",
+      "requests": [
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_sealed"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "search", "resource_refs": ["obj_sealed"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "summarize", "resource_refs": ["obj_sealed"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"}
+      ]
+    },
+    {
+      "scenario_id": "A4-007",
+      "database_identity": "a4_case_007",
+      "replay_scenarios": ["A4-001", "A4-002", "A4-003", "A4-004", "A4-005", "A4-006"],
+      "requests": []
+    },
+    {
+      "scenario_id": "A4-008",
+      "database_identity": "a4_case_008",
+      "via_derived_view": true,
+      "requests": [
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_restricted"], "field_paths": ["label", "note", "secret_detail"], "authorization_refs": ["grant_a4_partial"], "requested_at": "2032-06-10T09:00:00Z"},
+        {"caller_ref": "caller_owner", "purpose": "synthetic_review", "action": "read", "resource_refs": ["obj_sealed"], "field_paths": ["label"], "authorization_refs": ["grant_a4_full"], "requested_at": "2032-06-10T09:00:00Z"}
+      ]
+    }
+  ]
+}

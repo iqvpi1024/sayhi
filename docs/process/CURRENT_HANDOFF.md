@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
 slice_id: SLICE-MVP-A-ACCESS-POLICY-001
-current_phase: adr_accepted
+current_phase: suite_materialized
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -24,18 +24,18 @@ latest_recovery_points:
 decision_ref: DEC-MVP-A-ACCESS-POLICY-001
 spec_contract: SPEC-A4-ACCESS-POLICY-001 (approved)
 adr_ref: ADR-0008
-suite_manifest: none
+suite_manifest: tests/a4_suite_manifest.json (materialized, not_executed)
 implementation_plan: none
-next_role: Suite_Materializer
-next_single_action: materialize_A4_suite (fixture/oracle/scenarios/protocol/contract module/runner/validator/manifest; business tests stay not_executed)
+next_role: Planner
+next_single_action: create_A4_implementation_plan_and_task_cards (PLAN-MVP-A-A4-IMPL-001)
 scope_in:
-  - A4 suite materialization only (no business code, no adapter)
+  - A4 implementation plan and task cards only
 scope_out:
   - real personal data
-  - any A4 business code or adapter; fixture/oracle semantic changes after materialization
+  - any A4 business code; fixture/oracle semantic changes (frozen since materialization)
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A4 suite materialized, preflight validator exit 0, contract tests skipped without adapter
+stop_condition: A4 implementation plan and task cards recorded
 ```
 
 ## 当前事实

@@ -204,6 +204,6 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-012` | 查询层判决强制执行与 fail closed；字段过滤；拒绝非泄露 | `SPEC-A4-ACCESS-POLICY-001` §2-§8；S4 §6.2-§6.4、§9、§12-§14；S1 Policy Subject 字段 | `A4-001..008`（suite 待物化） | `TBD` | `not_executed` |
+| `FR-012` | 查询层判决强制执行与 fail closed；字段过滤；拒绝非泄露 | `SPEC-A4-ACCESS-POLICY-001` §2-§8；S4 §6.2-§6.4、§9、§12-§14；S1 Policy Subject 字段 | `A4-001..008`（suite 已物化于 `tests/a4_suite_manifest.json`） | `TBD` | `not_executed` |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。ADR-0008/ARCH 已接受；仅授权 suite 物化，不得编写业务代码。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`。suite 已物化但无 adapter，合同测试保持 skipped；仅授权 Implementation Plan，不得开始业务代码。

@@ -1,0 +1,15 @@
+{
+  "suite_id": "a4_access_policy_v1",
+  "fixture_ref": "tests/fixtures/a4_access_policy_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/a4_access_policy_v1/oracles.json",
+  "scenarios": [
+    {"scenario_id": "A4-001", "contract_refs": ["A4-INV-001"]},
+    {"scenario_id": "A4-002", "contract_refs": ["A4-INV-001", "A4-INV-002"]},
+    {"scenario_id": "A4-003", "contract_refs": ["A4-INV-002"]},
+    {"scenario_id": "A4-004", "contract_refs": ["A4-INV-006"]},
+    {"scenario_id": "A4-005", "contract_refs": ["A4-INV-001", "A4-INV-003"]},
+    {"scenario_id": "A4-006", "contract_refs": ["A4-INV-005"]},
+    {"scenario_id": "A4-007", "contract_refs": ["A4-INV-004"]},
+    {"scenario_id": "A4-008", "contract_refs": ["A4-INV-003", "A4-INV-007"]}
+  ]
+}
