@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
 slice_id: SLICE-MVP-A-ACCESS-POLICY-001
-current_phase: implementation_in_progress
+current_phase: slice_verified
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -21,13 +21,14 @@ latest_recovery_points:
   - b3-commitment-rp-20260722
   - a2-current-state-rp-20260722
   - a3-entity-merge-rp-20260724
+  - a4-access-policy-rp-20260724
 decision_ref: DEC-MVP-A-ACCESS-POLICY-001
 spec_contract: SPEC-A4-ACCESS-POLICY-001 (approved)
 adr_ref: ADR-0008
 suite_manifest: tests/a4_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A4-IMPL-001 (docs/planning/MVP_A_A4_IMPLEMENTATION_PLAN.md)
-next_role: Implementer
-next_single_action: execute_A4_TASK_005 (Gate Review, state/trace sync, recovery tag a4-access-policy-rp-20260724)
+next_role: Product Decision
+next_single_action: product_decision_for_next_slice (recommended A5 application shell; alternative B4 reconciliation)
 scope_in:
   - A4-TASK-005 only: review doc, state/trace/handoff sync, recovery record
 scope_out:
@@ -35,7 +36,7 @@ scope_out:
   - fixture/oracle/contract module changes, oracle edits to fit implementation
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: Gate Review P0/P1=0 recorded and recovery tag pushed
+stop_condition: next slice Product Decision recorded; no business code before applicability review
 ```
 
 ## 当前事实
