@@ -1069,6 +1069,51 @@ class SemanticStore:
             "SELECT merge_ref FROM split_records ORDER BY split_id"
         )]
 
+
+    # A4 additive: read-only policy label and digest helpers for query-time access
+    # policy evaluation. These helpers never write; policy decisions stay Derived.
+
+    def object_policy_labels(self, object_id: str) -> JsonObject | None:
+        """Read-only S1 policy labels for one Canonical object, or None if absent."""
+        payload = self.canonical_object_or_none(object_id)
+        if payload is None:
+            return None
+        compartments = payload.get("compartments")
+        return {
+            "object_id": object_id,
+            "sensitivity": payload.get("sensitivity"),
+            "compartments": list(compartments) if isinstance(compartments, list) else [],
+            "owner_ref": payload.get("owner_ref"),
+        }
+
+    def policy_labeled_objects(self) -> list[JsonObject]:
+        """Read-only listing of Canonical objects carrying S1 policy labels."""
+        labeled: list[JsonObject] = []
+        for summary in self.canonical_object_summaries():
+            payload = summary["payload"]
+            if "sensitivity" in payload or "compartments" in payload:
+                compartments = payload.get("compartments")
+                labeled.append(
+                    {
+                        "object_id": summary["object_id"],
+                        "object_type": summary["object_type"],
+                        "sensitivity": payload.get("sensitivity"),
+                        "compartments": list(compartments) if isinstance(compartments, list) else [],
+                        "owner_ref": payload.get("owner_ref"),
+                    }
+                )
+        return labeled
+
+    def canonical_object_digest(self, object_id: str) -> str:
+        """Deterministic SHA-256 digest of one Canonical object payload."""
+        return _canonical_digest(self.canonical_object(object_id))
+
+    def canonical_layer_digest(self) -> str:
+        """Deterministic digest over all Canonical objects for zero-write checks."""
+        snapshot = self.seed_snapshot()
+        return _canonical_digest({"data_revision": snapshot["data_revision"], "objects": snapshot["objects"]})
+
+
 def _object_id(item: Mapping[str, Any]) -> str:
     for key in (
         "entity_id",

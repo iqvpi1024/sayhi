@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
 slice_id: SLICE-MVP-A-ACCESS-POLICY-001
-current_phase: implementation_planned
+current_phase: implementation_in_progress
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -27,15 +27,15 @@ adr_ref: ADR-0008
 suite_manifest: tests/a4_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A4-IMPL-001 (docs/planning/MVP_A_A4_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A4_TASK_001 (store read-only policy label helpers per task card)
+next_single_action: execute_A4_TASK_002 (access_policy.py pure-function policy evaluator per task card)
 scope_in:
-  - A4-TASK-001 only: store.py read-only helpers, test_a4_task_001_store.py
+  - A4-TASK-002 only: access_policy.py, test_a4_task_002_access_policy.py
 scope_out:
   - real personal data
-  - A4-TASK-002+ files, adapter, official runner, fixture/oracle changes
+  - A4-TASK-003+ files, adapter, official runner, fixture/oracle changes
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A4-TASK-001 targeted store tests passed and recorded
+stop_condition: A4-TASK-002 targeted evaluator tests passed and recorded
 ```
 
 ## 当前事实
@@ -46,5 +46,6 @@ stop_condition: A4-TASK-001 targeted store tests passed and recorded
 - A4 非目标：多用户、家庭授权、数字遗产、sealed 紧急恢复、外部 Agent/MCP runtime、策略编辑器 UI、真实数据。
 - A4 applicability review `A4-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`（2026-07-24）。
 - `SPEC-A4-ACCESS-POLICY-001` 已批准（`A4-CONTRACT-REVIEW-001`，2026-07-24）。
+- A4-TASK-001 已完成并验证：store 只读策略标注/digest 辅助，定向 6/6 passed，regression 175 OK（8 A4 contract skipped）。
 - 全量 configured-adapter regression 基线：169 OK 无 skip；10 个 suite validator 全 PASSED。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。

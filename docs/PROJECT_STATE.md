@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-ACCESS-POLICY-001` |
-| 当前阶段 | `implementation_planned` |
+| 当前阶段 | `implementation_in_progress` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -53,6 +53,10 @@
 37. A2-TASK-004 已完成：official runner `a2-20260722.json` 同一次 run 8/8 passed/current；configured-adapter regression 151 OK 无 skip；9 个 suite validator 全 PASSED；manifest 已绑定 current result。
 38. A2-TASK-005 已完成：Gate Review `A2_CURRENT_STATE_GATE_REVIEW_2026-07-22.md` 结论 P0=0/P1=0；A2 切片 verified，recovery tag `a2-current-state-rp-20260722` 已推送。
 39. `DEC-MVP-A-ENTITY-MERGE-001` 已选择 A3 实体合并/拆分切片；只授权 applicability review，未授权业务代码。
+40. A3 executable suite、Implementation Plan、TASK-001..005 与 Gate Review 均已完成；A3 切片 verified，recovery tag `a3-entity-merge-rp-20260724` 已推送。
+41. `DEC-MVP-A-ACCESS-POLICY-001` 已选择 A4 查询层权限切片；applicability review `A4-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`。
+42. `SPEC-A4-ACCESS-POLICY-001` 已批准；A4 traceability、`ADR-0008`、`ARCH-A4-ACCESS-POLICY-001`、suite 物化与 `PLAN-MVP-A-A4-IMPL-001`（A4-TASK-001..005）已完成。
+43. A4-TASK-001 已完成：store 新增只读策略标注辅助（`object_policy_labels`/`policy_labeled_objects`）与 canonical digest 辅助（`canonical_object_digest`/`canonical_layer_digest`）；定向 6/6 passed，configured-adapter regression 175 OK、8 A4 contract skipped；A4 official suite 仍 `not_executed`。
 
 ## 4. 真实验证结果
 
@@ -87,6 +91,7 @@
 | A3-TASK-003 | contract 8/8 passed（adapter）；全量 regression 169 OK 无 skip；official runner 未执行 |
 | A3 官方 suite | `a3-20260724.json`：8/8 passed/current；全量 regression 169 OK；manifest 已绑定 |
 | A3 Gate Review | `A3_ENTITY_MERGE_GATE_REVIEW_2026-07-24.md`：P0=0、P1=0 |
+| A4-TASK-001 | 定向 6/6 passed（test_a4_task_001_store）；configured-adapter regression 175 OK、8 A4 contract skipped；A4 official suite `not_executed` |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -98,4 +103,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A4-TASK-001（store 只读策略标注与 digest 辅助），只允许任务卡列出的文件。**
+**执行 A4-TASK-002（`access_policy.py` 纯函数判决器），只允许任务卡列出的文件。**
