@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
-slice_id: SLICE-MVP-A-ACCESS-POLICY-001
-current_phase: slice_verified
+handoff_id: HANDOFF-MVP-A-APP-SHELL-001
+slice_id: SLICE-MVP-A-APP-SHELL-001
+current_phase: implementation_planned
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -22,21 +22,21 @@ latest_recovery_points:
   - a2-current-state-rp-20260722
   - a3-entity-merge-rp-20260724
   - a4-access-policy-rp-20260724
-decision_ref: DEC-MVP-A-ACCESS-POLICY-001
-spec_contract: SPEC-A4-ACCESS-POLICY-001 (approved)
-adr_ref: ADR-0008
-suite_manifest: tests/a4_suite_manifest.json (materialized, not_executed)
-implementation_plan: PLAN-MVP-A-A4-IMPL-001 (docs/planning/MVP_A_A4_IMPLEMENTATION_PLAN.md)
-next_role: Product Decision
-next_single_action: product_decision_for_next_slice (recommended A5 application shell; alternative B4 reconciliation)
+decision_ref: DEC-MVP-A-APP-SHELL-001
+spec_contract: SPEC-A5-APP-SHELL-001 v0.2 (approved)
+adr_ref: ADR-0009
+suite_manifest: tests/a5_suite_manifest.json (materialized, not_executed)
+implementation_plan: PLAN-MVP-A-A5-IMPL-001 (docs/planning/MVP_A_A5_IMPLEMENTATION_PLAN.md)
+next_role: Implementer
+next_single_action: execute_A5_TASK_001 (app_shell.py presentation-layer pure functions per task card)
 scope_in:
-  - A4-TASK-005 only: review doc, state/trace/handoff sync, recovery record
+  - A5-TASK-001 only: app_shell.py, test_a5_task_001_app_shell.py
 scope_out:
   - real personal data
-  - fixture/oracle/contract module changes, oracle edits to fit implementation
+  - A5-TASK-002+ files, adapter, official runner, fixture/oracle changes
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: next slice Product Decision recorded; no business code before applicability review
+stop_condition: A5-TASK-001 targeted presentation tests passed and recorded
 ```
 
 ## 当前事实
