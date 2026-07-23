@@ -187,3 +187,13 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `FR-105` | current_state 的 stale 检测与重建等价（MVP-A 切片；增量对账/失败队列属 B4） | `SPEC-A2-CURRENT-STATE-001` §3、§5-§7；S3 §8-§14；S6 §6-§14 | `A2-004/005/006/007` | `src/noetide_micro/current_state.py`、`src/noetide_micro/store.py`、`src/noetide_micro/a2_testing_adapter.py` | `passed` |
 
 状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。official runner `a2-20260722.json` 8/8 passed/current 已绑定；Gate Review P0=0/P1=0，切片 verified，recovery tag `a2-current-state-rp-20260722`。
+
+## 4.9 Active Slice：A3 实体合并候选与拆分回滚
+
+`SLICE-MVP-A-ENTITY-MERGE-001` 只实现 FR-011 的固定合成 MVP-A 子集：两个合成 Person Entity 的 merge proposal、用户确认的原子发布（引用重定向 + `merged_into` + `merge_record`）与 split compensation 等价恢复。它不代表自动合并、模糊身份匹配、非 Person 合并或权限 runtime。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-011` | merge proposal → 确认 → ChangeSet 原子发布；split compensation 等价恢复 | `SPEC-A3-ENTITY-MERGE-001` §2-§9；S1 Entity 状态机/`merged_into`/SOM-AT-017；S3 merge/split operation | `A3-001..008`（suite 待物化） | `TBD` | `not_executed` |
+
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。仅授权 ADR/Architecture 选择，不得物化 suite 或编写业务代码。
