@@ -1,0 +1,80 @@
+{
+  "schema_version": "noetide.a3-suite-manifest.v1",
+  "suite_id": "a3_entity_merge_v1",
+  "slice_id": "SLICE-MVP-A-ENTITY-MERGE-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "not_executed",
+  "required_scenario_ids": [
+    "A3-001",
+    "A3-002",
+    "A3-003",
+    "A3-004",
+    "A3-005",
+    "A3-006",
+    "A3-007",
+    "A3-008"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-A-ENTITY-MERGE-001"
+    ],
+    "contract_ref": "SPEC-A3-ENTITY-MERGE-001",
+    "adr_refs": [
+      "ADR-0007"
+    ],
+    "architecture_ref": "ARCH-A3-ENTITY-MERGE-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/a3_entity_merge_v1/fixture.json",
+      "sha256": "0462e4e02d7c13342e3684d382b7ae3ff52dd6047b298c129a021ed033f711ed"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/a3_entity_merge_v1/oracles.json",
+      "sha256": "b49a0b42471c92b1cc582dbc1783a989c1576832b890a955ac4d8221749ebe0e"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/a3_entity_merge_scenarios.json",
+      "sha256": "6d10895aa1195c02b907fc3309e8240298a2a495e555914edbc9ead89d1c489f"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/a3_entity_merge_adapter_protocol.py",
+      "sha256": "f7065ddc2c54a20e97968dc4f901bdea3bb40c64a7a9f5d867b1c909889e8769"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_a3_entity_merge_contract.py",
+      "sha256": "0073b75fa6a1e32fff4d881a13ae7f1f56c4f9ef58490185f38de194e2a9b4cd"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_a3_suite.py",
+      "sha256": "eada05abbf4b91817ab77cc4fec981b6ceaff60bf1110115f0fbd9890c52c422"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_a3_suite.py",
+      "sha256": "8abcd882ab033ea1f444eb525b9e6a501e6b0561c4936868682829b024af6389"
+    }
+  ],
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}

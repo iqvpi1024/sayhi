@@ -1,0 +1,100 @@
+{
+  "fixture_id": "a3_entity_merge_v1",
+  "schema_version": "noetide.a3-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "a3_entity_merge_v1",
+  "determinism": {
+    "clock": "2032-05-10T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "shared_entities": [
+    {"entity_id": "person_delta", "entity_kind": "synthetic_person", "identity_status": "active", "synthetic": true},
+    {"entity_id": "person_epsilon", "entity_kind": "synthetic_person", "identity_status": "active", "synthetic": true},
+    {"entity_id": "person_zeta", "entity_kind": "synthetic_person", "identity_status": "active", "synthetic": true}
+  ],
+  "shared_sources": [
+    {"source_id": "src_a3_delta_001", "content": "synthetic source note about person_delta", "synthetic": true},
+    {"source_id": "src_a3_epsilon_001", "content": "synthetic source note about person_epsilon", "synthetic": true}
+  ],
+  "shared_references": [
+    {"ref_kind": "relationship_party", "object_id": "relationship_a3_001", "field": "party_ref", "value": "person_delta"},
+    {"ref_kind": "relationship_party", "object_id": "relationship_a3_002", "field": "party_ref", "value": "person_epsilon"},
+    {"ref_kind": "state_subject", "object_id": "state_a3_001", "field": "subject_ref", "value": "person_delta"},
+    {"ref_kind": "assertion_subject", "object_id": "assertion_a3_001", "field": "subject_ref", "value": "person_delta"}
+  ],
+  "protected_layers": {
+    "trust_closeness": {"person_delta": {"trust": 0.4, "closeness": 0.6}, "person_epsilon": {"trust": 0.5, "closeness": 0.3}},
+    "personality_judgments": {"person_delta": "synthetic reserved personality hypothesis", "person_epsilon": "synthetic calm hypothesis"}
+  },
+  "merge_candidate": {
+    "operation": "merge",
+    "source_entity_ref": "person_delta",
+    "target_entity_ref": "person_epsilon",
+    "reason": "synthetic duplicate identity confirmed by user",
+    "synthetic_profile_id": "a3_entity_merge_v1"
+  },
+  "cases": [
+    {
+      "scenario_id": "A3-001",
+      "database_identity": "a3_case_001",
+      "initial_data_revision": "rev_030",
+      "operations": ["publish_merge"]
+    },
+    {
+      "scenario_id": "A3-002",
+      "database_identity": "a3_case_002",
+      "initial_data_revision": "rev_030",
+      "invalid_merge_attempts": [
+        {"operation": "merge", "source_entity_ref": "person_delta", "target_entity_ref": "person_epsilon", "reason": null, "synthetic_profile_id": "a3_entity_merge_v1"},
+        {"operation": "merge", "source_entity_ref": "person_delta", "target_entity_ref": "person_delta", "reason": "self merge", "synthetic_profile_id": "a3_entity_merge_v1"},
+        {"operation": "merge", "source_entity_ref": "person_delta", "target_entity_ref": "person_epsilon", "reason": "wrong profile", "synthetic_profile_id": "unexpected_profile"},
+        {"operation": "merge", "source_entity_ref": "person_unknown", "target_entity_ref": "person_epsilon", "reason": "unknown entity", "synthetic_profile_id": "a3_entity_merge_v1"}
+      ],
+      "operations": ["attempt_invalid_merges"]
+    },
+    {
+      "scenario_id": "A3-003",
+      "database_identity": "a3_case_003",
+      "initial_data_revision": "rev_030",
+      "operations": ["publish_merge", "read_history_and_views"]
+    },
+    {
+      "scenario_id": "A3-004",
+      "database_identity": "a3_case_004",
+      "initial_data_revision": "rev_030",
+      "failure_point": "entity_merge.mid_redirect",
+      "operations": ["publish_merge"]
+    },
+    {
+      "scenario_id": "A3-005",
+      "database_identity": "a3_case_005",
+      "initial_data_revision": "rev_030",
+      "operations": ["publish_merge", "publish_split"]
+    },
+    {
+      "scenario_id": "A3-006",
+      "database_identity": "a3_case_006",
+      "initial_data_revision": "rev_030",
+      "operations": ["publish_merge", "publish_split", "read_audit_chain"]
+    },
+    {
+      "scenario_id": "A3-007",
+      "database_identity": "a3_case_007",
+      "initial_data_revision": "rev_030",
+      "operations": ["publish_merge", "publish_split", "check_protected_layers"]
+    },
+    {
+      "scenario_id": "A3-008",
+      "database_identity": "a3_case_008",
+      "initial_data_revision": "rev_030",
+      "invalid_split_attempts": [
+        {"operation": "split", "merge_ref": "merge_unknown", "reason": "unknown merge ref"},
+        {"operation": "split", "merge_ref": "<published_merge_id>", "reason": "repeated split"},
+        {"operation": "split", "merge_ref": null, "reason": "missing merge ref"}
+      ],
+      "operations": ["publish_merge", "publish_split", "attempt_invalid_splits"]
+    }
+  ]
+}

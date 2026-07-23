@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-ENTITY-MERGE-001` |
-| 当前阶段 | `adr_accepted` |
+| 当前阶段 | `suite_materialized` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -93,4 +93,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**物化 A3 executable suite（fixture/oracle/scenarios/protocol/contract module/runner/validator/manifest），业务测试保持 `not_executed`，禁止业务代码。**
+**建立 A3 Implementation Plan 与任务卡（PLAN-MVP-A-A3-IMPL-001），禁止业务代码。**

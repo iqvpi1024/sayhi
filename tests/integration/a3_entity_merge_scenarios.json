@@ -1,0 +1,15 @@
+{
+  "suite_id": "a3_entity_merge_v1",
+  "fixture_ref": "tests/fixtures/a3_entity_merge_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/a3_entity_merge_v1/oracles.json",
+  "scenarios": [
+    {"scenario_id": "A3-001", "contract_refs": ["A3-INV-001", "A3-INV-002"]},
+    {"scenario_id": "A3-002", "contract_refs": ["A3-INV-001", "A3-INV-007"]},
+    {"scenario_id": "A3-003", "contract_refs": ["A3-INV-003", "A3-INV-006"]},
+    {"scenario_id": "A3-004", "contract_refs": ["A3-INV-002"]},
+    {"scenario_id": "A3-005", "contract_refs": ["A3-INV-001", "A3-INV-004"]},
+    {"scenario_id": "A3-006", "contract_refs": ["A3-INV-003"]},
+    {"scenario_id": "A3-007", "contract_refs": ["A3-INV-005"]},
+    {"scenario_id": "A3-008", "contract_refs": ["A3-INV-007"]}
+  ]
+}

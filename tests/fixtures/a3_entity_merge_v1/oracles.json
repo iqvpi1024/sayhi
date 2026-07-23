@@ -1,0 +1,14 @@
+{
+  "oracle_id": "a3_entity_merge_v1",
+  "schema_version": "noetide.a3-oracle.v1",
+  "scenarios": {
+    "A3-001": {"result": {"status": "merge_published", "source_entity_ref": "person_delta", "target_entity_ref": "person_epsilon", "source_identity_status": "merged", "merged_into": "person_epsilon", "redirected_references": 3, "merge_record_complete": true, "data_revision": "rev_031"}, "forbidden_mutations": ["source_records", "trust_closeness", "personality_judgments"]},
+    "A3-002": {"result": {"status": "all_failed", "failed_attempts": 4, "reason_codes": ["merge_reason_required", "merge_source_equals_target", "unexpected_synthetic_profile", "merge_entity_not_found"], "data_revision": "rev_030"}, "forbidden_mutations": ["entities", "relationships", "states", "assertions", "merge_records", "revisions"]},
+    "A3-003": {"result": {"status": "history_and_views_read", "source_history_visible": true, "source_assertions_visible": true, "core_views": {"person_card": "stale", "relationship_timeline": "stale", "current_state": "stale"}, "fake_fresh": false, "data_revision": "rev_031"}, "forbidden_mutations": ["source_records", "historical_revisions"]},
+    "A3-004": {"result": {"status": "failed", "reason_code": "merge_redirect_failed", "canonical_readable": true, "pre_merge_state_preserved": true, "merge_record_absent": true, "data_revision": "rev_030"}, "forbidden_mutations": ["entities", "relationships", "states", "assertions", "merge_records", "revisions"]},
+    "A3-005": {"result": {"status": "split_published", "source_entity_ref": "person_delta", "source_identity_status": "active", "merged_into_cleared": true, "references_restored": 3, "field_equivalent_to_pre_merge": true, "data_revision": "rev_032"}, "forbidden_mutations": ["source_records", "trust_closeness", "personality_judgments"]},
+    "A3-006": {"result": {"status": "audit_chain_read", "audit_events": ["merge_published", "split_published"], "merge_record_retained": true, "append_only": true, "data_revision": "rev_032"}, "forbidden_mutations": ["source_records", "historical_revisions", "merge_records"]},
+    "A3-007": {"result": {"status": "protected_layers_checked", "trust_unchanged": true, "closeness_unchanged": true, "personality_unchanged": true, "unrelated_objects_unchanged": true, "data_revision": "rev_032"}, "forbidden_mutations": ["trust_closeness", "personality_judgments", "source_records"]},
+    "A3-008": {"result": {"status": "all_failed", "failed_attempts": 3, "reason_codes": ["merge_ref_not_found", "merge_already_split", "merge_ref_required"], "data_revision": "rev_032"}, "forbidden_mutations": ["entities", "relationships", "states", "assertions", "revisions"]}
+  }
+}
