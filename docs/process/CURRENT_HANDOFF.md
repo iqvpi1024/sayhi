@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-A-ENTITY-MERGE-001
-slice_id: SLICE-MVP-A-ENTITY-MERGE-001
-current_phase: slice_verified
+handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
+slice_id: SLICE-MVP-A-ACCESS-POLICY-001
+current_phase: product_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -21,29 +21,28 @@ latest_recovery_points:
   - b3-commitment-rp-20260722
   - a2-current-state-rp-20260722
   - a3-entity-merge-rp-20260724
-decision_ref: DEC-MVP-A-ENTITY-MERGE-001
-spec_contract: SPEC-A3-ENTITY-MERGE-001 (approved)
-adr_ref: ADR-0007
-architecture_ref: ARCH-A3-ENTITY-MERGE-001
-suite_manifest: tests/a3_suite_manifest.json (executed, passed, bound)
-implementation_plan: PLAN-MVP-A-A3-IMPL-001 (all 5 tasks completed)
-gate_review: docs/reviews/A3_ENTITY_MERGE_GATE_REVIEW_2026-07-24.md (P0=0, P1=0)
-next_role: Product_Decider
-next_single_action: return_to_product_decision_for_next_slice (candidates per docs/planning/MASTER_DELIVERY_ROADMAP.md: A4 access policy, B4 reconciliation - A2+B3 deps now satisfied)
+decision_ref: DEC-MVP-A-ACCESS-POLICY-001
+spec_contract: none (applicability review required first)
+adr_ref: none
+suite_manifest: none
+implementation_plan: none
+next_role: Spec_Applicability_Reviewer
+next_single_action: execute_A4_spec_applicability_review (S1/S3/S4/S6 coverage of FR-012 slice)
 scope_in:
-  - reading roadmap and open questions to propose the next slice decision
+  - S1/S3/S4/S6 applicability review for query-layer access policy slice
 scope_out:
   - real personal data
-  - D2/D3 production installer claims
-  - any business code before a new Product Decision exists
-  - moving or reusing any existing tag
-stop_condition: new Product Decision recorded; no implementation may start before it
+  - any A4 business code, fixture, oracle, ADR or suite before applicability review concludes
+  - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
+  - external Agent runtime, MCP runtime, policy editor UI
+stop_condition: A4 applicability review recorded with explicit conclusion
 ```
 
 ## 当前事实
 
-- A3 切片 verified：official runner `a3-20260724.json` 8/8 passed/current 已绑定；Gate Review P0=0/P1=0；recovery tag `a3-entity-merge-rp-20260724` 已推送。
+- A3 切片 verified，recovery tag `a3-entity-merge-rp-20260724` 已推送；official suite 8/8 passed/current 已绑定。
+- `DEC-MVP-A-ACCESS-POLICY-001`（2026-07-24）选择 A4 作为 active slice，只授权 S1/S3/S4/S6 applicability review。
+- A4 范围：固定合成单用户本地调用者；身份+目的+舱室+字段+时间综合判决；allowed（过滤后字段集）/denied（原因码）；多策略最严格交集、allow 交集 deny 并集、无法求交默认拒绝；复用 A1 六态降级。
+- A4 非目标：多用户、家庭授权、数字遗产、sealed 紧急恢复、外部 Agent/MCP runtime、策略编辑器 UI、真实数据。
 - 全量 configured-adapter regression 基线：169 OK 无 skip；10 个 suite validator 全 PASSED。
-- 施工前 Change Control 已记录：A3-006/008 fixture 采用 `pre_published` 播种；`split_records` 独立成表保持 `merge_records` 严格只增不改。
-- B4-RECONCILIATION-DIFF 的 A2+B3 依赖均已 verified；A4 需要 S4 applicability review 与相关 Privacy Product Decision。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。

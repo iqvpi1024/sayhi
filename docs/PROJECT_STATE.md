@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-A-ENTITY-MERGE-001` |
-| 当前阶段 | `slice_verified` |
+| 当前工作切片 | `SLICE-MVP-A-ACCESS-POLICY-001` |
+| 当前阶段 | `product_decided` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -98,4 +98,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**A3 切片已 verified 并创建 recovery point；下一步回到 Product Decision，按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 选择下一切片（候选：A4 权限、B4 对账——A2+B3 依赖均已满足），未经新 Decision 不得开始任何业务代码。**
+**执行 A4 SPEC applicability review（S1/S3/S4/S6 对 FR-012 切片的覆盖评估），禁止业务代码。**
