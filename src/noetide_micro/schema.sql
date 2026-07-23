@@ -164,3 +164,22 @@ CREATE TABLE IF NOT EXISTS a2_view_rebuild_receipts (
     status TEXT NOT NULL CHECK (status IN ('rebuilt', 'failed')),
     payload_json TEXT NOT NULL
 );
+
+-- A3 additive: entity merge audit records (append-only, immutable) and split compensation records.
+-- Business publish/split behavior remains in later A3 tasks.
+CREATE TABLE IF NOT EXISTS merge_records (
+    merge_id TEXT PRIMARY KEY,
+    source_entity_ref TEXT NOT NULL,
+    target_entity_ref TEXT NOT NULL,
+    pre_merge_references_json TEXT NOT NULL,
+    published_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    recorded_at TEXT NOT NULL,
+    synthetic_profile_id TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS split_records (
+    split_id TEXT PRIMARY KEY,
+    merge_ref TEXT NOT NULL REFERENCES merge_records(merge_id),
+    published_revision TEXT NOT NULL REFERENCES canonical_revisions(revision_id),
+    recorded_at TEXT NOT NULL
+);

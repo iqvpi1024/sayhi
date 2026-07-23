@@ -26,14 +26,14 @@ adr_ref: ADR-0007
 suite_manifest: tests/a3_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A3-IMPL-001 (docs/planning/MVP_A_A3_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A3_TASK_001 (store merge_records helpers per task card)
+next_single_action: execute_A3_TASK_002 (entity_merge.py changeset service per task card)
 scope_in:
-  - A3-TASK-001 only: schema.sql, store.py, test_a3_task_001_store.py
+  - A3-TASK-002 only: entity_merge.py, store glue, test_a3_task_002_entity_merge.py
 scope_out:
   - real personal data
-  - A3-TASK-002+ files, adapter, official runner, fixture/oracle changes
+  - A3-TASK-003+ files, adapter, official runner, fixture/oracle changes
   - automatic person merge, fuzzy identity matching, connectors, permissions runtime
-stop_condition: A3-TASK-001 targeted store tests passed and recorded
+stop_condition: A3-TASK-002 targeted tests passed and regression recorded
 ```
 
 ## 当前事实

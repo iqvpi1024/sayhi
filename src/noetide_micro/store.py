@@ -970,6 +970,97 @@ class SemanticStore:
                     if field not in cw:
                         raise SeedValidationError('coverage_window missing required field: ' + field)
 
+    def put_merge_record(
+        self,
+        merge_id: str,
+        source_entity_ref: str,
+        target_entity_ref: str,
+        pre_merge_references: list[Mapping[str, Any]],
+        published_revision: str,
+        recorded_at: str,
+        synthetic_profile_id: str,
+    ) -> None:
+        """Persist an A3 merge audit record; records are append-only and immutable."""
+        if not merge_id or not source_entity_ref or not target_entity_ref:
+            raise ValueError("merge record requires merge_id and both entity refs")
+        if source_entity_ref == target_entity_ref:
+            raise ValueError("merge record source and target must differ")
+        if not isinstance(pre_merge_references, list):
+            raise ValueError("merge record requires a pre_merge_references list")
+        self._connection.execute(
+            "INSERT INTO merge_records (merge_id, source_entity_ref, target_entity_ref, "
+            "pre_merge_references_json, published_revision, recorded_at, synthetic_profile_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (merge_id, source_entity_ref, target_entity_ref,
+             _canonical_json(pre_merge_references), published_revision, recorded_at, synthetic_profile_id),
+        )
+
+    def merge_record(self, merge_id: str) -> JsonObject:
+        row = self._connection.execute(
+            "SELECT source_entity_ref, target_entity_ref, pre_merge_references_json, "
+            "published_revision, recorded_at, synthetic_profile_id FROM merge_records WHERE merge_id = ?",
+            (merge_id,),
+        ).fetchone()
+        if row is None:
+            raise KeyError(merge_id)
+        return {
+            "merge_id": merge_id,
+            "source_entity_ref": row[0],
+            "target_entity_ref": row[1],
+            "pre_merge_references": json.loads(row[2]),
+            "published_revision": row[3],
+            "recorded_at": row[4],
+            "synthetic_profile_id": row[5],
+        }
+
+    def merge_record_or_none(self, merge_id: str) -> JsonObject | None:
+        try:
+            return self.merge_record(merge_id)
+        except KeyError:
+            return None
+
+    def merge_records(self) -> list[JsonObject]:
+        return [self.merge_record(row[0]) for row in self._connection.execute(
+            "SELECT merge_id FROM merge_records ORDER BY merge_id"
+        )]
+
+    def put_split_record(
+        self,
+        split_id: str,
+        merge_ref: str,
+        published_revision: str,
+        recorded_at: str,
+    ) -> None:
+        """Persist an A3 split compensation record; append-only."""
+        if not split_id or not merge_ref:
+            raise ValueError("split record requires split_id and merge_ref")
+        if self.merge_record_or_none(merge_ref) is None:
+            raise ValueError("split record requires an existing merge record")
+        self._connection.execute(
+            "INSERT INTO split_records (split_id, merge_ref, published_revision, recorded_at) "
+            "VALUES (?, ?, ?, ?)",
+            (split_id, merge_ref, published_revision, recorded_at),
+        )
+
+    def split_record_for_merge(self, merge_ref: str) -> JsonObject | None:
+        row = self._connection.execute(
+            "SELECT split_id, published_revision, recorded_at FROM split_records WHERE merge_ref = ?",
+            (merge_ref,),
+        ).fetchone()
+        if row is None:
+            return None
+        return {
+            "split_id": row[0],
+            "merge_ref": merge_ref,
+            "published_revision": row[1],
+            "recorded_at": row[2],
+        }
+
+    def split_records(self) -> list[JsonObject]:
+        return [self.split_record_for_merge(row[0]) for row in self._connection.execute(
+            "SELECT merge_ref FROM split_records ORDER BY split_id"
+        )]
+
 def _object_id(item: Mapping[str, Any]) -> str:
     for key in (
         "entity_id",
