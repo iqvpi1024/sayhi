@@ -197,3 +197,13 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `FR-011` | merge proposal → 确认 → ChangeSet 原子发布；split compensation 等价恢复 | `SPEC-A3-ENTITY-MERGE-001` §2-§9；S1 Entity 状态机/`merged_into`/SOM-AT-017；S3 merge/split operation | `A3-001..008`（`tests/a3_suite_manifest.json`，8/8 passed） | `src/noetide_micro/entity_merge.py`、`src/noetide_micro/store.py`、`src/noetide_micro/a3_testing_adapter.py` | `passed` |
 
 状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。official runner `a3-20260724.json` 8/8 passed/current 已绑定；Gate Review P0=0/P1=0，切片 verified，recovery tag `a3-entity-merge-rp-20260724`。
+
+## 4.10 Active Slice：A4 查询层权限与舱室强制执行
+
+`SLICE-MVP-A-ACCESS-POLICY-001` 只实现 FR-012 的固定合成 MVP-A 子集：单用户本地调用者在身份+目的+舱室+字段+时间约束下的查询层判决（`allow/allow_with_redaction/deny`），多策略最严格交集，判决零写入。它不代表多用户、Grant 管理 UI、外部 Agent runtime 或完整权限平台。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-012` | 查询层判决强制执行与 fail closed；字段过滤；拒绝非泄露 | `SPEC-A4-ACCESS-POLICY-001` §2-§8；S4 §6.2-§6.4、§9、§12-§14；S1 Policy Subject 字段 | `A4-001..008`（suite 待物化） | `TBD` | `not_executed` |
+
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。仅授权 ADR/Architecture 选择，不得物化 suite 或编写业务代码。

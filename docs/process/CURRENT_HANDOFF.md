@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ACCESS-POLICY-001
 slice_id: SLICE-MVP-A-ACCESS-POLICY-001
-current_phase: contract_approved
+current_phase: traceable
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -26,16 +26,16 @@ spec_contract: SPEC-A4-ACCESS-POLICY-001 (approved)
 adr_ref: none
 suite_manifest: none
 implementation_plan: none
-next_role: Traceability_Maintainer
-next_single_action: build_A4_traceability (FR-012 row in REQUIREMENTS_MATRIX)
+next_role: Architect
+next_single_action: draft_A4_ADR_and_architecture (pure-function evaluator, zero-write enforcement)
 scope_in:
-  - A4 FR-012 traceability row only
+  - A4 ADR + Architecture View only
 scope_out:
   - real personal data
-  - any A4 business code, fixture, oracle, ADR or suite before traceability done
+  - any A4 business code, fixture, oracle or suite before ADR accepted
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A4 traceability row recorded in matrix
+stop_condition: A4 ADR/Architecture accepted
 ```
 
 ## 当前事实
