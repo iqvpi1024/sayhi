@@ -196,4 +196,4 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 |---|---|---|---|---|---|
 | `FR-011` | merge proposal → 确认 → ChangeSet 原子发布；split compensation 等价恢复 | `SPEC-A3-ENTITY-MERGE-001` §2-§9；S1 Entity 状态机/`merged_into`/SOM-AT-017；S3 merge/split operation | `A3-001..008`（suite 待物化） | `TBD` | `not_executed` |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。仅授权 ADR/Architecture 选择，不得物化 suite 或编写业务代码。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。ADR-0007/ARCH 已接受；仅授权 suite 物化，不得编写业务代码。

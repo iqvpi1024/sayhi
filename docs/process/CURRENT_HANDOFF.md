@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-ENTITY-MERGE-001
 slice_id: SLICE-MVP-A-ENTITY-MERGE-001
-current_phase: traceable
+current_phase: adr_accepted
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -22,18 +22,18 @@ latest_recovery_points:
   - a2-current-state-rp-20260722
 decision_ref: DEC-MVP-A-ENTITY-MERGE-001
 spec_contract: SPEC-A3-ENTITY-MERGE-001 (approved)
-adr_ref: none
+adr_ref: ADR-0007
 suite_manifest: none
 implementation_plan: none
-next_role: Architect
-next_single_action: draft_A3_ADR_and_architecture (merge_record persistence + atomic redirection mechanism)
+next_role: Suite_Materializer
+next_single_action: materialize_A3_suite (fixture/oracle/scenarios/protocol/contract module/runner/validator/manifest; business tests stay not_executed)
 scope_in:
-  - A3 ADR + Architecture View only
+  - A3 suite materialization only (no business code, no adapter)
 scope_out:
   - real personal data
-  - any A3 business code, fixture, oracle or suite before ADR accepted
+  - any A3 business code or adapter; fixture/oracle semantic changes after materialization
   - automatic person merge, fuzzy identity matching, connectors, permissions runtime
-stop_condition: A3 ADR/Architecture accepted
+stop_condition: A3 suite materialized, preflight validator exit 0, contract tests skipped without adapter
 ```
 
 ## 当前事实
