@@ -5,7 +5,7 @@
 ## A3-TASK-001：store merge_records 持久化辅助
 
 - 允许文件：`src/noetide_micro/schema.sql`、`src/noetide_micro/store.py`、`tests/semantic/test_a3_task_001_store.py`。
-- 交付：`merge_records` 表（merge_id、source_entity_ref、target_entity_ref、pre_merge_references JSON、published_revision、recorded_at、split_revision nullable）；写入/读取辅助；重复写入同一 merge_id 拒绝（只增不改）。
+- 交付：`merge_records` 表（merge_id、source_entity_ref、target_entity_ref、pre_merge_references JSON、published_revision、recorded_at；只增不改、无更新列）与 `split_records` 表（split_id、merge_ref FK、published_revision、recorded_at；append-only）；写入/读取辅助；重复写入同一 merge_id/split_id 拒绝。设计细化：split 记录独立成表，保持 merge_records 严格不可变（符合 ADR-0007“只增不改”），"already split" 由 split_records 存在性判定。
 - 验证：Python import、定向 store tests、PRAGMA 检查、`git diff --check`。
 - 禁止：entity_merge 业务逻辑、adapter、fixture/oracle 修改。
 

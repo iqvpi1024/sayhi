@@ -38,7 +38,7 @@
     {
       "role": "fixture",
       "path": "tests/fixtures/a3_entity_merge_v1/fixture.json",
-      "sha256": "0462e4e02d7c13342e3684d382b7ae3ff52dd6047b298c129a021ed033f711ed"
+      "sha256": "f240bbb3c182e6ce338932c88ce05a5aab55ea3a055671e3e46807a0fb144f6a"
     },
     {
       "role": "oracle",
