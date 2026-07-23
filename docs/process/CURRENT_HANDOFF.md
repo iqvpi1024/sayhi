@@ -27,15 +27,15 @@ adr_ref: ADR-0008
 suite_manifest: tests/a4_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A4-IMPL-001 (docs/planning/MVP_A_A4_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A4_TASK_003 (a4_testing_adapter.py full adapter protocol implementation per task card)
+next_single_action: execute_A4_TASK_004 (official runner, manifest binding, full regression, 11 suite validators per task card)
 scope_in:
-  - A4-TASK-003 only: a4_testing_adapter.py
+  - A4-TASK-004 only: docs/testing/results/a4-*.json, tests/a4_suite_manifest.json binding fields
 scope_out:
   - real personal data
-  - A4-TASK-004+ files, official runner, fixture/oracle/contract module changes
+  - fixture/oracle/contract module changes, oracle edits to fit implementation
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A4 contract 8/8 passed under NOETIDE_A4_ADAPTER
+stop_condition: A4 official runner 8/8 passed in one run, manifest bound, regression and validators clean
 ```
 
 ## 当前事实
@@ -48,5 +48,6 @@ stop_condition: A4 contract 8/8 passed under NOETIDE_A4_ADAPTER
 - `SPEC-A4-ACCESS-POLICY-001` 已批准（`A4-CONTRACT-REVIEW-001`，2026-07-24）。
 - A4-TASK-001 已完成并验证：store 只读策略标注/digest 辅助，定向 6/6 passed，regression 175 OK（8 A4 contract skipped）。
 - A4-TASK-002 已完成并验证：access_policy.py 判决器与 oracle 全场景一致，定向 8/8 passed，regression 183 OK（8 A4 contract skipped）。
+- A4-TASK-003 已完成并验证：a4_testing_adapter.py contract 8/8 passed；全量 regression 191 OK 无 skip。
 - 全量 configured-adapter regression 基线：169 OK 无 skip；10 个 suite validator 全 PASSED。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。
