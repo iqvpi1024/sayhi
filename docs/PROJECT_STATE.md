@@ -85,6 +85,7 @@
 | A3-TASK-001 | 定向 5/5 passed（test_a3_task_001_store）；configured-adapter regression 156 OK、8 A3 contract skipped；A3 official suite `not_executed` |
 | A3-TASK-002 | 定向 5/5 passed（test_a3_task_002_entity_merge）；configured-adapter regression 161 OK、8 A3 contract skipped；A3 official suite `not_executed` |
 | A3-TASK-003 | contract 8/8 passed（adapter）；全量 regression 169 OK 无 skip；official runner 未执行 |
+| A3 官方 suite | `a3-20260724.json`：8/8 passed/current；全量 regression 169 OK；manifest 已绑定 |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -96,4 +97,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A3-TASK-004（A3 official runner 同一次 run 8/8 + 全量回归 + manifest 绑定），不得修改 oracle 迎合实现。**
+**执行 A3-TASK-005：A3 Gate Review（P0/P1 审计）、状态/追踪同步与 recovery point。**

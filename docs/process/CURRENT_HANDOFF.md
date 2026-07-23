@@ -23,17 +23,17 @@ latest_recovery_points:
 decision_ref: DEC-MVP-A-ENTITY-MERGE-001
 spec_contract: SPEC-A3-ENTITY-MERGE-001 (approved)
 adr_ref: ADR-0007
-suite_manifest: tests/a3_suite_manifest.json (materialized, not_executed)
+suite_manifest: tests/a3_suite_manifest.json (executed, passed, bound)
 implementation_plan: PLAN-MVP-A-A3-IMPL-001 (docs/planning/MVP_A_A3_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A3_TASK_004 (official runner + manifest binding per task card)
+next_single_action: execute_A3_TASK_005_gate_review
 scope_in:
   - A3-TASK-004 only: official runner result + manifest binding fields
 scope_out:
   - real personal data
-  - oracle/fixture changes to fit implementation, A3-TASK-005 (gate review)
+  - any business code, moving existing tags
   - automatic person merge, fuzzy identity matching, connectors, permissions runtime
-stop_condition: A3 official run 8/8 passed/current bound in manifest
+stop_condition: A3 Gate Review P0/P1=0 recorded and recovery point created/pushed
 ```
 
 ## 当前事实

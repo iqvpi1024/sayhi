@@ -1,40 +1,71 @@
 {
-  "schema_version": "noetide.a3-suite-manifest.v1",
+  "schema_version": "noetide.a3-run-result.v1",
+  "run_id": "a3-78a080bd6e994967b4ad1409f740ab76",
   "suite_id": "a3_entity_merge_v1",
-  "slice_id": "SLICE-MVP-A-ENTITY-MERGE-001",
-  "suite_artifact_version": "1.0.0",
-  "flags": {
-    "suite_defined": true,
-    "suite_materialized": true,
-    "suite_executed": true,
-    "suite_passed": true
+  "manifest_sha256": "3d770d691c23fc00073cdd6898c2ce40716e0ac0e41c60d54f8cd0228eb86c11",
+  "git_commit": "ee809dfd5170e8c1b6d3711b2edbdf3213333232",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
   },
-  "suite_artifact_state": "materialized",
-  "latest_verification_result": "passed",
-  "latest_run_applicability": "current",
-  "required_scenario_ids": [
-    "A3-001",
-    "A3-002",
-    "A3-003",
-    "A3-004",
-    "A3-005",
-    "A3-006",
-    "A3-007",
-    "A3-008"
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_a3_suite",
+    "--adapter",
+    "noetide_micro.a3_testing_adapter",
+    "--output",
+    "docs/testing/results/a3-20260724.json"
   ],
-  "baseline": {
-    "product_path": "PRDv05.md",
-    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
-    "decision_refs": [
-      "DEC-MVP-A-ENTITY-MERGE-001"
-    ],
-    "contract_ref": "SPEC-A3-ENTITY-MERGE-001",
-    "adr_refs": [
-      "ADR-0007"
-    ],
-    "architecture_ref": "ARCH-A3-ENTITY-MERGE-001"
-  },
-  "artifacts": [
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "A3-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A3-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A3-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A3-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A3-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A3-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A3-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A3-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
     {
       "role": "fixture",
       "path": "tests/fixtures/a3_entity_merge_v1/fixture.json",
@@ -85,14 +116,5 @@
       "path": "src/noetide_micro/a3_testing_adapter.py",
       "sha256": "02ea0f86efc17b488b4c2b0d06ea2eb5bbaa873ea5f294a9defc819dce025f47"
     }
-  ],
-  "privacy": {
-    "synthetic_only": true,
-    "external_network": false,
-    "workspace_external_reads": false,
-    "real_personal_data": false
-  },
-  "latest_verification_result_path": "docs/testing/results/a3-20260724.json",
-  "latest_verification_manifest_sha256": "3d770d691c23fc00073cdd6898c2ce40716e0ac0e41c60d54f8cd0228eb86c11",
-  "latest_verification_result_sha256": "ad66ea0a4344decc45048f30f29b2e67b4a2155f97d6e2ff1446dddcec72a1c9"
+  ]
 }
