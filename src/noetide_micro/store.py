@@ -652,6 +652,14 @@ class SemanticStore:
             (data_revision,),
         ).rowcount
 
+    def mark_all_projections_stale(self, data_revision: str) -> int:
+        """Mark every fresh Core View projection stale after a Canonical merge/split publish."""
+        return self._connection.execute(
+            "UPDATE projection_rows SET freshness_status = 'stale' "
+            "WHERE view_revision != ? AND freshness_status = 'fresh'",
+            (data_revision,),
+        ).rowcount
+
     def delete_current_state_projection(self) -> int:
         """Delete the A2 Derived view row and its receipts without touching Canonical or Ledger data."""
         with self.transaction():

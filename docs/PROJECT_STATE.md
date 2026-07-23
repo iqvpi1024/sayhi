@@ -83,6 +83,7 @@
 | A2 可复现性重跑 | `a2-20260722-r2.json`：同 commit/同 manifest 8/8 passed |
 | A2 Gate Review | `A2_CURRENT_STATE_GATE_REVIEW_2026-07-22.md`：P0=0、P1=0 |
 | A3-TASK-001 | 定向 5/5 passed（test_a3_task_001_store）；configured-adapter regression 156 OK、8 A3 contract skipped；A3 official suite `not_executed` |
+| A3-TASK-002 | 定向 5/5 passed（test_a3_task_002_entity_merge）；configured-adapter regression 161 OK、8 A3 contract skipped；A3 official suite `not_executed` |
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
 
@@ -94,4 +95,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A3-TASK-002（`entity_merge.py` ChangeSet 服务：preflight、原子重定向、split 等价恢复、fail closed），只允许任务卡列出的文件。**
+**执行 A3-TASK-003（`a3_testing_adapter.py`，完整实现 adapter protocol，不得修改 fixture/oracle/contract module）。**
