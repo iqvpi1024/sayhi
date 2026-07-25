@@ -1,0 +1,32 @@
+{
+ "schema_version": "noetide.b6-task-result.v1",
+ "run_id": "b6-task001-20260725",
+ "task_id": "B6-TASK-001",
+ "slice_id": "SLICE-MVP-B-SHADOW-MIGRATION-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b6_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_b6_task001_002 -v",
+   "exit_code": 0,
+   "result": "9/9 passed (combined task001+002 module): shadow_migration: clean migration reconciled (3 partitions match) + original digest untouched, transform counts {fields_renamed: 2}, fault injection at_batch=2 discards shadow with zero partial write, deviation -> mismatch not repaired, history carried intact"
+  },
+  {
+   "command": "python tools/validate_b6_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: materialized; no business test executed (unchanged)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}

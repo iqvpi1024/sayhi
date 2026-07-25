@@ -24,8 +24,8 @@
 
 | Task | 交付物 | Contract / Test | 完成条件 | 状态 |
 |---|---|---|---|---|
-| `B6-TASK-001` | `shadow_migration.py`：文件级影子副本、v1->v2 变换、故障注入、迁移后对账 | §2.1/§3/§6、`B6-001..004/008/009` | 三分区 match；transform_log 计数确定；故障零部分写入；历史随迁移完整 | `pending` |
-| `B6-TASK-002` | `disambiguation.py`：候选扫描、合并传播、批量处理 | §2.2/§2.3/§5、`B6-005..007` | 候选对 12 且全 proposed；传播 2 计数确定；batches=3 processed=12 可复现 | `pending` |
+| `B6-TASK-001` | `shadow_migration.py`：文件级影子副本、v1->v2 变换、故障注入、迁移后对账 | §2.1/§3/§6、`B6-001..004/008/009` | 三分区 match；transform_log 计数确定；故障零部分写入；历史随迁移完整 | `completed`；定向 9/9 passed（含 TASK-002），见 `b6-task001-20260725.json` |
+| `B6-TASK-002` | `disambiguation.py`：候选扫描、合并传播、批量处理 | §2.2/§2.3/§5、`B6-005..007` | 候选对 12 且全 proposed；传播 2 计数确定；batches=3 processed=12 可复现 | `completed`；定向 9/9 passed（含 TASK-001），见 `b6-task002-20260725.json` |
 | `B6-TASK-003` | `b6_testing_adapter.py` 与 B6 contract 集成 | §7/§8、`B6-001..010` | adapter 完整实现 protocol；fixture/oracle 不被修改；B6-010 横切通过 | `pending` |
 | `B6-TASK-004` | B6 official runner、existing regression 与 immutable result | §7/§8 | B6 10/10 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `pending` |
 | `B6-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
