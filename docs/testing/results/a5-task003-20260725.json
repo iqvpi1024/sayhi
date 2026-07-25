@@ -1,0 +1,28 @@
+{
+ "schema_version": "noetide.a5-task-result.v1",
+ "run_id": "a5-task003-a45a8bd-20260725",
+ "task_id": "A5-TASK-003",
+ "slice_id": "SLICE-MVP-A-APP-SHELL-001",
+ "git_commit": "a45a8bd",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a5_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_A5_ADAPTER='noetide_micro.a5_testing_adapter'; python -m unittest tests.semantic.test_a5_app_shell_contract",
+   "exit_code": 0,
+   "result": "contract 8/8 passed (A5-001..008) at commit a45a8bd; no implementation change in this task"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 8 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "211 tests OK, 0 skipped; regression no degradation"
+  }
+ ]
+}

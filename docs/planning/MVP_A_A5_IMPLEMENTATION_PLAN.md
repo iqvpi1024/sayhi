@@ -25,7 +25,7 @@
 |---|---|---|---|---|
 | `A5-TASK-001` | `app_shell.py` 呈现层纯函数（NL review、impact preview、summary line）与零绕过静态扫描辅助 | §2-§5、`A5-002/003/008` | 呈现输出形状确定；壳模块无 store 写调用可静态证明 | `completed`（2026-07-24，`a5-task001-2320515-20260724`） |
 | `A5-TASK-002` | 壳命令接线（cli.py 增加 guide/receipts/history 命令）与 `a5_testing_adapter.py` | §3、§7-§8、`A5-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `completed`（2026-07-25，`a5-task002-310bcf2-20260725`） |
-| `A5-TASK-003` | A5 contract 集成验证（NOETIDE_A5_ADAPTER 下 8/8） | §7-§8、`A5-001..008` | contract 8/8 passed | `pending` |
+| `A5-TASK-003` | A5 contract 集成验证（NOETIDE_A5_ADAPTER 下 8/8） | §7-§8、`A5-001..008` | contract 8/8 passed | `completed`（2026-07-25，`a5-task003-a45a8bd-20260725`） |
 | `A5-TASK-004` | A5 official runner、existing regression 与 immutable result | §7-§8 | A5 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `pending` |
 | `A5-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
 
