@@ -250,15 +250,15 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-105` | 写后校验 + 干净增量对账（无发现） | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 写后校验 | `B4-001` | `noetide_micro.reconciliation`（ADR-0011） | `not_executed` |
-| `FR-105` | 失败队列检出（隔离+报告，不修复） | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 | `B4-002` | `noetide_micro.reconciliation` | `not_executed` |
-| `FR-105` | stale 视图检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 stale 语义 | `B4-003` | `noetide_micro.reconciliation` | `not_executed` |
-| `FR-105` | 孤儿引用检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7 | `B4-004` | `noetide_micro.reconciliation` | `not_executed` |
-| `FR-105` | 未消费 ChangeSet 检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 | `B4-005` | `noetide_micro.reconciliation` | `not_executed` |
-| `FR-105` | 深度对账三分区 match | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S7 投影重建 | `B4-006` | `noetide_micro.reconciliation` | `not_executed` |
-| `FR-105` | 深度对账 mismatch 报告，不静默改写 | `SPEC-B4-RECONCILIATION-001` §6/§7；S7 | `B4-007` | `noetide_micro.reconciliation` | `not_executed` |
-| `FR-106` | Semantic Diff：当前状态/联系状态字段级差异 | `SPEC-B4-RECONCILIATION-001` §2.2/§7；S2 revision 语义 | `B4-008` | `noetide_micro.semantic_diff` | `not_executed` |
-| `FR-106` | Semantic Diff：Hypothesis 变化 + no_change；diff 不持久化不作证据 | `SPEC-B4-RECONCILIATION-001` §2.2/§5/§7；S1/S2 Derived 边界 | `B4-009` | `noetide_micro.semantic_diff` | `not_executed` |
-| 横切（PRD §10.5/§25.3） | trust/closeness/人格/历史不变；profile 外 fail closed | `SPEC-B4-RECONCILIATION-001` §5/§7 | `B4-010` | `noetide_micro.reconciliation` / `noetide_micro.semantic_diff` | `not_executed` |
+| `FR-105` | 写后校验 + 干净增量对账（无发现） | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 写后校验 | `B4-001` | `noetide_micro.reconciliation`（ADR-0011） | `passed`（b4-20260725.json） |
+| `FR-105` | 失败队列检出（隔离+报告，不修复） | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 | `B4-002` | `noetide_micro.reconciliation` | `passed`（b4-20260725.json） |
+| `FR-105` | stale 视图检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 stale 语义 | `B4-003` | `noetide_micro.reconciliation` | `passed`（b4-20260725.json） |
+| `FR-105` | 孤儿引用检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7 | `B4-004` | `noetide_micro.reconciliation` | `passed`（b4-20260725.json） |
+| `FR-105` | 未消费 ChangeSet 检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 | `B4-005` | `noetide_micro.reconciliation` | `passed`（b4-20260725.json） |
+| `FR-105` | 深度对账三分区 match | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S7 投影重建 | `B4-006` | `noetide_micro.reconciliation` | `passed`（b4-20260725.json） |
+| `FR-105` | 深度对账 mismatch 报告，不静默改写 | `SPEC-B4-RECONCILIATION-001` §6/§7；S7 | `B4-007` | `noetide_micro.reconciliation` | `passed`（b4-20260725.json） |
+| `FR-106` | Semantic Diff：当前状态/联系状态字段级差异 | `SPEC-B4-RECONCILIATION-001` §2.2/§7；S2 revision 语义 | `B4-008` | `noetide_micro.semantic_diff` | `passed`（b4-20260725.json） |
+| `FR-106` | Semantic Diff：Hypothesis 变化 + no_change；diff 不持久化不作证据 | `SPEC-B4-RECONCILIATION-001` §2.2/§5/§7；S1/S2 Derived 边界 | `B4-009` | `noetide_micro.semantic_diff` | `passed`（b4-20260725.json） |
+| 横切（PRD §10.5/§25.3） | trust/closeness/人格/历史不变；profile 外 fail closed | `SPEC-B4-RECONCILIATION-001` §5/§7 | `B4-010` | `noetide_micro.reconciliation` / `noetide_micro.semantic_diff` | `passed`（b4-20260725.json） |
 
-状态：`product_decided=true`（`DEC-MVP-B-RECONCILIATION-001`，2026-07-25）、`spec_approved=true`（`B4-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0011`，2026-07-25）、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
+状态：`product_decided=true`（`DEC-MVP-B-RECONCILIATION-001`，2026-07-25）、`spec_approved=true`（`B4-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0011`，2026-07-25）、`suite_defined=true`、`suite_materialized=true`（2026-07-25）、`suite_executed=true`、`suite_passed=true`（2026-07-25，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/b4-20260725.json`，manifest 已绑定）。

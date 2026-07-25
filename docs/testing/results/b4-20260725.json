@@ -1,0 +1,115 @@
+{
+  "schema_version": "noetide.b4-run-result.v1",
+  "run_id": "b4-c2b86e1949ea40b8945b0e346676234a",
+  "suite_id": "b4_reconciliation_v1",
+  "manifest_sha256": "3a464da9c434d8687817178059675cad07764d4e4202823af5dbc6e47bb4ca75",
+  "git_commit": "59aa8a904c5bd75a2d6a3ee8dd18d31cfc82ac6b",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_b4_suite",
+    "--adapter",
+    "noetide_micro.b4_testing_adapter",
+    "--output",
+    "docs/testing/results/b4-20260725.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "B4-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-009",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B4-010",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/b4_reconciliation_v1/fixture.json",
+      "sha256": "2341a207bdd6492aaf3503fa6b00f24069b77de02d53c225048ebe87719b9f13"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/b4_reconciliation_v1/oracles.json",
+      "sha256": "fb99705b68adafcde6a6602e905e3580a7f9f299711e22ce9f6a106ddd5047c0"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/b4_reconciliation_scenarios.json",
+      "sha256": "de209be37cde5ae1aba1fe0d5b6d2761155fed093a8a999d74a066361de2643b"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/b4_reconciliation_adapter_protocol.py",
+      "sha256": "807f11d193e072f7441049d938aa5206e19471036c15fda61eff48628676e739"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_b4_reconciliation_contract.py",
+      "sha256": "f1962919189cc599166d68dfccc658ecff325115c0d04f6f955291e2ee4a9d00"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_b4_suite.py",
+      "sha256": "9d3c2625bbafe20d3b5efaf9b45640eb1189c15af76f35042f3f8e4b702e82c2"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_b4_suite.py",
+      "sha256": "1c6f1f875958ba8694b115732d49e328680a9292ed01c50b2f15f2ad01f14c54"
+    }
+  ]
+}

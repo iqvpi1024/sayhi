@@ -1,0 +1,42 @@
+{
+ "schema_version": "noetide.b4-task-result.v1",
+ "run_id": "b4-task005-20260725",
+ "task_id": "B4-TASK-005",
+ "slice_id": "SLICE-MVP-B-RECONCILIATION-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b4_official_suite": "passed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m tests.runner.run_b4_suite --adapter noetide_micro.b4_testing_adapter --output docs/testing/results/b4-20260725.json",
+   "exit_code": 0,
+   "result": "official runner: 10/10 scenarios passed in one run; immutable result docs/testing/results/b4-20260725.json; environment stamped; network blocked; stdlib only"
+  },
+  {
+   "command": "manifest binding (tests/b4_suite_manifest.json)",
+   "exit_code": 0,
+   "result": "flags -> suite_executed=true, suite_passed=true; latest_verification_result=passed; latest_run_applicability=current; result path+sha256 and run-time manifest sha256 bound"
+  },
+  {
+   "command": "python tools/validate_*.py (all suite validators) + tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "all suite validators PASSED (14, incl. validate_b4_suite with bound current result); product baseline static checks PASSED"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 10 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "292 tests OK, 0 skipped; no regression (baseline was 264 before B4)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
