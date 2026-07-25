@@ -1,0 +1,32 @@
+{
+ "schema_version": "noetide.b5-task-result.v1",
+ "run_id": "b5-task001-20260725",
+ "task_id": "B5-TASK-001",
+ "slice_id": "SLICE-MVP-B-MULTILINGUAL-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b5_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_b5_bilingual_task001 -v",
+   "exit_code": 0,
+   "result": "9/9 passed: separate storage, original read + evidence resolution, paired view, translation_unavailable not faked, overwrite rejected no-write, revision history retained (tr_001 superseded / tr_002 active), orphan reported, unknown source rejected, view never persisted"
+  },
+  {
+   "command": "python tools/validate_b5_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: materialized; no business test executed (unchanged)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}

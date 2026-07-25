@@ -24,7 +24,7 @@
 
 | Task | 交付物 | Contract / Test | 完成条件 | 状态 |
 |---|---|---|---|---|
-| `B5-TASK-001` | `bilingual.py`：对照记录追加/修订、对照视图、orphan 检测、覆盖拒绝面 | §2..§6、`B5-001..007` | 分离存储；paired/unavailable/orphan 正确；覆盖拒绝；修订历史保留 | `pending` |
+| `B5-TASK-001` | `bilingual.py`：对照记录追加/修订、对照视图、orphan 检测、覆盖拒绝面 | §2..§6、`B5-001..007` | 分离存储；paired/unavailable/orphan 正确；覆盖拒绝；修订历史保留 | `completed`；定向 9/9 passed，见 `b5-task001-20260725.json` |
 | `B5-TASK-002` | `b5_testing_adapter.py` 与 B5 contract 集成 | §7/§8、`B5-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改；B5-008 横切通过 | `pending` |
 | `B5-TASK-003` | B5 official runner、existing regression 与 immutable result | §7/§8 | B5 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `pending` |
 | `B5-TASK-004` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
