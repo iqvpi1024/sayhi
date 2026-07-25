@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-HARDENING-001` |
-| 当前阶段 | `product_decided` |
+| 当前阶段 | `applicability_reviewed` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -68,6 +68,7 @@
 52. A5-TASK-004 已完成：official runner `a5-20260725.json` 同一次 run 8/8 passed/current；manifest 已绑定 current result；12 个 suite validator 全 PASSED；全量 regression 211 OK 无 skip。
 53. A5-TASK-005 已完成：Gate Review `A5_APP_SHELL_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0；A5 切片 verified；矩阵 §4.11 已同步；recovery tag `a5-app-shell-rp-20260725` 已创建并推送。
 54. `DEC-MVP-A-HARDENING-001` 已选择 A6 硬化与本地 Alpha 切片，并显式裁决"12 个可执行语义变更测试"= FR-001..012 各一个端到端场景在同一 Reference Profile 执行；只授权 S1/S2/S3/S6/S7 applicability review，未授权业务代码。
+55. A6 applicability review `A6-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`（2026-07-25）：S1/S2/S6 pass，S3/S7 partial；4 个缺口（集成证明、Reference Profile 具体化、错误恢复壳层、Alpha 可解释性）由 A6 slice contract 闭合；尚未建立 A6 合同、traceability、ADR、suite 或代码。
 
 ## 4. 真实验证结果
 
@@ -124,4 +125,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A6 applicability review（S1/S2/S3/S6/S7），依据 `DEC-MVP-A-HARDENING-001` §6 的授权边界。**
+**起草 A6 slice contract（SPEC-A6-HARDENING-001），闭合 12 场景映射、Reference Profile、错误恢复与 Alpha 可解释性。**
