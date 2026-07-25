@@ -1,0 +1,32 @@
+{
+ "schema_version": "noetide.b5-task-result.v1",
+ "run_id": "b5-task002-20260725",
+ "task_id": "B5-TASK-002",
+ "slice_id": "SLICE-MVP-B-MULTILINGUAL-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b5_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_B5_ADAPTER='noetide_micro.b5_testing_adapter'; python -m unittest tests.semantic.test_b5_multilingual_contract -v",
+   "exit_code": 0,
+   "result": "contract 8/8 passed with noetide_micro.b5_testing_adapter; fixture/oracle/scenario files untouched"
+  },
+  {
+   "command": "python tools/validate_b5_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: materialized (unchanged)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
