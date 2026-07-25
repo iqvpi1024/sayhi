@@ -81,9 +81,9 @@ class IncrementalReconciliationTests(unittest.TestCase):
         after = (self.store.canonical_layer_digest(), self.store.seed_snapshot()["projections"])
         self.assertEqual(before, after)
 
-    def test_deep_mode_rejected_until_task_002(self) -> None:
+    def test_unsupported_mode_rejected(self) -> None:
         with self.assertRaises(ValueError):
-            run_reconciliation(self.store, "deep", CLOCK)
+            run_reconciliation(self.store, "weekly", CLOCK)
 
 
 if __name__ == "__main__":

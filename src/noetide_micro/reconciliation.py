@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from .store import SemanticStore
+from .store import SemanticStore, _canonical_digest
 
 
 JsonObject = dict[str, Any]
 PROFILE_ID = "b4_reconciliation_v1"
+DEEP_PARTITIONS = ("person_card", "relationship_timeline", "current_state")
 INCREMENTAL_KINDS = ("failure_queue", "stale_view", "orphan_reference", "unconsumed_changeset")
 UNCONSUMED_CHANGESET_STATUSES = ("proposed", "approved")
 
@@ -16,26 +17,107 @@ UNCONSUMED_CHANGESET_STATUSES = ("proposed", "approved")
 def run_reconciliation(store: SemanticStore, mode: str, clock: str) -> JsonObject:
     """Run a read-only reconciliation scan and return a ReconciliationReport.
 
-    The detector only reads Canonical, L2 projections and the revision ledger.
-    It never writes, repairs or rewrites projections; every finding is
-    quarantined and reported with disposition ``quarantined_reported``.
+    Run state machine: ``requested -> scanning -> report_issued``. The detector
+    only reads Canonical, L2 projections and the revision ledger. It never
+    writes, repairs or rewrites projections; every finding is quarantined and
+    reported with disposition ``quarantined_reported``. A failed scan returns an
+    explicit unavailable report shell instead of an empty "no findings" report.
     """
-    if mode != "incremental":
-        raise ValueError("B4-TASK-001 implements incremental reconciliation only")
-    findings = _incremental_findings(store)
+    if mode not in ("incremental", "deep"):
+        raise ValueError(f"unsupported reconciliation mode: {mode}")
+    try:
+        if mode == "incremental":
+            findings = _incremental_findings(store)
+            deep_result: JsonObject | None = None
+            mismatch_details: JsonObject = {}
+        else:
+            findings = []
+            deep_result, mismatch_details = _deep_compare(store)
+    except Exception as exc:  # unavailable shell, never a silent empty report
+        return {
+            "report_id": f"report_{mode}_{clock}",
+            "profile_id": PROFILE_ID,
+            "mode": mode,
+            "generated_at": clock,
+            "run_state": "unavailable",
+            "unavailable_reason": f"{type(exc).__name__}: {exc}",
+            "findings": [],
+            "deep_result": None,
+            "mismatch_details": {},
+            "summary": {"finding_count": 0, "quarantined": True, "auto_repair_attempted": False},
+        }
     return {
         "report_id": f"report_{mode}_{clock}",
         "profile_id": PROFILE_ID,
         "mode": mode,
         "generated_at": clock,
+        "run_state": "report_issued",
         "findings": findings,
-        "deep_result": None,
+        "deep_result": deep_result,
+        "mismatch_details": mismatch_details,
         "summary": {
             "finding_count": len(findings),
             "quarantined": True,
             "auto_repair_attempted": False,
         },
     }
+
+
+def expected_projection_payload(store: SemanticStore, partition: str) -> JsonObject:
+    """Derive the expected Derived projection payload for one deep partition.
+
+    Deterministic and Canonical-only: the same derivation seeds the synthetic
+    profile projections and rebuilds expectations during deep reconciliation,
+    so a stored projection matches exactly when nothing deviated.
+    """
+    if partition not in DEEP_PARTITIONS:
+        raise ValueError(f"unknown deep partition: {partition}")
+    snapshot = store.seed_snapshot()
+    objects = snapshot["objects"]
+    current = snapshot["data_revision"]
+    fields_at_current = {
+        object_id: payload.get("fields", {})
+        for object_id, payload in sorted(objects.items())
+    }
+    if partition == "person_card":
+        return {"partition": partition, "data_revision": current, "objects": fields_at_current}
+    if partition == "current_state":
+        return {"partition": partition, "data_revision": current, "current": fields_at_current}
+    history = [
+        {
+            "object_id": record["object_id"],
+            "revision": record["revision"],
+            "fields": record["fields"],
+        }
+        for record in store.ledger_records_of_type("revision_snapshot")
+    ]
+    history.sort(key=lambda item: (item["object_id"], item["revision"]))
+    return {"partition": partition, "data_revision": current, "history": history}
+
+
+def _deep_compare(store: SemanticStore) -> tuple[JsonObject, JsonObject]:
+    """Rebuild each partition from Canonical and compare digests; never rewrite."""
+    stored_by_partition: dict[str, JsonObject] = {}
+    for record in store.projection_records():
+        payload = record["payload"]
+        if isinstance(payload, dict) and payload.get("partition") in DEEP_PARTITIONS:
+            stored_by_partition[payload["partition"]] = payload
+    deep_result: JsonObject = {}
+    mismatch_details: JsonObject = {}
+    for partition in DEEP_PARTITIONS:
+        expected = expected_projection_payload(store, partition)
+        actual = stored_by_partition.get(partition)
+        expected_digest = _canonical_digest(expected)
+        actual_digest = _canonical_digest(actual) if actual is not None else "absent"
+        if actual is not None and actual_digest == expected_digest:
+            deep_result[partition] = "match"
+        else:
+            deep_result[partition] = "mismatch"
+            mismatch_details[partition] = {
+                "expected_digest": expected_digest,
+                "actual_digest": actual_digest,
+            }
+    return deep_result, mismatch_details
 
 
 def revision_consistency(store: SemanticStore) -> bool:
