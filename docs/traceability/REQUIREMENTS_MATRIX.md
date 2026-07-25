@@ -286,15 +286,15 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `PRD-§24.3` | 影子迁移 + 深度对账 match | `SPEC-B6-SHADOW-MIGRATION-001` §2.1/§7；B4 对账语义 | `B6-001` | TBD（ADR/物化后填写） | `not_executed` |
-| `PRD-§24.3` | 变换正确性与确定性 transform_log | `SPEC-B6-SHADOW-MIGRATION-001` §2.1/§7 | `B6-002` | TBD | `not_executed` |
-| `PRD-§24.3` | 迁移故障：显式 failed、零部分写入、影子可丢弃 | `SPEC-B6-SHADOW-MIGRATION-001` §3/§6/§7 | `B6-003` | TBD | `not_executed` |
-| `PRD-§24.3` | 影子偏差 mismatch 报告不静默修复 | `SPEC-B6-SHADOW-MIGRATION-001` §6/§7 | `B6-004` | TBD | `not_executed` |
-| `PRD-§24.3` | 消歧候选确定性计数、无自动合并 | `SPEC-B6-SHADOW-MIGRATION-001` §2.2/§5/§7 | `B6-005` | TBD | `not_executed` |
-| `PRD-§24.3` | 已确认合并传播计数确定、历史保留 | `SPEC-B6-SHADOW-MIGRATION-001` §2.3/§7；S3 | `B6-006` | TBD | `not_executed` |
-| `PRD-§24.3` | 批量处理计数可复现 | `SPEC-B6-SHADOW-MIGRATION-001` §5/§7 | `B6-007` | TBD | `not_executed` |
-| `PRD-§24.3` | bitemporal 历史随迁移完整 | `SPEC-B6-SHADOW-MIGRATION-001` §4/§7；S2 | `B6-008` | TBD | `not_executed` |
-| `PRD-§24.3` | 影子/报告不作证据 | `SPEC-B6-SHADOW-MIGRATION-001` §2/§5/§7 | `B6-009` | TBD | `not_executed` |
-| `PRD-§24.3` | 横切：原始库不变、历史完整、fail closed | `SPEC-B6-SHADOW-MIGRATION-001` §5/§7 | `B6-010` | TBD | `not_executed` |
+| `PRD-§24.3` | 影子迁移 + 深度对账 match | `SPEC-B6-SHADOW-MIGRATION-001` §2.1/§7；B4 对账语义 | `B6-001` | `noetide_micro.shadow_migration`（ADR-0013） | `not_executed` |
+| `PRD-§24.3` | 变换正确性与确定性 transform_log | `SPEC-B6-SHADOW-MIGRATION-001` §2.1/§7 | `B6-002` | `noetide_micro.shadow_migration` | `not_executed` |
+| `PRD-§24.3` | 迁移故障：显式 failed、零部分写入、影子可丢弃 | `SPEC-B6-SHADOW-MIGRATION-001` §3/§6/§7 | `B6-003` | `noetide_micro.shadow_migration` | `not_executed` |
+| `PRD-§24.3` | 影子偏差 mismatch 报告不静默修复 | `SPEC-B6-SHADOW-MIGRATION-001` §6/§7 | `B6-004` | `noetide_micro.shadow_migration` | `not_executed` |
+| `PRD-§24.3` | 消歧候选确定性计数、无自动合并 | `SPEC-B6-SHADOW-MIGRATION-001` §2.2/§5/§7 | `B6-005` | `noetide_micro.disambiguation` | `not_executed` |
+| `PRD-§24.3` | 已确认合并传播计数确定、历史保留 | `SPEC-B6-SHADOW-MIGRATION-001` §2.3/§7；S3 | `B6-006` | `noetide_micro.disambiguation` | `not_executed` |
+| `PRD-§24.3` | 批量处理计数可复现 | `SPEC-B6-SHADOW-MIGRATION-001` §5/§7 | `B6-007` | `noetide_micro.disambiguation` | `not_executed` |
+| `PRD-§24.3` | bitemporal 历史随迁移完整 | `SPEC-B6-SHADOW-MIGRATION-001` §4/§7；S2 | `B6-008` | `noetide_micro.shadow_migration` | `not_executed` |
+| `PRD-§24.3` | 影子/报告不作证据 | `SPEC-B6-SHADOW-MIGRATION-001` §2/§5/§7 | `B6-009` | `noetide_micro.shadow_migration / noetide_micro.disambiguation` | `not_executed` |
+| `PRD-§24.3` | 横切：原始库不变、历史完整、fail closed | `SPEC-B6-SHADOW-MIGRATION-001` §5/§7 | `B6-010` | `noetide_micro.shadow_migration / noetide_micro.disambiguation` | `not_executed` |
 
-状态：`product_decided=true`（`DEC-MVP-B-SHADOW-MIGRATION-001`，2026-07-25）、`spec_approved=true`（`B6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
+状态：`product_decided=true`（`DEC-MVP-B-SHADOW-MIGRATION-001`，2026-07-25）、`spec_approved=true`（`B6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0013`，2026-07-25）、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
