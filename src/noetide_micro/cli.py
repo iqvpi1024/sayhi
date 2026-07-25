@@ -6,7 +6,10 @@ import argparse
 import sys
 from pathlib import Path
 
+from .app_shell import render_impact_preview, render_review
+from .changesets import ChangeSetService
 from .runtime import open_runtime
+from .store import SemanticStore
 
 
 DEFAULT_DATA_DIR = Path.home() / ".noetide" / "data"
@@ -106,6 +109,125 @@ def cmd_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def _open_existing_store(args: argparse.Namespace) -> SemanticStore | None:
+    path = _data_dir(args) / "noetide.sqlite3"
+    if not path.exists():
+        return None
+    return SemanticStore(path)
+
+
+def cmd_guide(args: argparse.Namespace) -> int:
+    def journey(runtime) -> int:
+        clock = runtime.fixture["determinism"]["clock"]
+        store = SemanticStore(_data_dir(args) / "noetide.sqlite3")
+        try:
+            receipt = runtime.intake()
+            print(f"[record] Source {receipt['source_id']} stored (receipt {receipt['receipt_id']}).")
+            proposal = runtime.propose("src_micro_001")
+            relationship = store.canonical_object("rel_alpha_beta")
+            labels = [
+                store.canonical_object(ref)["canonical_label"]
+                for ref in relationship["participant_refs"]
+            ]
+            item = render_review(proposal, labels)
+            print(f"[review] {item['summary_text']}")
+            print(f"[review] evidence: {', '.join(item['evidence_citations'])}")
+            preview = render_impact_preview(proposal)
+            print(f"[preview] {preview['impact_text']}")
+            status = proposal["status"]
+            if status in ("proposed", "approved"):
+                if not args.yes:
+                    answer = input("[confirm] type yes to publish this change: ")
+                    if answer.strip().lower() != "yes":
+                        print("cancelled: nothing was published.")
+                        return 2
+                if status == "proposed":
+                    runtime.approve(proposal["changeset_id"], "person_alpha")
+                published = runtime.publish(proposal["changeset_id"], args.publish_key)
+            elif status == "published":
+                published = ChangeSetService(store, runtime.fixture, clock).receipt(proposal["receipt_id"])
+                print(f"[confirm] already published at {published.get('published_revision')}.")
+            else:
+                print(f"[confirm] ChangeSet status is {status}; nothing to publish.")
+                published = None
+            if published is not None:
+                print(f"[confirm] publish {published['status']} -> {published.get('published_revision')} (receipt {published['receipt_id']}).")
+            card = runtime.view("person_card")
+            timeline = runtime.view("relationship_timeline")
+            print(f"[read_view] person_card {card['freshness_status']} at {card['data_revision']}: {card['payload']}")
+            print(f"[read_view] relationship_timeline {timeline['freshness_status']} at {timeline['data_revision']}: {len(timeline['payload']['history'])} history entries")
+            if published is not None:
+                print(f"[receipt] {published['receipt_id']} status={published['status']}")
+            current = runtime.changeset("changeset_micro_001")
+            if current is not None and current.get("status") == "published":
+                if not args.yes:
+                    answer = input("[revert] type yes to revert the published change: ")
+                    if answer.strip().lower() != "yes":
+                        print("revert skipped by user.")
+                        return 0
+                reverted = runtime.revert("changeset_micro_001", args.revert_key)
+                print(f"[revert] compensation -> {reverted.get('compensation_revision')} (receipt {reverted['receipt_id']}).")
+                card = runtime.view("person_card")
+                timeline = runtime.view("relationship_timeline")
+                print(f"[read_view] person_card {card['freshness_status']} at {card['data_revision']}: {card['payload']}")
+                print(f"[read_view] relationship_timeline {timeline['freshness_status']} at {timeline['data_revision']}: {len(timeline['payload']['history'])} history entries")
+            elif current is not None and current.get("status") == "reverted":
+                print(f"[revert] already reverted (compensation {current.get('rollback_reference')}).")
+            return 0
+        finally:
+            store.close()
+
+    return _with_runtime(args, journey)
+
+
+def cmd_receipts(args: argparse.Namespace) -> int:
+    store = _open_existing_store(args)
+    if store is None:
+        print("No local data yet. Run `noetide init` first.")
+        return 0
+    try:
+        receipts = store.ledger_records_of_type("receipt")
+        if not receipts:
+            print("No receipts found.")
+            return 0
+        for receipt in receipts:
+            line = f"{receipt['receipt_id']}: status={receipt['status']}"
+            if receipt.get("published_revision"):
+                line += f" published_revision={receipt['published_revision']}"
+            if receipt.get("compensation_revision"):
+                line += f" compensation_revision={receipt['compensation_revision']}"
+            print(line)
+        return 0
+    finally:
+        store.close()
+
+
+def cmd_history(args: argparse.Namespace) -> int:
+    store = _open_existing_store(args)
+    if store is None:
+        print("No local data yet. Run `noetide init` first.")
+        return 0
+    try:
+        changesets = store.ledger_records_of_type("changeset")
+        receipts = store.ledger_records_of_type("receipt")
+        events = store.ledger_records_of_type("audit_event")
+        if not changesets and not receipts and not events:
+            print("No history found.")
+            return 0
+        print("ChangeSets:")
+        for item in changesets:
+            print(f"  {item['changeset_id']}: status={item['status']}")
+        print("Receipts:")
+        for item in receipts:
+            print(f"  {item['receipt_id']}: status={item['status']}")
+        print("Audit events:")
+        for item in events:
+            print(f"  {item['changeset_id']}: {item['event_type']} at {item['revision']}")
+        return 0
+    finally:
+        store.close()
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="noetide")
     parser.add_argument("--data-dir", help="local SQLite data directory")
@@ -136,6 +258,14 @@ def main(argv: list[str] | None = None) -> int:
         command.set_defaults(handler=cmd_c1)
     review = commands.add_parser("review")
     review.set_defaults(handler=cmd_review)
+    guide = commands.add_parser("guide")
+    guide.add_argument("--yes", action="store_true", help="skip interactive confirmations")
+    guide.add_argument("--publish-key", default="cli_guide_publish_001")
+    guide.add_argument("--revert-key", default="cli_guide_revert_001")
+    guide.set_defaults(handler=cmd_guide)
+    for name, handler in (("receipts", cmd_receipts), ("history", cmd_history)):
+        command = commands.add_parser(name)
+        command.set_defaults(handler=handler)
     args = parser.parse_args(argv)
     try:
         return args.handler(args)

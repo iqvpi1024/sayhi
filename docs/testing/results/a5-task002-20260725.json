@@ -1,0 +1,53 @@
+{
+ "schema_version": "noetide.a5-task-result.v1",
+ "run_id": "a5-task002-310bcf2-20260725",
+ "task_id": "A5-TASK-002",
+ "slice_id": "SLICE-MVP-A-APP-SHELL-001",
+ "git_commit": "310bcf2",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a5_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -c \"import noetide_micro.a5_testing_adapter; import noetide_micro.cli\"",
+   "exit_code": 0,
+   "result": "imports OK"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_a5_task_002_adapter -v",
+   "exit_code": 0,
+   "result": "6/6 passed (all 8 cases match oracles incl. forbidden_mutations, system isolation, layer snapshot keys, inject_failure reaches publish with atomic rollback to rev_010, cli receipts/history on empty dir, cli guide full journey rev_010->rev_011->rev_012)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_A5_ADAPTER='noetide_micro.a5_testing_adapter'; python -m unittest tests.semantic.test_a5_app_shell_contract -v",
+   "exit_code": 0,
+   "result": "contract 8/8 passed (A5-001..008)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 8 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "211 tests OK, 0 skipped; no regression"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; python tools/validate_a5_suite.py",
+   "exit_code": 0,
+   "result": "A5 suite materialized; no business test was executed"
+  },
+  {
+   "command": "powershell -File tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "product baseline static checks passed"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
