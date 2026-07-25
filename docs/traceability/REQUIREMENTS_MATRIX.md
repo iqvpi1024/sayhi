@@ -279,3 +279,22 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `FR-108` | 横切：原文/hash 不变、翻译不作证据、profile 外 fail closed | `SPEC-B5-MULTILINGUAL-001` §5/§7 | `B5-008` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
 
 状态：`product_decided=true`（`DEC-MVP-B-MULTILINGUAL-001`，2026-07-25）、`spec_approved=true`（`B5-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0012`，2026-07-25）、`suite_defined=true`、`suite_materialized=true`（2026-07-25）、`suite_executed=true`、`suite_passed=true`（2026-07-25，official runner 同一次 run 8/8 passed/current，immutable result `docs/testing/results/b5-20260725.json`，manifest 已绑定）、`gate_review_passed=true`（`B5_MULTILINGUAL_GATE_REVIEW_2026-07-25.md`，P0=0/P1=0）、`verified=true`（recovery tag `b5-multilingual-rp-20260725`）。
+
+## 4.15 Active Slice：B6 Shadow Migration 与压测消歧传播
+
+`SLICE-MVP-B-SHADOW-MIGRATION-001` 在一个固定合成复杂 profile 上验证影子迁移（原始库零改动、失败无部分写入、迁移后深度对账）与压测消歧传播（确定性计数、未确认不自动合并、历史完整保留）。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `PRD-§24.3` | 影子迁移 + 深度对账 match | `SPEC-B6-SHADOW-MIGRATION-001` §2.1/§7；B4 对账语义 | `B6-001` | TBD（ADR/物化后填写） | `not_executed` |
+| `PRD-§24.3` | 变换正确性与确定性 transform_log | `SPEC-B6-SHADOW-MIGRATION-001` §2.1/§7 | `B6-002` | TBD | `not_executed` |
+| `PRD-§24.3` | 迁移故障：显式 failed、零部分写入、影子可丢弃 | `SPEC-B6-SHADOW-MIGRATION-001` §3/§6/§7 | `B6-003` | TBD | `not_executed` |
+| `PRD-§24.3` | 影子偏差 mismatch 报告不静默修复 | `SPEC-B6-SHADOW-MIGRATION-001` §6/§7 | `B6-004` | TBD | `not_executed` |
+| `PRD-§24.3` | 消歧候选确定性计数、无自动合并 | `SPEC-B6-SHADOW-MIGRATION-001` §2.2/§5/§7 | `B6-005` | TBD | `not_executed` |
+| `PRD-§24.3` | 已确认合并传播计数确定、历史保留 | `SPEC-B6-SHADOW-MIGRATION-001` §2.3/§7；S3 | `B6-006` | TBD | `not_executed` |
+| `PRD-§24.3` | 批量处理计数可复现 | `SPEC-B6-SHADOW-MIGRATION-001` §5/§7 | `B6-007` | TBD | `not_executed` |
+| `PRD-§24.3` | bitemporal 历史随迁移完整 | `SPEC-B6-SHADOW-MIGRATION-001` §4/§7；S2 | `B6-008` | TBD | `not_executed` |
+| `PRD-§24.3` | 影子/报告不作证据 | `SPEC-B6-SHADOW-MIGRATION-001` §2/§5/§7 | `B6-009` | TBD | `not_executed` |
+| `PRD-§24.3` | 横切：原始库不变、历史完整、fail closed | `SPEC-B6-SHADOW-MIGRATION-001` §5/§7 | `B6-010` | TBD | `not_executed` |
+
+状态：`product_decided=true`（`DEC-MVP-B-SHADOW-MIGRATION-001`，2026-07-25）、`spec_approved=true`（`B6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
