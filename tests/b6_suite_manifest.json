@@ -1,0 +1,82 @@
+{
+  "schema_version": "noetide.b6-suite-manifest.v1",
+  "suite_id": "b6_shadow_migration_v1",
+  "slice_id": "SLICE-MVP-B-SHADOW-MIGRATION-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "none",
+  "required_scenario_ids": [
+    "B6-001",
+    "B6-002",
+    "B6-003",
+    "B6-004",
+    "B6-005",
+    "B6-006",
+    "B6-007",
+    "B6-008",
+    "B6-009",
+    "B6-010"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-B-SHADOW-MIGRATION-001"
+    ],
+    "contract_ref": "SPEC-B6-SHADOW-MIGRATION-001",
+    "adr_refs": [
+      "ADR-0013"
+    ],
+    "architecture_ref": "ARCH-B6-SHADOW-MIGRATION-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/b6_shadow_migration_v1/fixture.json",
+      "sha256": "de6709677e7fd183f4e53e6fef54794842d564de5fc294bb92be4a7fe4c19d19"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/b6_shadow_migration_v1/oracles.json",
+      "sha256": "99c776e1ce837ae97245d8488773d787bab5fd6167a97c92bfd5a67852f8d0e2"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/b6_shadow_migration_scenarios.json",
+      "sha256": "8b6e9bee4080d89ce3ed4d2d85e59f77359d3fdd2f3abb34bfbe9c20ffd960fd"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/b6_shadow_migration_adapter_protocol.py",
+      "sha256": "b2b4eafa1d482215b41d0ce4dfbcc501662864a8025e082075f64460381a1ca0"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_b6_shadow_migration_contract.py",
+      "sha256": "888c28464298f96ddba9dbd02a3a808cc804b1402d4e9c72f55b5c2a7697f3e3"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_b6_suite.py",
+      "sha256": "65c7069cc28282130dc02b793e2fbef2ec1ce04820b30117d8a07e1c2c9450e4"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_b6_suite.py",
+      "sha256": "e2a1e0974cccdeb03c870c73dadd92fa8a745a229efcdb0fdbe8323f95bec715"
+    }
+  ],
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}

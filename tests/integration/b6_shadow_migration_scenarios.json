@@ -1,0 +1,74 @@
+{
+  "suite_id": "b6_shadow_migration_v1",
+  "fixture_ref": "tests/fixtures/b6_shadow_migration_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/b6_shadow_migration_v1/oracles.json",
+  "scenarios": [
+    {
+      "scenario_id": "B6-001",
+      "contract_refs": [
+        "B6-INV-001",
+        "B6-INV-002"
+      ]
+    },
+    {
+      "scenario_id": "B6-002",
+      "contract_refs": [
+        "B6-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "B6-003",
+      "contract_refs": [
+        "B6-INV-001",
+        "B6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "B6-004",
+      "contract_refs": [
+        "B6-INV-002",
+        "B6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "B6-005",
+      "contract_refs": [
+        "B6-INV-003",
+        "B6-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "B6-006",
+      "contract_refs": [
+        "B6-INV-004",
+        "B6-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "B6-007",
+      "contract_refs": [
+        "B6-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "B6-008",
+      "contract_refs": [
+        "B6-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "B6-009",
+      "contract_refs": [
+        "B6-INV-002"
+      ]
+    },
+    {
+      "scenario_id": "B6-010",
+      "contract_refs": [
+        "B6-INV-001",
+        "B6-INV-003",
+        "B6-INV-007"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "fixture_id": "b6_shadow_migration_v1",
+  "schema_version": "noetide.b6-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "b6_shadow_migration_v1",
+  "determinism": {
+    "clock": "2032-06-01T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "entities": [
+    {
+      "entity_id": "synthetic_person_alpha_01",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_alpha",
+      "display_label": "synthetic alpha variant 1",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_alpha_02",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_alpha",
+      "display_label": "synthetic alpha variant 2",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_alpha_03",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_alpha",
+      "display_label": "synthetic alpha variant 3",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_beta_01",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_beta",
+      "display_label": "synthetic beta variant 1",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_beta_02",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_beta",
+      "display_label": "synthetic beta variant 2",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_beta_03",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_beta",
+      "display_label": "synthetic beta variant 3",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_gamma_01",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_gamma",
+      "display_label": "synthetic gamma variant 1",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_gamma_02",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_gamma",
+      "display_label": "synthetic gamma variant 2",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_gamma_03",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_gamma",
+      "display_label": "synthetic gamma variant 3",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_delta_01",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_delta",
+      "display_label": "synthetic delta variant 1",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_delta_02",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_delta",
+      "display_label": "synthetic delta variant 2",
+      "synthetic": true
+    },
+    {
+      "entity_id": "synthetic_person_delta_03",
+      "entity_kind": "synthetic_person",
+      "name_key": "synthetic_name_delta",
+      "display_label": "synthetic delta variant 3",
+      "synthetic": true
+    }
+  ],
+  "base_sources": [
+    {
+      "source_id": "src_b6_stmt_001",
+      "source_kind": "synthetic_statement",
+      "text": "synthetic migration statement alpha",
+      "synthetic": true
+    }
+  ],
+  "canonical_objects": [
+    {
+      "object_id": "state_b6_contact_001",
+      "object_kind": "synthetic_contact_state",
+      "entity_ref": "synthetic_person_alpha_01",
+      "revisions": {
+        "rev_020": {
+          "fields": {
+            "contact_frequency": "weekly"
+          }
+        },
+        "rev_021": {
+          "fields": {
+            "contact_frequency": "daily"
+          }
+        }
+      },
+      "statement_locator": "src_b6_stmt_001"
+    },
+    {
+      "object_id": "state_b6_static_001",
+      "object_kind": "synthetic_static_state",
+      "entity_ref": "synthetic_person_beta_01",
+      "revisions": {
+        "rev_020": {
+          "fields": {
+            "residence_city": "synthetic_city_b"
+          }
+        },
+        "rev_021": {
+          "fields": {
+            "residence_city": "synthetic_city_b"
+          }
+        }
+      },
+      "statement_locator": "src_b6_stmt_001"
+    }
+  ],
+  "translations": [
+    {
+      "translation_id": "tr_b6_001",
+      "source_ref": "src_b6_stmt_001",
+      "target_language": "synthetic_lang_b",
+      "translated_text": "synthetic migration translation alpha",
+      "translation_revision": "tr_001"
+    }
+  ],
+  "reference_links": [
+    {
+      "link_id": "link_b6_001",
+      "from_object": "state_b6_contact_001",
+      "to_entity": "synthetic_person_alpha_01"
+    },
+    {
+      "link_id": "link_b6_002",
+      "from_object": "state_b6_static_001",
+      "to_entity": "synthetic_person_alpha_01"
+    },
+    {
+      "link_id": "link_b6_003",
+      "from_object": "state_b6_static_001",
+      "to_entity": "synthetic_person_alpha_02"
+    }
+  ],
+  "merge_instruction": {
+    "merge_id": "merge_b6_001",
+    "source_entity_ref": "synthetic_person_alpha_01",
+    "target_entity_ref": "synthetic_person_alpha_02",
+    "confirmed": true
+  },
+  "batch_job": {
+    "items": 12,
+    "batch_size": 5
+  },
+  "expected_candidate_pairs": 12,
+  "expected_propagated_references": 2,
+  "cases": [
+    {
+      "scenario_id": "B6-001",
+      "database_identity": "b6_case_001",
+      "operation": "shadow_migrate"
+    },
+    {
+      "scenario_id": "B6-002",
+      "database_identity": "b6_case_002",
+      "operation": "shadow_migrate_transform_check"
+    },
+    {
+      "scenario_id": "B6-003",
+      "database_identity": "b6_case_003",
+      "operation": "shadow_migrate",
+      "fault_injection": {
+        "at_batch": 2
+      }
+    },
+    {
+      "scenario_id": "B6-004",
+      "database_identity": "b6_case_004",
+      "operation": "shadow_migrate_then_deviate",
+      "deviation": {
+        "partition": "person_card",
+        "field": "contact_frequency_v2",
+        "forced_value": "weekly"
+      }
+    },
+    {
+      "scenario_id": "B6-005",
+      "database_identity": "b6_case_005",
+      "operation": "disambiguation_scan"
+    },
+    {
+      "scenario_id": "B6-006",
+      "database_identity": "b6_case_006",
+      "operation": "merge_propagation"
+    },
+    {
+      "scenario_id": "B6-007",
+      "database_identity": "b6_case_007",
+      "operation": "batch_stress"
+    },
+    {
+      "scenario_id": "B6-008",
+      "database_identity": "b6_case_008",
+      "operation": "shadow_migrate_history_check"
+    },
+    {
+      "scenario_id": "B6-009",
+      "database_identity": "b6_case_009",
+      "operation": "evidence_boundary_check"
+    },
+    {
+      "scenario_id": "B6-010",
+      "database_identity": "b6_case_010",
+      "operation": "cross_cutting",
+      "out_of_profile_attempt": {
+        "operation": "shadow_migrate",
+        "synthetic_profile_id": "unexpected_profile"
+      }
+    }
+  ]
+}

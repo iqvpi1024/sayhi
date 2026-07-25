@@ -1,0 +1,160 @@
+{
+  "oracle_id": "b6_shadow_migration_v1",
+  "schema_version": "noetide.b6-oracle.v1",
+  "scenarios": {
+    "B6-001": {
+      "result": {
+        "status": "reconciled",
+        "deep_result": {
+          "person_card": "match",
+          "relationship_timeline": "match",
+          "current_state": "match"
+        },
+        "original_unchanged": true
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-002": {
+      "result": {
+        "status": "reconciled",
+        "transform_log_counts": {
+          "fields_renamed": 2
+        },
+        "transform_correct": true,
+        "original_unchanged": true
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-003": {
+      "result": {
+        "status": "failed",
+        "reason_code": "migration_fault_injected",
+        "fault_batch": 2,
+        "partial_write_to_original": false,
+        "original_unchanged": true,
+        "shadow_state": "discarded"
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-004": {
+      "result": {
+        "status": "reconciled",
+        "deep_result": {
+          "person_card": "mismatch",
+          "relationship_timeline": "match",
+          "current_state": "match"
+        },
+        "mismatch_partitions": [
+          "person_card"
+        ],
+        "digest_pair_present": true,
+        "silent_repair": false,
+        "original_unchanged": true
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-005": {
+      "result": {
+        "status": "scan_completed",
+        "candidate_pairs": 12,
+        "auto_merges": 0,
+        "all_candidates_proposed": true
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-006": {
+      "result": {
+        "status": "propagated",
+        "merge_id": "merge_b6_001",
+        "propagated_references": 2,
+        "counts_deterministic": true,
+        "history_preserved": true,
+        "unaffected_entities_intact": true
+      },
+      "forbidden_mutations": [
+        "original_sources"
+      ]
+    },
+    "B6-007": {
+      "result": {
+        "status": "processed",
+        "input_items": 12,
+        "batch_size": 5,
+        "batches": 3,
+        "processed": 12,
+        "counts_reproducible": true
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-008": {
+      "result": {
+        "status": "reconciled",
+        "revisions_carried": true,
+        "snapshots_carried": true,
+        "translations_carried": true,
+        "undo_history_intact": true,
+        "original_unchanged": true
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-009": {
+      "result": {
+        "status": "boundary_ok",
+        "shadow_derived_only": true,
+        "canonical_references_shadow": false,
+        "report_is_evidence": false
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    },
+    "B6-010": {
+      "result": {
+        "status": "cross_cutting_ok",
+        "original_unchanged": true,
+        "history_intact": true,
+        "no_auto_merge": true,
+        "out_of_profile_attempt": {
+          "status": "failed",
+          "reason_code": "out_of_profile_input",
+          "write_attempted": false
+        }
+      },
+      "forbidden_mutations": [
+        "original_canonical",
+        "original_sources",
+        "original_ledger"
+      ]
+    }
+  }
+}
