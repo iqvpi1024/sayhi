@@ -65,6 +65,7 @@
 49. A5-TASK-001 已完成：`app_shell.py` 呈现层纯函数（NL review、impact preview、零绕过静态扫描辅助）；定向 6/6 passed，configured-adapter regression 205 OK（8 A5 contract skipped）；A5 official suite 仍 `not_executed`。
 50. A5-TASK-002 已完成：`cli.py` 增加 guide/receipts/history 命令，`a5_testing_adapter.py` 完整实现 adapter protocol；定向 6/6 passed，contract 8/8 passed（adapter），全量 regression 211 OK 无 skip；fixture/oracle 未修改；official runner 属 A5-TASK-004。
 51. A5-TASK-003 已完成：contract 集成验证 8/8 passed（commit a45a8bd），全量 regression 211 OK 无 skip 无退化；无实现变更；A5 official suite 仍 `not_executed`。
+52. A5-TASK-004 已完成：official runner `a5-20260725.json` 同一次 run 8/8 passed/current；manifest 已绑定 current result；12 个 suite validator 全 PASSED；全量 regression 211 OK 无 skip。
 
 ## 4. 真实验证结果
 
@@ -107,6 +108,7 @@
 | A5-TASK-001 | `a5-task001-2320515-20260724.json`：定向 6/6 passed；configured-adapter regression 205 OK、8 A5 contract skipped；A5 official suite `not_executed` |
 | A5-TASK-002 | `a5-task002-310bcf2-20260725.json`：定向 6/6 passed；contract 8/8 passed（adapter）；全量 regression 211 OK 无 skip；A5 official suite `not_executed` |
 | A5-TASK-003 | `a5-task003-a45a8bd-20260725.json`：contract 8/8 passed；全量 regression 211 OK 无 skip 无退化；A5 official suite `not_executed` |
+| A5 官方 suite | `a5-20260725.json`：同一次 run 8/8 passed/current；全量 regression 211 OK 无 skip；12 个 suite validator 全 PASSED；manifest 已绑定 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -119,4 +121,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A5-TASK-004（A5 official runner、12 个 suite validator、全量回归、manifest 绑定 current result）。**
+**执行 A5-TASK-005（Gate Review、状态/追踪同步、recovery tag `a5-app-shell-rp-20260725` 创建并推送）。**

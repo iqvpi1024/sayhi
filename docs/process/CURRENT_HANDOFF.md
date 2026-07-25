@@ -25,18 +25,18 @@ latest_recovery_points:
 decision_ref: DEC-MVP-A-APP-SHELL-001
 spec_contract: SPEC-A5-APP-SHELL-001 v0.2 (approved)
 adr_ref: ADR-0009
-suite_manifest: tests/a5_suite_manifest.json (materialized, not_executed)
+suite_manifest: tests/a5_suite_manifest.json (materialized, bound current result a5-20260725.json 8/8 passed)
 implementation_plan: PLAN-MVP-A-A5-IMPL-001 (docs/planning/MVP_A_A5_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A5_TASK_004 (official runner + 12 suite validators + regression + manifest binding)
+next_single_action: execute_A5_TASK_005 (Gate Review + recovery point tag, review/state/trace files only)
 scope_in:
-  - A5-TASK-004 only: docs/testing/results/a5-*.json, tests/a5_suite_manifest.json binding fields
+  - A5-TASK-005 only: gate review doc, PROJECT_STATE, traceability, handoff, recovery tag
 scope_out:
   - real personal data
-  - A5-TASK-005+ steps, fixture/oracle changes
+  - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A5-TASK-004 official runner 8/8 same-run passed, manifest bound, validators PASSED
+stop_condition: A5-TASK-005 Gate Review P0/P1=0 recorded and recovery tag pushed
 ```
 
 ## 当前事实
@@ -54,5 +54,6 @@ stop_condition: A5-TASK-004 official runner 8/8 same-run passed, manifest bound,
 - A5-TASK-001 已完成并验证：app_shell.py 呈现层纯函数与零绕过静态扫描辅助，定向 6/6 passed，configured-adapter regression 205 OK（8 A5 contract skipped），PRAGMA 检查通过；official suite 仍 `not_executed`。
 - A5-TASK-002 已完成并验证：cli.py guide/receipts/history 接线与 a5_testing_adapter.py 完整 protocol 实现，定向 6/6 passed，contract 8/8 passed（adapter），全量 regression 211 OK 无 skip；official suite 仍 `not_executed`。
 - A5-TASK-003 已完成并验证：contract 集成验证 8/8 passed（a45a8bd），regression 211 OK 无 skip 无退化；official suite 仍 `not_executed`。
+- A5-TASK-004 已完成并验证：official runner a5-20260725.json 同一次 run 8/8 passed/current，manifest 已绑定 current result，12 个 suite validator 全 PASSED，全量 regression 211 OK 无 skip。
 - 全量 configured-adapter regression 基线：211 OK 无 skip；12 个 suite validator。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。
