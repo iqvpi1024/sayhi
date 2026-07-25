@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-HARDENING-001` |
-| 当前阶段 | `task_003_completed` |
+| 当前阶段 | `slice_verified` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -76,6 +76,9 @@
 60. A6-TASK-001 已完成（2026-07-25）：`start.py` D0 入口与错误恢复壳面（clean_start exit 0；db corrupt 非零退出、非泄露错误、原文件不动；unwritable 非零退出不越界写；`--clean` 仅删默认合成根）；store.py 窄修复（init 失败关闭连接，防文件锁泄漏）；定向 6/6 passed，全量 regression 238 OK（21 A6 contract skipped）；A6 official suite 仍 `not_executed`。
 61. A6-TASK-002 已完成（2026-07-25，commit 3fc39db）：`alpha_explainability.py` 数据路径发现（合成/真实路径分离可验证）、备份产物+SHA-256 校验清单、导出 Round Trip（委托已验证 CP 能力，无新导出格式）、卸载语义（默认保留数据目录、删除需独立确认+已验证备份副本）；cli 窄接线 paths/backup/export/uninstall-info；定向 8/8 passed，全量 regression 259 OK（21 A6 contract skipped）；A6 official suite 仍 `not_executed`。注：该任务首个工作树曾因会话中断丢失，本轮按已批准任务卡重做。
 62. A6-TASK-003 已完成（2026-07-25，commit 08173d8）：`a6_journey.py` 集成旅程编排辅助（seed 固定合成数据、journey 步骤、conflict/bitemporal/merge-split/restricted-query/stale-base 探针、cross-cutting 审计、SLO 计时收集绑定 `a6_mvp_a_reference_v1`），全部只调用已验证核心能力，零新恢复/权限/候选生成语义；定向 13/13 passed，全量 regression 259 OK（21 A6 contract skipped）；A6 official suite 仍 `not_executed`。
+63. A6-TASK-004 已完成（2026-07-25，commit 77066da）：`a6_testing_adapter.py` 完整实现 adapter protocol；contract 21/21 passed；沙箱场景经 start.py 子进程、A6-007/009/016/017 用隔离内存探针库不动共享状态；A6-019 导出真实共享 store；定向 5/5 passed；全量 regression 264 OK 0 skip。
+64. A6-TASK-005 已完成（2026-07-25，commit 00d146a）：official runner `a6-20260725.json` 同一次 run 21/21 passed/current；环境戳记与 `a6_mvp_a_reference_v1` 绑定完整；manifest 绑定 current result（flags 全 true）；13 个 suite validator + product baseline 校验全部 PASSED；regression 264 OK 0 skip。
+65. A6-TASK-006 已完成（2026-07-25）：Gate Review `A6_HARDENING_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0，八个 A6-INV 均有正/反证明；矩阵 §4.12 状态更新为 verified；recovery tag `a6-hardening-rp-20260725` 已创建并推送。FR-003 生成侧保持合同 §1.1 显式已知限制；Alpha 发布动作须独立发布门禁决定。
 
 ## 4. 真实验证结果
 
@@ -132,4 +135,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A6-TASK-004：`a6_testing_adapter.py` 完整实现 adapter protocol，`NOETIDE_A6_ADAPTER=noetide_micro.a6_testing_adapter` 下 contract 21/21 passed。***
+**按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 选择下一切片（B4/B5/B6、C2-C6、D2/D3 之一），先走 Decision 门禁。***

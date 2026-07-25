@@ -30,7 +30,7 @@
 | `A6-TASK-003` | 集成旅程组装支撑：共享 reference profile 系统所需的运行时编排辅助（seed、journey 步骤、conflict probe、merge/split、restricted query、cross-cutting audit 辅助、SLO 计时收集） | `A6-001..012/016/017/021` | 组装辅助只调用已验证核心能力；无新恢复/权限/候选生成语义 | `completed`（2026-07-25，`a6-task003-20260725`） |
 | `A6-TASK-004` | `a6_testing_adapter.py` 完整实现 adapter protocol，contract 21/21 passed（adapter） | `A6-001..021` | adapter 完整实现 protocol；fixture/oracle 不被修改；全量 regression 无 skip 无退化 | `completed`（2026-07-25，`a6-task004-20260725`） |
 | `A6-TASK-005` | A6 official runner、existing regression 与 immutable result | `A6-001..021` | 21/21 同一次 run passed/current；环境戳记与 profile 绑定完整；13 个 suite validator PASSED；manifest 正确绑定 result | `completed`（2026-07-25，`a6-task005-20260725`） |
-| `A6-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
+| `A6-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `completed`（2026-07-25，`A6-HARDENING-GATE-2026-07-25`，tag `a6-hardening-rp-20260725`） |
 
 ## 3. 允许文件边界
 
