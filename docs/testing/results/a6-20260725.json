@@ -1,0 +1,177 @@
+{
+  "schema_version": "noetide.a6-run-result.v1",
+  "run_id": "a6-34ecda6595864e9a83e2d910d24998e6",
+  "suite_id": "a6_hardening_v1",
+  "manifest_sha256": "35b16842d553d7a53b00bdf4ae2dc2355cbd00edd8bbc0395b40f7cf31bb9e77",
+  "git_commit": "77066da9ecec938b273d6715d7d7e3b51e7d6e05",
+  "applicability": "current",
+  "reference_profile": {
+    "profile_id": "a6_mvp_a_reference_v1",
+    "slo_scope_note": "SLO observations are valid only for this profile; cross-profile extrapolation is forbidden"
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only",
+    "wall_time_utc": "2026-07-25T06:03:55.146130+00:00",
+    "monotonic_duration_seconds": 0.728474,
+    "timezone": "中国标准时间"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_a6_suite",
+    "--adapter",
+    "noetide_micro.a6_testing_adapter",
+    "--output",
+    "docs/testing/results/a6-20260725.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "A6-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-009",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-010",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-011",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-012",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-013",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-014",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-015",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-016",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-017",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-018",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-019",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-020",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "A6-021",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/a6_hardening_v1/fixture.json",
+      "sha256": "9cebb8666c59524e99a0cd8ffc2b8a1a3cb2ad8447f43fa61160ab6df73ffa7e"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/a6_hardening_v1/oracles.json",
+      "sha256": "0c523b2646acd674ea4016f37031effaa6fa29d8a1a8817f908b71aa5d58f6c3"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/a6_hardening_scenarios.json",
+      "sha256": "3cc3d84eabe86e908339cf627273a289d854958edbbbc20090264ecfb5d2ab4c"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/a6_hardening_adapter_protocol.py",
+      "sha256": "4af516b7b533c528250b690ecaf82913b64e3bdc6c33c6dc9e3a75b733862f42"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_a6_hardening_contract.py",
+      "sha256": "cb85b580e38fb9af5cfbb64121274f02502a4d980eec1786795d3ba4dabf6cb4"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_a6_suite.py",
+      "sha256": "b3982ee92b45f668dbaaee1dd6d88c613df84734744d23bb26d219fee762195d"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_a6_suite.py",
+      "sha256": "81caa50658d219dc06a3a6c80dde4aa69ca4fb335ad7c759d40a8b013829c996"
+    }
+  ]
+}

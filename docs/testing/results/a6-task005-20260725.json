@@ -1,0 +1,44 @@
+{
+ "schema_version": "noetide.a6-task-result.v1",
+ "run_id": "a6-task005-20260725",
+ "task_id": "A6-TASK-005",
+ "slice_id": "SLICE-MVP-A-HARDENING-001",
+ "git_commit": "77066da",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a6_official_suite": "passed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m tests.runner.run_a6_suite --adapter noetide_micro.a6_testing_adapter --output docs/testing/results/a6-20260725.json",
+   "exit_code": 0,
+   "result": "official runner: 21/21 scenarios passed in one run (run_id a6-<uuid>, git 77066da); environment stamped (Windows-11-10.0.26200-SP0 / Python 3.12.8 / SQLite 3.45.3 / network blocked / stdlib only / wall_time_utc 2026-07-25T06:03:55Z / monotonic 0.728474s / timezone stamped); result bound to reference profile a6_mvp_a_reference_v1 with no-extrapolation note"
+  },
+  {
+   "command": "manifest binding (tests/a6_suite_manifest.json)",
+   "exit_code": 0,
+   "result": "flags -> suite_executed=true, suite_passed=true; latest_verification_result=passed; latest_run_applicability=current; result path+sha256 and run-time manifest sha256 bound (A5 pattern); only binding fields changed"
+  },
+  {
+   "command": "python tools/validate_*.py (13 suite validators) + tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "all 13 suite validators PASSED incl. validate_a6_suite (materialized and current business runner result is bound); product baseline static checks PASSED"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 9 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "264 tests OK, 0 skipped; no regression"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ],
+ "notes": "SLO observations (A6-021) were actually measured via SloCollector and are bound to a6_mvp_a_reference_v1 only; no cross-profile extrapolation claimed. Oracle was not modified to fit the implementation. A6 slice now has an immutable 21/21 passed result artifact at docs/testing/results/a6-20260725.json; Gate Review remains TASK-006."
+}
