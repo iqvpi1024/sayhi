@@ -242,4 +242,4 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | PRD §21.2/§21.4 可解释性 | 数据路径/路径分离/备份/导出/卸载语义 | `SPEC-A6-HARDENING-001` §7；S7 可移植语义 | `A6-018..020` | TBD | `not_executed` |
 | PRD §21.2 SLO | 固定 SLO 检查实际结果绑定 profile 记录，不外推 | `SPEC-A6-HARDENING-001` §2/§7；S6 IQ-014/HTH-INV-009 | `A6-021` | TBD | `not_executed` |
 
-状态：`product_decided=true`、`spec_approved=true`（`A6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0010`，2026-07-25）、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
+状态：`product_decided=true`、`spec_approved=true`（`A6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0010`，2026-07-25）、`suite_defined=true`、`suite_materialized=true`（2026-07-25，preflight validator exit 0，21 个 contract 场景 skip）、`suite_executed=false`、`suite_passed=false`。

@@ -1,0 +1,158 @@
+{
+  "schema_version": "noetide.a6-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "a6_hardening_v1",
+  "reference_profile": {
+    "profile_id": "a6_mvp_a_reference_v1",
+    "data_revision": "a6_hardening_v1",
+    "seed_order": "fixed",
+    "execution_mode": "sequential_shared_state"
+  },
+  "seed": {
+    "persons": [
+      {
+        "person_id": "person_lin_zhou_synthetic",
+        "display_name": "Lin Zhou (synthetic)",
+        "kind": "person"
+      },
+      {
+        "person_id": "person_su_wan_synthetic",
+        "display_name": "Su Wan (synthetic)",
+        "kind": "person"
+      },
+      {
+        "person_id": "person_zhouzi_alias_synthetic",
+        "display_name": "Zhou Zi (synthetic alias)",
+        "kind": "person"
+      }
+    ],
+    "relationship": {
+      "relationship_id": "rel_lin_su_synthetic",
+      "from": "person_lin_zhou_synthetic",
+      "to": "person_su_wan_synthetic"
+    },
+    "initial_trust": 0.4,
+    "initial_closeness": 0.5,
+    "note": "trust/closeness/personality values are fixed synthetic seeds; no scenario may auto-modify them"
+  },
+  "cases": [
+    {
+      "scenario_id": "A6-001",
+      "action": "record_source",
+      "input_text": "SYNTHETIC: Lin Zhou and Su Wan joined the same reading group in 2024.",
+      "expected_source_kind": "text"
+    },
+    {
+      "scenario_id": "A6-002",
+      "action": "inspect_unconfirmed_candidate",
+      "candidate_origin": "A6-001"
+    },
+    {
+      "scenario_id": "A6-003",
+      "action": "audit_write_paths"
+    },
+    {
+      "scenario_id": "A6-004",
+      "action": "review_preview_confirm",
+      "candidate_origin": "A6-001"
+    },
+    {
+      "scenario_id": "A6-005",
+      "action": "read_core_views",
+      "views": [
+        "person_card",
+        "relationship_timeline",
+        "current_state"
+      ]
+    },
+    {
+      "scenario_id": "A6-006",
+      "action": "revert_and_audit",
+      "target_scenario": "A6-004"
+    },
+    {
+      "scenario_id": "A6-007",
+      "action": "fixed_query_battery",
+      "query_set": "a6_fixed_battery_v1"
+    },
+    {
+      "scenario_id": "A6-008",
+      "action": "bitemporal_history_query",
+      "target": "rel_lin_su_synthetic"
+    },
+    {
+      "scenario_id": "A6-009",
+      "action": "conflict_probe",
+      "seed_conflict": "a6_conflict_pair_v1"
+    },
+    {
+      "scenario_id": "A6-010",
+      "action": "merge_split_cycle",
+      "entities": [
+        "person_lin_zhou_synthetic",
+        "person_zhouzi_alias_synthetic"
+      ]
+    },
+    {
+      "scenario_id": "A6-011",
+      "action": "restricted_query",
+      "caller": "restricted_synthetic_caller",
+      "query": "a6_restricted_query_v1"
+    },
+    {
+      "scenario_id": "A6-012",
+      "action": "final_cross_cutting_audit"
+    },
+    {
+      "scenario_id": "A6-013",
+      "action": "clean_start",
+      "isolation": "sandbox"
+    },
+    {
+      "scenario_id": "A6-014",
+      "action": "startup_with_corrupt_db",
+      "isolation": "sandbox",
+      "failure_point": "corrupt_db_file"
+    },
+    {
+      "scenario_id": "A6-015",
+      "action": "write_with_unwritable_dir",
+      "isolation": "sandbox",
+      "failure_point": "unwritable_data_dir"
+    },
+    {
+      "scenario_id": "A6-016",
+      "action": "publish_with_injected_failure",
+      "failure_point": "mid_publish"
+    },
+    {
+      "scenario_id": "A6-017",
+      "action": "read_view_with_l2_failure",
+      "failure_point": "l2_projection"
+    },
+    {
+      "scenario_id": "A6-018",
+      "action": "inspect_data_paths"
+    },
+    {
+      "scenario_id": "A6-019",
+      "action": "backup_and_export"
+    },
+    {
+      "scenario_id": "A6-020",
+      "action": "uninstall_semantics_probe",
+      "isolation": "sandbox"
+    },
+    {
+      "scenario_id": "A6-021",
+      "action": "record_slo_observations",
+      "slo_ids": [
+        "canonical_query_p95",
+        "changeset_publish_p95",
+        "core_view_read_after_publish",
+        "l3_stale_visibility"
+      ]
+    }
+  ]
+}

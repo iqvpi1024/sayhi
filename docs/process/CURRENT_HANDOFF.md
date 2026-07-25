@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-HARDENING-001
 slice_id: SLICE-MVP-A-HARDENING-001
-current_phase: adr_accepted
+current_phase: suite_materialized
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -26,18 +26,18 @@ latest_recovery_points:
 decision_ref: DEC-MVP-A-HARDENING-001
 spec_contract: SPEC-A6-HARDENING-001 v0.1 Approved (A6-CONTRACT-REVIEW-001)
 adr_ref: ADR-0010 (+ ARCH-A6-HARDENING-001)
-suite_manifest: none yet
+suite_manifest: tests/a6_suite_manifest.json (materialized, not_executed)
 implementation_plan: none yet
 next_role: Implementer
-next_single_action: materialize A6 executable suite per ADR-0010 section 5.2 (fixture/oracle/scenarios/protocol/runner/validator/manifest; preflight exit 0, business tests not_executed)
+next_single_action: establish A6 Implementation Plan + task cards (PLAN-MVP-A-A6-IMPL-001), then A6-TASK-001
 scope_in:
-  - A6 suite materialization only (no business code)
+  - A6 implementation plan + task cards only (no business code)
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A6 suite materialized + preflight validator exit 0; implementation plan next, no business code before plan
+stop_condition: A6 implementation plan + task cards established; then per-task development
 ```
 
 ## 当前事实

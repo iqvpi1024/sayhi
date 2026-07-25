@@ -1,0 +1,289 @@
+{
+  "schema_version": "noetide.a6-oracles.v1",
+  "scenarios": {
+    "A6-001": {
+      "result": {
+        "source_appended": true,
+        "receipt_issued": true,
+        "canonical_revision_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical"
+      ]
+    },
+    "A6-002": {
+      "result": {
+        "candidate_visible_in_review": true,
+        "candidate_in_canonical": false,
+        "candidate_in_core_views": false
+      },
+      "forbidden_mutations": [
+        "canonical"
+      ]
+    },
+    "A6-003": {
+      "result": {
+        "all_normative_writes_via_changeset": true,
+        "source_append_independent": true,
+        "bypass_paths_found": 0
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-004": {
+      "result": {
+        "preview_object_set_equals_published": true,
+        "preview_view_set_equals_actual": true,
+        "published": true,
+        "receipt_issued": true
+      },
+      "forbidden_mutations": [
+        "trust",
+        "closeness",
+        "personality"
+      ]
+    },
+    "A6-005": {
+      "result": {
+        "person_card": "fresh",
+        "relationship_timeline": "fresh",
+        "current_state": "fresh",
+        "stale_returned_as_fresh": false
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-006": {
+      "result": {
+        "receipt_available": true,
+        "history_contains_publish": true,
+        "history_contains_revert_compensation": true,
+        "views_restored_consistent": true
+      },
+      "forbidden_mutations": [
+        "trust",
+        "closeness",
+        "personality"
+      ]
+    },
+    "A6-007": {
+      "result": {
+        "six_states_strictly_separated": true,
+        "unknown_not_guessed": true,
+        "cross_compartment_leak": false
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-008": {
+      "result": {
+        "valid_recorded_distinguished": true,
+        "recorded_at_not_backfilled": true,
+        "correction_vs_evolution_distinguished": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-009": {
+      "result": {
+        "conflict_detected": true,
+        "presented_side_by_side": true,
+        "auto_resolved": false
+      },
+      "forbidden_mutations": [
+        "trust",
+        "closeness",
+        "personality"
+      ]
+    },
+    "A6-010": {
+      "result": {
+        "merge_via_candidate_confirmation": true,
+        "split_executed": true,
+        "split_restored_prior_state": true
+      },
+      "forbidden_mutations": [
+        "trust",
+        "closeness",
+        "personality"
+      ]
+    },
+    "A6-011": {
+      "result": {
+        "fail_closed": true,
+        "answered_less": true,
+        "no_guessing": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-012": {
+      "result": {
+        "trust_unchanged": true,
+        "closeness_unchanged": true,
+        "personality_unchanged": true,
+        "history_preserved": true,
+        "stale_base_rejected": true,
+        "l2_fallback_available": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-013": {
+      "result": {
+        "exit_code": 0,
+        "data_dir_created_at_declared_path": true,
+        "preflight_smoke_passed": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-014": {
+      "result": {
+        "exit_code_nonzero": true,
+        "error_non_leaking": true,
+        "original_file_untouched": true,
+        "silent_repair_attempted": false
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-015": {
+      "result": {
+        "exit_code_nonzero": true,
+        "clear_error": true,
+        "wrote_outside_declared_root": false
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-016": {
+      "result": {
+        "rolled_back": true,
+        "canonical_revision_unchanged": true,
+        "failure_reported": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality"
+      ]
+    },
+    "A6-017": {
+      "result": {
+        "fallback": "canonical_or_explicit_unavailable",
+        "stale_returned_as_fresh": false
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-018": {
+      "result": {
+        "data_path_discoverable": true,
+        "synthetic_real_paths_differ": true,
+        "separation_verifiable": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-019": {
+      "result": {
+        "backup_artifact_exists": true,
+        "checksum_manifest_verifiable": true,
+        "export_round_trip": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-020": {
+      "result": {
+        "default_uninstall_preserves_data": true,
+        "delete_requires_independent_confirmation": true,
+        "backup_export_copies_mentioned": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    },
+    "A6-021": {
+      "result": {
+        "observations_recorded": true,
+        "bound_to_profile": "a6_mvp_a_reference_v1",
+        "extrapolation_forbidden": true,
+        "all_slo_ids_present": true
+      },
+      "forbidden_mutations": [
+        "canonical",
+        "trust",
+        "closeness",
+        "personality",
+        "history"
+      ]
+    }
+  }
+}

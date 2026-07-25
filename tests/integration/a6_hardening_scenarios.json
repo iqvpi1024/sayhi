@@ -1,0 +1,163 @@
+{
+  "suite_id": "a6_hardening_v1",
+  "fixture_ref": "tests/fixtures/a6_hardening_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/a6_hardening_v1/oracles.json",
+  "execution": {
+    "mode": "sequential_shared_state",
+    "order": [
+      "A6-001",
+      "A6-002",
+      "A6-003",
+      "A6-004",
+      "A6-005",
+      "A6-006",
+      "A6-007",
+      "A6-008",
+      "A6-009",
+      "A6-010",
+      "A6-011",
+      "A6-012",
+      "A6-013",
+      "A6-014",
+      "A6-015",
+      "A6-016",
+      "A6-017",
+      "A6-018",
+      "A6-019",
+      "A6-020",
+      "A6-021"
+    ]
+  },
+  "scenarios": [
+    {
+      "scenario_id": "A6-001",
+      "contract_refs": [
+        "A6-INV-004",
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-002",
+      "contract_refs": [
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-003",
+      "contract_refs": [
+        "A6-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "A6-004",
+      "contract_refs": [
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-005",
+      "contract_refs": [
+        "A6-INV-008"
+      ]
+    },
+    {
+      "scenario_id": "A6-006",
+      "contract_refs": [
+        "A6-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "A6-007",
+      "contract_refs": [
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-008",
+      "contract_refs": [
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-009",
+      "contract_refs": [
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-010",
+      "contract_refs": [
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-011",
+      "contract_refs": [
+        "A6-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "A6-012",
+      "contract_refs": [
+        "A6-INV-001",
+        "A6-INV-007",
+        "A6-INV-008"
+      ]
+    },
+    {
+      "scenario_id": "A6-013",
+      "contract_refs": [
+        "A6-INV-003"
+      ]
+    },
+    {
+      "scenario_id": "A6-014",
+      "contract_refs": [
+        "A6-INV-003",
+        "A6-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "A6-015",
+      "contract_refs": [
+        "A6-INV-003"
+      ]
+    },
+    {
+      "scenario_id": "A6-016",
+      "contract_refs": [
+        "A6-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "A6-017",
+      "contract_refs": [
+        "A6-INV-008"
+      ]
+    },
+    {
+      "scenario_id": "A6-018",
+      "contract_refs": [
+        "A6-INV-003"
+      ]
+    },
+    {
+      "scenario_id": "A6-019",
+      "contract_refs": [
+        "A6-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "A6-020",
+      "contract_refs": [
+        "A6-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "A6-021",
+      "contract_refs": [
+        "A6-INV-002"
+      ]
+    }
+  ]
+}
