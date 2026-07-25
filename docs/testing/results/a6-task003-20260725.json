@@ -1,0 +1,44 @@
+{
+ "schema_version": "noetide.a6-task-result.v1",
+ "run_id": "a6-task003-20260725",
+ "task_id": "A6-TASK-003",
+ "slice_id": "SLICE-MVP-A-HARDENING-001",
+ "git_commit": "3fc39db",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a6_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_a6_task_003_journey -v",
+   "exit_code": 0,
+   "result": "13/13 passed (layer snapshot + protected layers; record/propose/candidate visibility; publish/views/revert journey; answer battery six states; conflict probe; bitemporal probe after revert; merge/split cycle; restricted query probe; injected publish failure atomic rollback; L2 failure canonical fallback; stale base rejected; cross-cutting check; SLO collector + report)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 8 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "259 tests OK, 21 skipped (A6 contract, no adapter); no regression from TASK-002 baseline"
+  },
+  {
+   "command": "python tools/validate_a6_suite.py",
+   "exit_code": 0,
+   "result": "A6 Hardening suite materialized; no business test was executed"
+  },
+  {
+   "command": "powershell -File tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "product baseline static checks passed"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ],
+ "notes": "a6_journey.py only composes already-verified capabilities (intake/candidate/changesets/views/answers/access_policy/entity_merge/current_state/app_shell); no new recovery, permission, or candidate-generation semantics. stale_base_probe reuses the Micro-tested advance_for_test path: conflicted receipt is idempotent and canonical revision stays rev_011_test. Answer battery reuses the approved A1 answer_safety_v1 fixture. SQLite PRAGMAs (foreign_keys=ON, journal_mode=DELETE, synchronous=FULL) remain covered by test_a6_task_001_start."
+}
