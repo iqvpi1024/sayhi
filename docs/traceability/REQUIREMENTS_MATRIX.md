@@ -317,3 +317,21 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `PRD-§23` | 横切：revision 链完整、证据真实、fail closed、无关层不变 | `SPEC-C2-HYPOTHESIS-001` §4/§5/§7；S2 | `C2-010` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
 
 状态：`product_decided=true`（`DEC-MVP-C-HYPOTHESIS-001`，2026-07-26）、`spec_approved=true`（`C2-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0014`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c2-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C2_HYPOTHESIS_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c2-hypothesis-lifecycle-rp-20260726`）。
+## 4.17 Active Slice：C3 Review & Calibration
+
+`SLICE-MVP-C-REVIEW-001` 在一个固定合成 profile 上验证两类 Derived 能力：周期性复盘报告（周/月/年度确定性计数、fresh/stale、历史版本保留、删除重建等价）与跨阶段比较（同指标集 signed delta、不合法比较 fail closed）。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `PRD-§20.3 FR-203` | 周复盘确定性计数、fresh、view_revision=1 | `SPEC-C3-REVIEW-001` §2.1/§7 | `C3-001` | `noetide_micro.reviews`（ADR-0015） | `passed`（c3-20260726.json） |
+| `PRD-§20.3 FR-203` | 月/年度复盘、半开窗口边界归属 | `SPEC-C3-REVIEW-001` §2.1/§2.3/§7 | `C3-002` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§16.2` | Canonical 变化后窗口报告 stale、不改写历史 | `SPEC-C3-REVIEW-001` §3/§5/§7；S2 | `C3-003` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§16.2` | 重建成新版本、旧版本保留不覆盖 | `SPEC-C3-REVIEW-001` §3/§7；S2 | `C3-004` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§12 L3` | 删除后重建等价、Canonical digest 不变 | `SPEC-C3-REVIEW-001` §3/§5/§7 | `C3-005` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§20.3 FR-205` | 同指标集两窗口 signed delta 精确 | `SPEC-C3-REVIEW-001` §2.2/§7 | `C3-006` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§20.3 FR-205` | 指标集不一致 fail closed 无写入 | `SPEC-C3-REVIEW-001` §2.2/§6/§7 | `C3-007` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§20.3 FR-205` | 窗口不合法 fail closed 无写入 | `SPEC-C3-REVIEW-001` §2.3/§6/§7 | `C3-008` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§12 L3` | 报告/比较不进事实证据集、Canonical 无反向引用 | `SPEC-C3-REVIEW-001` §2/§5/§7；S1 | `C3-009` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+| `PRD-§23` | 横切：版本链完整、digest 不变、profile 外 fail closed | `SPEC-C3-REVIEW-001` §4/§5/§7；S2 | `C3-010` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
+
+状态：`product_decided=true`（`DEC-MVP-C-REVIEW-001`，2026-07-26）、`spec_approved=true`（`C3-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0015`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c3-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C3_REVIEW_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c3-review-calibration-rp-20260726`）。

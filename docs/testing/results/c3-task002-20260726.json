@@ -1,0 +1,22 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "C3-TASK-002",
+  "date": "2026-07-26",
+  "git_commit": "bb13f3b64e8a80addab8de4f61fdabd591a27ea1",
+  "checks": [
+    {
+      "name": "contract_with_adapter",
+      "command": "NOETIDE_C3_ADAPTER=noetide_micro.c3_testing_adapter python -m unittest tests.semantic.test_c3_review_contract",
+      "exit_code": 0,
+      "result": "10 tests OK"
+    },
+    {
+      "name": "preflight_validator",
+      "command": "python tools/validate_c3_suite.py",
+      "exit_code": 0,
+      "result": "PASSED (materialized, not executed)"
+    }
+  ],
+  "notes": "C3-002 oracle correction: monthly/yearly commitments_completed 3->4 and commitments_closed_on_time 2->3; manual expectation arithmetic error, fixture unchanged, implementation deterministic counts match fixture; manifest oracle hash updated.",
+  "result": "passed"
+}

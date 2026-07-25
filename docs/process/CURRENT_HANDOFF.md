@@ -3,8 +3,8 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-C-HYPOTHESIS-001
-slice_id: SLICE-MVP-C-HYPOTHESIS-001
+handoff_id: HANDOFF-MVP-C-REVIEW-001
+slice_id: SLICE-MVP-C-REVIEW-001
 current_phase: slice_verified
 product_baseline:
   path: PRDv05.md
@@ -17,17 +17,17 @@ release:
   prerelease: true
   delivery_level: D1_synthetic_preview
 latest_recovery_points:
-  - b4-reconciliation-rp-20260725
   - b5-multilingual-rp-20260725
   - b6-shadow-migration-rp-20260725
   - c2-hypothesis-lifecycle-rp-20260726
-decision_ref: DEC-MVP-C-HYPOTHESIS-001
-spec_contract: SPEC-C2-HYPOTHESIS-001 v0.1 Approved (C2-CONTRACT-REVIEW-001)
-adr_ref: ADR-0014 (+ ARCH-C2-HYPOTHESIS-001)
-suite_manifest: tests/c2_suite_manifest.json (materialized, executed, passed, bound to c2-20260726.json)
-implementation_plan: PLAN-MVP-C-C2-IMPL-001 (C2-TASK-001..004, all completed)
+  - c3-review-calibration-rp-20260726
+decision_ref: DEC-MVP-C-REVIEW-001
+spec_contract: SPEC-C3-REVIEW-001 v0.1 Approved (C3-CONTRACT-REVIEW-001)
+adr_ref: ADR-0015 (+ ARCH-C3-REVIEW-001)
+suite_manifest: tests/c3_suite_manifest.json (materialized, executed, passed, bound to c3-20260726.json)
+implementation_plan: PLAN-MVP-C-C3-IMPL-001 (C3-TASK-001..004, all completed)
 next_role: Product/Architecture
-next_single_action: choose next slice per docs/planning/MASTER_DELIVERY_ROADMAP.md (C3-REVIEW-CALIBRATION FR-203/205, then C4/C5/C6, D2/D3); start with a Decision gate
+next_single_action: choose next slice per docs/planning/MASTER_DELIVERY_ROADMAP.md (C4-SCENARIO-ACTION FR-204/206, then C5/C6, D2/D3); start with a Decision gate; distinguish from C1 verified predicted/fictional subset
 scope_in:
   - next slice decision only (no business code before Decision gate)
 scope_out:
@@ -35,24 +35,24 @@ scope_out:
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-  - automatic hypothesis generation/transition/scoring (C2 contract non-goals)
-stop_condition: next slice decided; C2 hypothesis lifecycle slice is verified (gate review passed, recovery tag pushed)
+  - natural-language review generation, causal/trend inference, persona judgment (C3 contract non-goals)
+stop_condition: next slice decided; C3 review & calibration slice is verified (gate review passed, recovery tag pushed)
 ```
 
 ## 当前事实
 
-- C2 切片 verified，recovery tag `c2-hypothesis-lifecycle-rp-20260726` 已推送；official suite 10/10 passed/current 已绑定（`docs/testing/results/c2-20260726.json`）。
-- `DEC-MVP-C-HYPOTHESIS-001`（2026-07-26）选择 C2 作为 active slice：FR-201 Hypothesis 支持证据、反例、范围与生命周期；约束 Hypothesis 不升级为 Fact。
-- C2 applicability review `C2-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`（2026-07-26）；`SPEC-C2-HYPOTHESIS-001` v0.1 经 `C2-CONTRACT-REVIEW-001` 批准。
-- `ADR-0014` Accepted：复用 canonical_objects(object_type=hypothesis) + canonical_evidence_refs，payload 内嵌 revision_history，迁移收据进修订账本；零 schema 变更。
-- C2-TASK-001 完成：`hypotheses.py` 五入口（create/attach/transition/present/upgrade-reject）全部 confirmed-only，定向 9/9 passed（`c2-task001-20260726.json`）。
-- C2-TASK-002 完成：`c2_testing_adapter.py` 完整实现 protocol，contract 10/10 passed（`c2-task002-20260726.json`）。
-- C2-TASK-003 完成：official runner 同一次 run 10/10 passed/current，manifest 绑定，17 个 suite validator 全 PASSED，全量 regression 347 OK 0 skip（`c2-task003-20260726.json`）。
-- C2-TASK-004 完成：Gate Review `C2_HYPOTHESIS_GATE_REVIEW_2026-07-26.md` P0=0/P1=0；矩阵 §4.16 verified=true。
+- C3 切片 verified，recovery tag `c3-review-calibration-rp-20260726` 已推送；official suite 10/10 passed/current 已绑定（`docs/testing/results/c3-20260726.json`）。
+- `DEC-MVP-C-REVIEW-001`（2026-07-26）选择 C3 作为 active slice：FR-203 周/月/年度复盘、FR-205 跨阶段比较；约束 Derived 非证据、确定性计数、历史版本保留、可比性 fail closed。
+- C3 applicability review `C3-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`（2026-07-26）；`SPEC-C3-REVIEW-001` v0.1 经 `C3-CONTRACT-REVIEW-001` 批准。
+- `ADR-0015` Accepted：复用 ledger_records（record_type=review_report/phase_comparison），窗口输入 digest 判定 freshness，新增 store 窄方法 `delete_ledger_record`；零 schema 变更。
+- C3-TASK-001 完成：`reviews.py` 五入口（generate/present/rebuild/delete/compare），定向 5/5 passed（`c3-task001-20260726.json`）。
+- C3-TASK-002 完成：`c3_testing_adapter.py` 完整实现 protocol，contract 10/10 passed；oracle 一处人工计数修正（月/年度 completed 3->4、on_time 2->3，fixture 未动，manifest hash 已同步）（`c3-task002-20260726.json`）。
+- C3-TASK-003 完成：official runner 同一次 run 10/10 passed/current，manifest 绑定，18 个 suite validator 全 PASSED，全量 regression 362 OK 0 skip（`c3-task003-20260726.json`）。
+- C3-TASK-004 完成：Gate Review `C3_REVIEW_GATE_REVIEW_2026-07-26.md` P0=0/P1=0；矩阵 §4.17 verified=true。
 
 ## 回归基线（2026-07-26）
 
-- 全量 configured-adapter semantic regression：347 tests OK、0 skipped（13 个 adapter 环境变量：MICRO/ANSWER/A2/A3/A4/A5/A6/B2/B3/B4/B5/B6/C2）。
-- suite validators：17 个全部 PASSED。
-- 已 verified 切片：Micro、A1-A6、B1-B6、C1、C2、Synthetic Ingestion、Context Pack。
-- 剩余路线：C3-REVIEW-CALIBRATION → C4-SCENARIO-ACTION → C5-CONTEXT-PACK-BACKUP → C6-MVP-RELEASE → D2 → D3（发布动作需用户确认）。
+- 全量 configured-adapter semantic regression：362 tests OK、0 skipped（14 个 adapter 环境变量：MICRO/ANSWER/A2/A3/A4/A5/A6/B2/B3/B4/B5/B6/C2/C3）。
+- suite validators：18 个全部 PASSED。
+- 已 verified 切片：Micro、A1-A6、B1-B6、C1、C2、C3、Synthetic Ingestion、Context Pack。
+- 剩余路线：C4-SCENARIO-ACTION → C5-CONTEXT-PACK-BACKUP → C6-MVP-RELEASE → D2 → D3（发布动作需用户确认）。

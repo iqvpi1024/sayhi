@@ -11,7 +11,7 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-C-HYPOTHESIS-001` |
+| 当前工作切片 | `SLICE-MVP-C-REVIEW-001` |
 | 当前阶段 | `slice_verified` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
@@ -143,6 +143,10 @@
 | C2-TASK-002 | `c2-task002-20260726.json`：contract 10/10 passed（adapter）；回归 347 OK 0 skip；C2 official suite `not_executed` |
 | C2 官方 suite | `c2-20260726.json`：同一次 run 10/10 passed/current；全量 regression 347 OK 0 skip；17 个 suite validator 全 PASSED；manifest 已绑定 |
 | C2 Gate Review | `C2_HYPOTHESIS_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；C2 Hypothesis Lifecycle（FR-201）verified |
+| C3-TASK-001 | `c3-task001-20260726.json`：reviews 模块 + `store.delete_ledger_record` 定向 5/5 passed；回归 362 OK（C3 contract skipped）；C3 official suite `not_executed` |
+| C3-TASK-002 | `c3-task002-20260726.json`：contract 10/10 passed（adapter）；oracle 一处人工计数修正（月/年度 completed 3->4、on_time 2->3，fixture 未动，manifest hash 已同步）；C3 official suite `not_executed` |
+| C3 官方 suite | `c3-20260726.json`：同一次 run 10/10 passed/current；全量 regression 362 OK 0 skip；18 个 suite validator 全 PASSED；manifest 已绑定 |
+| C3 Gate Review | `C3_REVIEW_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；C3 Review & Calibration（FR-203/FR-205）verified |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -155,4 +159,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**C2 Hypothesis Lifecycle 已 verified（recovery tag `c2-hypothesis-lifecycle-rp-20260726`）。按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 进入 `C3-REVIEW-CALIBRATION`（FR-203/205，之后 C4/C5/C6、D2/D3），先走 C3 Decision 门禁。**
+**C3 Review & Calibration 已 verified（recovery tag `c3-review-calibration-rp-20260726`）。按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 进入 `C4-SCENARIO-ACTION`（FR-204/206 情景推演+行动跟进，之后 C5/C6、D2/D3），先走 C4 Decision 门禁；注意与 C1 已验证的 predicted/fictional 子集的边界区分。**

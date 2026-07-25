@@ -1,0 +1,27 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "C3-TASK-001",
+  "date": "2026-07-26",
+  "git_commit": "bb13f3b64e8a80addab8de4f61fdabd591a27ea1",
+  "checks": [
+    {
+      "name": "imports",
+      "command": "python -c import noetide_micro.reviews/store",
+      "exit_code": 0,
+      "result": "imports ok"
+    },
+    {
+      "name": "targeted_unit",
+      "command": "python -m unittest tests.semantic.test_c3_task001_reviews -v",
+      "exit_code": 0,
+      "result": "5 tests OK"
+    },
+    {
+      "name": "full_regression",
+      "command": "python -m unittest discover -s tests -t . (13 adapter env vars)",
+      "exit_code": 0,
+      "result": "362 tests OK (skipped=10, C3 contract not yet bound)"
+    }
+  ],
+  "result": "passed"
+}

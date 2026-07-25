@@ -1,0 +1,368 @@
+{
+  "schema_version": "noetide.c3-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "c3_review_calibration_v1",
+  "determinism": {
+    "clock": "2026-07-26T00:00:00+00:00"
+  },
+  "metric_set_id": "review_metrics_v1",
+  "windows": {
+    "W1": {
+      "review_kind": "weekly",
+      "window_start": "2026-07-06",
+      "window_end": "2026-07-13"
+    },
+    "W2": {
+      "review_kind": "weekly",
+      "window_start": "2026-07-13",
+      "window_end": "2026-07-20"
+    },
+    "M1": {
+      "review_kind": "monthly",
+      "window_start": "2026-07-01",
+      "window_end": "2026-08-01"
+    },
+    "Y1": {
+      "review_kind": "yearly",
+      "window_start": "2026-01-01",
+      "window_end": "2027-01-01"
+    }
+  },
+  "profile_objects": [
+    {
+      "object_id": "EP-SYN-C3-001",
+      "object_type": "episode",
+      "occurred_on": "2026-07-06",
+      "title": "Synthetic episode 001"
+    },
+    {
+      "object_id": "EP-SYN-C3-002",
+      "object_type": "episode",
+      "occurred_on": "2026-07-08",
+      "title": "Synthetic episode 002"
+    },
+    {
+      "object_id": "EP-SYN-C3-003",
+      "object_type": "episode",
+      "occurred_on": "2026-07-08",
+      "title": "Synthetic episode 003"
+    },
+    {
+      "object_id": "EP-SYN-C3-004",
+      "object_type": "episode",
+      "occurred_on": "2026-07-13",
+      "title": "Synthetic episode 004"
+    },
+    {
+      "object_id": "EP-SYN-C3-005",
+      "object_type": "episode",
+      "occurred_on": "2026-07-15",
+      "title": "Synthetic episode 005"
+    },
+    {
+      "object_id": "EP-SYN-C3-006",
+      "object_type": "episode",
+      "occurred_on": "2026-07-17",
+      "title": "Synthetic episode 006"
+    },
+    {
+      "object_id": "EP-SYN-C3-007",
+      "object_type": "episode",
+      "occurred_on": "2026-07-19",
+      "title": "Synthetic episode 007"
+    },
+    {
+      "object_id": "EP-SYN-C3-008",
+      "object_type": "episode",
+      "occurred_on": "2026-07-20",
+      "title": "Synthetic episode 008"
+    },
+    {
+      "object_id": "EP-SYN-C3-009",
+      "object_type": "episode",
+      "occurred_on": "2026-06-30",
+      "title": "Synthetic episode 009"
+    },
+    {
+      "object_id": "CM-SYN-C3-001",
+      "object_type": "commitment",
+      "status": "completed",
+      "completed_at": "2026-07-07",
+      "due_at": "2026-07-08",
+      "title": "Synthetic commitment 001"
+    },
+    {
+      "object_id": "CM-SYN-C3-002",
+      "object_type": "commitment",
+      "status": "completed",
+      "completed_at": "2026-07-09",
+      "due_at": "2026-07-07",
+      "title": "Synthetic commitment 002"
+    },
+    {
+      "object_id": "CM-SYN-C3-003",
+      "object_type": "commitment",
+      "status": "cancelled",
+      "cancelled_at": "2026-07-10",
+      "due_at": "2026-07-10",
+      "title": "Synthetic commitment 003"
+    },
+    {
+      "object_id": "CM-SYN-C3-004",
+      "object_type": "commitment",
+      "status": "completed",
+      "completed_at": "2026-07-16",
+      "due_at": "2026-07-16",
+      "title": "Synthetic commitment 004"
+    },
+    {
+      "object_id": "CM-SYN-C3-005",
+      "object_type": "commitment",
+      "status": "cancelled",
+      "cancelled_at": "2026-07-18",
+      "due_at": "2026-07-19",
+      "title": "Synthetic commitment 005"
+    },
+    {
+      "object_id": "CM-SYN-C3-006",
+      "object_type": "commitment",
+      "status": "completed",
+      "completed_at": "2026-07-25",
+      "due_at": "2026-07-30",
+      "title": "Synthetic commitment 006"
+    },
+    {
+      "object_id": "DC-SYN-C3-001",
+      "object_type": "decision",
+      "reviewed_at": "2026-07-08",
+      "title": "Synthetic decision 001"
+    },
+    {
+      "object_id": "DC-SYN-C3-002",
+      "object_type": "decision",
+      "title": "Synthetic decision 002"
+    },
+    {
+      "object_id": "DC-SYN-C3-003",
+      "object_type": "decision",
+      "reviewed_at": "2026-07-14",
+      "title": "Synthetic decision 003"
+    },
+    {
+      "object_id": "DC-SYN-C3-004",
+      "object_type": "decision",
+      "reviewed_at": "2026-07-19",
+      "title": "Synthetic decision 004"
+    },
+    {
+      "object_id": "HP-SYN-C3-001",
+      "object_type": "hypothesis",
+      "status": "active",
+      "statement": "Synthetic hypothesis 001"
+    },
+    {
+      "object_id": "HP-SYN-C3-002",
+      "object_type": "hypothesis",
+      "status": "active",
+      "statement": "Synthetic hypothesis 002"
+    },
+    {
+      "object_id": "HP-SYN-C3-003",
+      "object_type": "hypothesis",
+      "status": "challenged",
+      "statement": "Synthetic hypothesis 003"
+    },
+    {
+      "object_id": "HP-SYN-C3-004",
+      "object_type": "hypothesis",
+      "status": "weakened",
+      "statement": "Synthetic hypothesis 004"
+    }
+  ],
+  "cases": [
+    {
+      "scenario_id": "C3-001",
+      "database_identity": "c3_001",
+      "ops": [
+        {
+          "op": "generate_review",
+          "window": "W1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-002",
+      "database_identity": "c3_002",
+      "ops": [
+        {
+          "op": "generate_review",
+          "window": "M1"
+        },
+        {
+          "op": "generate_review",
+          "window": "Y1"
+        },
+        {
+          "op": "generate_review",
+          "window": "W1"
+        },
+        {
+          "op": "generate_review",
+          "window": "W2"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-003",
+      "database_identity": "c3_003",
+      "ops": [
+        {
+          "op": "generate_review",
+          "window": "W1"
+        },
+        {
+          "op": "inject_episode",
+          "episode_id": "EP-SYN-C3-NEW1",
+          "occurred_on": "2026-07-09"
+        },
+        {
+          "op": "present_review",
+          "window": "W1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-004",
+      "database_identity": "c3_004",
+      "ops": [
+        {
+          "op": "generate_review",
+          "window": "W1"
+        },
+        {
+          "op": "inject_episode",
+          "episode_id": "EP-SYN-C3-NEW1",
+          "occurred_on": "2026-07-09"
+        },
+        {
+          "op": "rebuild_review",
+          "window": "W1"
+        },
+        {
+          "op": "present_review",
+          "window": "W1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-005",
+      "database_identity": "c3_005",
+      "ops": [
+        {
+          "op": "generate_review",
+          "window": "W1"
+        },
+        {
+          "op": "delete_review",
+          "window": "W1"
+        },
+        {
+          "op": "rebuild_review",
+          "window": "W1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-006",
+      "database_identity": "c3_006",
+      "ops": [
+        {
+          "op": "compare_phases",
+          "window_a": "W1",
+          "window_b": "W2",
+          "metric_set_id": "review_metrics_v1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-007",
+      "database_identity": "c3_007",
+      "ops": [
+        {
+          "op": "compare_phases",
+          "window_a": "W1",
+          "window_b": "W2",
+          "metric_set_id": "other_metrics_v9"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-008",
+      "database_identity": "c3_008",
+      "ops": [
+        {
+          "op": "compare_phases",
+          "window_a": "W1",
+          "window_b": "M1",
+          "metric_set_id": "review_metrics_v1"
+        },
+        {
+          "op": "compare_phases",
+          "window_a": {
+            "review_kind": "weekly",
+            "window_start": "2026-07-13",
+            "window_end": "2026-07-06"
+          },
+          "window_b": "W2",
+          "metric_set_id": "review_metrics_v1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-009",
+      "database_identity": "c3_009",
+      "ops": [
+        {
+          "op": "generate_review",
+          "window": "W1"
+        },
+        {
+          "op": "compare_phases",
+          "window_a": "W1",
+          "window_b": "W2",
+          "metric_set_id": "review_metrics_v1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C3-010",
+      "database_identity": "c3_010",
+      "ops": [
+        {
+          "op": "generate_review",
+          "window": "W1"
+        },
+        {
+          "op": "inject_episode",
+          "episode_id": "EP-SYN-C3-NEW1",
+          "occurred_on": "2026-07-09"
+        },
+        {
+          "op": "rebuild_review",
+          "window": "W1"
+        },
+        {
+          "op": "compare_phases",
+          "window_a": "W1",
+          "window_b": "W2",
+          "metric_set_id": "review_metrics_v1"
+        },
+        {
+          "op": "generate_review",
+          "window": "W9"
+        }
+      ]
+    }
+  ]
+}

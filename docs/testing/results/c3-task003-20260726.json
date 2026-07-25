@@ -1,0 +1,33 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "C3-TASK-003",
+  "date": "2026-07-26",
+  "git_commit": "bb13f3b64e8a80addab8de4f61fdabd591a27ea1",
+  "checks": [
+    {
+      "name": "official_runner",
+      "command": "python -m tests.runner.run_c3_suite --adapter noetide_micro.c3_testing_adapter --output docs/testing/results/c3-20260726.json",
+      "exit_code": 0,
+      "result": "10 C3 scenarios passed, single run, network blocked"
+    },
+    {
+      "name": "preflight_validator",
+      "command": "python tools/validate_c3_suite.py",
+      "exit_code": 0,
+      "result": "PASSED, current result bound"
+    },
+    {
+      "name": "full_regression",
+      "command": "python -m unittest discover -s tests -t . (14 adapter env vars)",
+      "exit_code": 0,
+      "result": "362 tests OK 0 skipped"
+    },
+    {
+      "name": "all_suite_validators",
+      "command": "python tools/validate_*.py (18 files)",
+      "exit_code": 0,
+      "result": "18 PASSED, 0 failed"
+    }
+  ],
+  "result": "passed"
+}

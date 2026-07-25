@@ -1,0 +1,79 @@
+{
+  "schema_version": "noetide.c3-suite-manifest.v1",
+  "suite_id": "c3_review_v1",
+  "slice_id": "SLICE-MVP-C-REVIEW-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": true,
+    "suite_passed": true
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "required_scenario_ids": [
+    "C3-001",
+    "C3-002",
+    "C3-003",
+    "C3-004",
+    "C3-005",
+    "C3-006",
+    "C3-007",
+    "C3-008",
+    "C3-009",
+    "C3-010"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-C-REVIEW-001"
+    ],
+    "contract_ref": "SPEC-C3-REVIEW-001",
+    "adr_refs": [
+      "ADR-0015"
+    ],
+    "architecture_ref": "ARCH-C3-REVIEW-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/c3_review_calibration_v1/fixture.json",
+      "sha256": "78f286e0987aab846996bee14e1dfb8f727e998442df8cac16bbd1ea1b31b128"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/c3_review_calibration_v1/oracles.json",
+      "sha256": "5d05c8618f524221fc1b6734c1c4bde1a6faa26a9dfe4a523d093bb0710a2f13"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/c3_review_scenarios.json",
+      "sha256": "8b6f30518417b62217a6c822a8241da0aa9f55659c43ed79d175eccec428e384"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/c3_review_adapter_protocol.py",
+      "sha256": "dd1370a0252fbaa9df73c950ae7798dadf191f5238c807e291b41fd76100dfaa"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_c3_review_contract.py",
+      "sha256": "dce13d038bb881dc7e4484f6460f869213300c7d5de6859db1a58b4f82c846c3"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_c3_suite.py",
+      "sha256": "63cedf351810d9e0c3b8cf6a36d7fc6669a2da2925da335cb4343e9a673ae78d"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c3_suite.py",
+      "sha256": "796a6ea74f5b5d92597b5acc19ca4a09be9397381eb367e11c62fe147a6bfdbf"
+    }
+  ],
+  "latest_verification_result_path": "docs/testing/results/c3-20260726.json",
+  "latest_verification_result_sha256": "ef0187afa56dd7979806387943fbbc4b282072ce206668cd6551de1f79a3fdb4",
+  "latest_verification_manifest_sha256": "562890463343811829905dd906110ad7a5e5781275679643d147a9d3301fcb1b"
+}

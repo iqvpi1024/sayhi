@@ -1,0 +1,234 @@
+{
+  "schema_version": "noetide.c3-oracles.v1",
+  "scenarios": {
+    "C3-001": {
+      "result": {
+        "outcome": "generated",
+        "review_kind": "weekly",
+        "metrics": {
+          "days_recorded": 2,
+          "episodes": 3,
+          "commitments_completed": 2,
+          "commitments_cancelled": 1,
+          "commitments_closed_on_time": 1,
+          "decisions_reviewed": 1,
+          "hypothesis_status_counts": {
+            "active": 2,
+            "challenged": 1,
+            "weakened": 1,
+            "retired": 0
+          }
+        },
+        "freshness": "fresh",
+        "view_revision": 1,
+        "derived_only": true,
+        "canonical_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_ledger"
+      ]
+    },
+    "C3-002": {
+      "result": {
+        "monthly_metrics": {
+          "days_recorded": 7,
+          "episodes": 8,
+          "commitments_completed": 4,
+          "commitments_cancelled": 2,
+          "commitments_closed_on_time": 3,
+          "decisions_reviewed": 3,
+          "hypothesis_status_counts": {
+            "active": 2,
+            "challenged": 1,
+            "weakened": 1,
+            "retired": 0
+          }
+        },
+        "yearly_metrics": {
+          "days_recorded": 8,
+          "episodes": 9,
+          "commitments_completed": 4,
+          "commitments_cancelled": 2,
+          "commitments_closed_on_time": 3,
+          "decisions_reviewed": 3,
+          "hypothesis_status_counts": {
+            "active": 2,
+            "challenged": 1,
+            "weakened": 1,
+            "retired": 0
+          }
+        },
+        "boundary_episode_window": "W2_only",
+        "canonical_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_ledger"
+      ]
+    },
+    "C3-003": {
+      "result": {
+        "freshness": "stale",
+        "report_metrics_unchanged": true,
+        "stored_metrics": {
+          "days_recorded": 2,
+          "episodes": 3,
+          "commitments_completed": 2,
+          "commitments_cancelled": 1,
+          "commitments_closed_on_time": 1,
+          "decisions_reviewed": 1,
+          "hypothesis_status_counts": {
+            "active": 2,
+            "challenged": 1,
+            "weakened": 1,
+            "retired": 0
+          }
+        },
+        "view_revision": 1
+      },
+      "forbidden_mutations": [
+        "revision_ledger"
+      ]
+    },
+    "C3-004": {
+      "result": {
+        "view_revision": 2,
+        "freshness": "fresh",
+        "metrics": {
+          "days_recorded": 3,
+          "episodes": 4,
+          "commitments_completed": 2,
+          "commitments_cancelled": 1,
+          "commitments_closed_on_time": 1,
+          "decisions_reviewed": 1,
+          "hypothesis_status_counts": {
+            "active": 2,
+            "challenged": 1,
+            "weakened": 1,
+            "retired": 0
+          }
+        },
+        "v1_preserved": true,
+        "v1_metrics": {
+          "days_recorded": 2,
+          "episodes": 3,
+          "commitments_completed": 2,
+          "commitments_cancelled": 1,
+          "commitments_closed_on_time": 1,
+          "decisions_reviewed": 1,
+          "hypothesis_status_counts": {
+            "active": 2,
+            "challenged": 1,
+            "weakened": 1,
+            "retired": 0
+          }
+        }
+      },
+      "forbidden_mutations": [
+        "revision_ledger"
+      ]
+    },
+    "C3-005": {
+      "result": {
+        "rebuild_metrics_equal": true,
+        "rebuilt_metrics": {
+          "days_recorded": 2,
+          "episodes": 3,
+          "commitments_completed": 2,
+          "commitments_cancelled": 1,
+          "commitments_closed_on_time": 1,
+          "decisions_reviewed": 1,
+          "hypothesis_status_counts": {
+            "active": 2,
+            "challenged": 1,
+            "weakened": 1,
+            "retired": 0
+          }
+        },
+        "view_revision": 1,
+        "canonical_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_ledger"
+      ]
+    },
+    "C3-006": {
+      "result": {
+        "outcome": "generated",
+        "deltas": {
+          "days_recorded": 2,
+          "episodes": 1,
+          "commitments_completed": -1,
+          "commitments_cancelled": 0,
+          "commitments_closed_on_time": 0,
+          "decisions_reviewed": 1,
+          "hypothesis_status_counts": {
+            "active": 0,
+            "challenged": 0,
+            "weakened": 0,
+            "retired": 0
+          }
+        },
+        "derived_only": true,
+        "canonical_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_ledger"
+      ]
+    },
+    "C3-007": {
+      "result": {
+        "outcome": "rejected",
+        "comparison_records": 0,
+        "canonical_unchanged": true,
+        "derived_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "derived_ledger",
+        "revision_ledger"
+      ]
+    },
+    "C3-008": {
+      "result": {
+        "kind_mismatch_outcome": "rejected",
+        "inverted_window_outcome": "rejected",
+        "comparison_records": 0,
+        "derived_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "derived_ledger",
+        "revision_ledger"
+      ]
+    },
+    "C3-009": {
+      "result": {
+        "derived_not_referenced_by_canonical": true,
+        "hypothesis_counts_match_snapshot": true,
+        "derived_only_flags": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_ledger"
+      ]
+    },
+    "C3-010": {
+      "result": {
+        "version_chain": [
+          1,
+          2
+        ],
+        "out_of_profile_outcome": "rejected",
+        "unrelated_canonical_unchanged": true,
+        "canonical_writes_from_review_ops": 0
+      },
+      "forbidden_mutations": [
+        "revision_ledger"
+      ]
+    }
+  }
+}

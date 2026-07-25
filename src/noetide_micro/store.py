@@ -748,6 +748,12 @@ class SemanticStore:
         if cursor.rowcount != 1:
             raise KeyError(record_id)
 
+    def delete_ledger_record(self, record_id: str) -> None:
+        # ADR-0015: Derived-only deletion (review reports / phase comparisons); never for Canonical audit rows.
+        cursor = self._connection.execute("DELETE FROM ledger_records WHERE record_id = ?", (record_id,))
+        if cursor.rowcount != 1:
+            raise KeyError(record_id)
+
     def schema_objects(self) -> set[str]:
         return {
             row[0]
