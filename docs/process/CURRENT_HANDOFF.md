@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-HARDENING-001
 slice_id: SLICE-MVP-A-HARDENING-001
-current_phase: suite_materialized
+current_phase: plan_approved
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -27,17 +27,17 @@ decision_ref: DEC-MVP-A-HARDENING-001
 spec_contract: SPEC-A6-HARDENING-001 v0.1 Approved (A6-CONTRACT-REVIEW-001)
 adr_ref: ADR-0010 (+ ARCH-A6-HARDENING-001)
 suite_manifest: tests/a6_suite_manifest.json (materialized, not_executed)
-implementation_plan: none yet
+implementation_plan: PLAN-MVP-A-A6-IMPL-001 (A6-TASK-001..006)
 next_role: Implementer
-next_single_action: establish A6 Implementation Plan + task cards (PLAN-MVP-A-A6-IMPL-001), then A6-TASK-001
+next_single_action: A6-TASK-001 per docs/planning/MVP_A_A6_TASK_CARDS.md (start.py D0 entry + error recovery shell surfaces)
 scope_in:
-  - A6 implementation plan + task cards only (no business code)
+  - A6-TASK-001 only (start.py, narrow store corruption-detection, narrow tests)
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A6 implementation plan + task cards established; then per-task development
+stop_condition: A6-TASK-001 verified (targeted tests + regression + record); then A6-TASK-002
 ```
 
 ## 当前事实

@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-HARDENING-001` |
-| 当前阶段 | `suite_materialized` |
+| 当前阶段 | `plan_approved` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -72,6 +72,7 @@
 56. `SPEC-A6-HARDENING-001` v0.1 已起草并 Approved（`A6-CONTRACT-REVIEW-001`，2026-07-25，结论 `approved_for_traceability`）：21 场景在同一 Reference Profile `a6_mvp_a_reference_v1` 顺序执行共享状态；FR-003 生成侧为显式已知限制（合同 §1.1）；错误恢复五表面与 Alpha 可解释性验收已固定；Traceability 矩阵 §4.12 已建立；尚未建立 A6 ADR、suite 或代码。
 57. `ADR-0010` 已 Accepted（2026-07-25）：根目录 `start.py` 为 D0 唯一入口（runtime 检查、合成 devdata 根、init/migrate、preflight+smoke、`--clean` 路径前缀校验）；evaluator package 复用版本化 runner/validator 模式；`a6_mvp_a_reference_v1` 环境描述符已记录（Windows 11 10.0.26200 / Ryzen 5 5600H / CPython 3.12.8 / SQLite ADR-0001 PRAGMA），runner 须戳记实际环境，SLO 不外推；`ARCH-A6-HARDENING-001` 已建立；`.gitignore` 已加 `/devdata/`；尚未物化 A6 suite 或代码。
 58. A6 executable suite 已物化（2026-07-25）：fixture/oracles（21 场景固定预期）、scenarios（固定顺序、共享状态执行模式）、adapter protocol、contract module、offline runner（环境戳记 wall time/monotonic/timezone + reference profile 绑定）、preflight validator、manifest；`tools/validate_a6_suite.py` exit 0；contract 21 skipped（无 adapter，不代表业务通过）；全量 regression 232 tests = 211 OK + 21 skipped，无退化；尚未建立 A6 Implementation Plan 或业务代码。
+59. `PLAN-MVP-A-A6-IMPL-001` 与 A6 任务卡已建立（2026-07-25）：6 个任务（start.py 壳面 -> Alpha 可解释性 -> 旅程编排 -> adapter -> official runner -> Gate Review）；明确 FR-003 生成侧不得静默补写；尚未开始 A6 业务代码。
 
 ## 4. 真实验证结果
 
@@ -128,4 +129,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**建立 A6 Implementation Plan 与任务卡（`PLAN-MVP-A-A6-IMPL-001`），然后进入 A6-TASK-001。**
+**执行 A6-TASK-001：`start.py` D0 入口与错误恢复壳面（任务卡边界内）。**
