@@ -24,7 +24,7 @@
 
 | Task | 交付物 | Contract / Test | 完成条件 | 状态 |
 |---|---|---|---|---|
-| `B4-TASK-001` | `reconciliation.py` 增量对账：运行状态机与四类发现检测 | §2.1/§3/§5、`B4-001..005` | 干净 profile 零发现；四类注入各检出且 `disposition=quarantined_reported`；无写入 | `pending` |
+| `B4-TASK-001` | `reconciliation.py` 增量对账：运行状态机与四类发现检测 | §2.1/§3/§5、`B4-001..005` | 干净 profile 零发现；四类注入各检出且 `disposition=quarantined_reported`；无写入 | `completed`；定向 7/7 passed，见 `b4-task001-20260725.json` |
 | `B4-TASK-002` | `reconciliation.py` 深度对账：三分区重建比较 | §2.1/§5/§6、`B4-006/007` | 逐分区 match/mismatch + digest 对；不回写、不整图重算 | `pending` |
 | `B4-TASK-003` | `semantic_diff.py` 查询时字段级 diff | §2.2/§5、`B4-008/009` | create/modify/no_change + before/after；不持久化；digest 前后不变；revision 缺失显式拒绝 | `pending` |
 | `B4-TASK-004` | `b4_testing_adapter.py` 与 B4 contract 集成 | §7/§8、`B4-001..010` | adapter 完整实现 protocol；fixture/oracle 不被修改；B4-010 横切通过 | `pending` |
