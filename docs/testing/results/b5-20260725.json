@@ -1,0 +1,105 @@
+{
+  "schema_version": "noetide.b5-run-result.v1",
+  "run_id": "b4-fdfc821fa18143088a69556781582769",
+  "suite_id": "b5_multilingual_v1",
+  "manifest_sha256": "0c0dac826855721d799af339facdd864b75d72de0c2cb0c3283f2dd1363d0ae6",
+  "git_commit": "ac1f6342c7edfeeafa19ceb9a8cd02f44443dd94",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_b5_suite",
+    "--adapter",
+    "noetide_micro.b5_testing_adapter",
+    "--output",
+    "docs/testing/results/b5-20260725.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "B5-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B5-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B5-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B5-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B5-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B5-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B5-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "B5-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/b5_multilingual_v1/fixture.json",
+      "sha256": "67333921121c69877d310cec110477fbac9dc099331d0647f43f9dfa18f0786a"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/b5_multilingual_v1/oracles.json",
+      "sha256": "2be78ec8ee6a7f2aefde3c114a7500c49e8070556ab17519c72013bc263c1542"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/b5_multilingual_scenarios.json",
+      "sha256": "8d1131a3efadd0f04acaf593cc9f137ddea57c02a6dc9a0212a8a5964b9cf485"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/b5_multilingual_adapter_protocol.py",
+      "sha256": "c550df6a15373d300c9314074bf8e142fe341c1ea09016879bbd28e5f5bed22f"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_b5_multilingual_contract.py",
+      "sha256": "5ffc460a7a784a84e7d52f1d2fe279a89e4f01900fcb75c24bd6d7d2ce75f3fd"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_b5_suite.py",
+      "sha256": "a1672aa5d2a0cbc248b842ed52b95b73522f92d451fc0b51a86709de27fc33c8"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_b5_suite.py",
+      "sha256": "41d92a0fa6ef9342076c6902536be94ae92865cb16cd8b85868a932e53f2c40a"
+    }
+  ]
+}

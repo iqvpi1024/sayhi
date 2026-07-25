@@ -3,8 +3,8 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-B-RECONCILIATION-001
-slice_id: SLICE-MVP-B-RECONCILIATION-001
+handoff_id: HANDOFF-MVP-B-MULTILINGUAL-001
+slice_id: SLICE-MVP-B-MULTILINGUAL-001
 current_phase: slice_verified
 product_baseline:
   path: PRDv05.md
@@ -25,11 +25,12 @@ latest_recovery_points:
   - a5-app-shell-rp-20260725
   - a6-hardening-rp-20260725
   - b4-reconciliation-rp-20260725
-decision_ref: DEC-MVP-B-RECONCILIATION-001
-spec_contract: SPEC-B4-RECONCILIATION-001 v0.1 Approved (B4-CONTRACT-REVIEW-001)
-adr_ref: ADR-0011 (+ ARCH-B4-RECONCILIATION-001)
-suite_manifest: tests/b4_suite_manifest.json (materialized, executed, passed, bound to b4-20260725.json)
-implementation_plan: PLAN-MVP-B-B4-IMPL-001 (B4-TASK-001..006)
+  - b5-multilingual-rp-20260725
+decision_ref: DEC-MVP-B-MULTILINGUAL-001
+spec_contract: SPEC-B5-MULTILINGUAL-001 v0.1 Approved (B5-CONTRACT-REVIEW-001)
+adr_ref: ADR-0012 (+ ARCH-B5-MULTILINGUAL-001)
+suite_manifest: tests/b5_suite_manifest.json (materialized, executed, passed, bound to b5-20260725.json)
+implementation_plan: PLAN-MVP-B-B5-IMPL-001 (B5-TASK-001..004)
 next_role: Product/Architecture
 next_single_action: choose next slice per docs/planning/MASTER_DELIVERY_ROADMAP.md (B4/B5/B6, C2-C6, D2/D3); start with a Decision gate
 scope_in:
@@ -74,5 +75,10 @@ stop_condition: next slice decided; A6 hardening slice is verified (gate review 
 - B4-TASK-004 已完成（59aa8a9）：b4_testing_adapter.py，contract 10/10 passed。
 - B4-TASK-005 已完成（56d1c51）：official runner `b4-20260725.json` 同一次 run 10/10 passed/current，manifest 已绑定，14 个 suite validator 全 PASSED，全量 regression 292 OK 0 skip。
 - B4-TASK-006 已完成：Gate Review `B4_RECONCILIATION_GATE_REVIEW_2026-07-25.md` P0=0/P1=0，B4 切片 verified，矩阵 §4.13 同步，recovery tag `b4-reconciliation-rp-20260725`。
-- 全量 configured-adapter regression 基线：292 OK 0 skip；14 个 suite validator。
+- `DEC-MVP-B-MULTILINGUAL-001`（2026-07-25）选择 B5 切片；`SPEC-B5-MULTILINGUAL-001` v0.1 Approved（`B5-CONTRACT-REVIEW-001`）；`ADR-0012`/`ARCH-B5-MULTILINGUAL-001` 已接受；suite 物化 8 场景。
+- B5-TASK-001 已完成（1923b7d）：bilingual.py 原文/翻译分离、对照视图、覆盖拒绝、修订历史，定向 9/9 passed。
+- B5-TASK-002 已完成：b5_testing_adapter.py，contract 8/8 passed。
+- B5-TASK-003 已完成：official runner `b5-20260725.json` 同一次 run 8/8 passed/current，manifest 已绑定，15 个 suite validator 全 PASSED，全量 regression 309 OK 0 skip。
+- B5-TASK-004 已完成：Gate Review `B5_MULTILINGUAL_GATE_REVIEW_2026-07-25.md` P0=0/P1=0，B5 切片 verified，矩阵 §4.14 同步，recovery tag `b5-multilingual-rp-20260725`。
+- 全量 configured-adapter regression 基线：309 OK 0 skip；15 个 suite validator。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。

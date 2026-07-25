@@ -11,7 +11,7 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-B-RECONCILIATION-001` |
+| 当前工作切片 | `SLICE-MVP-B-MULTILINGUAL-001` |
 | 当前阶段 | `slice_verified` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
@@ -131,6 +131,10 @@
 | B4-TASK-004 | `b4-task004-20260725.json`：contract 10/10 passed（adapter）；B4 official suite `not_executed` |
 | B4 官方 suite | `b4-20260725.json`：同一次 run 10/10 passed/current；全量 regression 292 OK 无 skip；14 个 suite validator 全 PASSED；manifest 已绑定 |
 | B4 Gate Review | `B4_RECONCILIATION_GATE_REVIEW_2026-07-25.md`：P0=0、P1=0 |
+| B5-TASK-001 | `b5-task001-20260725.json`：bilingual overlay 定向 9/9 passed；B5 official suite `not_executed` |
+| B5-TASK-002 | `b5-task002-20260725.json`：contract 8/8 passed（adapter）；B5 official suite `not_executed` |
+| B5 官方 suite | `b5-20260725.json`：同一次 run 8/8 passed/current；全量 regression 309 OK 无 skip；15 个 suite validator 全 PASSED；manifest 已绑定 |
+| B5 Gate Review | `B5_MULTILINGUAL_GATE_REVIEW_2026-07-25.md`：P0=0、P1=0 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -143,4 +147,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 选择下一切片（B5/B6、C2-C6、D2/D3 之一），先走 Decision 门禁。**
+**按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 选择下一切片（B6、C2-C6、D2/D3 之一），先走 Decision 门禁。**

@@ -269,13 +269,13 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-108` | 双语 Source 分离存储（原文 Vault + 独立翻译记录） | `SPEC-B5-MULTILINGUAL-001` §2.1/§7；S7 Source Vault | `B5-001` | `noetide_micro.bilingual`（ADR-0012） | `not_executed` |
-| `FR-108` | 原文读取与 Evidence Ref 解析到原文 | `SPEC-B5-MULTILINGUAL-001` §4/§7；S2 Evidence | `B5-002` | `noetide_micro.bilingual` | `not_executed` |
-| `FR-108` | 对照视图 paired 并排读取 | `SPEC-B5-MULTILINGUAL-001` §2.2/§7 | `B5-003` | `noetide_micro.bilingual` | `not_executed` |
-| `FR-108` | 以翻译覆盖原文被拒绝 | `SPEC-B5-MULTILINGUAL-001` §5/§7；PRD §21.5 | `B5-004` | `noetide_micro.bilingual` | `not_executed` |
-| `FR-108` | 缺失翻译显式降级 | `SPEC-B5-MULTILINGUAL-001` §2.2/§5/§7 | `B5-005` | `noetide_micro.bilingual` | `not_executed` |
-| `FR-108` | 翻译修订历史保留 | `SPEC-B5-MULTILINGUAL-001` §3/§7；S2 revision 语义 | `B5-006` | `noetide_micro.bilingual` | `not_executed` |
-| `FR-108` | orphan 翻译记录报告不静默配对 | `SPEC-B5-MULTILINGUAL-001` §6/§7 | `B5-007` | `noetide_micro.bilingual` | `not_executed` |
-| `FR-108` | 横切：原文/hash 不变、翻译不作证据、profile 外 fail closed | `SPEC-B5-MULTILINGUAL-001` §5/§7 | `B5-008` | `noetide_micro.bilingual` | `not_executed` |
+| `FR-108` | 双语 Source 分离存储（原文 Vault + 独立翻译记录） | `SPEC-B5-MULTILINGUAL-001` §2.1/§7；S7 Source Vault | `B5-001` | `noetide_micro.bilingual`（ADR-0012） | `passed`（b5-20260725.json） |
+| `FR-108` | 原文读取与 Evidence Ref 解析到原文 | `SPEC-B5-MULTILINGUAL-001` §4/§7；S2 Evidence | `B5-002` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
+| `FR-108` | 对照视图 paired 并排读取 | `SPEC-B5-MULTILINGUAL-001` §2.2/§7 | `B5-003` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
+| `FR-108` | 以翻译覆盖原文被拒绝 | `SPEC-B5-MULTILINGUAL-001` §5/§7；PRD §21.5 | `B5-004` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
+| `FR-108` | 缺失翻译显式降级 | `SPEC-B5-MULTILINGUAL-001` §2.2/§5/§7 | `B5-005` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
+| `FR-108` | 翻译修订历史保留 | `SPEC-B5-MULTILINGUAL-001` §3/§7；S2 revision 语义 | `B5-006` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
+| `FR-108` | orphan 翻译记录报告不静默配对 | `SPEC-B5-MULTILINGUAL-001` §6/§7 | `B5-007` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
+| `FR-108` | 横切：原文/hash 不变、翻译不作证据、profile 外 fail closed | `SPEC-B5-MULTILINGUAL-001` §5/§7 | `B5-008` | `noetide_micro.bilingual` | `passed`（b5-20260725.json） |
 
-状态：`product_decided=true`（`DEC-MVP-B-MULTILINGUAL-001`，2026-07-25）、`spec_approved=true`（`B5-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0012`，2026-07-25）、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
+状态：`product_decided=true`（`DEC-MVP-B-MULTILINGUAL-001`，2026-07-25）、`spec_approved=true`（`B5-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0012`，2026-07-25）、`suite_defined=true`、`suite_materialized=true`（2026-07-25）、`suite_executed=true`、`suite_passed=true`（2026-07-25，official runner 同一次 run 8/8 passed/current，immutable result `docs/testing/results/b5-20260725.json`，manifest 已绑定）、`gate_review_passed=true`（`B5_MULTILINGUAL_GATE_REVIEW_2026-07-25.md`，P0=0/P1=0）、`verified=true`（recovery tag `b5-multilingual-rp-20260725`）。

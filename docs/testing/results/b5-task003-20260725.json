@@ -1,0 +1,42 @@
+{
+ "schema_version": "noetide.b5-task-result.v1",
+ "run_id": "b5-task003-20260725",
+ "task_id": "B5-TASK-003",
+ "slice_id": "SLICE-MVP-B-MULTILINGUAL-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b5_official_suite": "passed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m tests.runner.run_b5_suite --adapter noetide_micro.b5_testing_adapter --output docs/testing/results/b5-20260725.json",
+   "exit_code": 0,
+   "result": "official runner: 8/8 scenarios passed in one run; immutable result docs/testing/results/b5-20260725.json; environment stamped; network blocked; stdlib only"
+  },
+  {
+   "command": "manifest binding (tests/b5_suite_manifest.json)",
+   "exit_code": 0,
+   "result": "flags -> suite_executed=true, suite_passed=true; result path+sha256 and run-time manifest sha256 bound"
+  },
+  {
+   "command": "python tools/validate_*.py (all suite validators) + tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "all 15 suite validators PASSED (incl. validate_b5_suite with bound current result); product baseline static checks PASSED"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 11 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "309 tests OK, 0 skipped; no regression (baseline was 292 before B5)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
