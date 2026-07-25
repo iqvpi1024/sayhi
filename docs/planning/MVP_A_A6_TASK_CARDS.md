@@ -2,6 +2,8 @@
 
 ## A6-TASK-001：start.py D0 入口与错误恢复壳面
 
+状态：`completed`（2026-07-25，验证记录 `docs/testing/results/a6-task001-20260725.json`；另含 store.py 窄修复：初始化失败时关闭连接）。
+
 - 允许文件：`start.py`、`src/noetide_micro/store.py`（仅损坏检测窄改动）、`tests/semantic/test_a6_task_001_start.py`。
 - 交付：`python start.py` 完成 runtime 版本检查（>=3.12）、创建合成数据根（默认 `<repo>/devdata/`，`--data-root` 覆盖）、初始化/迁移数据库并运行最小 preflight+smoke；成功 exit 0 并输出本地访问入口；`--clean` 仅在路径前缀校验通过后删除声明的合成根；数据库损坏时拒绝启动、非零退出、非泄露错误、不静默修复/覆盖原文件；数据目录不可写时非零退出、不越界写。
 - 验证：Python import、定向 tests（干净启动/损坏库/不可写目录/clean 前缀校验）、PRAGMA 检查、`git diff --check`。

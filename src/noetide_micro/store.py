@@ -28,12 +28,16 @@ class SemanticStore:
         path = Path(database_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(path, isolation_level=None)
-        self._connection.execute("PRAGMA foreign_keys = ON")
-        self._connection.execute("PRAGMA journal_mode = DELETE")
-        self._connection.execute("PRAGMA synchronous = FULL")
-        self._connection.executescript(
-            Path(__file__).with_name("schema.sql").read_text(encoding="utf-8")
-        )
+        try:
+            self._connection.execute("PRAGMA foreign_keys = ON")
+            self._connection.execute("PRAGMA journal_mode = DELETE")
+            self._connection.execute("PRAGMA synchronous = FULL")
+            self._connection.executescript(
+                Path(__file__).with_name("schema.sql").read_text(encoding="utf-8")
+            )
+        except BaseException:
+            self._connection.close()
+            raise
 
     def close(self) -> None:
         self._connection.close()

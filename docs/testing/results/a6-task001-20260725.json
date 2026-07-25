@@ -1,0 +1,49 @@
+{
+ "schema_version": "noetide.a6-task-result.v1",
+ "run_id": "a6-task001-20260725",
+ "task_id": "A6-TASK-001",
+ "slice_id": "SLICE-MVP-A-HARDENING-001",
+ "git_commit": "7fd6887",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a6_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "python -c \"import start; import sys; sys.path.insert(0,'src'); import noetide_micro.store\"",
+   "exit_code": 0,
+   "result": "imports OK"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_a6_task_001_start -v",
+   "exit_code": 0,
+   "result": "6/6 passed (clean start rev_010 + PRAGMA OK; corrupt db exit 4 with original bytes untouched; unusable root exit 3 without writing elsewhere; --clean removes only default devdata root; --clean outside refused exit 5; runtime check OK)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 8 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "238 tests OK, 21 skipped (A6 contract, no adapter); no regression from 211-test baseline"
+  },
+  {
+   "command": "python tools/validate_a6_suite.py",
+   "exit_code": 0,
+   "result": "A6 Hardening suite materialized; no business test was executed"
+  },
+  {
+   "command": "powershell -File tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "product baseline static checks passed"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ],
+ "notes": "store.py narrow fix: SemanticStore now closes its SQLite connection if initialization fails (prevents file lock leak on corrupt databases). No store write-path or semantic change."
+}
