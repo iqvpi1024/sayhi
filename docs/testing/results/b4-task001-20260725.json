@@ -1,0 +1,38 @@
+{
+ "schema_version": "noetide.b4-task-result.v1",
+ "run_id": "b4-task001-20260725",
+ "task_id": "B4-TASK-001",
+ "slice_id": "SLICE-MVP-B-RECONCILIATION-001",
+ "git_commit": "pending",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b4_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_b4_reconciliation_task001 -v",
+   "exit_code": 0,
+   "result": "7/7 passed: clean zero findings, failure_queue/stale_view/orphan_reference/unconsumed_changeset each detected with disposition=quarantined_reported, zero-write proof, deep mode rejected until B4-TASK-002"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest discover -s tests/semantic -t .",
+   "exit_code": 1,
+   "result": "259 tests, 2 pre-existing setUpClass errors (answer_safety/micro contract adapters unset, verified pre-existing via git stash), 79 adapter-gated skips; no new failure"
+  },
+  {
+   "command": "python tools/validate_b4_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: B4 suite materialized; no business test executed (unchanged)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}

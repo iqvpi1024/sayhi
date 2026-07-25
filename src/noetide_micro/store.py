@@ -1077,6 +1077,27 @@ class SemanticStore:
     # A4 additive: read-only policy label and digest helpers for query-time access
     # policy evaluation. These helpers never write; policy decisions stay Derived.
 
+    # B4 additive: read-only listing helpers for the reconciliation detector.
+    # These helpers never write; reconciliation findings stay Derived.
+
+    def revision_ids(self) -> list[str]:
+        """Read-only listing of Canonical revision ids in stable order."""
+        return [
+            row[0]
+            for row in self._connection.execute(
+                "SELECT revision_id FROM canonical_revisions ORDER BY revision_id"
+            )
+        ]
+
+    def projection_records(self) -> list[JsonObject]:
+        """Read-only listing of every Derived projection row, including view_name."""
+        return [
+            {**self.projection_record(row[0]), "view_name": row[0]}
+            for row in self._connection.execute(
+                "SELECT view_name FROM projection_rows ORDER BY view_name"
+            )
+        ]
+
     def object_policy_labels(self, object_id: str) -> JsonObject | None:
         """Read-only S1 policy labels for one Canonical object, or None if absent."""
         payload = self.canonical_object_or_none(object_id)
