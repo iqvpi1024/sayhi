@@ -1,0 +1,32 @@
+{
+ "schema_version": "noetide.b4-task-result.v1",
+ "run_id": "b4-task003-20260725",
+ "task_id": "B4-TASK-003",
+ "slice_id": "SLICE-MVP-B-RECONCILIATION-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b4_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_b4_semantic_diff_task003 -v",
+   "exit_code": 0,
+   "result": "7/7 passed: modify field-level before/after, hypothesis change presentable, no_change, create, missing target revision + unknown object explicitly rejected, zero-write proof (Canonical digest + ledger unchanged)"
+  },
+  {
+   "command": "python tools/validate_b4_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: materialized; no business test executed (unchanged)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
