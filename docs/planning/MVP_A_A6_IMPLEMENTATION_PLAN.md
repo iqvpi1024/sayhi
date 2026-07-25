@@ -28,7 +28,7 @@
 | `A6-TASK-001` | `start.py` D0 入口与错误恢复壳面（runtime 检查、devdata 根、init/migrate、preflight+smoke、`--clean` 前缀校验、db corrupt/unwritable 固定表面） | `A6-013/014/015/018`；`A6-INV-003` | 干净启动 exit 0；损坏库拒绝启动非零退出不静默修复；不可写目录不越界写；`--clean` 只删声明合成根 | `completed`（2026-07-25，`a6-task001-20260725`） |
 | `A6-TASK-002` | Alpha 可解释性支撑：数据路径发现、备份+校验清单、导出 Round Trip（复用 CP）、卸载语义（默认保留数据、删除独立确认） | `A6-019/020`；`A6-INV-005` | 备份产物+校验清单可验证；导出 Round Trip 成立；默认卸载不删数据目录 | `completed`（2026-07-25，`a6-task002-20260725`） |
 | `A6-TASK-003` | 集成旅程组装支撑：共享 reference profile 系统所需的运行时编排辅助（seed、journey 步骤、conflict probe、merge/split、restricted query、cross-cutting audit 辅助、SLO 计时收集） | `A6-001..012/016/017/021` | 组装辅助只调用已验证核心能力；无新恢复/权限/候选生成语义 | `completed`（2026-07-25，`a6-task003-20260725`） |
-| `A6-TASK-004` | `a6_testing_adapter.py` 完整实现 adapter protocol，contract 21/21 passed（adapter） | `A6-001..021` | adapter 完整实现 protocol；fixture/oracle 不被修改；全量 regression 无 skip 无退化 | `pending` |
+| `A6-TASK-004` | `a6_testing_adapter.py` 完整实现 adapter protocol，contract 21/21 passed（adapter） | `A6-001..021` | adapter 完整实现 protocol；fixture/oracle 不被修改；全量 regression 无 skip 无退化 | `completed`（2026-07-25，`a6-task004-20260725`） |
 | `A6-TASK-005` | A6 official runner、existing regression 与 immutable result | `A6-001..021` | 21/21 同一次 run passed/current；环境戳记与 profile 绑定完整；13 个 suite validator PASSED；manifest 正确绑定 result | `pending` |
 | `A6-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
 

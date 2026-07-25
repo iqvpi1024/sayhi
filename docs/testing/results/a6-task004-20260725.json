@@ -1,0 +1,49 @@
+{
+ "schema_version": "noetide.a6-task-result.v1",
+ "run_id": "a6-task004-20260725",
+ "task_id": "A6-TASK-004",
+ "slice_id": "SLICE-MVP-A-HARDENING-001",
+ "git_commit": "e98d1f5",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a6_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_a6_task_004_adapter -v",
+   "exit_code": 0,
+   "result": "5/5 passed (rejects non-synthetic fixture; layer_snapshot shape; first-scenario chain + snapshot stability; injected failure required for A6-016; sandbox scenarios leave shared state untouched)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_A6_ADAPTER='noetide_micro.a6_testing_adapter'; python -m unittest tests.semantic.test_a6_hardening_contract",
+   "exit_code": 0,
+   "result": "contract 21/21 passed in fixed order on one shared reference-profile system; sandbox scenarios isolated; all forbidden_mutations layers unchanged"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 9 adapter env vars configured (incl. NOETIDE_A6_ADAPTER); python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "264 tests OK, 0 skipped; no regression from TASK-003 baseline (259 OK + 21 previously-skipped A6 contract now executed + 5 new narrow tests = 264... actual: 264 total, zero skips)"
+  },
+  {
+   "command": "python tools/validate_a6_suite.py",
+   "exit_code": 0,
+   "result": "A6 Hardening suite materialized; no business test was executed (preflight validator; manifest flags unchanged until TASK-005 binding)"
+  },
+  {
+   "command": "powershell -File tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "product baseline static checks passed"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ],
+ "notes": "a6_testing_adapter.py dispatches all 21 scenarios to already-verified journey helpers (a6_journey), start.py subprocess sandboxes (A6-013/014/015), and alpha_explainability/portability probes (A6-018/019/020). A6-007/009/016/017 run on isolated in-memory probe stores so shared reference-profile state is never mutated. A6-019 exports the actual shared store via ContextPackExporter. No fixture/oracle/scenario/contract-module changes. Official runner binding remains TASK-005."
+}
