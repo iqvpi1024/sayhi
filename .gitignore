@@ -44,3 +44,4 @@ Review-report/
 /tests/results/
 /src/*.egg-info/
 
+/devdata/

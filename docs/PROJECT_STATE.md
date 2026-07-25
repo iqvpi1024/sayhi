@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-HARDENING-001` |
-| 当前阶段 | `contract_approved` |
+| 当前阶段 | `adr_accepted` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -70,6 +70,7 @@
 54. `DEC-MVP-A-HARDENING-001` 已选择 A6 硬化与本地 Alpha 切片，并显式裁决"12 个可执行语义变更测试"= FR-001..012 各一个端到端场景在同一 Reference Profile 执行；只授权 S1/S2/S3/S6/S7 applicability review，未授权业务代码。
 55. A6 applicability review `A6-SPEC-APPLICABILITY-001` 结论 `pass_with_slice_contract_required`（2026-07-25）：S1/S2/S6 pass，S3/S7 partial；4 个缺口（集成证明、Reference Profile 具体化、错误恢复壳层、Alpha 可解释性）由 A6 slice contract 闭合；尚未建立 A6 合同、traceability、ADR、suite 或代码。
 56. `SPEC-A6-HARDENING-001` v0.1 已起草并 Approved（`A6-CONTRACT-REVIEW-001`，2026-07-25，结论 `approved_for_traceability`）：21 场景在同一 Reference Profile `a6_mvp_a_reference_v1` 顺序执行共享状态；FR-003 生成侧为显式已知限制（合同 §1.1）；错误恢复五表面与 Alpha 可解释性验收已固定；Traceability 矩阵 §4.12 已建立；尚未建立 A6 ADR、suite 或代码。
+57. `ADR-0010` 已 Accepted（2026-07-25）：根目录 `start.py` 为 D0 唯一入口（runtime 检查、合成 devdata 根、init/migrate、preflight+smoke、`--clean` 路径前缀校验）；evaluator package 复用版本化 runner/validator 模式；`a6_mvp_a_reference_v1` 环境描述符已记录（Windows 11 10.0.26200 / Ryzen 5 5600H / CPython 3.12.8 / SQLite ADR-0001 PRAGMA），runner 须戳记实际环境，SLO 不外推；`ARCH-A6-HARDENING-001` 已建立；`.gitignore` 已加 `/devdata/`；尚未物化 A6 suite 或代码。
 
 ## 4. 真实验证结果
 
@@ -126,4 +127,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**A6 的 ADR 步骤：记录 `a6_mvp_a_reference_v1` 环境描述符，并完成到期的开发启动与 evaluator package 决策（`ONE_CLICK_DELIVERY_PLAN.md` §2）。**
+**物化 A6 executable suite（fixture/oracle/scenarios/protocol/runner/validator/manifest），preflight validator exit 0，业务测试保持 `not_executed`。**

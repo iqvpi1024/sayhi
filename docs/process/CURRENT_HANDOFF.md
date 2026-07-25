@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-HARDENING-001
 slice_id: SLICE-MVP-A-HARDENING-001
-current_phase: contract_approved
+current_phase: adr_accepted
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -25,19 +25,19 @@ latest_recovery_points:
   - a5-app-shell-rp-20260725
 decision_ref: DEC-MVP-A-HARDENING-001
 spec_contract: SPEC-A6-HARDENING-001 v0.1 Approved (A6-CONTRACT-REVIEW-001)
-adr_ref: none yet
+adr_ref: ADR-0010 (+ ARCH-A6-HARDENING-001)
 suite_manifest: none yet
 implementation_plan: none yet
 next_role: Implementer
-next_single_action: A6 ADR step - record a6_mvp_a_reference_v1 environment descriptor and dev-launch/evaluator package decision (ONE_CLICK_DELIVERY_PLAN section 2 due item)
+next_single_action: materialize A6 executable suite per ADR-0010 section 5.2 (fixture/oracle/scenarios/protocol/runner/validator/manifest; preflight exit 0, business tests not_executed)
 scope_in:
-  - A6 ADR drafting only (environment descriptor + dev-launch/evaluator package)
+  - A6 suite materialization only (no business code)
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A6 ADR accepted; no fixture/oracle/code before then
+stop_condition: A6 suite materialized + preflight validator exit 0; implementation plan next, no business code before plan
 ```
 
 ## 当前事实
