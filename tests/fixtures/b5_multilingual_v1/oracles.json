@@ -1,0 +1,137 @@
+{
+  "oracle_id": "b5_multilingual_v1",
+  "schema_version": "noetide.b5-oracle.v1",
+  "scenarios": {
+    "B5-001": {
+      "result": {
+        "status": "stored",
+        "source_id": "src_b5_new_001",
+        "receipt_status": "stored",
+        "content_hash_present": true,
+        "translation_id": "tr_new_001",
+        "translation_source_ref": "src_b5_new_001",
+        "translation_revision": "tr_001",
+        "original_overwritten": false
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "base_translations",
+        "receipts"
+      ]
+    },
+    "B5-002": {
+      "result": {
+        "status": "original_read",
+        "source_id": "src_b5_orig_001",
+        "original_text": "synthetic original alpha",
+        "content_hash_matches": true,
+        "evidence_target": "src_b5_orig_001",
+        "evidence_target_is_translation": false
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "base_translations",
+        "receipts"
+      ]
+    },
+    "B5-003": {
+      "result": {
+        "status": "view_issued",
+        "pairing_status": "paired",
+        "source_ref": "src_b5_orig_001",
+        "original_text": "synthetic original alpha",
+        "translated_text": "synthetic translation alpha",
+        "target_language": "synthetic_lang_b",
+        "translation_revision": "tr_001",
+        "record_kind": "translation_overlay",
+        "derived_only": true
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "base_translations",
+        "receipts"
+      ]
+    },
+    "B5-004": {
+      "result": {
+        "status": "failed",
+        "reason_code": "original_overwrite_rejected",
+        "write_attempted": false,
+        "original_text_unchanged": true,
+        "content_hash_unchanged": true,
+        "receipt_history_unchanged": true
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "base_translations",
+        "receipts"
+      ]
+    },
+    "B5-005": {
+      "result": {
+        "status": "view_issued",
+        "pairing_status": "translation_unavailable",
+        "source_ref": "src_b5_orig_002",
+        "translation": null,
+        "original_presented_as_translation": false
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "base_translations",
+        "receipts"
+      ]
+    },
+    "B5-006": {
+      "result": {
+        "status": "revised",
+        "translation_id": "tr_pair_001",
+        "active_revision": "tr_002",
+        "superseded_revisions": [
+          "tr_001"
+        ],
+        "history_retained": true,
+        "original_unchanged": true,
+        "view_shows_revision": "tr_002"
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "receipts"
+      ]
+    },
+    "B5-007": {
+      "result": {
+        "status": "anomalies_reported",
+        "orphan_translations": [
+          "translation:missing_source_001:tr_001"
+        ],
+        "silent_pairing": false,
+        "original_unaffected": true
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "base_translations",
+        "receipts"
+      ]
+    },
+    "B5-008": {
+      "result": {
+        "status": "cross_cutting_ok",
+        "originals_unchanged": true,
+        "content_hashes_unchanged": true,
+        "receipts_unchanged": true,
+        "translation_history_intact": true,
+        "view_not_evidence": true,
+        "out_of_profile_attempt": {
+          "status": "failed",
+          "reason_code": "out_of_profile_input",
+          "write_attempted": false
+        }
+      },
+      "forbidden_mutations": [
+        "base_sources",
+        "base_translations",
+        "receipts"
+      ]
+    }
+  }
+}

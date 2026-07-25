@@ -1,0 +1,119 @@
+{
+  "fixture_id": "b5_multilingual_v1",
+  "schema_version": "noetide.b5-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "b5_multilingual_v1",
+  "determinism": {
+    "clock": "2032-05-01T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "base_sources": [
+    {
+      "source_id": "src_b5_orig_001",
+      "source_kind": "synthetic_statement",
+      "language": "synthetic_lang_a",
+      "text": "synthetic original alpha",
+      "synthetic": true
+    },
+    {
+      "source_id": "src_b5_orig_002",
+      "source_kind": "synthetic_statement",
+      "language": "synthetic_lang_a",
+      "text": "synthetic original beta",
+      "synthetic": true
+    }
+  ],
+  "base_translations": [
+    {
+      "translation_id": "tr_pair_001",
+      "source_ref": "src_b5_orig_001",
+      "target_language": "synthetic_lang_b",
+      "translated_text": "synthetic translation alpha",
+      "translation_revision": "tr_001"
+    }
+  ],
+  "new_pair": {
+    "source": {
+      "source_id": "src_b5_new_001",
+      "source_kind": "synthetic_statement",
+      "language": "synthetic_lang_a",
+      "text": "synthetic original gamma",
+      "synthetic": true
+    },
+    "translation": {
+      "translation_id": "tr_new_001",
+      "source_ref": "src_b5_new_001",
+      "target_language": "synthetic_lang_b",
+      "translated_text": "synthetic translation gamma",
+      "translation_revision": "tr_001"
+    }
+  },
+  "translation_revision_update": {
+    "translation_id": "tr_pair_001",
+    "source_ref": "src_b5_orig_001",
+    "target_language": "synthetic_lang_b",
+    "translated_text": "synthetic translation alpha revised",
+    "translation_revision": "tr_002"
+  },
+  "orphan_translation": {
+    "translation_id": "tr_orphan_001",
+    "source_ref": "missing_source_001",
+    "target_language": "synthetic_lang_b",
+    "translated_text": "synthetic orphan translation",
+    "translation_revision": "tr_001"
+  },
+  "cases": [
+    {
+      "scenario_id": "B5-001",
+      "database_identity": "b5_case_001",
+      "operation": "append_pair"
+    },
+    {
+      "scenario_id": "B5-002",
+      "database_identity": "b5_case_002",
+      "operation": "read_original",
+      "source_ref": "src_b5_orig_001"
+    },
+    {
+      "scenario_id": "B5-003",
+      "database_identity": "b5_case_003",
+      "operation": "bilingual_view",
+      "source_ref": "src_b5_orig_001"
+    },
+    {
+      "scenario_id": "B5-004",
+      "database_identity": "b5_case_004",
+      "operation": "overwrite_attempt",
+      "source_ref": "src_b5_orig_001",
+      "overwrite_text": "synthetic translation alpha"
+    },
+    {
+      "scenario_id": "B5-005",
+      "database_identity": "b5_case_005",
+      "operation": "bilingual_view",
+      "source_ref": "src_b5_orig_002"
+    },
+    {
+      "scenario_id": "B5-006",
+      "database_identity": "b5_case_006",
+      "operation": "revise_translation"
+    },
+    {
+      "scenario_id": "B5-007",
+      "database_identity": "b5_case_007",
+      "operation": "anomaly_scan",
+      "inject_orphan": true
+    },
+    {
+      "scenario_id": "B5-008",
+      "database_identity": "b5_case_008",
+      "operation": "cross_cutting",
+      "out_of_profile_attempt": {
+        "operation": "append_pair",
+        "synthetic_profile_id": "unexpected_profile"
+      }
+    }
+  ]
+}

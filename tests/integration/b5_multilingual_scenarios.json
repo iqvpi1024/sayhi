@@ -1,0 +1,60 @@
+{
+  "suite_id": "b5_multilingual_v1",
+  "fixture_ref": "tests/fixtures/b5_multilingual_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/b5_multilingual_v1/oracles.json",
+  "scenarios": [
+    {
+      "scenario_id": "B5-001",
+      "contract_refs": [
+        "B5-INV-001"
+      ]
+    },
+    {
+      "scenario_id": "B5-002",
+      "contract_refs": [
+        "B5-INV-002"
+      ]
+    },
+    {
+      "scenario_id": "B5-003",
+      "contract_refs": [
+        "B5-INV-002",
+        "B5-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "B5-004",
+      "contract_refs": [
+        "B5-INV-003"
+      ]
+    },
+    {
+      "scenario_id": "B5-005",
+      "contract_refs": [
+        "B5-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "B5-006",
+      "contract_refs": [
+        "B5-INV-001",
+        "B5-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "B5-007",
+      "contract_refs": [
+        "B5-INV-002",
+        "B5-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "B5-008",
+      "contract_refs": [
+        "B5-INV-001",
+        "B5-INV-002",
+        "B5-INV-006"
+      ]
+    }
+  ]
+}
