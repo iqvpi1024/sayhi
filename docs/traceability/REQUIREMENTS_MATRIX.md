@@ -214,9 +214,9 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 | PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
 |---|---|---|---|---|---|
-| `FR-001` | 壳 `record` 命令：Source append + receipt | `SPEC-A5-APP-SHELL-001` §2-§8；S3 导入语义；S7 数据目录 | `A5-001` | `TBD` | `not_executed` |
-| `FR-005` | 自然语言审查与影响预览（Derived 呈现） | `SPEC-A5-APP-SHELL-001` §2-§8；S5 §6.1 Candidate Envelope | `A5-002`、`A5-003`、`A5-008` | `TBD` | `not_executed` |
-| `FR-006` | 发布后 Core View 更新（person_card/relationship_timeline fresh） | `SPEC-A5-APP-SHELL-001` §2-§8；S3；A2 视图语义 | `A5-005`、`A5-007` | `TBD` | `not_executed` |
-| `FR-007` | ChangeSet 回执、历史与撤销 | `SPEC-A5-APP-SHELL-001` §2-§8；S3 ChangeSet 语义 | `A5-004`、`A5-006`、`A5-007` | `TBD` | `not_executed` |
+| `FR-001` | 壳 `record` 命令：Source append + receipt | `SPEC-A5-APP-SHELL-001` §2-§8；S3 导入语义；S7 数据目录 | `A5-001` | `intake.py`（经 `cli.py` record / `a5_testing_adapter.py`） | `passed`（`a5-20260725.json`） |
+| `FR-005` | 自然语言审查与影响预览（Derived 呈现） | `SPEC-A5-APP-SHELL-001` §2-§8；S5 §6.1 Candidate Envelope | `A5-002`、`A5-003`、`A5-008` | `app_shell.py` | `passed`（`a5-20260725.json`） |
+| `FR-006` | 发布后 Core View 更新（person_card/relationship_timeline fresh） | `SPEC-A5-APP-SHELL-001` §2-§8；S3；A2 视图语义 | `A5-005`、`A5-007` | `views.py`（CoreViewReader/Projector，经 adapter） | `passed`（`a5-20260725.json`） |
+| `FR-007` | ChangeSet 回执、历史与撤销 | `SPEC-A5-APP-SHELL-001` §2-§8；S3 ChangeSet 语义 | `A5-004`、`A5-006`、`A5-007` | `changesets.py`（publish/revert/receipt，经 adapter/`cli.py`） | `passed`（`a5-20260725.json`） |
 
-状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=false`、`suite_passed=false`。suite 已物化（`tests/a5_suite_manifest.json`，preflight validator exit 0），合同测试保持 skipped；Implementation Plan `PLAN-MVP-A-A5-IMPL-001` 已批准，仅授权按任务卡施工。
+状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。official runner `docs/testing/results/a5-20260725.json` 同一次 run 8/8 passed/current，manifest 已绑定 current result；Gate Review `A5_APP_SHELL_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0，切片 `verified`。

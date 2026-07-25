@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-APP-SHELL-001
 slice_id: SLICE-MVP-A-APP-SHELL-001
-current_phase: implementation_in_progress
+current_phase: slice_verified
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -22,21 +22,22 @@ latest_recovery_points:
   - a2-current-state-rp-20260722
   - a3-entity-merge-rp-20260724
   - a4-access-policy-rp-20260724
+  - a5-app-shell-rp-20260725
 decision_ref: DEC-MVP-A-APP-SHELL-001
 spec_contract: SPEC-A5-APP-SHELL-001 v0.2 (approved)
 adr_ref: ADR-0009
 suite_manifest: tests/a5_suite_manifest.json (materialized, bound current result a5-20260725.json 8/8 passed)
 implementation_plan: PLAN-MVP-A-A5-IMPL-001 (docs/planning/MVP_A_A5_IMPLEMENTATION_PLAN.md)
 next_role: Implementer
-next_single_action: execute_A5_TASK_005 (Gate Review + recovery point tag, review/state/trace files only)
+next_single_action: choose next slice per MASTER_DELIVERY_ROADMAP (applicability review first) or advance D2/D3 one-click delivery planning
 scope_in:
-  - A5-TASK-005 only: gate review doc, PROJECT_STATE, traceability, handoff, recovery tag
+  - next slice applicability review only; no business code before decision + SPEC + suite materialization
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A5-TASK-005 Gate Review P0/P1=0 recorded and recovery tag pushed
+stop_condition: next slice applicability review recorded; no implementation before its plan is approved
 ```
 
 ## 当前事实
@@ -55,5 +56,6 @@ stop_condition: A5-TASK-005 Gate Review P0/P1=0 recorded and recovery tag pushed
 - A5-TASK-002 已完成并验证：cli.py guide/receipts/history 接线与 a5_testing_adapter.py 完整 protocol 实现，定向 6/6 passed，contract 8/8 passed（adapter），全量 regression 211 OK 无 skip；official suite 仍 `not_executed`。
 - A5-TASK-003 已完成并验证：contract 集成验证 8/8 passed（a45a8bd），regression 211 OK 无 skip 无退化；official suite 仍 `not_executed`。
 - A5-TASK-004 已完成并验证：official runner a5-20260725.json 同一次 run 8/8 passed/current，manifest 已绑定 current result，12 个 suite validator 全 PASSED，全量 regression 211 OK 无 skip。
+- A5-TASK-005 已完成：Gate Review P0=0/P1=0，A5 切片 verified，矩阵 §4.11 同步，recovery tag `a5-app-shell-rp-20260725` 已创建并推送。
 - 全量 configured-adapter regression 基线：211 OK 无 skip；12 个 suite validator。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。

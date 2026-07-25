@@ -27,7 +27,7 @@
 | `A5-TASK-002` | 壳命令接线（cli.py 增加 guide/receipts/history 命令）与 `a5_testing_adapter.py` | §3、§7-§8、`A5-001..008` | adapter 完整实现 protocol；fixture/oracle 不被修改 | `completed`（2026-07-25，`a5-task002-310bcf2-20260725`） |
 | `A5-TASK-003` | A5 contract 集成验证（NOETIDE_A5_ADAPTER 下 8/8） | §7-§8、`A5-001..008` | contract 8/8 passed | `completed`（2026-07-25，`a5-task003-a45a8bd-20260725`） |
 | `A5-TASK-004` | A5 official runner、existing regression 与 immutable result | §7-§8 | A5 8/8 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `completed`（2026-07-25，`a5-20260725.json`） |
-| `A5-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
+| `A5-TASK-005` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `completed`（2026-07-25，`A5_APP_SHELL_GATE_REVIEW_2026-07-25.md`） |
 
 ## 3. 允许文件边界
 
