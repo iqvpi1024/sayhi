@@ -243,3 +243,22 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | PRD §21.2 SLO | 固定 SLO 检查实际结果绑定 profile 记录，不外推 | `SPEC-A6-HARDENING-001` §2/§7；S6 IQ-014/HTH-INV-009 | `A6-021` | `a6_journey.SloCollector` + `slo_report` | passed（`a6-20260725.json`，official 21/21） |
 
 状态：`product_decided=true`、`spec_approved=true`（`A6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0010`，2026-07-25）、`suite_defined=true`、`suite_materialized=true`（2026-07-25）、`suite_executed=true`、`suite_passed=true`（2026-07-25，official runner 同一次 run 21/21 passed/current，immutable result `docs/testing/results/a6-20260725.json`，manifest 已绑定）、`gate_review_passed=true`（`A6_HARDENING_GATE_REVIEW_2026-07-25.md`，P0=0/P1=0）、`verified=true`（recovery tag `a6-hardening-rp-20260725`）。
+
+## 4.13 Active Slice：B4 Reconciliation 与 Semantic Diff
+
+`SLICE-MVP-B-RECONCILIATION-001` 在一个固定合成 profile 上验证写后校验与日常增量对账、周期深度对账、只读 Semantic Diff。对账发现只隔离 + 报告，不静默修复；Semantic Diff 为查询时派生，不持久化、不作证据。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-105` | 写后校验 + 干净增量对账（无发现） | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 写后校验 | `B4-001` | TBD（ADR/物化后填写） | `not_executed` |
+| `FR-105` | 失败队列检出（隔离+报告，不修复） | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 | `B4-002` | TBD | `not_executed` |
+| `FR-105` | stale 视图检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 stale 语义 | `B4-003` | TBD | `not_executed` |
+| `FR-105` | 孤儿引用检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7 | `B4-004` | TBD | `not_executed` |
+| `FR-105` | 未消费 ChangeSet 检出 | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S3 | `B4-005` | TBD | `not_executed` |
+| `FR-105` | 深度对账三分区 match | `SPEC-B4-RECONCILIATION-001` §2.1/§7；S7 投影重建 | `B4-006` | TBD | `not_executed` |
+| `FR-105` | 深度对账 mismatch 报告，不静默改写 | `SPEC-B4-RECONCILIATION-001` §6/§7；S7 | `B4-007` | TBD | `not_executed` |
+| `FR-106` | Semantic Diff：当前状态/联系状态字段级差异 | `SPEC-B4-RECONCILIATION-001` §2.2/§7；S2 revision 语义 | `B4-008` | TBD | `not_executed` |
+| `FR-106` | Semantic Diff：Hypothesis 变化 + no_change；diff 不持久化不作证据 | `SPEC-B4-RECONCILIATION-001` §2.2/§5/§7；S1/S2 Derived 边界 | `B4-009` | TBD | `not_executed` |
+| 横切（PRD §10.5/§25.3） | trust/closeness/人格/历史不变；profile 外 fail closed | `SPEC-B4-RECONCILIATION-001` §5/§7 | `B4-010` | TBD | `not_executed` |
+
+状态：`product_decided=true`（`DEC-MVP-B-RECONCILIATION-001`，2026-07-25）、`spec_approved=true`（`B4-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
