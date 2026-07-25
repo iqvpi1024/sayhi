@@ -1,0 +1,85 @@
+{
+  "schema_version": "noetide.c2-suite-manifest.v1",
+  "suite_id": "c2_hypothesis_v1",
+  "slice_id": "SLICE-MVP-C-HYPOTHESIS-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": true,
+    "suite_passed": true
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "required_scenario_ids": [
+    "C2-001",
+    "C2-002",
+    "C2-003",
+    "C2-004",
+    "C2-005",
+    "C2-006",
+    "C2-007",
+    "C2-008",
+    "C2-009",
+    "C2-010"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-C-HYPOTHESIS-001"
+    ],
+    "contract_ref": "SPEC-C2-HYPOTHESIS-001",
+    "adr_refs": [
+      "ADR-0014"
+    ],
+    "architecture_ref": "ARCH-C2-HYPOTHESIS-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/c2_hypothesis_v1/fixture.json",
+      "sha256": "c10ba855e8a738204fe03d0af33c70f0510b28891156857b18b40392504ff969"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/c2_hypothesis_v1/oracles.json",
+      "sha256": "aaeb3c5c0333f9245dbf065d3b702f2186376fb9534561c1311eadc5cfa8c6a3"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/c2_hypothesis_scenarios.json",
+      "sha256": "57f0bc49b96e58463f3b09db136491e55959984f69692fe27da96673d29fb409"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/c2_hypothesis_adapter_protocol.py",
+      "sha256": "8f69458e78b8760376978d4cab7dc2704e3470e0afc01a60ce062d0782e8c820"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_c2_hypothesis_contract.py",
+      "sha256": "63158634f23520fc95971bb3da23c33e295bdedfc3de30875b132b5e5e6b6857"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_c2_suite.py",
+      "sha256": "9fac3dd524802892bded3477fd0259b0302c80b7558ab7c14c0f65abced9acbb"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c2_suite.py",
+      "sha256": "77a8a8cfc29e6fa32392371e3d45069117e8594fdfc7d4de38d8520eaa0b1b23"
+    }
+  ],
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  },
+  "latest_verification_result_path": "docs/testing/results/c2-20260726.json",
+  "latest_verification_result_sha256": "9a564abe987760818055e39328295e860073682af3e610590f91b162bf21b6ac",
+  "latest_verification_manifest_sha256": "506fbb065270f15b067c858487772d8622501b53cbdaf8a8e35ec8def789a62a"
+}

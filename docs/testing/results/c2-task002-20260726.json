@@ -1,0 +1,32 @@
+{
+ "schema_version": "noetide.c2-task-result.v1",
+ "run_id": "c2-task002-20260726",
+ "task_id": "C2-TASK-002",
+ "slice_id": "SLICE-MVP-C-HYPOTHESIS-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "c2_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_C2_ADAPTER='noetide_micro.c2_testing_adapter'; python -m unittest tests.semantic.test_c2_hypothesis_contract -v",
+   "exit_code": 0,
+   "result": "contract 10/10 passed with noetide_micro.c2_testing_adapter; fixture/oracle/scenario files untouched"
+  },
+  {
+   "command": "$env:PYTHONPATH='src' + 13 adapter env vars (MICRO/ANSWER/A2..A6/B2..B6/C2); python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "full regression 347 tests OK, 0 skipped"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}

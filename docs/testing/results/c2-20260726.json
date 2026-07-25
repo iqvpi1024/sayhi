@@ -1,0 +1,115 @@
+{
+  "schema_version": "noetide.c2-run-result.v1",
+  "run_id": "c2-a8c6907348824f3ea0fe6dea8753fb56",
+  "suite_id": "c2_hypothesis_v1",
+  "manifest_sha256": "506fbb065270f15b067c858487772d8622501b53cbdaf8a8e35ec8def789a62a",
+  "git_commit": "1e7fb3a96ea59f02e95e98f8b03b78f6706a0008",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_c2_suite",
+    "--adapter",
+    "noetide_micro.c2_testing_adapter",
+    "--output",
+    "docs/testing/results/c2-20260726.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "C2-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-009",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C2-010",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/c2_hypothesis_v1/fixture.json",
+      "sha256": "c10ba855e8a738204fe03d0af33c70f0510b28891156857b18b40392504ff969"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/c2_hypothesis_v1/oracles.json",
+      "sha256": "aaeb3c5c0333f9245dbf065d3b702f2186376fb9534561c1311eadc5cfa8c6a3"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/c2_hypothesis_scenarios.json",
+      "sha256": "57f0bc49b96e58463f3b09db136491e55959984f69692fe27da96673d29fb409"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/c2_hypothesis_adapter_protocol.py",
+      "sha256": "8f69458e78b8760376978d4cab7dc2704e3470e0afc01a60ce062d0782e8c820"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_c2_hypothesis_contract.py",
+      "sha256": "63158634f23520fc95971bb3da23c33e295bdedfc3de30875b132b5e5e6b6857"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_c2_suite.py",
+      "sha256": "9fac3dd524802892bded3477fd0259b0302c80b7558ab7c14c0f65abced9acbb"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c2_suite.py",
+      "sha256": "77a8a8cfc29e6fa32392371e3d45069117e8594fdfc7d4de38d8520eaa0b1b23"
+    }
+  ]
+}

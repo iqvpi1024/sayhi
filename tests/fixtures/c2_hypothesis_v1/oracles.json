@@ -1,0 +1,182 @@
+{
+  "schema_version": "noetide.c2-oracles.v1",
+  "scenarios": {
+    "C2-001": {
+      "result": {
+        "create_outcome": "applied",
+        "status": "active",
+        "object_revision": 1,
+        "evidence_for": 2,
+        "evidence_against": 0,
+        "valid_scope": "synthetic conflict conversations in project work",
+        "hypothesis_kind": "pattern",
+        "in_assertion_layer": false
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-002": {
+      "result": {
+        "attach_outcome": "applied",
+        "status": "active",
+        "object_revision": 2,
+        "evidence_for": 3,
+        "history_entries": 1
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-003": {
+      "result": {
+        "attach_outcome": "applied",
+        "status": "active",
+        "evidence_against": 1,
+        "auto_transitions": 0
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-004": {
+      "result": {
+        "transition_outcome": "applied",
+        "status": "challenged",
+        "display_tone": "tentative",
+        "object_revision": 3,
+        "history_statuses": [
+          "active",
+          "active"
+        ],
+        "transition_receipts": 1
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-005": {
+      "result": {
+        "status": "weakened",
+        "display_tone": "tentative",
+        "evidence_against": 3,
+        "object_revision": 6,
+        "history_statuses": [
+          "active",
+          "active",
+          "challenged",
+          "challenged",
+          "challenged"
+        ],
+        "all_history_readable": true
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-006": {
+      "result": {
+        "display_tone": "tentative",
+        "is_fact": false,
+        "in_fact_evidence_set": false,
+        "certain_tone_used": false,
+        "assertion_layer_unchanged": true
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-007": {
+      "result": {
+        "upgrade_outcome": "rejected",
+        "writes_during_upgrade": 0,
+        "status": "active",
+        "object_revision": 1
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-008": {
+      "result": {
+        "final_status": "active",
+        "object_revision": 9,
+        "transition_receipts": 5,
+        "history_statuses": [
+          "active",
+          "active",
+          "challenged",
+          "challenged",
+          "challenged",
+          "weakened",
+          "active",
+          "retired"
+        ],
+        "no_deletions": true
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-009": {
+      "result": {
+        "unconfirmed_attach_outcome": "rejected",
+        "unconfirmed_transition_outcome": "rejected",
+        "status": "active",
+        "object_revision": 1,
+        "evidence_for": 2,
+        "evidence_against": 0,
+        "auto_transitions": 0
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    },
+    "C2-010": {
+      "result": {
+        "revision_chain_complete": true,
+        "all_evidence_sources_exist": true,
+        "illegal_missing_source_outcome": "rejected",
+        "illegal_derived_ref_outcome": "rejected",
+        "out_of_profile_outcome": "rejected",
+        "unrelated_canonical_unchanged": true,
+        "auto_transitions": 0,
+        "final_status": "active",
+        "object_revision": 9
+      },
+      "forbidden_mutations": [
+        "source_layer",
+        "entity_layer",
+        "assertion_layer",
+        "derived_layer"
+      ]
+    }
+  }
+}

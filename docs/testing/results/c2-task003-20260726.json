@@ -1,0 +1,42 @@
+{
+ "schema_version": "noetide.c2-task-result.v1",
+ "run_id": "c2-task003-20260726",
+ "task_id": "C2-TASK-003",
+ "slice_id": "SLICE-MVP-C-HYPOTHESIS-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "c2_official_suite": "executed_passed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m tests.runner.run_c2_suite --adapter noetide_micro.c2_testing_adapter --output docs/testing/results/c2-20260726.json",
+   "exit_code": 0,
+   "result": "official runner: passed 10/10 C2 scenarios in one immutable run; result docs/testing/results/c2-20260726.json"
+  },
+  {
+   "command": "python tools/validate_c2_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: suite materialized and current business runner result is bound (manifest flags executed+passed, result hash bound)"
+  },
+  {
+   "command": "python tools/validate_*.py (17 suites)",
+   "exit_code": 0,
+   "result": "all 17 suite validators PASSED"
+  },
+  {
+   "command": "$env:PYTHONPATH='src' + 13 adapter env vars; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "full regression 347 tests OK, 0 skipped, no regressions"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}

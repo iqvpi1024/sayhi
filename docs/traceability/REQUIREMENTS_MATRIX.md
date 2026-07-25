@@ -298,3 +298,22 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `PRD-§24.3` | 横切：原始库不变、历史完整、fail closed | `SPEC-B6-SHADOW-MIGRATION-001` §5/§7 | `B6-010` | `noetide_micro.shadow_migration / noetide_micro.disambiguation` | `passed`（b6-20260725.json） |
 
 状态：`product_decided=true`（`DEC-MVP-B-SHADOW-MIGRATION-001`，2026-07-25）、`spec_approved=true`（`B6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=true`（`ADR-0013`，2026-07-25）、`suite_defined=true`、`suite_materialized=true`（2026-07-25）、`suite_executed=true`、`suite_passed=true`（2026-07-25，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/b6-20260725.json`，manifest 已绑定）、`gate_review_passed=true`（`B6_SHADOW_MIGRATION_GATE_REVIEW_2026-07-25.md`，P0=0/P1=0）、`verified=true`（recovery tag `b6-shadow-migration-rp-20260725`）。
+
+## 4.16 Active Slice：C2 Hypothesis Lifecycle
+
+`SLICE-MVP-C-HYPOTHESIS-001` 在一个固定合成 profile 上验证 Hypothesis 生命周期：用户确认创建（active + valid_scope + 支持证据）、用户确认的证据/反例追加、用户确认的状态迁移（active -> challenged -> weakened，含纠正性回退与 retired/restore）、反例不自动改状态、历史 revision 永不删除、tentative 呈现、永不升级为 Fact。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `PRD-§20.2 FR-201` | 用户确认创建 Hypothesis（scope + 支持证据） | `SPEC-C2-HYPOTHESIS-001` §2.1/§7 | `C2-001` | `noetide_micro.hypotheses`（ADR-0014） | `passed`（c2-20260726.json） |
+| `PRD-§20.2 FR-201` | 支持证据追加、状态保持、revision 递增 | `SPEC-C2-HYPOTHESIS-001` §2.1/§2.2/§7 | `C2-002` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§26 Case G` | 反例进入 evidence_against 不自动改状态 | `SPEC-C2-HYPOTHESIS-001` §2.2/§3/§7；S2 | `C2-003` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§26 Case G` | 确认迁移 active->challenged，历史保留，tentative | `SPEC-C2-HYPOTHESIS-001` §3/§7；S3 | `C2-004` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§26 Case G` | 确认迁移 challenged->weakened，反例累计 | `SPEC-C2-HYPOTHESIS-001` §3/§7 | `C2-005` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§26 Case G` | 呈现 tentative、is_fact=false、事实证据集隔离 | `SPEC-C2-HYPOTHESIS-001` §2.3/§5/§7 | `C2-006` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§5.2-7` | upgrade_to_fact fail closed | `SPEC-C2-HYPOTHESIS-001` §5/§6/§7；S1 | `C2-007` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§5.2` | 纠正性回退、retire、restore 各产生新 revision | `SPEC-C2-HYPOTHESIS-001` §3/§7；S3 | `C2-008` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§5.2-7` | 未确认操作 rejected 无写入、auto_transitions=0 | `SPEC-C2-HYPOTHESIS-001` §6/§7；S3 | `C2-009` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+| `PRD-§23` | 横切：revision 链完整、证据真实、fail closed、无关层不变 | `SPEC-C2-HYPOTHESIS-001` §4/§5/§7；S2 | `C2-010` | `noetide_micro.hypotheses` | `passed`（c2-20260726.json） |
+
+状态：`product_decided=true`（`DEC-MVP-C-HYPOTHESIS-001`，2026-07-26）、`spec_approved=true`（`C2-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0014`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c2-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C2_HYPOTHESIS_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c2-hypothesis-lifecycle-rp-20260726`）。

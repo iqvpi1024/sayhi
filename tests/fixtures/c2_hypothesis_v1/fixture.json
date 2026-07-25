@@ -1,0 +1,566 @@
+{
+  "schema_version": "noetide.c2-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "c2_hypothesis_v1",
+  "determinism": {
+    "clock": "2026-07-26T00:00:00+00:00"
+  },
+  "base_sources": [
+    {
+      "source_id": "SRC-SYN-C2-DIARY-001",
+      "source_kind": "synthetic_diary",
+      "text": "Synthetic diary entry 001: avoided a disagreement during a planning call.",
+      "locator": "entry#1"
+    },
+    {
+      "source_id": "SRC-SYN-C2-DIARY-002",
+      "source_kind": "synthetic_diary",
+      "text": "Synthetic diary entry 002: postponed a hard conversation twice.",
+      "locator": "entry#2"
+    },
+    {
+      "source_id": "SRC-SYN-C2-DIARY-003",
+      "source_kind": "synthetic_diary",
+      "text": "Synthetic diary entry 003: stayed quiet when the plan changed.",
+      "locator": "entry#3"
+    },
+    {
+      "source_id": "SRC-SYN-C2-EPISODE-001",
+      "source_kind": "synthetic_episode_record",
+      "text": "Synthetic episode 001: initiated conflict resolution at retro.",
+      "locator": "segment#1"
+    },
+    {
+      "source_id": "SRC-SYN-C2-EPISODE-002",
+      "source_kind": "synthetic_episode_record",
+      "text": "Synthetic episode 002: mediated a scheduling dispute.",
+      "locator": "segment#2"
+    },
+    {
+      "source_id": "SRC-SYN-C2-EPISODE-003",
+      "source_kind": "synthetic_episode_record",
+      "text": "Synthetic episode 003: raised a disagreement openly.",
+      "locator": "segment#3"
+    }
+  ],
+  "base_entities": [
+    {
+      "entity_id": "ENT-SYN-C2-SELF",
+      "entity_kind": "person",
+      "display_name": "Synthetic Self"
+    }
+  ],
+  "hypothesis_seed": {
+    "hypothesis_id": "HYP-SYN-C2-001",
+    "statement": "Synthetic hypothesis: the user may tend to avoid conflict when disagreements arise.",
+    "hypothesis_kind": "pattern",
+    "valid_scope": "synthetic conflict conversations in project work",
+    "subject_ref": "ENT-SYN-C2-SELF"
+  },
+  "cases": [
+    {
+      "scenario_id": "C2-001",
+      "database_identity": "c2_001",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-002",
+      "database_identity": "c2_002",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-DIARY-003",
+          "locator": "entry#3",
+          "stance": "supports"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-003",
+      "database_identity": "c2_003",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-001",
+          "locator": "segment#1",
+          "stance": "contradicts"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-004",
+      "database_identity": "c2_004",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-001",
+          "locator": "segment#1",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "challenged",
+          "reason": "synthetic counter-evidence appeared"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-005",
+      "database_identity": "c2_005",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-001",
+          "locator": "segment#1",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "challenged",
+          "reason": "first synthetic counter-evidence"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-002",
+          "locator": "segment#2",
+          "stance": "contradicts"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-003",
+          "locator": "segment#3",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "weakened",
+          "reason": "repeated synthetic counter-evidence"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-006",
+      "database_identity": "c2_006",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-001",
+          "locator": "segment#1",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "challenged",
+          "reason": "first synthetic counter-evidence"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-002",
+          "locator": "segment#2",
+          "stance": "contradicts"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-003",
+          "locator": "segment#3",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "weakened",
+          "reason": "repeated synthetic counter-evidence"
+        },
+        {
+          "op": "present",
+          "at": "2026-07-26T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-007",
+      "database_identity": "c2_007",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "upgrade_to_fact",
+          "at": "2026-07-26T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-008",
+      "database_identity": "c2_008",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-001",
+          "locator": "segment#1",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "challenged",
+          "reason": "first synthetic counter-evidence"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-002",
+          "locator": "segment#2",
+          "stance": "contradicts"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-003",
+          "locator": "segment#3",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "weakened",
+          "reason": "repeated synthetic counter-evidence"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "active",
+          "reason": "user correction: scope narrowed"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "retired",
+          "reason": "user retired the hypothesis"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "active",
+          "reason": "user restore"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-009",
+      "database_identity": "c2_009",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": false,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-001",
+          "locator": "segment#1",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": false,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "challenged",
+          "reason": "unconfirmed attempt"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C2-010",
+      "database_identity": "c2_010",
+      "ops": [
+        {
+          "op": "create_hypothesis",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "evidence": [
+            {
+              "source_id": "SRC-SYN-C2-DIARY-001",
+              "locator": "entry#1",
+              "stance": "supports"
+            },
+            {
+              "source_id": "SRC-SYN-C2-DIARY-002",
+              "locator": "entry#2",
+              "stance": "supports"
+            }
+          ]
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-DIARY-003",
+          "locator": "entry#3",
+          "stance": "supports"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-001",
+          "locator": "segment#1",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "challenged",
+          "reason": "first synthetic counter-evidence"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-002",
+          "locator": "segment#2",
+          "stance": "contradicts"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-EPISODE-003",
+          "locator": "segment#3",
+          "stance": "contradicts"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "weakened",
+          "reason": "repeated synthetic counter-evidence"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "retired",
+          "reason": "user retired the hypothesis"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "active",
+          "reason": "user restore"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "SRC-SYN-C2-MISSING",
+          "locator": "entry#9",
+          "stance": "supports"
+        },
+        {
+          "op": "attach_evidence",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "source_id": "DERIVED:projection:proj_x",
+          "locator": "row#1",
+          "stance": "supports"
+        },
+        {
+          "op": "transition_status",
+          "confirmed": true,
+          "at": "2026-07-26T00:00:00+00:00",
+          "to_status": "retired",
+          "reason": "out of profile target",
+          "hypothesis_id": "HYP-SYN-C2-UNKNOWN"
+        }
+      ]
+    }
+  ]
+}
