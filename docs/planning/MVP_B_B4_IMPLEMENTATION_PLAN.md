@@ -29,7 +29,7 @@
 | `B4-TASK-003` | `semantic_diff.py` 查询时字段级 diff | §2.2/§5、`B4-008/009` | create/modify/no_change + before/after；不持久化；digest 前后不变；revision 缺失显式拒绝 | `completed`；定向 7/7 passed，见 `b4-task003-20260725.json` |
 | `B4-TASK-004` | `b4_testing_adapter.py` 与 B4 contract 集成 | §7/§8、`B4-001..010` | adapter 完整实现 protocol；fixture/oracle 不被修改；B4-010 横切通过 | `completed`；contract 10/10 passed（adapter），见 `b4-task004-20260725.json` |
 | `B4-TASK-005` | B4 official runner、existing regression 与 immutable result | §7/§8 | B4 10/10 同一次 run passed；既有 suite 无回归；manifest 正确绑定 result | `completed`；`b4-20260725.json` 10/10 current/passed，全量回归 292 OK 0 skip |
-| `B4-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `pending` |
+| `B4-TASK-006` | Gate Review、状态/追踪、Recovery Point | Process 流程 | P0/P1=0、验证记录完整、tag 仅在审查通过后创建 | `completed`；Gate Review `B4_RECONCILIATION_GATE_REVIEW_2026-07-25.md` P0=0/P1=0，recovery tag `b4-reconciliation-rp-20260725` |
 
 ## 3. 允许文件边界
 

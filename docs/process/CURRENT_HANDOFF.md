@@ -3,8 +3,8 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-A-HARDENING-001
-slice_id: SLICE-MVP-A-HARDENING-001
+handoff_id: HANDOFF-MVP-B-RECONCILIATION-001
+slice_id: SLICE-MVP-B-RECONCILIATION-001
 current_phase: slice_verified
 product_baseline:
   path: PRDv05.md
@@ -24,11 +24,12 @@ latest_recovery_points:
   - a4-access-policy-rp-20260724
   - a5-app-shell-rp-20260725
   - a6-hardening-rp-20260725
-decision_ref: DEC-MVP-A-HARDENING-001
-spec_contract: SPEC-A6-HARDENING-001 v0.1 Approved (A6-CONTRACT-REVIEW-001)
-adr_ref: ADR-0010 (+ ARCH-A6-HARDENING-001)
-suite_manifest: tests/a6_suite_manifest.json (materialized, executed, passed, bound to a6-20260725.json)
-implementation_plan: PLAN-MVP-A-A6-IMPL-001 (A6-TASK-001..006)
+  - b4-reconciliation-rp-20260725
+decision_ref: DEC-MVP-B-RECONCILIATION-001
+spec_contract: SPEC-B4-RECONCILIATION-001 v0.1 Approved (B4-CONTRACT-REVIEW-001)
+adr_ref: ADR-0011 (+ ARCH-B4-RECONCILIATION-001)
+suite_manifest: tests/b4_suite_manifest.json (materialized, executed, passed, bound to b4-20260725.json)
+implementation_plan: PLAN-MVP-B-B4-IMPL-001 (B4-TASK-001..006)
 next_role: Product/Architecture
 next_single_action: choose next slice per docs/planning/MASTER_DELIVERY_ROADMAP.md (B4/B5/B6, C2-C6, D2/D3); start with a Decision gate
 scope_in:
@@ -66,5 +67,12 @@ stop_condition: next slice decided; A6 hardening slice is verified (gate review 
 - A6-TASK-004 已完成（77066da）：a6_testing_adapter.py，contract 21/21 passed，regression 264 OK 0 skip。
 - A6-TASK-005 已完成（00d146a）：official runner 21/21 passed/current，manifest 已绑定，13 个 suite validator 全 PASSED。
 - A6-TASK-006 已完成：Gate Review P0=0/P1=0，A6 切片 verified，矩阵 §4.12 同步，recovery tag `a6-hardening-rp-20260725` 已推送。
-- 全量 configured-adapter regression 基线：264 OK 0 skip；13 个 suite validator。
+- `DEC-MVP-B-RECONCILIATION-001`（2026-07-25）选择 B4 切片；`SPEC-B4-RECONCILIATION-001` v0.1 Approved（`B4-CONTRACT-REVIEW-001`）；`ADR-0011`/`ARCH-B4-RECONCILIATION-001` 已接受；suite 物化 10 场景。
+- B4-TASK-001 已完成（5b7be53）：reconciliation.py 增量对账四类发现 + store B4 additive 只读助手，定向 7/7 passed。
+- B4-TASK-002 已完成（53a4e86）：深度对账三分区重建比较 + unavailable 壳，定向 11/11 passed。
+- B4-TASK-003 已完成（341eb61）：semantic_diff.py 查询时派生 diff（derived-only），定向 7/7 passed。
+- B4-TASK-004 已完成（59aa8a9）：b4_testing_adapter.py，contract 10/10 passed。
+- B4-TASK-005 已完成（56d1c51）：official runner `b4-20260725.json` 同一次 run 10/10 passed/current，manifest 已绑定，14 个 suite validator 全 PASSED，全量 regression 292 OK 0 skip。
+- B4-TASK-006 已完成：Gate Review `B4_RECONCILIATION_GATE_REVIEW_2026-07-25.md` P0=0/P1=0，B4 切片 verified，矩阵 §4.13 同步，recovery tag `b4-reconciliation-rp-20260725`。
+- 全量 configured-adapter regression 基线：292 OK 0 skip；14 个 suite validator。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。
