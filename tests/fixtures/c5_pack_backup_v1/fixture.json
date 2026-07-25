@@ -1,0 +1,198 @@
+{
+  "schema_version": "noetide.c5-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "c5_pack_backup_v1",
+  "determinism": {
+    "clock": "2026-07-26T00:00:00+00:00"
+  },
+  "backup_key": "c5-synthetic-backup-key-v1",
+  "wrong_key": "c5-synthetic-wrong-key",
+  "deletion_policy": {
+    "backup": "pending_expiry",
+    "export_copy": "out_of_control"
+  },
+  "seed": {
+    "sources": [
+      {
+        "source_id": "SRC-SYN-C5-001",
+        "source_kind": "synthetic_diary",
+        "text": "Synthetic diary entry c5-001."
+      },
+      {
+        "source_id": "SRC-SYN-C5-002",
+        "source_kind": "synthetic_note",
+        "text": "Synthetic note c5-002."
+      }
+    ],
+    "canonical": [
+      {
+        "object_id": "EP-SYN-C5-001",
+        "object_type": "episode",
+        "occurred_on": "2026-07-10",
+        "title": "Synthetic episode c5-001"
+      },
+      {
+        "object_id": "DC-SYN-C5-001",
+        "object_type": "decision",
+        "status": "decided",
+        "title": "Synthetic decision c5-001"
+      },
+      {
+        "object_id": "HP-SYN-C5-001",
+        "object_type": "hypothesis",
+        "status": "active",
+        "statement": "Synthetic hypothesis c5-001"
+      }
+    ],
+    "ledger": [
+      {
+        "record_id": "ledger-syn-c5-001",
+        "record_type": "seed_note",
+        "payload": {
+          "note": "synthetic ledger seed",
+          "at": "2026-07-26T00:00:00+00:00"
+        }
+      }
+    ]
+  },
+  "cases": [
+    {
+      "scenario_id": "C5-001",
+      "database_identity": "c5_001",
+      "ops": [
+        {
+          "op": "export"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-002",
+      "database_identity": "c5_002",
+      "ops": [
+        {
+          "op": "export"
+        },
+        {
+          "op": "export_again"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-003",
+      "database_identity": "c5_003",
+      "ops": [
+        {
+          "op": "export"
+        },
+        {
+          "op": "verify"
+        },
+        {
+          "op": "tamper",
+          "file": "canonical.json"
+        },
+        {
+          "op": "verify"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-004",
+      "database_identity": "c5_004",
+      "ops": [
+        {
+          "op": "export"
+        },
+        {
+          "op": "inject_unknown_file"
+        },
+        {
+          "op": "verify"
+        },
+        {
+          "op": "remove_file",
+          "file": "markdown/ledger.md"
+        },
+        {
+          "op": "verify_after_remove"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-005",
+      "database_identity": "c5_005",
+      "ops": [
+        {
+          "op": "create_backup"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-006",
+      "database_identity": "c5_006",
+      "ops": [
+        {
+          "op": "create_backup"
+        },
+        {
+          "op": "restore",
+          "key": "correct"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-007",
+      "database_identity": "c5_007",
+      "ops": [
+        {
+          "op": "create_backup"
+        },
+        {
+          "op": "restore",
+          "key": "wrong"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-008",
+      "database_identity": "c5_008",
+      "ops": [
+        {
+          "op": "deletion_receipt"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-009",
+      "database_identity": "c5_009",
+      "ops": [
+        {
+          "op": "deletion_receipt",
+          "fail_component": "cache"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C5-010",
+      "database_identity": "c5_010",
+      "ops": [
+        {
+          "op": "export"
+        },
+        {
+          "op": "create_backup"
+        },
+        {
+          "op": "verify"
+        },
+        {
+          "op": "restore_to_existing"
+        },
+        {
+          "op": "out_of_profile_op"
+        }
+      ]
+    }
+  ]
+}

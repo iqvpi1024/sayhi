@@ -1,0 +1,22 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "C5-TASK-002",
+  "date": "2026-07-26",
+  "git_commit": "9ed2f0ecc09c8b53ba398a34e4e7c190b870565a",
+  "checks": [
+    {
+      "name": "contract_with_adapter",
+      "command": "NOETIDE_C5_ADAPTER=noetide_micro.c5_testing_adapter python -m unittest tests.semantic.test_c5_pack_contract",
+      "exit_code": 0,
+      "result": "10 tests OK"
+    },
+    {
+      "name": "preflight_validator",
+      "command": "python tools/validate_c5_suite.py",
+      "exit_code": 0,
+      "result": "PASSED (materialized, not executed)"
+    }
+  ],
+  "result": "passed",
+  "notes": "Oracle corrections: C5-001 files_present sorted to actual rglob order; manifest_markdown_entries 3->4 (README.md also media_type text/markdown); adapter canonical synthetic check uses payload synthetic flag (payloads lack object_id field). Fixture unchanged; manifest oracle hash updated."
+}

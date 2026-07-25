@@ -1,0 +1,79 @@
+{
+  "schema_version": "noetide.c5-suite-manifest.v1",
+  "suite_id": "c5_pack_backup_v1",
+  "slice_id": "SLICE-MVP-C-PACK-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": true,
+    "suite_passed": true
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "required_scenario_ids": [
+    "C5-001",
+    "C5-002",
+    "C5-003",
+    "C5-004",
+    "C5-005",
+    "C5-006",
+    "C5-007",
+    "C5-008",
+    "C5-009",
+    "C5-010"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-C-PACK-001"
+    ],
+    "contract_ref": "SPEC-C5-PACK-001",
+    "adr_refs": [
+      "ADR-0017"
+    ],
+    "architecture_ref": "ARCH-C5-PACK-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/c5_pack_backup_v1/fixture.json",
+      "sha256": "5def59beb4d1d32dcb5c913d26536be8cb1d620e7dcdeca7f0dd008d5cae75c4"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/c5_pack_backup_v1/oracles.json",
+      "sha256": "6bb2056efd2864663d42aa6ddcd6a8b45a9735c3adfb25c8202eba6fa8ae64aa"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/c5_pack_scenarios.json",
+      "sha256": "760f3133e949428e3d5665a4cac7d820772a7b596b15c127c50ce2a2005f484a"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/c5_pack_adapter_protocol.py",
+      "sha256": "18095f2e587e33e4f53ee37bff23ab88fcefd51bbd4c8f4506af5770546f7754"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_c5_pack_contract.py",
+      "sha256": "6be71bbd80910eba5b6318336bf7beb31a6dd1894f2a8650f6c9dc7310e846a1"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_c5_suite.py",
+      "sha256": "4a3fff08a276cb6a25edc1b29b6b2b056c91a7a4c9689fba1315e4e5b2f1b526"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c5_suite.py",
+      "sha256": "56f8650dfc21902cfff8a50a5b09967fc9767d6d4ee2585b11bb3d1c3713eef5"
+    }
+  ],
+  "latest_verification_result_path": "docs/testing/results/c5-20260726.json",
+  "latest_verification_result_sha256": "fa7af0a75b68b1f97d80ab4b58ed998fc3d16c4ca1a1b3236dc542c8135e8fea",
+  "latest_verification_manifest_sha256": "a8c6d86e4562098f5ca9afc5959ca95ff38383eaa963453035c14164b67c4d41"
+}

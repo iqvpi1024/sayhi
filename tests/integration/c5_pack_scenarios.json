@@ -1,0 +1,72 @@
+{
+  "suite_id": "c5_pack_backup_v1",
+  "fixture_ref": "tests/fixtures/c5_pack_backup_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/c5_pack_backup_v1/oracles.json",
+  "scenarios": [
+    {
+      "scenario_id": "C5-001",
+      "contract_refs": [
+        "C5-INV-001"
+      ]
+    },
+    {
+      "scenario_id": "C5-002",
+      "contract_refs": [
+        "C5-INV-001",
+        "C5-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "C5-003",
+      "contract_refs": [
+        "C5-INV-002"
+      ]
+    },
+    {
+      "scenario_id": "C5-004",
+      "contract_refs": [
+        "C5-INV-002"
+      ]
+    },
+    {
+      "scenario_id": "C5-005",
+      "contract_refs": [
+        "C5-INV-003",
+        "C5-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "C5-006",
+      "contract_refs": [
+        "C5-INV-003",
+        "C5-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "C5-007",
+      "contract_refs": [
+        "C5-INV-003"
+      ]
+    },
+    {
+      "scenario_id": "C5-008",
+      "contract_refs": [
+        "C5-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "C5-009",
+      "contract_refs": [
+        "C5-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "C5-010",
+      "contract_refs": [
+        "C5-INV-005",
+        "C5-INV-006",
+        "C5-INV-007"
+      ]
+    }
+  ]
+}

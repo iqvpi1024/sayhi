@@ -1,0 +1,21 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "C5-TASK-001",
+  "date": "2026-07-26",
+  "git_commit": "9ed2f0ecc09c8b53ba398a34e4e7c190b870565a",
+  "checks": [
+    {
+      "name": "imports",
+      "command": "python -c import noetide_micro.pack_backup",
+      "exit_code": 0,
+      "result": "import ok"
+    },
+    {
+      "name": "targeted_unit",
+      "command": "python -m unittest tests.semantic.test_c5_task001_pack_backup",
+      "exit_code": 0,
+      "result": "5 tests OK"
+    }
+  ],
+  "result": "passed"
+}

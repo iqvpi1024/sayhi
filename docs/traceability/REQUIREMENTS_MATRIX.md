@@ -353,3 +353,21 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `PRD-§23` | 横切：链完整、fail closed、无关层不变 | `SPEC-C4-SCENARIO-001` §4/§5/§7；S2 | `C4-010` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
 
 状态：`product_decided=true`（`DEC-MVP-C-SCENARIO-001`，2026-07-26）、`spec_approved=true`（`C4-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0016`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c4-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C4_SCENARIO_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c4-scenario-action-rp-20260726`）。
+## 4.19 Active Slice：C5 Context Pack & Encrypted Backup
+
+`SLICE-MVP-C-PACK-001` 在一个固定合成 profile 上验证：Markdown+JSON Pack（确定性渲染 + fail-closed 校验）、本地加密备份（密文非明文、字节一致恢复、错误密钥拒绝）、删除与恢复诚实性（八成分回执）。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `PRD-§24.x` | Markdown+JSON Pack 导出、manifest 含 markdown 条目 | `SPEC-C5-PACK-001` §2.1/§7 | `C5-001` | `noetide_micro.pack_backup`（ADR-0017） | `passed`（c5-20260726.json） |
+| `PRD-§24.x` | 渲染确定性、独立可读 | `SPEC-C5-PACK-001` §2.1/§7 | `C5-002` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§20.4 FR-303` | 校验 validated、篡改 rejected | `SPEC-C5-PACK-001` §2.1/§6/§7；S7 | `C5-003` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§20.4 FR-303` | 未知/缺失文件 fail closed | `SPEC-C5-PACK-001` §6/§7；S7 | `C5-004` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§24.x` | 加密备份密文非明文、receipt、read-only | `SPEC-C5-PACK-001` §2.2/§5/§7 | `C5-005` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§24.x` | 正确密钥字节一致恢复、源库不变 | `SPEC-C5-PACK-001` §2.3/§3/§7 | `C5-006` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§24.x` | 错误密钥 fail closed 零写入 | `SPEC-C5-PACK-001` §6/§7 | `C5-007` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§534` | 八成分回执、pending_expiry/out_of_control | `SPEC-C5-PACK-001` §2.4/§7；S1 | `C5-008` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§534` | partial failure 显式报告 | `SPEC-C5-PACK-001` §2.4/§6/§7 | `C5-009` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+| `PRD-§23` | 横切：digest 不变、不覆盖源库、fail closed | `SPEC-C5-PACK-001` §4/§5/§7 | `C5-010` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
+
+状态：`product_decided=true`（`DEC-MVP-C-PACK-001`，2026-07-26）、`spec_approved=true`（`C5-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0017`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c5-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C5_PACK_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c5-context-pack-backup-rp-20260726`）。

@@ -1,0 +1,127 @@
+{
+  "schema_version": "noetide.c5-oracles.v1",
+  "scenarios": {
+    "C5-001": {
+      "result": {
+        "export_outcome": "exported",
+        "files_present": [
+          "README.md",
+          "canonical.json",
+          "checksums.sha256",
+          "ledger.json",
+          "manifest.json",
+          "markdown/canonical.md",
+          "markdown/ledger.md",
+          "markdown/sources.md",
+          "sources.json"
+        ],
+        "manifest_markdown_entries": 4,
+        "hashes_valid": true
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-002": {
+      "result": {
+        "byte_identical": true,
+        "contains_expected_headings": true,
+        "export_scope": "owner_private_synthetic"
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-003": {
+      "result": {
+        "first_verify": "validated",
+        "tampered_verify": "rejected_hash_mismatch",
+        "sqlite_writes": 0
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-004": {
+      "result": {
+        "unknown_file_verify": "rejected_unknown_file",
+        "missing_file_verify": "rejected_hash_mismatch",
+        "sqlite_writes": 0
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-005": {
+      "result": {
+        "backup_outcome": "created",
+        "ciphertext_differs": true,
+        "receipt_has_hashes": true,
+        "encryption_label": "stdlib_deterministic_v1",
+        "store_digest_unchanged": true
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-006": {
+      "result": {
+        "restore_outcome": "restored",
+        "byte_identical": true,
+        "data_revision_match": true,
+        "source_unchanged": true
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-007": {
+      "result": {
+        "restore_outcome": "rejected",
+        "partial_file_exists": false
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-008": {
+      "result": {
+        "components": {
+          "live_source": "deleted",
+          "canonical_payload": "deleted",
+          "ledger_payload": "deleted",
+          "derived_index": "deleted",
+          "cache": "deleted",
+          "backup": "pending_expiry",
+          "export_copy": "out_of_control",
+          "minimal_audit_proof": "retained"
+        },
+        "overall": "deleted"
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-009": {
+      "result": {
+        "failed_component": "cache",
+        "overall": "partial_failure",
+        "claimed_deleted": false
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    },
+    "C5-010": {
+      "result": {
+        "store_digest_unchanged": true,
+        "restore_to_existing_outcome": "rejected",
+        "out_of_profile_outcome": "rejected",
+        "pack_synthetic_only": true
+      },
+      "forbidden_mutations": [
+        "store_layer"
+      ]
+    }
+  }
+}
