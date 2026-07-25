@@ -1,0 +1,32 @@
+{
+ "schema_version": "noetide.b6-task-result.v1",
+ "run_id": "b6-task003-20260725",
+ "task_id": "B6-TASK-003",
+ "slice_id": "SLICE-MVP-B-SHADOW-MIGRATION-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b6_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_B6_ADAPTER='noetide_micro.b6_testing_adapter'; python -m unittest tests.semantic.test_b6_shadow_migration_contract -v",
+   "exit_code": 0,
+   "result": "contract 10/10 passed with noetide_micro.b6_testing_adapter; fixture/oracle/scenario files untouched"
+  },
+  {
+   "command": "python tools/validate_b6_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: materialized (unchanged)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
