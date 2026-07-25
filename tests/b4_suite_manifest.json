@@ -1,0 +1,82 @@
+{
+  "schema_version": "noetide.b4-suite-manifest.v1",
+  "suite_id": "b4_reconciliation_v1",
+  "slice_id": "SLICE-MVP-B-RECONCILIATION-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "none",
+  "required_scenario_ids": [
+    "B4-001",
+    "B4-002",
+    "B4-003",
+    "B4-004",
+    "B4-005",
+    "B4-006",
+    "B4-007",
+    "B4-008",
+    "B4-009",
+    "B4-010"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-B-RECONCILIATION-001"
+    ],
+    "contract_ref": "SPEC-B4-RECONCILIATION-001",
+    "adr_refs": [
+      "ADR-0011"
+    ],
+    "architecture_ref": "ARCH-B4-RECONCILIATION-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/b4_reconciliation_v1/fixture.json",
+      "sha256": "2341a207bdd6492aaf3503fa6b00f24069b77de02d53c225048ebe87719b9f13"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/b4_reconciliation_v1/oracles.json",
+      "sha256": "fb99705b68adafcde6a6602e905e3580a7f9f299711e22ce9f6a106ddd5047c0"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/b4_reconciliation_scenarios.json",
+      "sha256": "de209be37cde5ae1aba1fe0d5b6d2761155fed093a8a999d74a066361de2643b"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/b4_reconciliation_adapter_protocol.py",
+      "sha256": "807f11d193e072f7441049d938aa5206e19471036c15fda61eff48628676e739"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_b4_reconciliation_contract.py",
+      "sha256": "f1962919189cc599166d68dfccc658ecff325115c0d04f6f955291e2ee4a9d00"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_b4_suite.py",
+      "sha256": "9d3c2625bbafe20d3b5efaf9b45640eb1189c15af76f35042f3f8e4b702e82c2"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_b4_suite.py",
+      "sha256": "1c6f1f875958ba8694b115732d49e328680a9292ed01c50b2f15f2ad01f14c54"
+    }
+  ],
+  "privacy": {
+    "synthetic_only": true,
+    "external_network": false,
+    "workspace_external_reads": false,
+    "real_personal_data": false
+  }
+}

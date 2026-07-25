@@ -1,0 +1,223 @@
+{
+  "oracle_id": "b4_reconciliation_v1",
+  "schema_version": "noetide.b4-oracle.v1",
+  "scenarios": {
+    "B4-001": {
+      "result": {
+        "status": "report_issued",
+        "mode": "incremental",
+        "finding_count": 0,
+        "auto_repair_attempted": false,
+        "data_revision": "rev_012",
+        "revision_consistent": true
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "failure_queue",
+        "derived_records",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-002": {
+      "result": {
+        "status": "report_issued",
+        "mode": "incremental",
+        "finding_count": 1,
+        "finding_kind": "failure_queue",
+        "subject_ref": "fq_b4_001",
+        "disposition": "quarantined_reported",
+        "auto_repair_attempted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-003": {
+      "result": {
+        "status": "report_issued",
+        "mode": "incremental",
+        "finding_count": 1,
+        "finding_kind": "stale_view",
+        "subject_ref": "proj_b4_card_001",
+        "disposition": "quarantined_reported",
+        "auto_repair_attempted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-004": {
+      "result": {
+        "status": "report_issued",
+        "mode": "incremental",
+        "finding_count": 1,
+        "finding_kind": "orphan_reference",
+        "subject_ref": "der_b4_001",
+        "disposition": "quarantined_reported",
+        "auto_repair_attempted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-005": {
+      "result": {
+        "status": "report_issued",
+        "mode": "incremental",
+        "finding_count": 1,
+        "finding_kind": "unconsumed_changeset",
+        "subject_ref": "cs_b4_001",
+        "disposition": "quarantined_reported",
+        "auto_repair_attempted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "trust_persona"
+      ]
+    },
+    "B4-006": {
+      "result": {
+        "status": "report_issued",
+        "mode": "deep",
+        "deep_result": {
+          "person_card": "match",
+          "relationship_timeline": "match",
+          "current_state": "match"
+        },
+        "auto_repair_attempted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "failure_queue",
+        "derived_records",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-007": {
+      "result": {
+        "status": "report_issued",
+        "mode": "deep",
+        "deep_result": {
+          "person_card": "mismatch",
+          "relationship_timeline": "match",
+          "current_state": "match"
+        },
+        "mismatch_partitions": [
+          "person_card"
+        ],
+        "digest_pair_present": true,
+        "projection_rewritten": false,
+        "auto_repair_attempted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-008": {
+      "result": {
+        "status": "diff_issued",
+        "object_ref": "state_contact_001",
+        "base_revision": "rev_010",
+        "target_revision": "rev_011",
+        "change_type": "modify",
+        "field_diffs": [
+          {
+            "field_path": "contact_frequency",
+            "before": "weekly",
+            "after": "daily"
+          }
+        ],
+        "derived_only": true,
+        "diff_persisted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "failure_queue",
+        "derived_records",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-009": {
+      "result": {
+        "status": "diff_issued",
+        "diffs": [
+          {
+            "object_ref": "hyp_contact_001",
+            "change_type": "modify",
+            "field_diffs": [
+              {
+                "field_path": "likelihood",
+                "before": "low",
+                "after": "medium"
+              }
+            ]
+          },
+          {
+            "object_ref": "state_static_001",
+            "change_type": "no_change",
+            "field_diffs": []
+          }
+        ],
+        "canonical_digest_unchanged": true,
+        "diff_persisted": false
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "failure_queue",
+        "derived_records",
+        "changesets",
+        "trust_persona"
+      ]
+    },
+    "B4-010": {
+      "result": {
+        "status": "cross_cutting_ok",
+        "trust_closeness_persona_unchanged": true,
+        "undo_history_retained": true,
+        "revision_ledger_intact": true,
+        "out_of_profile_attempt": {
+          "status": "failed",
+          "reason_code": "out_of_profile_input",
+          "write_attempted": false
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_objects",
+        "revisions",
+        "projections",
+        "failure_queue",
+        "derived_records",
+        "changesets",
+        "trust_persona"
+      ]
+    }
+  }
+}

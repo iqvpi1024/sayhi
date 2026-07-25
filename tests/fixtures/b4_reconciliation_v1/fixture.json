@@ -1,0 +1,247 @@
+{
+  "fixture_id": "b4_reconciliation_v1",
+  "schema_version": "noetide.b4-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "b4_reconciliation_v1",
+  "determinism": {
+    "clock": "2032-04-01T09:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "shared_entities": [
+    {
+      "entity_id": "person_delta",
+      "entity_kind": "synthetic_person",
+      "synthetic": true
+    }
+  ],
+  "shared_sources": [
+    {
+      "source_id": "src_b4_stmt_001",
+      "content": "synthetic contact statement alpha",
+      "synthetic": true
+    },
+    {
+      "source_id": "src_b4_stmt_002",
+      "content": "synthetic contact statement beta",
+      "synthetic": true
+    }
+  ],
+  "canonical_objects": [
+    {
+      "object_id": "state_contact_001",
+      "object_kind": "synthetic_contact_state",
+      "entity_ref": "person_delta",
+      "revisions": {
+        "rev_010": {
+          "fields": {
+            "contact_frequency": "weekly",
+            "channel": "text",
+            "trust": "established",
+            "closeness": "close",
+            "persona_note": "steady"
+          }
+        },
+        "rev_011": {
+          "fields": {
+            "contact_frequency": "daily",
+            "channel": "text",
+            "trust": "established",
+            "closeness": "close",
+            "persona_note": "steady"
+          }
+        },
+        "rev_012": {
+          "fields": {
+            "contact_frequency": "daily",
+            "channel": "text",
+            "trust": "established",
+            "closeness": "close",
+            "persona_note": "steady"
+          }
+        }
+      },
+      "statement_locator": "src_b4_stmt_001"
+    },
+    {
+      "object_id": "state_static_001",
+      "object_kind": "synthetic_static_state",
+      "entity_ref": "person_delta",
+      "revisions": {
+        "rev_010": {
+          "fields": {
+            "residence_city": "synthetic_city_a"
+          }
+        },
+        "rev_011": {
+          "fields": {
+            "residence_city": "synthetic_city_a"
+          }
+        },
+        "rev_012": {
+          "fields": {
+            "residence_city": "synthetic_city_a"
+          }
+        }
+      },
+      "statement_locator": "src_b4_stmt_002"
+    },
+    {
+      "object_id": "hyp_contact_001",
+      "object_kind": "hypothesis",
+      "entity_ref": "person_delta",
+      "revisions": {
+        "rev_011": {
+          "fields": {
+            "likelihood": "low",
+            "topic": "synthetic meetup"
+          }
+        },
+        "rev_012": {
+          "fields": {
+            "likelihood": "medium",
+            "topic": "synthetic meetup"
+          }
+        }
+      },
+      "statement_locator": "src_b4_stmt_002"
+    }
+  ],
+  "projections": [
+    {
+      "projection_id": "proj_b4_card_001",
+      "partition": "person_card",
+      "entity_ref": "person_delta",
+      "view_revision": "rev_012"
+    },
+    {
+      "projection_id": "proj_b4_timeline_001",
+      "partition": "relationship_timeline",
+      "entity_ref": "person_delta",
+      "view_revision": "rev_012"
+    },
+    {
+      "projection_id": "proj_b4_current_001",
+      "partition": "current_state",
+      "entity_ref": "person_delta",
+      "view_revision": "rev_012"
+    }
+  ],
+  "cases": [
+    {
+      "scenario_id": "B4-001",
+      "database_identity": "b4_case_001",
+      "data_revision": "rev_012",
+      "operation": "run_incremental"
+    },
+    {
+      "scenario_id": "B4-002",
+      "database_identity": "b4_case_002",
+      "data_revision": "rev_012",
+      "operation": "run_incremental",
+      "inject": {
+        "kind": "failure_queue",
+        "entry": {
+          "failure_id": "fq_b4_001",
+          "subject_ref": "proj_b4_card_001",
+          "reason_code": "synthetic_projection_write_failed"
+        }
+      }
+    },
+    {
+      "scenario_id": "B4-003",
+      "database_identity": "b4_case_003",
+      "data_revision": "rev_012",
+      "operation": "run_incremental",
+      "inject": {
+        "kind": "stale_view",
+        "projection_id": "proj_b4_card_001",
+        "forced_view_revision": "rev_011"
+      }
+    },
+    {
+      "scenario_id": "B4-004",
+      "database_identity": "b4_case_004",
+      "data_revision": "rev_012",
+      "operation": "run_incremental",
+      "inject": {
+        "kind": "orphan_reference",
+        "entry": {
+          "derived_id": "der_b4_001",
+          "referenced_object_id": "missing_object_001"
+        }
+      }
+    },
+    {
+      "scenario_id": "B4-005",
+      "database_identity": "b4_case_005",
+      "data_revision": "rev_012",
+      "operation": "run_incremental",
+      "inject": {
+        "kind": "unconsumed_changeset",
+        "entry": {
+          "changeset_id": "cs_b4_001",
+          "changeset_status": "approved"
+        }
+      }
+    },
+    {
+      "scenario_id": "B4-006",
+      "database_identity": "b4_case_006",
+      "data_revision": "rev_012",
+      "operation": "run_deep"
+    },
+    {
+      "scenario_id": "B4-007",
+      "database_identity": "b4_case_007",
+      "data_revision": "rev_012",
+      "operation": "run_deep",
+      "inject": {
+        "kind": "projection_deviation",
+        "projection_id": "proj_b4_card_001",
+        "field": "contact_frequency",
+        "forced_value": "weekly"
+      }
+    },
+    {
+      "scenario_id": "B4-008",
+      "database_identity": "b4_case_008",
+      "data_revision": "rev_012",
+      "operation": "semantic_diff",
+      "diff_query": {
+        "object_ref": "state_contact_001",
+        "base_revision": "rev_010",
+        "target_revision": "rev_011"
+      }
+    },
+    {
+      "scenario_id": "B4-009",
+      "database_identity": "b4_case_009",
+      "data_revision": "rev_012",
+      "operation": "semantic_diff_pair",
+      "diff_queries": [
+        {
+          "object_ref": "hyp_contact_001",
+          "base_revision": "rev_011",
+          "target_revision": "rev_012"
+        },
+        {
+          "object_ref": "state_static_001",
+          "base_revision": "rev_010",
+          "target_revision": "rev_012"
+        }
+      ]
+    },
+    {
+      "scenario_id": "B4-010",
+      "database_identity": "b4_case_010",
+      "data_revision": "rev_012",
+      "operation": "cross_cutting",
+      "out_of_profile_attempt": {
+        "operation": "run_incremental",
+        "synthetic_profile_id": "unexpected_profile"
+      }
+    }
+  ]
+}

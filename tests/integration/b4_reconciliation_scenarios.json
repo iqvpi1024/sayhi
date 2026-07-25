@@ -1,0 +1,72 @@
+{
+  "suite_id": "b4_reconciliation_v1",
+  "fixture_ref": "tests/fixtures/b4_reconciliation_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/b4_reconciliation_v1/oracles.json",
+  "scenarios": [
+    {
+      "scenario_id": "B4-001",
+      "contract_refs": [
+        "B4-INV-001"
+      ]
+    },
+    {
+      "scenario_id": "B4-002",
+      "contract_refs": [
+        "B4-INV-001"
+      ]
+    },
+    {
+      "scenario_id": "B4-003",
+      "contract_refs": [
+        "B4-INV-001"
+      ]
+    },
+    {
+      "scenario_id": "B4-004",
+      "contract_refs": [
+        "B4-INV-001"
+      ]
+    },
+    {
+      "scenario_id": "B4-005",
+      "contract_refs": [
+        "B4-INV-001",
+        "B4-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "B4-006",
+      "contract_refs": [
+        "B4-INV-003"
+      ]
+    },
+    {
+      "scenario_id": "B4-007",
+      "contract_refs": [
+        "B4-INV-001",
+        "B4-INV-003"
+      ]
+    },
+    {
+      "scenario_id": "B4-008",
+      "contract_refs": [
+        "B4-INV-002"
+      ]
+    },
+    {
+      "scenario_id": "B4-009",
+      "contract_refs": [
+        "B4-INV-002",
+        "B4-INV-004"
+      ]
+    },
+    {
+      "scenario_id": "B4-010",
+      "contract_refs": [
+        "B4-INV-005",
+        "B4-INV-006",
+        "B4-INV-007"
+      ]
+    }
+  ]
+}
