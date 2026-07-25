@@ -6,6 +6,13 @@ import argparse
 import sys
 from pathlib import Path
 
+from .alpha_explainability import (
+    confirm_and_delete_data,
+    create_reference_backup,
+    export_roundtrip,
+    paths_descriptor,
+    uninstall_info,
+)
 from .app_shell import render_impact_preview, render_review
 from .changesets import ChangeSetService
 from .runtime import open_runtime
@@ -114,6 +121,58 @@ def _open_existing_store(args: argparse.Namespace) -> SemanticStore | None:
     if not path.exists():
         return None
     return SemanticStore(path)
+
+
+def cmd_paths(args: argparse.Namespace) -> int:
+    runtime = open_runtime(_data_dir(args))
+    try:
+        profile = str(runtime.fixture.get("synthetic_profile_id", "synthetic_demo_profile"))
+    finally:
+        runtime.close()
+    info = paths_descriptor(_data_dir(args), profile)
+    print(f"data root: {info['declared_data_root']}")
+    print(f"synthetic profile: {info['synthetic_profile_id']}")
+    print(f"separated from default real path: {info['synthetic_real_separated']}")
+    return 0
+
+
+def cmd_backup(args: argparse.Namespace) -> int:
+    result = create_reference_backup(_data_dir(args), args.destination)
+    if not result["backup_created"] or not result["manifest_verified"]:
+        print("error: backup verification failed", file=sys.stderr)
+        return 1
+    print(f"backup pack: {result['pack_path']}")
+    print(f"data revision: {result['data_revision']} ({result['entry_count']} entries, sha256 manifest verified)")
+    print(f"roundtrip verified: {result['roundtrip']['roundtrip_verified']}")
+    return 0
+
+
+def cmd_export(args: argparse.Namespace) -> int:
+    result = export_roundtrip(_data_dir(args), args.destination)
+    if result["first_status"] != "validated" or not result["roundtrip_stable"]:
+        print("error: export round trip failed", file=sys.stderr)
+        return 1
+    print(f"export pack: {Path(args.destination).resolve()}")
+    print(f"round trip stable: {result['roundtrip_stable']}; revision unchanged: {result['revision_unchanged']}")
+    return 0
+
+
+def cmd_uninstall_info(args: argparse.Namespace) -> int:
+    info = uninstall_info(_data_dir(args))
+    print("default uninstall keeps the user data directory; nothing is deleted.")
+    print(f"data root preserved: {info['data_root_preserved_by_default']}")
+    if args.confirm_delete:
+        result = confirm_and_delete_data(
+            _data_dir(args), confirm=True, backup_path=args.backup
+        )
+        if not result["deleted"]:
+            print(f"deletion refused: {result['reason']}", file=sys.stderr)
+            print("create a verified backup first: python -m noetide_micro backup <destination>")
+            return 1
+        print(f"data directory deleted; verified backup kept at {result['backup_verified_at']}")
+    else:
+        print("to delete data, pass --confirm-delete together with --backup <verified pack path>.")
+    return 0
 
 
 def cmd_guide(args: argparse.Namespace) -> int:
@@ -263,6 +322,16 @@ def main(argv: list[str] | None = None) -> int:
     guide.add_argument("--publish-key", default="cli_guide_publish_001")
     guide.add_argument("--revert-key", default="cli_guide_revert_001")
     guide.set_defaults(handler=cmd_guide)
+    for name, handler in (("paths", cmd_paths), ("uninstall-info", cmd_uninstall_info)):
+        command = commands.add_parser(name)
+        command.set_defaults(handler=handler)
+    uninstall = commands.choices["uninstall-info"]
+    uninstall.add_argument("--confirm-delete", action="store_true")
+    uninstall.add_argument("--backup", default=None)
+    for name, handler in (("backup", cmd_backup), ("export", cmd_export)):
+        command = commands.add_parser(name)
+        command.add_argument("destination")
+        command.set_defaults(handler=handler)
     for name, handler in (("receipts", cmd_receipts), ("history", cmd_history)):
         command = commands.add_parser(name)
         command.set_defaults(handler=handler)

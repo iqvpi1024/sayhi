@@ -1,0 +1,44 @@
+{
+ "schema_version": "noetide.a6-task-result.v1",
+ "run_id": "a6-task002-20260725",
+ "task_id": "A6-TASK-002",
+ "slice_id": "SLICE-MVP-A-HARDENING-001",
+ "git_commit": "e6a77cc",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "a6_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m unittest tests.semantic.test_a6_task_002_explainability -v",
+   "exit_code": 0,
+   "result": "8/8 passed (paths discoverable + synthetic/real separation; backup pack + sha256 manifest verified; existing destination refused; export round trip stable and read-only; default uninstall preserves data; deletion requires confirmation; deletion requires verified backup; deletion succeeds with confirmation + verified backup)"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 8 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "259 tests OK, 21 skipped (A6 contract, no adapter); no regression from 251-test baseline"
+  },
+  {
+   "command": "python tools/validate_a6_suite.py",
+   "exit_code": 0,
+   "result": "A6 Hardening suite materialized; no business test was executed"
+  },
+  {
+   "command": "powershell -File tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "product baseline static checks passed"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ],
+ "notes": "alpha_explainability.py delegates export/verify to the verified Context Pack capability (portability.py); no new export format. CLI wiring adds paths/backup/export/uninstall-info. Uninstall semantics: default preserves user data; deletion requires independent confirmation plus a verified backup copy. Recovery note: this task's first working tree was lost to an earlier session interruption and was redone from the approved task card."
+}
