@@ -28,6 +28,10 @@
 
 该段保留 Product Decision 当时的授权边界，不作为动态阶段状态。后续 applicability、Trace、ADR-0002、Architecture 和 Pre-Suite Gate 已完成；当前动态状态与唯一下一动作只以 `docs/PROJECT_STATE.md` 和 `docs/process/CURRENT_HANDOFF.md` 为准。
 
+### 1.5 当前 MVP-A 硬化切片决定
+
+`DEC-MVP-A-HARDENING-001` 于 2026-07-25 选择 `SLICE-MVP-A-HARDENING-001`（A6）作为下一切片，并显式裁决 PRD §24.2"12 个可执行语义变更测试"的解释：FR-001..012 各一个端到端语义变更验收场景，在同一版本化 Reference Profile 上顺序执行（解释甲"12 核心对象各一测"被拒绝，理由记录在 Decision §2）。本决定只授权 S1/S2/S3/S6/S7 applicability review；无新重开的 deferred question。
+
 ### 1.4 当前 B2 phase window 解释
 
 `DEC-B2-PHASE-WINDOW-001` 于 2026-07-19 仅为 `b2_episode_summary_v1` 解释 fixture 已显式给出的时间边界：`phase_summary.time_window` 使用目标 Episode 的 `valid_time`。它不构成通用 phase grouping 规则，不修改 PRD、B2 Contract、fixture 或 oracle。

@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-MVP-A-APP-SHELL-001
-slice_id: SLICE-MVP-A-APP-SHELL-001
-current_phase: slice_verified
+handoff_id: HANDOFF-MVP-A-HARDENING-001
+slice_id: SLICE-MVP-A-HARDENING-001
+current_phase: product_decided
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -23,21 +23,21 @@ latest_recovery_points:
   - a3-entity-merge-rp-20260724
   - a4-access-policy-rp-20260724
   - a5-app-shell-rp-20260725
-decision_ref: DEC-MVP-A-APP-SHELL-001
-spec_contract: SPEC-A5-APP-SHELL-001 v0.2 (approved)
-adr_ref: ADR-0009
-suite_manifest: tests/a5_suite_manifest.json (materialized, bound current result a5-20260725.json 8/8 passed)
-implementation_plan: PLAN-MVP-A-A5-IMPL-001 (docs/planning/MVP_A_A5_IMPLEMENTATION_PLAN.md)
+decision_ref: DEC-MVP-A-HARDENING-001
+spec_contract: none yet (A6 applicability review pending)
+adr_ref: none yet
+suite_manifest: none yet
+implementation_plan: none yet
 next_role: Implementer
-next_single_action: choose next slice per MASTER_DELIVERY_ROADMAP (applicability review first) or advance D2/D3 one-click delivery planning
+next_single_action: A6 applicability review of S1/S2/S3/S6/S7 per DEC-MVP-A-HARDENING-001 section 6
 scope_in:
-  - next slice applicability review only; no business code before decision + SPEC + suite materialization
+  - A6 applicability review only: S1/S2/S3/S6/S7
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: next slice applicability review recorded; no implementation before its plan is approved
+stop_condition: A6 applicability review recorded with explicit conclusion; no business code before SPEC + suite + plan approved
 ```
 
 ## 当前事实

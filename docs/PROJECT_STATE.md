@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-A-APP-SHELL-001` |
-| 当前阶段 | `implementation_planned` |
+| 当前工作切片 | `SLICE-MVP-A-HARDENING-001` |
+| 当前阶段 | `product_decided` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -67,6 +67,7 @@
 51. A5-TASK-003 已完成：contract 集成验证 8/8 passed（commit a45a8bd），全量 regression 211 OK 无 skip 无退化；无实现变更；A5 official suite 仍 `not_executed`。
 52. A5-TASK-004 已完成：official runner `a5-20260725.json` 同一次 run 8/8 passed/current；manifest 已绑定 current result；12 个 suite validator 全 PASSED；全量 regression 211 OK 无 skip。
 53. A5-TASK-005 已完成：Gate Review `A5_APP_SHELL_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0；A5 切片 verified；矩阵 §4.11 已同步；recovery tag `a5-app-shell-rp-20260725` 已创建并推送。
+54. `DEC-MVP-A-HARDENING-001` 已选择 A6 硬化与本地 Alpha 切片，并显式裁决"12 个可执行语义变更测试"= FR-001..012 各一个端到端场景在同一 Reference Profile 执行；只授权 S1/S2/S3/S6/S7 applicability review，未授权业务代码。
 
 ## 4. 真实验证结果
 
@@ -123,4 +124,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**A5 切片已 verified。下一步：按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 选择下一个切片并先做 applicability review；或推进 D2/D3 一键部署规划（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）。**
+**执行 A6 applicability review（S1/S2/S3/S6/S7），依据 `DEC-MVP-A-HARDENING-001` §6 的授权边界。**
