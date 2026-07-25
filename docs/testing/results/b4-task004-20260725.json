@@ -1,0 +1,32 @@
+{
+ "schema_version": "noetide.b4-task-result.v1",
+ "run_id": "b4-task004-20260725",
+ "task_id": "B4-TASK-004",
+ "slice_id": "SLICE-MVP-B-RECONCILIATION-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b4_official_suite": "not_executed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; $env:NOETIDE_B4_ADAPTER='noetide_micro.b4_testing_adapter'; python -m unittest tests.semantic.test_b4_reconciliation_contract -v",
+   "exit_code": 0,
+   "result": "contract 10/10 passed with noetide_micro.b4_testing_adapter; fixture/oracle/scenario files untouched"
+  },
+  {
+   "command": "python tools/validate_b4_suite.py",
+   "exit_code": 0,
+   "result": "PASSED: materialized; manifest artifacts unchanged (adapter is not a bound artifact until official run)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}
