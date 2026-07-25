@@ -12,7 +12,7 @@
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
 | 当前工作切片 | `SLICE-MVP-A-HARDENING-001` |
-| 当前阶段 | `task_001_completed` |
+| 当前阶段 | `task_003_completed` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
@@ -74,6 +74,8 @@
 58. A6 executable suite 已物化（2026-07-25）：fixture/oracles（21 场景固定预期）、scenarios（固定顺序、共享状态执行模式）、adapter protocol、contract module、offline runner（环境戳记 wall time/monotonic/timezone + reference profile 绑定）、preflight validator、manifest；`tools/validate_a6_suite.py` exit 0；contract 21 skipped（无 adapter，不代表业务通过）；全量 regression 232 tests = 211 OK + 21 skipped，无退化；尚未建立 A6 Implementation Plan 或业务代码。
 59. `PLAN-MVP-A-A6-IMPL-001` 与 A6 任务卡已建立（2026-07-25）：6 个任务（start.py 壳面 -> Alpha 可解释性 -> 旅程编排 -> adapter -> official runner -> Gate Review）；明确 FR-003 生成侧不得静默补写；尚未开始 A6 业务代码。
 60. A6-TASK-001 已完成（2026-07-25）：`start.py` D0 入口与错误恢复壳面（clean_start exit 0；db corrupt 非零退出、非泄露错误、原文件不动；unwritable 非零退出不越界写；`--clean` 仅删默认合成根）；store.py 窄修复（init 失败关闭连接，防文件锁泄漏）；定向 6/6 passed，全量 regression 238 OK（21 A6 contract skipped）；A6 official suite 仍 `not_executed`。
+61. A6-TASK-002 已完成（2026-07-25，commit 3fc39db）：`alpha_explainability.py` 数据路径发现（合成/真实路径分离可验证）、备份产物+SHA-256 校验清单、导出 Round Trip（委托已验证 CP 能力，无新导出格式）、卸载语义（默认保留数据目录、删除需独立确认+已验证备份副本）；cli 窄接线 paths/backup/export/uninstall-info；定向 8/8 passed，全量 regression 259 OK（21 A6 contract skipped）；A6 official suite 仍 `not_executed`。注：该任务首个工作树曾因会话中断丢失，本轮按已批准任务卡重做。
+62. A6-TASK-003 已完成（2026-07-25，commit 08173d8）：`a6_journey.py` 集成旅程编排辅助（seed 固定合成数据、journey 步骤、conflict/bitemporal/merge-split/restricted-query/stale-base 探针、cross-cutting 审计、SLO 计时收集绑定 `a6_mvp_a_reference_v1`），全部只调用已验证核心能力，零新恢复/权限/候选生成语义；定向 13/13 passed，全量 regression 259 OK（21 A6 contract skipped）；A6 official suite 仍 `not_executed`。
 
 ## 4. 真实验证结果
 
@@ -130,4 +132,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**执行 A6-TASK-002：Alpha 可解释性支撑（数据路径、备份+校验清单、导出 Round Trip、卸载语义）。**
+**执行 A6-TASK-004：`a6_testing_adapter.py` 完整实现 adapter protocol，`NOETIDE_A6_ADAPTER=noetide_micro.a6_testing_adapter` 下 contract 21/21 passed。***

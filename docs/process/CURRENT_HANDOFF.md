@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-HARDENING-001
 slice_id: SLICE-MVP-A-HARDENING-001
-current_phase: task_001_completed
+current_phase: task_003_completed
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -29,15 +29,15 @@ adr_ref: ADR-0010 (+ ARCH-A6-HARDENING-001)
 suite_manifest: tests/a6_suite_manifest.json (materialized, not_executed)
 implementation_plan: PLAN-MVP-A-A6-IMPL-001 (A6-TASK-001..006)
 next_role: Implementer
-next_single_action: A6-TASK-002 per docs/planning/MVP_A_A6_TASK_CARDS.md (alpha explainability: paths/backup/export/uninstall semantics)
+next_single_action: A6-TASK-004 per docs/planning/MVP_A_A6_TASK_CARDS.md (a6_testing_adapter.py full protocol implementation; contract 21/21 passed under NOETIDE_A6_ADAPTER)
 scope_in:
-  - A6-TASK-002 only (alpha_explainability.py, narrow cli wiring, narrow tests)
+  - A6-TASK-004 only (a6_testing_adapter.py, narrow tests; no fixture/oracle/scenario changes)
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: A6-TASK-002 verified (targeted tests + regression + record); then A6-TASK-003
+stop_condition: A6-TASK-004 verified (contract 21/21 + regression no-skip + record); then A6-TASK-005 official runner
 ```
 
 ## 当前事实
@@ -59,5 +59,8 @@ stop_condition: A6-TASK-002 verified (targeted tests + regression + record); the
 - A5-TASK-005 已完成：Gate Review P0=0/P1=0，A5 切片 verified，矩阵 §4.11 同步，recovery tag `a5-app-shell-rp-20260725` 已创建并推送。
 - `DEC-MVP-A-HARDENING-001`（2026-07-25）选择 A6 切片并裁决 12 测试解释；A6-SPEC-APPLICABILITY-001 结论 `pass_with_slice_contract_required`。
 - `SPEC-A6-HARDENING-001` v0.1 已 Approved（`A6-CONTRACT-REVIEW-001`，2026-07-25）：21 场景在同一 Reference Profile `a6_mvp_a_reference_v1` 顺序执行；FR-003 生成侧为显式已知限制（合同 §1.1）；Traceability 矩阵 §4.12 已建立。
-- 全量 configured-adapter regression 基线：211 OK 无 skip；12 个 suite validator。
+- A6-TASK-001 已完成（e6a77cc）：start.py D0 入口与错误恢复壳面，定向 6/6 passed。
+- A6-TASK-002 已完成（3fc39db）：alpha_explainability.py + cli 接线，定向 8/8 passed，regression 259 OK（21 skipped）。
+- A6-TASK-003 已完成（08173d8）：a6_journey.py 编排辅助，定向 13/13 passed，regression 259 OK（21 skipped）。
+- 全量 configured-adapter regression 基线：259 OK，21 A6 contract skipped（无 adapter）；13 个 suite validator。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。
