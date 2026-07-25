@@ -1,0 +1,42 @@
+{
+ "schema_version": "noetide.b6-task-result.v1",
+ "run_id": "b6-task004-20260725",
+ "task_id": "B6-TASK-004",
+ "slice_id": "SLICE-MVP-B-SHADOW-MIGRATION-001",
+ "applicability": "current",
+ "environment": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.8",
+  "sqlite": "3.45.3",
+  "network": "blocked",
+  "dependencies": "stdlib_only"
+ },
+ "b6_official_suite": "passed",
+ "verifications": [
+  {
+   "command": "$env:PYTHONPATH='src'; python -m tests.runner.run_b6_suite --adapter noetide_micro.b6_testing_adapter --output docs/testing/results/b6-20260725.json",
+   "exit_code": 0,
+   "result": "official runner: 10/10 scenarios passed in one run; immutable result docs/testing/results/b6-20260725.json; environment stamped; network blocked; stdlib only"
+  },
+  {
+   "command": "manifest binding (tests/b6_suite_manifest.json)",
+   "exit_code": 0,
+   "result": "flags -> suite_executed=true, suite_passed=true; result path+sha256 and run-time manifest sha256 bound"
+  },
+  {
+   "command": "python tools/validate_*.py (all suite validators) + tools/validate_product_baseline.ps1",
+   "exit_code": 0,
+   "result": "all 16 suite validators PASSED (incl. validate_b6_suite with bound current result); product baseline static checks PASSED"
+  },
+  {
+   "command": "$env:PYTHONPATH='src'; all 12 adapter env vars configured; python -m unittest discover -s tests -t .",
+   "exit_code": 0,
+   "result": "328 tests OK, 0 skipped; no regression (baseline was 309 before B6)"
+  },
+  {
+   "command": "git diff --check",
+   "exit_code": 0,
+   "result": "no whitespace errors"
+  }
+ ]
+}

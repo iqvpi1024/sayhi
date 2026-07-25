@@ -6,12 +6,12 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": false,
-    "suite_passed": false
+    "suite_executed": true,
+    "suite_passed": true
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
-  "latest_run_applicability": "none",
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
   "required_scenario_ids": [
     "B6-001",
     "B6-002",
@@ -78,5 +78,8 @@
     "external_network": false,
     "workspace_external_reads": false,
     "real_personal_data": false
-  }
+  },
+  "latest_verification_result_path": "docs/testing/results/b6-20260725.json",
+  "latest_verification_result_sha256": "26ed3a399ed678edb1a53405ba8eb90a4d613fbf2b691b56f0e83873abd85863",
+  "latest_verification_manifest_sha256": "56123a318fff632daf6eb2b69bf4d187cbf58bcadfa955f883dc9a77812d1033"
 }
