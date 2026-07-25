@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-MVP-A-HARDENING-001
 slice_id: SLICE-MVP-A-HARDENING-001
-current_phase: applicability_reviewed
+current_phase: contract_approved
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -24,20 +24,20 @@ latest_recovery_points:
   - a4-access-policy-rp-20260724
   - a5-app-shell-rp-20260725
 decision_ref: DEC-MVP-A-HARDENING-001
-spec_contract: none yet (A6 applicability review pending)
+spec_contract: SPEC-A6-HARDENING-001 v0.1 Approved (A6-CONTRACT-REVIEW-001)
 adr_ref: none yet
 suite_manifest: none yet
 implementation_plan: none yet
 next_role: Implementer
-next_single_action: draft A6 slice contract SPEC-A6-HARDENING-001 per A6-SPEC-APPLICABILITY-001 findings
+next_single_action: A6 ADR step - record a6_mvp_a_reference_v1 environment descriptor and dev-launch/evaluator package decision (ONE_CLICK_DELIVERY_PLAN section 2 due item)
 scope_in:
-  - A6 slice contract drafting only (SPEC-A6-HARDENING-001)
+  - A6 ADR drafting only (environment descriptor + dev-launch/evaluator package)
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
   - multi-user, family authorization, digital legacy, sealed emergency recovery (DQ-003/004/009 deferred)
   - external Agent runtime, MCP runtime, policy editor UI
-stop_condition: SPEC-A6-HARDENING-001 contract review approved_for_traceability; no fixture/ADR/code before then
+stop_condition: A6 ADR accepted; no fixture/oracle/code before then
 ```
 
 ## 当前事实
@@ -58,5 +58,6 @@ stop_condition: SPEC-A6-HARDENING-001 contract review approved_for_traceability;
 - A5-TASK-004 已完成并验证：official runner a5-20260725.json 同一次 run 8/8 passed/current，manifest 已绑定 current result，12 个 suite validator 全 PASSED，全量 regression 211 OK 无 skip。
 - A5-TASK-005 已完成：Gate Review P0=0/P1=0，A5 切片 verified，矩阵 §4.11 同步，recovery tag `a5-app-shell-rp-20260725` 已创建并推送。
 - `DEC-MVP-A-HARDENING-001`（2026-07-25）选择 A6 切片并裁决 12 测试解释；A6-SPEC-APPLICABILITY-001 结论 `pass_with_slice_contract_required`。
+- `SPEC-A6-HARDENING-001` v0.1 已 Approved（`A6-CONTRACT-REVIEW-001`，2026-07-25）：21 场景在同一 Reference Profile `a6_mvp_a_reference_v1` 顺序执行；FR-003 生成侧为显式已知限制（合同 §1.1）；Traceability 矩阵 §4.12 已建立。
 - 全量 configured-adapter regression 基线：211 OK 无 skip；12 个 suite validator。
 - 最终目标仍为 D2/D3 一键部署（`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`）；当前交付级别仅 D1 合成预览。

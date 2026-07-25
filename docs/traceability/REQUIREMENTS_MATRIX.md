@@ -220,3 +220,26 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `FR-007` | ChangeSet 回执、历史与撤销 | `SPEC-A5-APP-SHELL-001` §2-§8；S3 ChangeSet 语义 | `A5-004`、`A5-006`、`A5-007` | `changesets.py`（publish/revert/receipt，经 adapter/`cli.py`） | `passed`（`a5-20260725.json`） |
 
 状态：`product_decided=true`、`spec_approved=true`、`traceable=true`、`adr_accepted=true`、`suite_defined=true`、`suite_materialized=true`、`suite_executed=true`、`suite_passed=true`。official runner `docs/testing/results/a5-20260725.json` 同一次 run 8/8 passed/current，manifest 已绑定 current result；Gate Review `A5_APP_SHELL_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0，切片 `verified`。
+## 4.12 Active Slice：A6 MVP-A 硬化与本地 Alpha
+
+`SLICE-MVP-A-HARDENING-001` 不引入新产品能力，把 FR-001..012 的既有证明组装为 MVP-A 发布级验收：21 个场景在同一个版本化 Reference Profile `a6_mvp_a_reference_v1` 上顺序执行、共享同一系统状态，并补齐错误恢复壳层表面与本地 Alpha 可解释性。FR-003 生成侧（Entity/Assertion 候选生成）为显式记录的已知限制，见 `SPEC-A6-HARDENING-001` §1.1。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `FR-001`/`FR-002` | Source append + 独立 receipt；Canonical 不变 | `SPEC-A6-HARDENING-001` §3/§7；S3 导入语义 | `A6-001` | TBD（ADR/物化后填写） | `not_executed` |
+| `FR-003` | 候选不成事实（生成侧为已知限制，§1.1） | `SPEC-A6-HARDENING-001` §1.1/§7；S5 Candidate Envelope | `A6-002` | TBD | `not_executed` |
+| `FR-004` | 规范写入全部经 ChangeSet；Source append 独立 | `SPEC-A6-HARDENING-001` §7；S3 ChangeSet 语义 | `A6-003` | TBD | `not_executed` |
+| `FR-005` | 自然语言审查 + 影响预览与发布一致 | `SPEC-A6-HARDENING-001` §7；`SPEC-A5-APP-SHELL-001` | `A6-004` | TBD | `not_executed` |
+| `FR-006` | 发布后三个 Core View 更新或显式失效 | `SPEC-A6-HARDENING-001` §2/§7；S3；A2 视图语义 | `A6-005` | TBD | `not_executed` |
+| `FR-007` | 回执、历史、撤销补偿完整可审计 | `SPEC-A6-HARDENING-001` §6/§7；S3 ChangeSet 语义 | `A6-006` | TBD | `not_executed` |
+| `FR-008` | 六态回答严格分离 | `SPEC-A6-HARDENING-001` §7；A1 回答安全语义 | `A6-007` | TBD | `not_executed` |
+| `FR-009` | 双时态历史查询区分 valid/recorded | `SPEC-A6-HARDENING-001` §4/§7；S2 双时态语义 | `A6-008` | TBD | `not_executed` |
+| `FR-010` | 冲突检测与并列呈现，不自动裁决 | `SPEC-A6-HARDENING-001` §7；S1/S2 冲突语义 | `A6-009` | TBD | `not_executed` |
+| `FR-011` | 实体合并候选与拆分回滚 | `SPEC-A6-HARDENING-001` §7；`SPEC-A3-ENTITY-MERGE-001` | `A6-010` | TBD | `not_executed` |
+| `FR-012` | 权限与舱室在查询层 fail closed | `SPEC-A6-HARDENING-001` §4/§7；`SPEC-A4-ACCESS-POLICY-001` | `A6-011` | TBD | `not_executed` |
+| 横切（PRD §10/§21） | trust/closeness/人格判断与历史不自动修改；stale base 拒绝；L2 fallback | `SPEC-A6-HARDENING-001` §5/§7；S3 | `A6-012` | TBD | `not_executed` |
+| PRD §21.2/§24.2 硬化 | 错误恢复壳层表面五项固定预期 | `SPEC-A6-HARDENING-001` §6/§7 | `A6-013..017` | TBD | `not_executed` |
+| PRD §21.2/§21.4 可解释性 | 数据路径/路径分离/备份/导出/卸载语义 | `SPEC-A6-HARDENING-001` §7；S7 可移植语义 | `A6-018..020` | TBD | `not_executed` |
+| PRD §21.2 SLO | 固定 SLO 检查实际结果绑定 profile 记录，不外推 | `SPEC-A6-HARDENING-001` §2/§7；S6 IQ-014/HTH-INV-009 | `A6-021` | TBD | `not_executed` |
+
+状态：`product_decided=true`、`spec_approved=true`（`A6-CONTRACT-REVIEW-001`，2026-07-25）、`traceable=true`、`adr_accepted=false`、`suite_defined=false`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
