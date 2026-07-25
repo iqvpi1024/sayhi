@@ -335,3 +335,21 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `PRD-§23` | 横切：版本链完整、digest 不变、profile 外 fail closed | `SPEC-C3-REVIEW-001` §4/§5/§7；S2 | `C3-010` | `noetide_micro.reviews` | `passed`（c3-20260726.json） |
 
 状态：`product_decided=true`（`DEC-MVP-C-REVIEW-001`，2026-07-26）、`spec_approved=true`（`C3-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0015`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c3-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C3_REVIEW_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c3-review-calibration-rp-20260726`）。
+## 4.18 Active Slice：C4 Scenario & Action
+
+`SLICE-MVP-C-SCENARIO-001` 在一个固定合成 profile 上验证情景推演与行动跟进：用户确认创建 predicted 情景三元组、确定性可执行性评估、用户确认选择、跟进创建/完成、Derived missed 视图；情景永不成为事实、永不生成专业建议。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `PRD-§20.3 FR-204` | 确认创建三元组、predicted、确定性 feasibility | `SPEC-C4-SCENARIO-001` §2.1/§7 | `C4-001` | `noetide_micro.scenarios`（ADR-0016） | `passed`（c4-20260726.json） |
+| `PRD-§5.2` | 未确认创建 rejected 零写入 | `SPEC-C4-SCENARIO-001` §6/§7；S3 | `C4-002` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§8.1` | upgrade-to-observed rejected、predicted 恒定 | `SPEC-C4-SCENARIO-001` §3/§5/§7；S1 | `C4-003` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§20.3 FR-204` | 确认选择、Decision/Outcome 不变 | `SPEC-C4-SCENARIO-001` §2.2/§5/§7 | `C4-004` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§20.3 FR-206` | 确认创建跟进、open、引用正确 | `SPEC-C4-SCENARIO-001` §2.3/§7 | `C4-005` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§20.3 FR-206` | 确认完成、新 revision、历史保留 | `SPEC-C4-SCENARIO-001` §3/§7；S2 | `C4-006` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§20.3 FR-206` | missed Derived 视图精确、无 Canonical 写入 | `SPEC-C4-SCENARIO-001` §2.4/§5/§7 | `C4-007` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§20.3 FR-206` | feasibility 确定性纯函数 | `SPEC-C4-SCENARIO-001` §2.1/§5/§7 | `C4-008` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§8.1` | 呈现隔离、非专业建议、不进事实证据集 | `SPEC-C4-SCENARIO-001` §2.5/§5/§7；S1 | `C4-009` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+| `PRD-§23` | 横切：链完整、fail closed、无关层不变 | `SPEC-C4-SCENARIO-001` §4/§5/§7；S2 | `C4-010` | `noetide_micro.scenarios` | `passed`（c4-20260726.json） |
+
+状态：`product_decided=true`（`DEC-MVP-C-SCENARIO-001`，2026-07-26）、`spec_approved=true`（`C4-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0016`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c4-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C4_SCENARIO_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c4-scenario-action-rp-20260726`）。

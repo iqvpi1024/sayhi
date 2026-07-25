@@ -1,0 +1,270 @@
+{
+  "schema_version": "noetide.c4-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "c4_scenario_action_v1",
+  "determinism": {
+    "clock": "2026-07-26T00:00:00+00:00",
+    "clock_date": "2026-07-26"
+  },
+  "base_decision": {
+    "object_id": "DC-SYN-C4-001",
+    "title": "Synthetic decision: change weekly routine",
+    "status": "decided"
+  },
+  "scenario_specs": {
+    "baseline": {
+      "assumptions": [
+        "synthetic assumption: current schedule holds",
+        "synthetic assumption: no new obligations"
+      ],
+      "projected_result": "synthetic baseline projection: steady progress",
+      "hard_blockers": [],
+      "soft_constraints": [
+        "limited weekly hours"
+      ]
+    },
+    "optimistic": {
+      "assumptions": [
+        "synthetic assumption: extra support arrives"
+      ],
+      "projected_result": "synthetic optimistic projection: faster progress",
+      "hard_blockers": [],
+      "soft_constraints": []
+    },
+    "pessimistic": {
+      "assumptions": [
+        "synthetic assumption: support withdrawn"
+      ],
+      "projected_result": "synthetic pessimistic projection: stalled progress",
+      "hard_blockers": [
+        "budget unavailable"
+      ],
+      "soft_constraints": [
+        "limited weekly hours"
+      ]
+    }
+  },
+  "follow_up_actions": [
+    {
+      "follow_up_id": "FU-SYN-C4-001",
+      "title": "Draft synthetic outreach plan",
+      "due_date": "2026-07-20"
+    },
+    {
+      "follow_up_id": "FU-SYN-C4-002",
+      "title": "Book synthetic review call",
+      "due_date": "2026-07-30"
+    },
+    {
+      "follow_up_id": "FU-SYN-C4-003",
+      "title": "Prepare synthetic budget note",
+      "due_date": "2026-07-22"
+    }
+  ],
+  "cases": [
+    {
+      "scenario_id": "C4-001",
+      "database_identity": "c4_001",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-002",
+      "database_identity": "c4_002",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": false
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-003",
+      "database_identity": "c4_003",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "attempt_mark_observed",
+          "scenario_kind": "baseline"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-004",
+      "database_identity": "c4_004",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "select_scenario",
+          "confirmed": true,
+          "scenario_kind": "baseline"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-005",
+      "database_identity": "c4_005",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "select_scenario",
+          "confirmed": true,
+          "scenario_kind": "baseline"
+        },
+        {
+          "op": "create_follow_ups",
+          "confirmed": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-006",
+      "database_identity": "c4_006",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "select_scenario",
+          "confirmed": true,
+          "scenario_kind": "baseline"
+        },
+        {
+          "op": "create_follow_ups",
+          "confirmed": true
+        },
+        {
+          "op": "complete_follow_up",
+          "confirmed": true,
+          "follow_up_id": "FU-SYN-C4-003"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-007",
+      "database_identity": "c4_007",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "select_scenario",
+          "confirmed": true,
+          "scenario_kind": "baseline"
+        },
+        {
+          "op": "create_follow_ups",
+          "confirmed": true
+        },
+        {
+          "op": "complete_follow_up",
+          "confirmed": true,
+          "follow_up_id": "FU-SYN-C4-003"
+        },
+        {
+          "op": "follow_up_view"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-008",
+      "database_identity": "c4_008",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "evaluate_feasibility"
+        },
+        {
+          "op": "evaluate_feasibility"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-009",
+      "database_identity": "c4_009",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "select_scenario",
+          "confirmed": true,
+          "scenario_kind": "baseline"
+        },
+        {
+          "op": "create_follow_ups",
+          "confirmed": true
+        },
+        {
+          "op": "complete_follow_up",
+          "confirmed": true,
+          "follow_up_id": "FU-SYN-C4-003"
+        },
+        {
+          "op": "present_scenarios"
+        }
+      ]
+    },
+    {
+      "scenario_id": "C4-010",
+      "database_identity": "c4_010",
+      "ops": [
+        {
+          "op": "create_scenario_set",
+          "confirmed": true
+        },
+        {
+          "op": "select_scenario",
+          "confirmed": true,
+          "scenario_kind": "baseline"
+        },
+        {
+          "op": "create_follow_ups",
+          "confirmed": true
+        },
+        {
+          "op": "complete_follow_up",
+          "confirmed": true,
+          "follow_up_id": "FU-SYN-C4-003"
+        },
+        {
+          "op": "follow_up_view"
+        },
+        {
+          "op": "select_scenario",
+          "confirmed": true,
+          "scenario_kind": "unknown_kind"
+        },
+        {
+          "op": "complete_follow_up",
+          "confirmed": true,
+          "follow_up_id": "FU-SYN-C4-UNKNOWN"
+        },
+        {
+          "op": "create_follow_ups",
+          "confirmed": false
+        }
+      ]
+    }
+  ]
+}

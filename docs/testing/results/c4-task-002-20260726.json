@@ -1,0 +1,22 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "C4-TASK-002",
+  "date": "2026-07-26",
+  "git_commit": "ce493e251fdb7bca064e23adb5b3e72dfc510cc1",
+  "checks": [
+    {
+      "name": "contract_with_adapter",
+      "command": "NOETIDE_C4_ADAPTER=noetide_micro.c4_testing_adapter python -m unittest tests.semantic.test_c4_scenario_contract",
+      "exit_code": 0,
+      "result": "10 tests OK"
+    },
+    {
+      "name": "preflight_validator",
+      "command": "python tools/validate_c4_suite.py",
+      "exit_code": 0,
+      "result": "PASSED (materialized, not executed)"
+    }
+  ],
+  "result": "passed",
+  "notes": "C4-006/007 oracle correction: forbidden_mutations incorrectly included scenario_layer which the case itself mutates via confirmed create_scenario_set; corrected to [decision_layer, revision_ledger]; fixture unchanged; manifest oracle hash updated."
+}

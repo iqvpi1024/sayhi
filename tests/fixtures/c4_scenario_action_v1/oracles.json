@@ -1,0 +1,149 @@
+{
+  "schema_version": "noetide.c4-oracles.v1",
+  "scenarios": {
+    "C4-001": {
+      "result": {
+        "outcome": "applied",
+        "feasibility": {
+          "baseline": "constrained",
+          "optimistic": "feasible",
+          "pessimistic": "infeasible"
+        },
+        "all_predicted": true,
+        "scenario_count": 3
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "revision_ledger"
+      ]
+    },
+    "C4-002": {
+      "result": {
+        "outcome": "rejected",
+        "scenario_count": 0
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "scenario_layer",
+        "followup_layer",
+        "receipts_ledger",
+        "revision_ledger"
+      ]
+    },
+    "C4-003": {
+      "result": {
+        "upgrade_outcome": "rejected",
+        "assertion_kind": "predicted",
+        "is_fact": false,
+        "object_revision": 1
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "followup_layer",
+        "receipts_ledger",
+        "revision_ledger"
+      ]
+    },
+    "C4-004": {
+      "result": {
+        "select_outcome": "applied",
+        "selection_receipts": 1,
+        "decision_unchanged": true,
+        "scenario_unchanged": true
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "followup_layer",
+        "revision_ledger"
+      ]
+    },
+    "C4-005": {
+      "result": {
+        "create_outcome": "applied",
+        "follow_up_count": 3,
+        "all_open": true,
+        "refs_correct": true
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "revision_ledger"
+      ]
+    },
+    "C4-006": {
+      "result": {
+        "complete_outcome": "applied",
+        "status": "done",
+        "object_revision": 2,
+        "history_entries": 1,
+        "transition_receipts": 1,
+        "others_unchanged": true
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "revision_ledger"
+      ]
+    },
+    "C4-007": {
+      "result": {
+        "view_statuses": {
+          "FU-SYN-C4-001": "missed",
+          "FU-SYN-C4-002": "open",
+          "FU-SYN-C4-003": "done"
+        },
+        "canonical_unchanged_by_view": true
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "revision_ledger"
+      ]
+    },
+    "C4-008": {
+      "result": {
+        "first": {
+          "baseline": "constrained",
+          "optimistic": "feasible",
+          "pessimistic": "infeasible"
+        },
+        "second": {
+          "baseline": "constrained",
+          "optimistic": "feasible",
+          "pessimistic": "infeasible"
+        },
+        "identical": true,
+        "pessimistic_infeasible": true
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "followup_layer",
+        "receipts_ledger",
+        "revision_ledger"
+      ]
+    },
+    "C4-009": {
+      "result": {
+        "all_is_fact_false": true,
+        "all_not_professional_advice": true,
+        "no_advice_fields": true,
+        "scenarios_not_in_fact_evidence": true
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "revision_ledger"
+      ]
+    },
+    "C4-010": {
+      "result": {
+        "revision_chain_complete": true,
+        "out_of_profile_select_outcome": "rejected",
+        "out_of_profile_complete_outcome": "rejected",
+        "unconfirmed_followups_outcome": "rejected",
+        "unrelated_unchanged": true,
+        "auto_transitions": 0
+      },
+      "forbidden_mutations": [
+        "decision_layer",
+        "revision_ledger"
+      ]
+    }
+  }
+}
