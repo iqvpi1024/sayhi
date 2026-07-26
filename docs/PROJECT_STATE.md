@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `v0.2.0-beta` GitHub prerelease 已发布（D3 完成） |
-| 当前工作切片 | 无 active slice；`DEC-Y2-ENTRY-001` 已定 Year 2 入口，待起草 PRDv06 |
-| 当前阶段 | `product_decided`（Year 2 入口）；首年全部 `recovery_point_published` |
+| 当前工作切片 | 无 active slice；`DEC-Y2-ENTRY-001` 已定 Year 2 入口，`PRDv06.md` 草案已完成待批准 |
+| 当前阶段 | `product_defined`（PRDv06 Draft）；首年全部 `recovery_point_published` |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
 | tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
@@ -81,6 +81,7 @@
 65. A6-TASK-006 已完成（2026-07-25）：Gate Review `A6_HARDENING_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0，八个 A6-INV 均有正/反证明；矩阵 §4.12 状态更新为 verified；recovery tag `a6-hardening-rp-20260725` 已创建并推送。FR-003 生成侧保持合同 §1.1 显式已知限制；Alpha 发布动作须独立发布门禁决定。
 66. D3 发布已执行（2026-07-26）：annotated tag `v0.2.0-beta` 已创建并推送。计划偏差如实记录：tag 实际打在 `08095cc`（含 D3 发布说明文档），而非 `D3_RELEASE_PLAN.md` §3.1 字面指定的 `d2-installer-rp-20260726`（`db2f0cc`）。从 tag 重建产物并复核 SHA-256 一致（commit `963e6e7`，smoke 通过）；GitHub prerelease 已创建并上传 ZIP + SHA256SUMS 两个附件；经 GitHub API 复核远端附件 digest 与本地一致；README 双语化（`fd8a023`）为发布收尾提交，main 已推送至 origin。
 67. `DEC-Y2-ENTRY-001` 已裁决（2026-07-26，产品负责人委托代理定案）：模型接入本地优先 + 云端显式授权 + 红线舱室 local-only；首个连接器为本地文件夹文本导入；真实数据红线与真实数据生产合同前置；本地 Web UI（stdlib、127.0.0.1、离线）；MCP runtime 后置；Y2-S1..S5 排序；授权起草 PRDv06。仅文档与决策，无业务编码。
+68. `PRDv06.md` 草案已完成（2026-07-27）：以 v0.5 全文为底，仅并入 §2.2 五块新语义（§14.5 模型接入政策、§21.6 真实数据生产合同、§24.5 Year 2 切片、§18.8 本地 Web UI、§19.5 MCP 门禁时机）+ Case H + 风险/DQ 同步；结构自查 27 章、32 FR、围栏配对正常；文档状态 Draft，产品基线索引仍指向 v0.5，待 `DEC-PRD-V06-001` 批准后切换并做 S1-S9 兼容复核。
 
 ## 4. 真实验证结果
 
@@ -174,4 +175,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**`DEC-Y2-ENTRY-001` 已裁决 Year 2 入口。下一步唯一动作：按其 §2.7 授权范围起草 `PRDv06.md`（真实数据生产合同、模型接入政策、FR-302 首连接器激活、本地 Web UI、MCP 门禁时机），形成 `DEC-PRD-V06-001` 基线批准草案；PRDv06 Approved 且 S1-S9 兼容复核完成前不得开始任何业务编码。**
+**`PRDv06.md` 草案已完成。下一步唯一动作：产品负责人审阅草案并形成 `DEC-PRD-V06-001` 批准决定（更新 `docs/product/CURRENT_PRODUCT_BASELINE.md` 索引与 hash、v0.5 转只读、记录批准）；随后 S1-S9 逐份兼容复核。批准前不得开始业务编码，不得把草案当 Approved 基线引用。**
