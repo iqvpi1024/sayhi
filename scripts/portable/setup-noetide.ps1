@@ -1,0 +1,106 @@
+[CmdletBinding()]
+param(
+    [string]$DataDirectory,
+    [switch]$Yes
+)
+
+$ErrorActionPreference = "Stop"
+Set-StrictMode -Version Latest
+
+function Write-Step([string]$Message) { Write-Output "[Noetide Setup] $Message" }
+
+try {
+    $bundleRoot = Split-Path -Parent $PSScriptRoot
+    $runtime = Join-Path $bundleRoot "runtime\python.exe"
+    if (-not (Test-Path -LiteralPath $runtime)) { throw "embedded Python runtime is missing; reinstall the Noetide beta bundle" }
+
+    $settingsRoot = Join-Path $env:LOCALAPPDATA "Noetide"
+    $settingsPath = Join-Path $settingsRoot "data_dir.txt"
+    $privacyPath = Join-Path $settingsRoot "privacy.json"
+    $defaultDirectory = Join-Path $settingsRoot "data"
+
+    $ackLocalOnly = $false
+    $ackSyntheticOnly = $false
+    $ackUnsigned = $false
+
+    if ($Yes) {
+        $ackLocalOnly = $true
+        $ackSyntheticOnly = $true
+        $ackUnsigned = $true
+        if ([string]::IsNullOrWhiteSpace($DataDirectory)) { $DataDirectory = $defaultDirectory }
+    }
+    else {
+        Add-Type -AssemblyName System.Windows.Forms
+        $notice = [System.Windows.Forms.MessageBox]::Show(
+            "Noetide Beta is local-only: your data stays on this computer and is never uploaded.`nThis build runs on synthetic demo data only; do not enter real personal information.`n`nContinue with first-time setup?",
+            "Noetide Beta - Privacy",
+            [System.Windows.Forms.MessageBoxButtons]::YesNo,
+            [System.Windows.Forms.MessageBoxIcon]::Information
+        )
+        if ($notice -ne [System.Windows.Forms.DialogResult]::Yes) { throw "setup cancelled by user" }
+        $ackLocalOnly = $true
+        $ackSyntheticOnly = $true
+
+        $unsigned = [System.Windows.Forms.MessageBox]::Show(
+            "This beta package is not code-signed. Windows SmartScreen may show a warning; this is expected.`nVerify the SHA-256 file shipped with the download if you need integrity assurance.`n`nAcknowledge and continue?",
+            "Noetide Beta - Unsigned Package",
+            [System.Windows.Forms.MessageBoxButtons]::YesNo,
+            [System.Windows.Forms.MessageBoxIcon]::Warning
+        )
+        if ($unsigned -ne [System.Windows.Forms.DialogResult]::Yes) { throw "setup cancelled by user" }
+        $ackUnsigned = $true
+
+        if ([string]::IsNullOrWhiteSpace($DataDirectory)) {
+            $useDefault = [System.Windows.Forms.MessageBox]::Show(
+                "Choose where your Noetide data lives. You own this folder; uninstalling the app never deletes it.`n`nUse the default folder?`n$defaultDirectory",
+                "Noetide Beta - Data Folder",
+                [System.Windows.Forms.MessageBoxButtons]::YesNo,
+                [System.Windows.Forms.MessageBoxIcon]::Question
+            )
+            if ($useDefault -eq [System.Windows.Forms.DialogResult]::Yes) {
+                $DataDirectory = $defaultDirectory
+            }
+            else {
+                $dialog = New-Object System.Windows.Forms.FolderBrowserDialog
+                $dialog.Description = "Choose a local folder you own for Noetide data"
+                $dialog.SelectedPath = $defaultDirectory
+                if ($dialog.ShowDialog() -ne [System.Windows.Forms.DialogResult]::OK) { throw "a local data folder is required" }
+                $DataDirectory = $dialog.SelectedPath
+            }
+        }
+    }
+
+    $resolvedData = [IO.Path]::GetFullPath($DataDirectory)
+    $resolvedLower = $resolvedData.TrimEnd('\').ToLowerInvariant()
+    $bundleLower = ([IO.Path]::GetFullPath($bundleRoot)).TrimEnd('\').ToLowerInvariant()
+    if ($resolvedLower -eq $bundleLower -or $resolvedLower.StartsWith($bundleLower + '\')) {
+        throw "the data folder must be outside the application folder so upgrades and uninstalls can never touch it"
+    }
+    New-Item -ItemType Directory -Force -Path $resolvedData, $settingsRoot | Out-Null
+    if (-not (Test-Path -LiteralPath $resolvedData -PathType Container)) { throw "data folder is not writable: $resolvedData" }
+
+    & $runtime -m noetide_micro --data-dir $resolvedData init
+    if ($LASTEXITCODE -ne 0) { throw "data initialization failed; the existing folder was not modified - pick an empty folder or restore from a backup" }
+
+    $privacy = [ordered]@{
+        schema_version = "noetide.privacy.v1"
+        chosen_at = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+        data_directory = $resolvedData
+        acknowledged_local_only = $ackLocalOnly
+        acknowledged_synthetic_only = $ackSyntheticOnly
+        acknowledged_unsigned = $ackUnsigned
+    }
+    ($privacy | ConvertTo-Json -Depth 4) | Set-Content -LiteralPath $privacyPath -Encoding utf8
+    Set-Content -LiteralPath $settingsPath -Value $resolvedData -Encoding utf8 -NoNewline
+
+    Write-Step "data folder: $resolvedData"
+    Write-Step "privacy choices recorded: $privacyPath"
+    & $runtime -m noetide_micro --data-dir $resolvedData status
+    if ($LASTEXITCODE -ne 0) { throw "status check failed after setup" }
+    Write-Step "setup complete. Use 'Noetide Shell.cmd' for commands, or 'Noetide Start.cmd' for a quick status view."
+    exit 0
+}
+catch {
+    Write-Error "Noetide setup failed: $($_.Exception.Message)"
+    exit 1
+}
