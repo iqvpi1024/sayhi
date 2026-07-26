@@ -371,3 +371,19 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `PRD-§23` | 横切：digest 不变、不覆盖源库、fail closed | `SPEC-C5-PACK-001` §4/§5/§7 | `C5-010` | `noetide_micro.pack_backup` | `passed`（c5-20260726.json） |
 
 状态：`product_decided=true`（`DEC-MVP-C-PACK-001`，2026-07-26）、`spec_approved=true`（`C5-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0017`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，official runner 同一次 run 10/10 passed/current，immutable result `docs/testing/results/c5-20260726.json`，manifest 已绑定）、`gate_review_passed=true`（`C5_PACK_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c5-context-pack-backup-rp-20260726`）。
+## 4.20 Active Slice：C6 MVP Release Gate
+
+`SLICE-MVP-C-RELEASE-001` 以可执行审计证明发布就绪：全量回归零 skip、安全审计（隐私/依赖/网络隔离/manifest 绑定）、数据恢复演练、公开 Beta 门禁；首年非目标保持关闭。
+
+| PRD Requirement | Slice Scope | SPEC Section | Acceptance Scenario | Implementation Module | Verification Result |
+|---|---|---|---|---|---|
+| `路线图 C6` | 全部 suite validator 通过 | `SPEC-C6-RELEASE-001` §2.2 | `C6-001` | `tests.runner.run_c6_release_audit`（ADR-0018） | `passed`（c6-20260726.json） |
+| `路线图 C6` | 全量回归零 skip | `SPEC-C6-RELEASE-001` §2.2/§4 | `C6-002` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
+| `PRD-§23` | 隐私边界扫描 | `SPEC-C6-RELEASE-001` §2.2/§4 | `C6-003` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
+| `PRD-§23` | 依赖审计 stdlib-only | `SPEC-C6-RELEASE-001` §2.2/§4 | `C6-004` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
+| `PRD-§23` | 网络隔离审计 | `SPEC-C6-RELEASE-001` §2.2/§4 | `C6-005` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
+| `PRD-§23` | manifest 绑定审计 | `SPEC-C6-RELEASE-001` §2.2/§4 | `C6-006` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
+| `路线图 C6` | 数据恢复演练字节一致 | `SPEC-C6-RELEASE-001` §2.2/§4；S7 | `C6-007` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
+| `路线图 C6` | Beta 门禁文档核验 | `SPEC-C6-RELEASE-001` §2.2/§3 | `C6-008` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
+
+状态：`product_decided=true`（`DEC-MVP-C-RELEASE-001`，2026-07-26）、`spec_approved=true`（`C6-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0018`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，审计 runner 同一次 run 8/8 passed，immutable result `docs/testing/results/c6-20260726.json`，manifest 已绑定；run1 失败留痕）、`gate_review_passed=true`（`C6_RELEASE_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c6-mvp-release-gate-rp-20260726`）。

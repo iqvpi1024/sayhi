@@ -1,0 +1,52 @@
+{
+  "schema_version": "noetide.c6-suite-manifest.v1",
+  "suite_id": "c6_release_gate_v1",
+  "slice_id": "SLICE-MVP-C-RELEASE-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": true,
+    "suite_passed": true
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "required_scenario_ids": [
+    "C6-001",
+    "C6-002",
+    "C6-003",
+    "C6-004",
+    "C6-005",
+    "C6-006",
+    "C6-007",
+    "C6-008"
+  ],
+  "baseline": {
+    "product_path": "PRDv05.md",
+    "product_canonical_lf_sha256": "34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7",
+    "decision_refs": [
+      "DEC-MVP-C-RELEASE-001"
+    ],
+    "contract_ref": "SPEC-C6-RELEASE-001",
+    "adr_refs": [
+      "ADR-0018"
+    ],
+    "architecture_ref": "ARCH-C6-RELEASE-001"
+  },
+  "artifacts": [
+    {
+      "role": "audit_runner",
+      "path": "tests/runner/run_c6_release_audit.py",
+      "sha256": "4aa3d0dad66a78e375eef496967b214ab7ed162d4087051d19687a6b486d1318"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c6_suite.py",
+      "sha256": "95661e82c21e643b3f9c80739cd91890a139d94813d0c460e687a1e7c17d4951"
+    }
+  ],
+  "latest_verification_result_path": "docs/testing/results/c6-20260726.json",
+  "latest_verification_result_sha256": "cec35010f9c89400af96161abadba5f2f2c32393d8f77c9c0e94da8acd12282f",
+  "latest_verification_manifest_sha256": "bb9cb1833cb0c29261db14add2e576265de98ca0082709016fc84f224c42e0ff"
+}

@@ -11,7 +11,7 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-C-PACK-001` |
+| 当前工作切片 | `SLICE-MVP-C-RELEASE-001` |
 | 当前阶段 | `slice_verified` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
@@ -155,6 +155,8 @@
 | C5-TASK-002 | `c5-task002-20260726.json`：contract 10/10 passed（adapter）；oracle 两处呈现修正（fixture 未动，manifest hash 已同步）；C5 official suite `not_executed` |
 | C5 官方 suite | `c5-20260726.json`：同一次 run 10/10 passed/current；全量 regression 392 OK 0 skip；20 个 suite validator 全 PASSED；manifest 已绑定 |
 | C5 Gate Review | `C5_PACK_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；C5 Context Pack & Encrypted Backup（FR-303 首年切片）verified |
+| C6 审计 | `c6-20260726.json`：审计 runner 同一次 run 8/8 passed（21 validators、回归 392 OK 0 skip、隐私/依赖/网络/manifest 审计、恢复演练、门禁核验）；run1 失败留痕 `c6-audit-run1-failed-20260726.json`；manifest 已绑定 |
+| C6 Gate Review | `C6_RELEASE_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；Beta 门禁 `BETA_GATE_REVIEW_2026-07-26.md` beta_ready=true；MVP-C 全部切片 verified |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -167,4 +169,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**C5 Context Pack & Encrypted Backup 已 verified（recovery tag `c5-context-pack-backup-rp-20260726`）。按 `docs/planning/MASTER_DELIVERY_ROADMAP.md` 进入 `C6-MVP-RELEASE`（首年完整回归、安全审计、公开 Beta 门禁，之后 D2/D3），先走 C6 Decision 门禁。**
+**C6 MVP Release Gate 已 verified（recovery tag `c6-mvp-release-gate-rp-20260726`），Beta 门禁 beta_ready=true。下一步：D2 End-user Installer（普通用户一键安装启动）；D3 GitHub Release 发布动作执行前必须取得用户确认。**

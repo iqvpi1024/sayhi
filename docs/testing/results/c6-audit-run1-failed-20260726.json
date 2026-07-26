@@ -1,0 +1,66 @@
+{
+  "schema_version": "noetide.c6-audit-result.v1",
+  "suite_id": "c6_release_gate_v1",
+  "manifest_sha256": "35167bc347a79e24a57b0d451e61104d387870ecb815220c29bdf4e70e1b1d91",
+  "git_commit": "f263cc5dee5d200f990ddda261445591ccf19836",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "dependencies": "stdlib_only"
+  },
+  "exit_code": 1,
+  "run_result": "failed",
+  "non_goals_closed": false,
+  "required_results": [
+    {
+      "test_id": "C6-001",
+      "check": "suite validators",
+      "individual_test_result": "failed",
+      "detail": "failed=validate_c6_suite.py"
+    },
+    {
+      "test_id": "C6-002",
+      "check": "full regression zero skip",
+      "individual_test_result": "passed",
+      "detail": "OK"
+    },
+    {
+      "test_id": "C6-003",
+      "check": "privacy boundary scan",
+      "individual_test_result": "failed",
+      "detail": "hits=tests\\fixtures\\b1_candidate_review_v1\\fixture.json;tests\\fixtures\\c1_decision_outcome_v1\\fixture.json"
+    },
+    {
+      "test_id": "C6-004",
+      "check": "dependency audit",
+      "individual_test_result": "passed",
+      "detail": "stdlib only"
+    },
+    {
+      "test_id": "C6-005",
+      "check": "network isolation audit",
+      "individual_test_result": "passed",
+      "detail": "no network surface"
+    },
+    {
+      "test_id": "C6-006",
+      "check": "manifest binding audit",
+      "individual_test_result": "passed",
+      "detail": "all manifests bound"
+    },
+    {
+      "test_id": "C6-007",
+      "check": "data recovery drill",
+      "individual_test_result": "passed",
+      "detail": "byte-identical, revision match, source unchanged"
+    },
+    {
+      "test_id": "C6-008",
+      "check": "beta gate documents",
+      "individual_test_result": "passed",
+      "detail": "14 recovery tags, state current, non-goals closed"
+    }
+  ]
+}

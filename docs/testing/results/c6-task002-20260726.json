@@ -1,0 +1,15 @@
+{
+  "schema_version": "noetide.task-verification.v1",
+  "task_id": "C6-TASK-002",
+  "date": "2026-07-26",
+  "git_commit": "f263cc5dee5d200f990ddda261445591ccf19836",
+  "checks": [
+    {
+      "name": "audit",
+      "command": "python -m tests.runner.run_c6_release_audit --output <result>",
+      "exit_code": 0,
+      "result": "run1 failed (self-hash staleness + legacy fixture field semantics) preserved as c6-audit-run1-failed-20260726.json; run2 8/8 passed bound as c6-20260726.json"
+    }
+  ],
+  "result": "passed"
+}
