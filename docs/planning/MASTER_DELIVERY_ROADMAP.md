@@ -8,8 +8,8 @@
 | Status | `Active Planning Baseline` |
 | Product Baseline | `PRDv05.md` v0.5 Approved |
 | Date | 2026-07-19 |
-| Latest Public Release | `v0.1.3-synthetic-preview` (D1 synthetic preview) |
-| Current Active Slice | `SLICE-MVP-A-CURRENT-STATE-001` |
+| Latest Public Release | `v0.2.0-beta` (D3 GitHub prerelease, one-click installer, synthetic demo) |
+| Current Active Slice | 无（首年切片全部完成，等待 Year 2 入口产品决策） |
 
 本路线图只规定交付顺序、切片边界和门禁。它不替代 PRD、Product Decision、SPEC、ADR、suite 或单切片 Implementation Plan，也不授权提前实现后续能力。
 

@@ -10,13 +10,13 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
-| 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-D2-INSTALLER-001` |
-| 当前阶段 | `slice_verified` |
-| 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
-| tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
-| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
-| 交付级别 | 已发布 D1 Windows-first 合成预览；D2 一键安装本机验证完成（未发布）；D3 未执行 |
+| 当前公开发布 | `v0.2.0-beta` GitHub prerelease 已发布（D3 完成） |
+| 当前工作切片 | 无 active slice（首年路线图全部完成，等待 Year 2 入口产品决策） |
+| 当前阶段 | `recovery_point_published`（D3 发布完成） |
+| 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
+| tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
+| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
+| 交付级别 | D1 合成预览（v0.1.3）与 D2/D3 Beta（v0.2.0 一键安装）均已发布；首年路线图切片全部 verified |
 | 分支 | `main`，已推送至 `origin/main` |
 
 ## 3. 已完成内容
@@ -79,6 +79,7 @@
 63. A6-TASK-004 已完成（2026-07-25，commit 77066da）：`a6_testing_adapter.py` 完整实现 adapter protocol；contract 21/21 passed；沙箱场景经 start.py 子进程、A6-007/009/016/017 用隔离内存探针库不动共享状态；A6-019 导出真实共享 store；定向 5/5 passed；全量 regression 264 OK 0 skip。
 64. A6-TASK-005 已完成（2026-07-25，commit 00d146a）：official runner `a6-20260725.json` 同一次 run 21/21 passed/current；环境戳记与 `a6_mvp_a_reference_v1` 绑定完整；manifest 绑定 current result（flags 全 true）；13 个 suite validator + product baseline 校验全部 PASSED；regression 264 OK 0 skip。
 65. A6-TASK-006 已完成（2026-07-25）：Gate Review `A6_HARDENING_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0，八个 A6-INV 均有正/反证明；矩阵 §4.12 状态更新为 verified；recovery tag `a6-hardening-rp-20260725` 已创建并推送。FR-003 生成侧保持合同 §1.1 显式已知限制；Alpha 发布动作须独立发布门禁决定。
+66. D3 发布已执行（2026-07-26）：annotated tag `v0.2.0-beta` 已创建并推送。计划偏差如实记录：tag 实际打在 `08095cc`（含 D3 发布说明文档），而非 `D3_RELEASE_PLAN.md` §3.1 字面指定的 `d2-installer-rp-20260726`（`db2f0cc`）。从 tag 重建产物并复核 SHA-256 一致（commit `963e6e7`，smoke 通过）；GitHub prerelease 已创建并上传 ZIP + SHA256SUMS 两个附件；经 GitHub API 复核远端附件 digest 与本地一致；README 双语化（`fd8a023`）为发布收尾提交，main 已推送至 origin。
 
 ## 4. 真实验证结果
 
@@ -158,6 +159,7 @@
 | C6 审计 | `c6-20260726.json`：审计 runner 同一次 run 8/8 passed（21 validators、回归 392 OK 0 skip、隐私/依赖/网络/manifest 审计、恢复演练、门禁核验）；run1 失败留痕 `c6-audit-run1-failed-20260726.json`；manifest 已绑定 |
 | C6 Gate Review | `C6_RELEASE_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；Beta 门禁 `BETA_GATE_REVIEW_2026-07-26.md` beta_ready=true；MVP-C 全部切片 verified |
 | D2 一键安装 | `D2_BETA_V0.2.0_VERIFICATION.md`：构建 exit 0（产物 SHA-256 `3798971cb5471043bf3b0bf79e32b668bb85c6fdd9807ad70dd120bc47264147`）；clean-install、真实状态、升级（自动数据备份+回滚点）、卸载（保留数据/显式删除+强制校验备份）、三项失败行为全部真实验证通过；回归 392 OK 0 skip；21 个 suite validator 全 PASSED；未发布 GitHub Release |
+| D3 发布核验 | GitHub API 附件 digest：`Noetide-beta-v0.2.0-win64.zip` = `sha256:3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8`、`SHA256SUMS-0.2.0-win64.txt` = `sha256:7cd7fae68d662d0e55a534ed30014a8d02645dec6a1044bdc4716a3495f3f29a`，与 `D3_RELEASE_PLAN.md` 记录及本地 `dist/` 复核哈希逐项一致；prerelease published at 2026-07-26T06:59:35Z；tag 已推送远端 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -166,8 +168,8 @@
 
 - 当前发布只允许固定合成 demo 数据。不得输入、导入、提交或推断真实个人资料、凭据或工作区外数据。
 - 该版本不是完整 PRD 产品，不实现真实导入、通用 NLP、权限/MCP runtime、同步、连接器、分享、签名安装包、升级或真实数据生产合同。
-- D2 一键安装已本机验证（ADR-0019），但未代码签名、Windows-only、无自动更新；D3 发布通道与真实数据生产合同仍未完成；不得因 D2 验证通过而宣称已发布或“完整一键部署”。
+- v0.2.0-beta 已发布，但未代码签名、Windows-only、无自动更新；真实数据生产合同仍未完成；不得宣称“完整一键部署”或生产可用。
 
 ## 6. 下一步唯一建议动作
 
-**D2 一键安装已本机验证（recovery tag `d2-installer-rp-20260726`）；D3 发布准备已完成（`D3_RELEASE_PLAN.md`、`SBOM-v0.2.0.md`、`BETA_V0.2.0_RELEASE_NOTES.md`）。下一步唯一动作：取得用户明确确认后按 `D3_RELEASE_PLAN.md` §3 执行发布；此前不得创建版本 tag、不得创建 GitHub Release。**
+**首年路线图（Micro、A1-A6、B1-B6、C1-C6、D0-D3）全部完成，`v0.2.0-beta` 已发布。下一步唯一动作：等待产品负责人拍板 Year 2 入口决策（模型接入方式、真实数据红线、首个连接器、界面形态、MCP 开放时机），形成 Product Decision；在此之前不得开始任何新业务编码，不得提前建设 Year 2 能力。**

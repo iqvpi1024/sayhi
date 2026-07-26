@@ -2,7 +2,7 @@
 
 | 字段 | 值 |
 |---|---|
-| 状态 | `prepared_pending_user_confirmation` |
+| 状态 | `executed`（2026-07-26 发布完成：tag 已推送、附件已上传、远端 digest 复核一致；tag 实际打在 `08095cc`，与 §3.1 字面指定的 `db2f0cc` 的偏差已在 `docs/PROJECT_STATE.md` 如实记录） |
 | 拟定版本 | `v0.2.0-beta`（prerelease） |
 | 基线提交 | D2 recovery tag `d2-installer-rp-20260726` 指向的提交 |
 | 依据 | `ONE_CLICK_DELIVERY_PLAN.md` §6；`DEC-D2-INSTALLER-001`；`ADR-0019` |
