@@ -170,4 +170,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**D2 一键安装已本机验证（recovery tag `d2-installer-rp-20260726`）。下一步唯一动作：D3 GitHub Release 发布准备——版本 tag、产物上传、校验值、SBOM/已知限制/恢复说明；执行任何发布动作前必须取得用户明确确认。**
+**D2 一键安装已本机验证（recovery tag `d2-installer-rp-20260726`）；D3 发布准备已完成（`D3_RELEASE_PLAN.md`、`SBOM-v0.2.0.md`、`BETA_V0.2.0_RELEASE_NOTES.md`）。下一步唯一动作：取得用户明确确认后按 `D3_RELEASE_PLAN.md` §3 执行发布；此前不得创建版本 tag、不得创建 GitHub Release。**

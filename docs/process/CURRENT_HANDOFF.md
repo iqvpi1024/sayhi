@@ -5,7 +5,7 @@
 ```yaml
 handoff_id: HANDOFF-D2-INSTALLER-001
 slice_id: SLICE-D2-INSTALLER-001
-current_phase: slice_verified
+current_phase: release_prepared_pending_user_confirmation
 product_baseline:
   path: PRDv05.md
   version: 0.5
@@ -25,7 +25,7 @@ adr_ref: ADR-0019 (installer/upgrade/signing/channel)
 verification: docs/releases/D2_BETA_V0.2.0_VERIFICATION.md (all real executions passed)
 artifact: dist/Noetide-beta-v0.2.0-win64.zip (sha256 3798971cb5471043bf3b0bf79e32b668bb85c6fdd9807ad70dd120bc47264147, local only, unpublished)
 next_role: Public Releaser (requires explicit user confirmation)
-next_single_action: prepare D3 GitHub Release plan (version tag, artifact upload, checksums, SBOM/known-limits/rollback notes) and STOP for user confirmation before any publish action
+next_single_action: D3 release plan is complete (docs/releases/D3_RELEASE_PLAN.md, SBOM-v0.2.0.md, BETA_V0.2.0_RELEASE_NOTES.md); WAIT for explicit user confirmation, then execute D3_RELEASE_PLAN.md section 3 (tag v0.2.0-beta, rebuild+rehash check, push tag, create prerelease, upload artifacts, verify remote digests)
 scope_in:
   - D3 release preparation documents only (no publish)
 scope_out:
@@ -33,7 +33,7 @@ scope_out:
   - fixture/oracle changes, moving existing tags
   - GitHub Release publication, version tag push, external notification (all require explicit user confirmation)
   - code signing (no certificate; D3 decision item)
-stop_condition: D3 release plan drafted and presented; any publish action requires explicit user confirmation
+stop_condition: D3 preparation complete and pushed; any publish action (version tag, GitHub Release, artifact upload, external notice) requires explicit user confirmation
 ```
 
 ## 当前事实
