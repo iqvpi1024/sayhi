@@ -105,7 +105,9 @@ required job 的 skip、取消或缺失不能合并为 green。公共发布使�
 
 当前已发布 D1 合成预览：`v0.1.3-synthetic-preview` 同时提供 Windows/Python 3.12 源码 ZIP 与自带 runtime 的 Windows portable ZIP。portable ZIP 解压后可运行 `Noetide Start.cmd`，不下载或处理真实个人数据；验证记录见 `PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。
 
-D2/D3 仍未完成：没有签名安装包、升级/卸载、普通用户首次设置界面或真实数据生产合同。虽然 GitHub prerelease 已发布，任何对外说明仍必须称为 D1 合成预览，不能简称“完整一键部署”。
+D2 已完成本机验证（未发布）：`Noetide-beta-v0.2.0-win64.zip` 提供免管理员安装、首次设置向导（数据目录选择 + 隐私确认 + 未签名披露）、升级前自动数据备份与回滚点、默认保留数据的卸载与显式确认删除（删除前强制引擎校验备份）。验证记录见 `D2_BETA_V0.2.0_VERIFICATION.md`。限制：未代码签名、Windows-only、无自动更新、仍为合成演示产品。
+
+D3 仍未完成：没有签名安装包、真实数据生产合同或 GitHub Release 发布。任何对外说明不得宣称“完整一键部署”；D3 发布动作需要用户明确确认。
 
 ## 10. 模型责任链
 

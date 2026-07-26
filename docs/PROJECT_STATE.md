@@ -11,12 +11,12 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `PUBLIC-PREVIEW-D1-001` 已发布 |
-| 当前工作切片 | `SLICE-MVP-C-RELEASE-001` |
+| 当前工作切片 | `SLICE-D2-INSTALLER-001` |
 | 当前阶段 | `slice_verified` |
 | 当前公开版本 | `v0.1.3-synthetic-preview` GitHub prerelease |
 | tag / commit | annotated tag `v0.1.3-synthetic-preview` -> `c340eac939cdbc094d6ec8da7f4e710d879cf1c1` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.1.3-synthetic-preview` |
-| 交付级别 | 已发布 D1 Windows-first 合成预览；D2/D3 未完成 |
+| 交付级别 | 已发布 D1 Windows-first 合成预览；D2 一键安装本机验证完成（未发布）；D3 未执行 |
 | 分支 | `main`，已推送至 `origin/main` |
 
 ## 3. 已完成内容
@@ -157,6 +157,7 @@
 | C5 Gate Review | `C5_PACK_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；C5 Context Pack & Encrypted Backup（FR-303 首年切片）verified |
 | C6 审计 | `c6-20260726.json`：审计 runner 同一次 run 8/8 passed（21 validators、回归 392 OK 0 skip、隐私/依赖/网络/manifest 审计、恢复演练、门禁核验）；run1 失败留痕 `c6-audit-run1-failed-20260726.json`；manifest 已绑定 |
 | C6 Gate Review | `C6_RELEASE_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；Beta 门禁 `BETA_GATE_REVIEW_2026-07-26.md` beta_ready=true；MVP-C 全部切片 verified |
+| D2 一键安装 | `D2_BETA_V0.2.0_VERIFICATION.md`：构建 exit 0（产物 SHA-256 `3798971cb5471043bf3b0bf79e32b668bb85c6fdd9807ad70dd120bc47264147`）；clean-install、真实状态、升级（自动数据备份+回滚点）、卸载（保留数据/显式删除+强制校验备份）、三项失败行为全部真实验证通过；回归 392 OK 0 skip；21 个 suite validator 全 PASSED；未发布 GitHub Release |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -165,8 +166,8 @@
 
 - 当前发布只允许固定合成 demo 数据。不得输入、导入、提交或推断真实个人资料、凭据或工作区外数据。
 - 该版本不是完整 PRD 产品，不实现真实导入、通用 NLP、权限/MCP runtime、同步、连接器、分享、签名安装包、升级或真实数据生产合同。
-- D2/D3 所需签名、升级/卸载、真实数据安全合同和普通用户生产支持仍未完成；不得因 portable ZIP 存在而宣称已完成。
+- D2 一键安装已本机验证（ADR-0019），但未代码签名、Windows-only、无自动更新；D3 发布通道与真实数据生产合同仍未完成；不得因 D2 验证通过而宣称已发布或“完整一键部署”。
 
 ## 6. 下一步唯一建议动作
 
-**C6 MVP Release Gate 已 verified（recovery tag `c6-mvp-release-gate-rp-20260726`），Beta 门禁 beta_ready=true。下一步：D2 End-user Installer（普通用户一键安装启动）；D3 GitHub Release 发布动作执行前必须取得用户确认。**
+**D2 一键安装已本机验证（recovery tag `d2-installer-rp-20260726`）。下一步唯一动作：D3 GitHub Release 发布准备——版本 tag、产物上传、校验值、SBOM/已知限制/恢复说明；执行任何发布动作前必须取得用户明确确认。**
