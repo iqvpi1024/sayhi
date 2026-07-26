@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
 | 当前公开发布 | `v0.2.0-beta` GitHub prerelease 已发布（D3 完成） |
-| 当前工作切片 | 无 active slice（首年路线图全部完成，等待 Year 2 入口产品决策） |
-| 当前阶段 | `recovery_point_published`（D3 发布完成） |
+| 当前工作切片 | 无 active slice；`DEC-Y2-ENTRY-001` 已定 Year 2 入口，待起草 PRDv06 |
+| 当前阶段 | `product_decided`（Year 2 入口）；首年全部 `recovery_point_published` |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
 | tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
@@ -80,6 +80,7 @@
 64. A6-TASK-005 已完成（2026-07-25，commit 00d146a）：official runner `a6-20260725.json` 同一次 run 21/21 passed/current；环境戳记与 `a6_mvp_a_reference_v1` 绑定完整；manifest 绑定 current result（flags 全 true）；13 个 suite validator + product baseline 校验全部 PASSED；regression 264 OK 0 skip。
 65. A6-TASK-006 已完成（2026-07-25）：Gate Review `A6_HARDENING_GATE_REVIEW_2026-07-25.md` 结论 P0=0/P1=0，八个 A6-INV 均有正/反证明；矩阵 §4.12 状态更新为 verified；recovery tag `a6-hardening-rp-20260725` 已创建并推送。FR-003 生成侧保持合同 §1.1 显式已知限制；Alpha 发布动作须独立发布门禁决定。
 66. D3 发布已执行（2026-07-26）：annotated tag `v0.2.0-beta` 已创建并推送。计划偏差如实记录：tag 实际打在 `08095cc`（含 D3 发布说明文档），而非 `D3_RELEASE_PLAN.md` §3.1 字面指定的 `d2-installer-rp-20260726`（`db2f0cc`）。从 tag 重建产物并复核 SHA-256 一致（commit `963e6e7`，smoke 通过）；GitHub prerelease 已创建并上传 ZIP + SHA256SUMS 两个附件；经 GitHub API 复核远端附件 digest 与本地一致；README 双语化（`fd8a023`）为发布收尾提交，main 已推送至 origin。
+67. `DEC-Y2-ENTRY-001` 已裁决（2026-07-26，产品负责人委托代理定案）：模型接入本地优先 + 云端显式授权 + 红线舱室 local-only；首个连接器为本地文件夹文本导入；真实数据红线与真实数据生产合同前置；本地 Web UI（stdlib、127.0.0.1、离线）；MCP runtime 后置；Y2-S1..S5 排序；授权起草 PRDv06。仅文档与决策，无业务编码。
 
 ## 4. 真实验证结果
 
@@ -160,6 +161,7 @@
 | C6 Gate Review | `C6_RELEASE_GATE_REVIEW_2026-07-26.md`：P0=0、P1=0；Beta 门禁 `BETA_GATE_REVIEW_2026-07-26.md` beta_ready=true；MVP-C 全部切片 verified |
 | D2 一键安装 | `D2_BETA_V0.2.0_VERIFICATION.md`：构建 exit 0（产物 SHA-256 `3798971cb5471043bf3b0bf79e32b668bb85c6fdd9807ad70dd120bc47264147`）；clean-install、真实状态、升级（自动数据备份+回滚点）、卸载（保留数据/显式删除+强制校验备份）、三项失败行为全部真实验证通过；回归 392 OK 0 skip；21 个 suite validator 全 PASSED；未发布 GitHub Release |
 | D3 发布核验 | GitHub API 附件 digest：`Noetide-beta-v0.2.0-win64.zip` = `sha256:3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8`、`SHA256SUMS-0.2.0-win64.txt` = `sha256:7cd7fae68d662d0e55a534ed30014a8d02645dec6a1044bdc4716a3495f3f29a`，与 `D3_RELEASE_PLAN.md` 记录及本地 `dist/` 复核哈希逐项一致；prerelease published at 2026-07-26T06:59:35Z；tag 已推送远端 |
+| DEC-Y2-ENTRY-001 文档变更 | `validate_product_baseline.ps1` exit 0；`validate_spec_baseline.ps1` exit 0；`git diff --check` exit 0（2026-07-26，静态校验，非业务测试） |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -172,4 +174,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**首年路线图（Micro、A1-A6、B1-B6、C1-C6、D0-D3）全部完成，`v0.2.0-beta` 已发布。下一步唯一动作：等待产品负责人拍板 Year 2 入口决策（模型接入方式、真实数据红线、首个连接器、界面形态、MCP 开放时机），形成 Product Decision；在此之前不得开始任何新业务编码，不得提前建设 Year 2 能力。**
+**`DEC-Y2-ENTRY-001` 已裁决 Year 2 入口。下一步唯一动作：按其 §2.7 授权范围起草 `PRDv06.md`（真实数据生产合同、模型接入政策、FR-302 首连接器激活、本地 Web UI、MCP 门禁时机），形成 `DEC-PRD-V06-001` 基线批准草案；PRDv06 Approved 且 S1-S9 兼容复核完成前不得开始任何业务编码。**

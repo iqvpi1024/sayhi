@@ -1,10 +1,10 @@
 # 识海 Noetide — 最终目标总纲
 
 > 版本：2026-07-18
-> 状态：执行中
-> 当前阶段：Phase 4 — Micro-MVP CLI 已完成
+> 状态：首年路线图已完成并发布（v0.2.0-beta）；Year 2 入口已决策（`DEC-Y2-ENTRY-001`）
+> 当前阶段：PRDv06 起草待开始
 > 总目标：产品可用（用户可安装、录入数据、查看人物卡/时间线、确认/撤销 ChangeSet）
-> 完成前不得打扰用户
+> 动态状态权威来源：`docs/PROJECT_STATE.md` 与 `docs/process/CURRENT_HANDOFF.md`；本文件只保留阶段总览，不作实时入口
 
 ---
 
@@ -17,10 +17,10 @@
 | Phase 2 | Micro-MVP 核心 | 完成 | TASK-001..010，49/49 passed |
 | Phase 3 | MVP-A Answer Safety | 完成 | AS-TASK-001..010，35/35 passed |
 | Phase 4 | Micro-MVP CLI | 完成 | CLI-001..006 实现并验证 |
-| Phase 5 | MVP-B Shiling | 待开始 | 审查预算、校准、低打扰 |
-| Phase 6 | MVP-C 决策室 | 待开始 | 财务/健康/决策舱室 |
-| Phase 7 | 连接器 | 待开始 | 微信/日历/邮件导入 |
-| Phase 8 | UI/部署/发布 | 待开始 | 多设备同步、GitHub 一键部署 |
+| Phase 5 | MVP-B Shiling | 完成 | B1-B6 全部 verified（审查预算、Episode、Commitment、对账、多语言、影子迁移） |
+| Phase 6 | MVP-C 决策室 | 完成（合成范围） | C1-C6 全部 verified；财务/健康专业舱室保持非目标 |
+| Phase 7 | 连接器 | Year 2 已决策 | `DEC-Y2-ENTRY-001`：首连接器 = 本地文件夹文本导入（Y2-S1）；微信/日历仍 deferred |
+| Phase 8 | UI/部署/发布 | 部分完成 | D0-D3 完成，v0.2.0-beta 已发布；本地 Web UI 列入 Y2-S3；多设备同步 deferred |
 
 ---
 
@@ -107,10 +107,10 @@ intake -> propose -> approve -> publish -> person-card -> timeline -> revert -> 
 
 ## 当前状态
 
-- 阶段：Phase 4 CLI 已完成
-- 上一完成：CLI-001..006 实现并验证
-- 下一动作：CLI-007 集成测试 + CLI-008 文档 + CLI-009 Recovery Point
-- 预计：Phase 4 全部完成后，产品进入可用状态
+- 阶段：首年路线图全部完成，`v0.2.0-beta` 已发布（2026-07-26）
+- 上一完成：D3 GitHub Release 发布与状态文档同步（commit `3a3d286`）
+- 下一动作：按 `DEC-Y2-ENTRY-001` §2.7 起草 PRDv06
+- 实时状态以 `docs/PROJECT_STATE.md` 为准
 
 ---
 

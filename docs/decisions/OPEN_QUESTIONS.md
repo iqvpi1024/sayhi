@@ -28,6 +28,10 @@
 
 该段保留 Product Decision 当时的授权边界，不作为动态阶段状态。后续 applicability、Trace、ADR-0002、Architecture 和 Pre-Suite Gate 已完成；当前动态状态与唯一下一动作只以 `docs/PROJECT_STATE.md` 和 `docs/process/CURRENT_HANDOFF.md` 为准。
 
+### 1.6 当前 Year 2 入口决定
+
+`DEC-Y2-ENTRY-001` 于 2026-07-26 由产品负责人委托代理裁决并单独记录在 `YEAR2_ENTRY_DECISION_2026-07-26.md`：模型接入（本地优先、云端显式授权、红线舱室 local-only）、首个连接器（本地文件夹文本导入）、真实数据红线、本地 Web UI、MCP 后置与 Y2-S1..S5 排序；授权起草 PRDv06。该决定只部分触及 `DQ-008`（首个连接器），`DQ-007/009/010/011/013` 保持 deferred。
+
 ### 1.5 当前 MVP-A 硬化切片决定
 
 `DEC-MVP-A-HARDENING-001` 于 2026-07-25 选择 `SLICE-MVP-A-HARDENING-001`（A6）作为下一切片，并显式裁决 PRD §24.2"12 个可执行语义变更测试"的解释：FR-001..012 各一个端到端语义变更验收场景，在同一版本化 Reference Profile 上顺序执行（解释甲"12 核心对象各一测"被拒绝，理由记录在 Decision §2）。本决定只授权 S1/S2/S3/S6/S7 applicability review；无新重开的 deferred question。
@@ -318,13 +322,13 @@
 | DQ-004 | 第三方数据分享、继承和纠纷规则 | §17.5、§27.1 | 法律/伦理验证阶段；Micro 不实现分享和继承 |
 | DQ-005 | 个人工具与商业产品的开源边界 | §27.1 | `decided`：`DEC-PUBLIC-PREVIEW-001` 为 `v0.1.0-synthetic-preview` 选择 MIT；未来商业版可另立新产品/许可决策 |
 | DQ-006 | 哪些 Decision 类型需要专业风险提示 | §27.1、§25.3 | MVP-C 决策室设计阶段 |
-| DQ-007 | 多设备同步冲突与密钥恢复 | §20 FR-301、§24.5 | Year 2 规划门禁 |
-| DQ-008 | 连接器优先级与适配范围 | §20 FR-302、§24.5 | Year 2 规划门禁 |
+| DQ-007 | 多设备同步冲突与密钥恢复 | §20 FR-301、§24.5 | Year 2 同步切片规划前；`DEC-Y2-ENTRY-001` 未授权同步 |
+| DQ-008 | 连接器优先级与适配范围 | §20 FR-302、§24.5 | 首个连接器已由 `DEC-Y2-ENTRY-001` 裁决为本地文件夹文本导入（Y2-S1）；其余连接器优先级仍 deferred |
 | DQ-009 | 家庭授权、托管人和数字遗产工作流 | §20 FR-305、§24.5-§24.6 | 法律/伦理验证完成后 |
 | DQ-010 | A2A 或其他 Agent 协议选择 | §20 FR-306、§24.6 | 生态阶段，不影响 MCP 最小合同 |
 | DQ-011 | 用户预授权自动处理的最大范围 | §11.4、§27.1 | MVP-B / FR-107 前；Micro 不扩大自动权限 |
 | DQ-012 | Canonical `value=unknown` 与 Answer Status 的组合 | §9.4、§27.1 | 引入 unknown State 查询前 |
-| DQ-013 | MCP 不可逆动作是否存在非 verified 例外 | §19.3、§27.1 | MCP runtime 前；未裁决时采用最保守拒绝 |
+| DQ-013 | MCP 不可逆动作是否存在非 verified 例外 | §19.3、§27.1 | Y2-S5 MCP runtime 切片前（`DEC-Y2-ENTRY-001` §2.5）；未裁决时采用最保守拒绝 |
 
 ## 5. 决策记录模板
 
