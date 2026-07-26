@@ -44,3 +44,6 @@ Windows 11，PowerShell 5.1，embedded Python 3.12.10（构建时校验 SHA-256 
 - Windows-only；无自动更新；升级由用户显式从新包运行升级脚本。
 - 仍是合成演示产品：不接受真实个人资料输入；不宣称真实数据生产就绪。
 - D3（GitHub Release 发布）未执行，需用户确认。
+## 6. 发布构建核对（2026-07-26）
+
+发布产物从 annotated tag `v0.2.0-beta` 重新构建（`scripts\build-d2-beta.ps1 -Version 0.2.0 -Ref v0.2.0-beta`，exit 0）。因 ZIP 包含构建时间戳，逐字节哈希与本记录 §1 不同：发布版 SHA-256 `3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8`。来源内容以 tag 为准（`RUNTIME_MANIFEST.json` 记录 `source_ref: v0.2.0-beta`）。发布版已做 smoke：clean-install + `Noetide Shell.cmd status` = rev_010，exit 0。

@@ -11,7 +11,7 @@
 
 - [ ] 版本号与 source tag：`v0.2.0-beta` annotated tag（执行时才创建，不移动既有 tag）。
 - [ ] 支持平台与最低环境：Windows 10/11 x64；无需预装 Python（自带 3.12.10 embedded runtime）；免管理员权限。
-- [ ] 安装包及 SHA-256：`Noetide-beta-v0.2.0-win64.zip`（`3798971cb5471043bf3b0bf79e32b668bb85c6fdd9807ad70dd120bc47264147`）+ `SHA256SUMS-0.2.0-win64.txt`；附件 digest 发布后与本地复核一致才宣告完成。
+- [ ] 安装包及 SHA-256：`Noetide-beta-v0.2.0-win64.zip`（从 tag `v0.2.0-beta` 重建，SHA-256 `3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8`）+ `SHA256SUMS-0.2.0-win64.txt`（`7cd7fae68d662d0e55a534ed30014a8d02645dec6a1044bdc4716a3495f3f29a`）；附件 digest 发布后与本地复核一致才宣告完成。注：ZIP 含构建时间戳，非逐字节可复现；来源内容以 tag 为准。
 - [ ] 构建 provenance：`scripts/build-d2-beta.ps1 -Version 0.2.0 -Ref <tag>`；embedded runtime 来源与哈希见 `SBOM-v0.2.0.md`。
 - [ ] 依赖清单/SBOM：`SBOM-v0.2.0.md`（零第三方 Python 依赖声明）。
 - [ ] 许可证：仓库 `LICENSE` 随包分发。

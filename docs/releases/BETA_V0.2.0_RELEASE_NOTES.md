@@ -10,8 +10,8 @@
 
 | 附件 | SHA-256 |
 |---|---|
-| `Noetide-beta-v0.2.0-win64.zip` | `3798971cb5471043bf3b0bf79e32b668bb85c6fdd9807ad70dd120bc47264147` |
-| `SHA256SUMS-0.2.0-win64.txt` | （发布时填入） |
+| `Noetide-beta-v0.2.0-win64.zip` | `3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8` |
+| `SHA256SUMS-0.2.0-win64.txt` | `7cd7fae68d662d0e55a534ed30014a8d02645dec6a1044bdc4716a3495f3f29a` |
 
 ## 平台与环境
 
