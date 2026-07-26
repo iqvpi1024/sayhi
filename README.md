@@ -1,60 +1,83 @@
-# 识海 Noetide
+# Noetide 识海
 
-识海是一个 Local-first、User-owned、Correctable、Portable 的 Personal Context & Growth Engine。本仓库公开提供 `v0.1.3-synthetic-preview`：它只演示一条已批准的合成 Micro 链路，不接收真实个人数据，也不声称实现完整 PRD。
+**A local-first, user-owned, correctable personal context engine — with proof, not promises.**
 
-## 当前可运行范围
+[English](#english) | [中文](#中文)
 
-- 包内合成 Source append。
-- 一个 `relationship.contact: active -> no_contact` ChangeSet 的提案、确认、原子发布与补偿撤销。
-- `person_card` 与 `relationship_timeline` 两个 Core View。
-- 本地 SQLite，Python 3.12 标准库，无网络访问。
-- 可导出 owner-private 的合成 Context Pack（JSON、Markdown、Source/Ledger 清单和 SHA-256）；不支持真实数据导入或分享导出。
+---
 
-不包含：真实数据导入、通用 NLP、权限 runtime、MCP、连接器、同步、财务、健康、决策工作流、分享导出、完整长期迁移或公开发布。
+## English
 
-## 本地运行
+Noetide is an open-source **Personal Context & Growth Engine** that runs entirely on your machine. Your data lives in a folder *you* choose. Nothing is uploaded — there is no upload code at all. Every claim in this README is backed by executable audits you can re-run yourself.
 
-Windows 上可用一个命令准备**仅含合成数据**的本地演示：
+### Why it's different
 
-```powershell
-.\scripts\run-synthetic-demo.ps1 -Recreate
+Most "personal AI memory" projects ask you to trust them. Noetide is built so you don't have to:
+
+- **Facts, hypotheses and fiction are strictly separated.** A hypothesis never auto-promotes to a fact.
+- **History is never overwritten.** Current state and historical state are bitemporal — corrections create new revisions, old ones stay auditable.
+- **Every write goes through a ChangeSet** you explicitly confirm, and every confirmation can be reverted with compensation.
+- **Uninstall never deletes your data.** Deleting data requires typing the full path *and* creates a verified backup first.
+- **392 semantic tests, 21 suite validators, 0 skips** — plus a release-gate audit that re-checks all of it before any version ships.
+
+### Quick start (Windows, 2 minutes)
+
+1. Download `Noetide-beta-v0.2.0-win64.zip` from [Releases](../../releases) and verify the SHA-256.
+2. Unzip anywhere (no admin rights needed, no Python install needed).
+3. Double-click `scripts/Noetide Setup.cmd` → pick your data folder → done.
+
+```text
+> scripts\Noetide Shell.cmd status
+Current revision: rev_010
 ```
 
-这只达到合成预览级 D1；不下载真实数据，也不是普通用户生产安装包。许可证、校验和限制见 `docs/releases/PUBLIC_SYNTHETIC_PREVIEW.md`。
+Export everything anytime — human-readable Markdown + JSON, no lock-in:
 
-Windows 试用者也可以下载 self-contained portable ZIP，解压后双击 `Noetide Start.cmd`。该包自带 Python runtime，只创建合成 SQLite 数据；它同样是 D1 合成预览，不是签名的生产安装包。
-
-手动等价流程：
-
-```powershell
-python -m venv .venv
-$env:PYTHONPATH = "$PWD\src"
-
-$dataDir = Join-Path $env:TEMP 'noetide-demo'
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir init
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir intake
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir propose src_micro_001
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir approve --id changeset_micro_001
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir publish --id changeset_micro_001
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir person-card
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir timeline
-.\.venv\Scripts\python -m noetide_micro --data-dir $dataDir revert --id changeset_micro_001
+```text
+> scripts\Noetide Shell.cmd export my-backup
+backup pack: my-backup
+data revision: rev_010 (4 entries, sha256 manifest verified)
+roundtrip verified: True
 ```
 
-`intake --text ...` 会被拒绝并返回非零 exit code，因为当前 RC 仅允许包内的合成 demo Source。
+### Engineering honesty
 
-## 验证
+| Claim | Proof |
+|---|---|
+| 392 tests OK, 0 skipped | `python -m unittest discover -s tests -t .` (16 adapter env vars) |
+| Stdlib-only, zero network calls | AST audit in the C6 release gate |
+| Synthetic fixtures only | Machine privacy scan in the C6 release gate |
+| Backup/restore byte-identical | Recovery drill in the C6 release gate |
 
-```powershell
-$env:PYTHONPATH = "$PWD\src"
-python .\tools\validate_micro_suite.py
-python .\tools\validate_answer_safety_suite.py
-python -m tests.runner.run_micro_suite --adapter noetide_micro.testing_adapter --output tmp\micro-run.json
-python -m tests.runner.run_answer_safety_suite --adapter noetide_micro.answer_testing_adapter --output tmp\answer-run.json
-```
+Full trail: PRD → 9 SPECs → 19 ADRs → per-slice executable suites → gate reviews → recovery tags, all in [`docs/`](docs/).
 
-测试 adapter 仅用于测试，不被 CLI 导入。当前可复现的验证记录位于 `docs/testing/results/`。
+### Honest limitations (v0.2.0-beta)
 
-## 开发状态
+- **Synthetic demo data only** — do not enter real personal information.
+- Windows-only, not code-signed (SmartScreen warning is expected), no auto-update.
+- No sync, no connectors, no real-data import, no multi-user — by design, for now.
 
-当前执行阶段与唯一下一动作见 `docs/PROJECT_STATE.md` 和 `docs/process/CURRENT_HANDOFF.md`。产品语义以 `PRDv05.md`、Approved SPEC 和 Decision 为准；不要将 README 示例外推为完整产品能力。
+## 中文
+
+识海是一个**完全运行在你自己电脑上**的个人上下文与成长引擎。数据放在你选的文件夹里，没有任何上传代码。本 README 里的每一条声明，都有你可以亲手重跑的可执行审计支撑。
+
+### 三分钟体验（Windows）
+
+1. 在 [Releases](../../releases) 下载 `Noetide-beta-v0.2.0-win64.zip`，核对 SHA-256。
+2. 解压到任意位置（免管理员、免装 Python）。
+3. 双击 `scripts/Noetide Setup.cmd`，选择数据文件夹，完成隐私确认即可。
+
+### 设计红线
+
+- 事实、假设、虚构严格分离；假设永远不会自动变成事实。
+- 历史永不覆盖；每次纠正都产生新版本，旧版本全程可审计。
+- 所有写入必须经过你确认的 ChangeSet；确认过的也能补偿撤销。
+- 卸载默认绝不删除你的数据；删除数据必须输入完整路径，且先强制生成校验备份。
+
+### 如实说明
+
+当前版本是**合成演示 Beta**：只接受内置合成数据，请勿输入真实个人信息。未签名、仅 Windows、无自动更新。路线图见 [`docs/releases/ONE_CLICK_DELIVERY_PLAN.md`](docs/releases/ONE_CLICK_DELIVERY_PLAN.md)。
+
+## License
+
+See [LICENSE](LICENSE). Security & privacy notes: [SUPPORT.md](SUPPORT.md).
