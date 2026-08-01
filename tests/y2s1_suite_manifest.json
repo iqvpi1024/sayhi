@@ -1,0 +1,76 @@
+{
+  "schema_version": "noetide.y2s1-suite-manifest.v1",
+  "suite_id": "y2s1_folder_import_v1",
+  "slice_id": "SLICE-Y2-S1-FOLDER-IMPORT-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": false,
+    "suite_passed": false
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "not_executed",
+  "latest_run_applicability": "current",
+  "required_scenario_ids": [
+    "Y2S1-001",
+    "Y2S1-002",
+    "Y2S1-003",
+    "Y2S1-004",
+    "Y2S1-005",
+    "Y2S1-006",
+    "Y2S1-007",
+    "Y2S1-008",
+    "Y2S1-009",
+    "Y2S1-010"
+  ],
+  "baseline": {
+    "product_path": "PRDv06.md",
+    "product_canonical_lf_sha256": "4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8",
+    "decision_refs": [
+      "DEC-Y2-S1-001"
+    ],
+    "contract_ref": "SPEC-Y2S1-FOLDER-IMPORT-001",
+    "adr_refs": [
+      "ADR-0020"
+    ],
+    "architecture_ref": "ARCH-Y2S1-FOLDER-IMPORT-001"
+  },
+  "artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/y2s1_folder_import_v1/fixture.json",
+      "sha256": "48d876869616aaef0b61455c9e0ced55f064b6680e82533cdaa89670c7f4802b"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/y2s1_folder_import_v1/oracles.json",
+      "sha256": "abe2979f1fe1b74f98c914ef4b6298bb813a3827260fad5d388e73069da54394"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/y2s1_folder_import_scenarios.json",
+      "sha256": "380fbb02ea8cf76b2cd87717db0547dc4d07996d50d45ccf1b1ccef660a2e468"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/y2s1_folder_import_adapter_protocol.py",
+      "sha256": "f188bd6ea884795479f0999153a1ec3376948161a294472d1019c4c3dbd9ba31"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_y2s1_folder_import_contract.py",
+      "sha256": "6662448d8a45babfc98332f3f327990eb68bea66758b695088b4669b8fb7a8e0"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_y2s1_suite.py",
+      "sha256": "f6cb3b4ae143af67fe22c1bf7e8ff09699796d53b87e357acde1d3cb0ced75a3"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_y2s1_suite.py",
+      "sha256": "32871e452dcc00e99272e38333afbff4cf02b7587f570213844097a41e11e8ef"
+    }
+  ]
+}

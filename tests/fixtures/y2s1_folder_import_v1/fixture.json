@@ -1,0 +1,138 @@
+{
+  "schema_version": "noetide.y2s1-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "y2s1_folder_import_v1",
+  "determinism": {
+    "clock": "2026-08-01T00:00:00+00:00"
+  },
+  "root_ref": "diary_root_v1",
+  "defaults": {
+    "language": "zh"
+  },
+  "libraries": {
+    "basic_three": [
+      {
+        "path": "2026-07-01.md",
+        "content": "今天开始了识海的记录实验。\n",
+        "mtime": "2026-07-01T09:00:00+00:00"
+      },
+      {
+        "path": "notes/reading.txt",
+        "content": "读书摘记：上下文即资产。\n",
+        "mtime": "2026-07-05T10:30:00+00:00"
+      },
+      {
+        "path": "2026-07-10.md",
+        "content": "和朋友讨论了长期记忆产品。\n",
+        "mtime": "2026-07-10T21:15:00+00:00"
+      }
+    ],
+    "duplicate_extra": {
+      "path": "dup/copy-of-0701.md",
+      "content": "今天开始了识海的记录实验。\n",
+      "mtime": "2026-07-11T08:00:00+00:00"
+    },
+    "skipped_files": [
+      {
+        "path": "assets/logo.png",
+        "content_base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "mtime": "2026-07-02T08:00:00+00:00"
+      },
+      {
+        "path": "scripts/run.exe",
+        "content_base64": "TVo=",
+        "mtime": "2026-07-02T08:05:00+00:00"
+      }
+    ],
+    "invalid_utf8_file": {
+      "path": "bad/broken.md",
+      "content_base64": "//9pbnZhbGlk",
+      "mtime": "2026-07-03T08:00:00+00:00"
+    },
+    "watch_new_file": {
+      "path": "2026-07-20.md",
+      "content": "新增的一篇日记。\n",
+      "mtime": "2026-07-20T08:00:00+00:00"
+    },
+    "outside_pool": [
+      {
+        "path": "secret.md",
+        "content": "根目录之外的秘密文件。\n",
+        "mtime": "2026-07-04T08:00:00+00:00"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "scenario_id": "Y2S1-001",
+      "action": "import",
+      "library": "basic_three"
+    },
+    {
+      "scenario_id": "Y2S1-002",
+      "action": "import",
+      "library": "basic_three",
+      "inspect": "notes/reading.txt"
+    },
+    {
+      "scenario_id": "Y2S1-003",
+      "action": "import",
+      "library": "basic_three",
+      "extra_files": ["duplicate_extra"]
+    },
+    {
+      "scenario_id": "Y2S1-004",
+      "action": "import_twice",
+      "library": "basic_three"
+    },
+    {
+      "scenario_id": "Y2S1-005",
+      "action": "import",
+      "library": "basic_three",
+      "extra_files": ["skipped_files"]
+    },
+    {
+      "scenario_id": "Y2S1-006",
+      "action": "import",
+      "library": "basic_three",
+      "outside_pool": true,
+      "junction": {
+        "path": "linked_outside",
+        "target": "outside_pool"
+      },
+      "extra_entries": [
+        {"kind": "relative_traversal", "path": "../escape.md"},
+        {"kind": "absolute_outside", "path": "outside_pool/secret.md"}
+      ]
+    },
+    {
+      "scenario_id": "Y2S1-007",
+      "action": "import",
+      "library": "basic_three",
+      "extra_files": ["invalid_utf8_file"]
+    },
+    {
+      "scenario_id": "Y2S1-008",
+      "action": "import_with_failure",
+      "library": "basic_three",
+      "fail_at_index": 1,
+      "then_rerun": true
+    },
+    {
+      "scenario_id": "Y2S1-009",
+      "action": "watch",
+      "library": "basic_three",
+      "add_between": "watch_new_file",
+      "polls": 3
+    },
+    {
+      "scenario_id": "Y2S1-010",
+      "action": "import",
+      "library": "basic_three",
+      "profile_override": "unknown_profile_v9",
+      "determinism_check": true,
+      "canonical_guard": true
+    }
+  ]
+}

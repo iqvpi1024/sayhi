@@ -1,0 +1,103 @@
+{
+  "schema_version": "noetide.y2s1-oracles.v1",
+  "scenarios": {
+    "Y2S1-001": {
+      "result": {
+        "report": {"files_seen": 3, "stored": 3, "duplicate": 0, "rejected": 0, "skipped": 0},
+        "receipts": [
+          {"relative_path": "2026-07-01.md", "status": "stored", "source_id": "src_folder_d3ab17b7dfdc7b28"},
+          {"relative_path": "2026-07-10.md", "status": "stored", "source_id": "src_folder_69286a9c49751b8b"},
+          {"relative_path": "notes/reading.txt", "status": "stored", "source_id": "src_folder_84d706dfdba5aef7"}
+        ],
+        "source_count": 3
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-002": {
+      "result": {
+        "inspect": {
+          "source_id": "src_folder_84d706dfdba5aef7",
+          "content_hash": "84d706dfdba5aef71926dfeaa8de3916776a643bb734851a9eaa5984e0676f29",
+          "byte_length": 37,
+          "source_created_at": "2026-07-05T10:30:00+00:00",
+          "ingested_at": "2026-08-01T00:00:00+00:00",
+          "language": "zh",
+          "locator": {"root_ref": "diary_root_v1", "relative_path": "notes/reading.txt"},
+          "coverage_window": {"start": "2026-07-05T10:30:00+00:00", "end": "2026-07-05T10:30:00+00:00", "continuous": true, "gaps": []}
+        }
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-003": {
+      "result": {
+        "report": {"files_seen": 4, "stored": 3, "duplicate": 1, "rejected": 0, "skipped": 0},
+        "duplicate_of": {"dup/copy-of-0701.md": "src_folder_d3ab17b7dfdc7b28"},
+        "source_count": 3
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-004": {
+      "result": {
+        "second_run": {"files_seen": 3, "stored": 0, "duplicate": 3, "rejected": 0, "skipped": 0},
+        "source_count": 3
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-005": {
+      "result": {
+        "report": {"files_seen": 5, "stored": 3, "duplicate": 0, "rejected": 0, "skipped": 2},
+        "skipped_paths": ["assets/logo.png", "scripts/run.exe"],
+        "source_count": 3
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-006": {
+      "result": {
+        "report": {"files_seen": 6, "stored": 3, "duplicate": 0, "rejected": 3, "skipped": 0},
+        "rejections": [
+          {"entry": "linked_outside/secret.md", "failure": "symlink_escape"},
+          {"entry": "../escape.md", "failure": "path_traversal"},
+          {"entry": "outside_pool/secret.md", "failure": "path_outside_root"}
+        ],
+        "source_count": 3,
+        "writes_outside_root": 0
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-007": {
+      "result": {
+        "report": {"files_seen": 4, "stored": 3, "duplicate": 0, "rejected": 1, "skipped": 0},
+        "rejections": [{"entry": "bad/broken.md", "failure": "invalid_utf8"}],
+        "source_count": 3
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-008": {
+      "result": {
+        "first_run": {"stored_before_failure": 1, "failed": true},
+        "final_source_count": 3,
+        "converged": true
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-009": {
+      "result": {
+        "polls": [
+          {"stored": 3, "duplicate": 0},
+          {"stored": 1, "duplicate": 3},
+          {"stored": 0, "duplicate": 4}
+        ],
+        "source_count": 4
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    },
+    "Y2S1-010": {
+      "result": {
+        "profile_rejected": "unknown_profile_v9",
+        "canonical_guard": {"canonical_digest_unchanged": true, "revision_unchanged": true},
+        "determinism": {"report_byte_identical": true}
+      },
+      "forbidden_mutations": ["canonical_layer", "revision_layer"]
+    }
+  }
+}
