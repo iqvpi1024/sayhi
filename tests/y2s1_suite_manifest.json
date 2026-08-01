@@ -6,11 +6,11 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": false,
-    "suite_passed": false
+    "suite_executed": true,
+    "suite_passed": true
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
+  "latest_verification_result": "passed",
   "latest_run_applicability": "current",
   "required_scenario_ids": [
     "Y2S1-001",
@@ -72,5 +72,8 @@
       "path": "tools/validate_y2s1_suite.py",
       "sha256": "32871e452dcc00e99272e38333afbff4cf02b7587f570213844097a41e11e8ef"
     }
-  ]
+  ],
+  "latest_verification_result_path": "docs/testing/results/y2s1-20260801.json",
+  "latest_verification_result_sha256": "909cc545fe26d387467a117f2e6d84093739e27d14ae3da45b589883985de990",
+  "latest_verification_manifest_sha256": "2629a16b511e62edaeee245b8c8163e235bd370536aa44ad42eb2fbe39d5ef86"
 }
