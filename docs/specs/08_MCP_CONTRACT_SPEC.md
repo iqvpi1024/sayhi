@@ -5,9 +5,9 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-MCP-001` |
-| 版本 | `0.3` |
+| 版本 | `0.4` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv05.md` v0.5 |
+| 产品基线 | `PRDv06.md`，PRD v0.6 |
 | 上游 | S1 v0.5、S2-S6 v0.4、S7 v0.3，均 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
@@ -270,3 +270,5 @@ suite_passed: false
 - 未选择 SDK/传输；测试未执行。
 
 当前结论：本 SPEC v0.3 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。execution、answer、freshness、authorization 与 disclosure 继续分轴，非 verified 答案不得驱动不可逆动作；测试仍未物化、执行或通过，不授权 A2A、多 Agent 或 MCP runtime 实现。
+
+当前结论：本 SPEC v0.4 于 2026-08-01 完成 PRD v0.6 兼容复审并保持 `Approved`。本次仅将产品基线绑定同步至 `PRDv06.md` v0.6，无语义修订；§19.5 确认 MCP runtime 后置，重开 DQ-013 前本 SPEC 保持图纸状态；测试仍未物化、执行或通过。

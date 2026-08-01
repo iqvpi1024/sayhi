@@ -5,9 +5,9 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SHP-001` |
-| 版本 | `0.4` |
+| 版本 | `0.5` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv05.md` v0.5 |
+| 产品基线 | `PRDv06.md`，PRD v0.6 |
 | 上游 | S1 v0.5、S2-S4 v0.4，均 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
@@ -297,3 +297,5 @@ suite_passed: false
 - 未选择模型/Prompt；测试未执行。
 
 当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。protected semantics oracle 保持有效，DQ-011 未重开前的 automatic 边界采用最保守配置；测试仍未物化、执行或通过，不授权 Hypothesis 工作流、多 Agent 或广域智能实现。
+
+当前结论：本 SPEC v0.5 于 2026-08-01 完成 PRD v0.6 兼容复审并保持 `Approved`。本次仅将产品基线绑定同步至 `PRDv06.md` v0.6，无语义修订；§14.5 模型接入政策与 propose-only 边界一致，实现合同属 Y2-S2 slice contract，本 SPEC 不提前裁决；测试仍未物化、执行或通过。

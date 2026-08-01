@@ -28,15 +28,15 @@ Test Ref 简写采用固定语法：`PREFIX-AT-001/004/009` 表示同 prefix 的
 
 | 代号 | SPEC | 版本 | 状态 |
 |---|---|---|---|
-| S1 | Semantic Object Model | v0.6 | `Approved` |
-| S2 | Bitemporal & Evidence | v0.5 | `Approved` |
-| S3 | ChangeSet & Consistency | v0.4 | `Approved` |
-| S4 | Privacy & Access Policy | v0.4 | `Approved` |
-| S5 | Shiling Policy | v0.4 | `Approved` |
-| S6 | Semantic Test Harness | v0.5 | `Approved` |
-| S7 | Storage, Index & Portability | v0.3 | `Approved` |
-| S8 | MCP Contract | v0.3 | `Approved` |
-| S9 | Ingestion & Migration | v0.4 | `Approved` |
+| S1 | Semantic Object Model | v0.7 | `Approved` |
+| S2 | Bitemporal & Evidence | v0.6 | `Approved` |
+| S3 | ChangeSet & Consistency | v0.5 | `Approved` |
+| S4 | Privacy & Access Policy | v0.5 | `Approved` |
+| S5 | Shiling Policy | v0.5 | `Approved` |
+| S6 | Semantic Test Harness | v0.6 | `Approved` |
+| S7 | Storage, Index & Portability | v0.4 | `Approved` |
+| S8 | MCP Contract | v0.4 | `Approved` |
+| S9 | Ingestion & Migration | v0.5 | `Approved` |
 
 批准表示语义合同经审查，不表示 suite 已物化、执行或通过。
 

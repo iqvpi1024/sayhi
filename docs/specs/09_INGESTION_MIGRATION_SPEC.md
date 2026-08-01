@@ -5,9 +5,9 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-IMM-001` |
-| 版本 | `0.4` |
+| 版本 | `0.5` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv05.md` v0.5 |
+| 产品基线 | `PRDv06.md`，PRD v0.6 |
 | 上游 | S1 v0.5、S2-S6 v0.4、S7-S8 v0.3，均 `Approved` |
 | 实现状态 | 未开始 |
 | 测试状态 | `suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false` |
@@ -317,3 +317,5 @@ suite_passed: false
 - 未选择适配/迁移技术；测试未执行。
 
 当前结论：本 SPEC v0.4 于 2026-07-15 完成 PRD v0.5 兼容复审并保持 `Approved`。Intake/Source receipt 已与 S1 对齐，多 ChangeSet 迁移的部分应用与补偿回滚状态已闭合；测试仍未物化、执行或通过。
+
+当前结论：本 SPEC v0.5 于 2026-08-01 完成 PRD v0.6 兼容复审并保持 `Approved`。本次仅将产品基线绑定同步至 `PRDv06.md` v0.6，无语义修订；文件夹文本导入合同属 Y2-S1 slice contract，本 SPEC 不提前裁决；测试仍未物化、执行或通过。

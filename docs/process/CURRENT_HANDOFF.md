@@ -3,13 +3,13 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-PRDV06-DRAFT-001
-slice_id: none_prdv06_pending_approval
-current_phase: product_defined_prdv06_draft
+handoff_id: HANDOFF-PRDV06-APPROVED-001
+slice_id: none_y2s1_decision_pending
+current_phase: product_decided_prdv06_approved
 product_baseline:
-  path: PRDv05.md
-  version: 0.5
-  canonical_lf_sha256: 34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7
+  path: PRDv06.md
+  version: 0.6
+  canonical_lf_sha256: 4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8
 release:
   tag: v0.2.0-beta
   commit: 08095cc4aca88adad6469ffe3bedc9f25bdabaf7
@@ -25,15 +25,15 @@ latest_recovery_points:
 previous_release:
   tag: v0.1.3-synthetic-preview
   commit: c340eac939cdbc094d6ec8da7f4e710d879cf1c1
-decision_ref: DEC-Y2-ENTRY-001
+decision_ref: DEC-PRD-V06-001 (baseline), DEC-Y2-ENTRY-001 (scope)
 adr_ref: ADR-0019 (installer/upgrade/signing/channel)
 verification: docs/releases/D2_BETA_V0.2.0_VERIFICATION.md + D3 remote digest check via GitHub API (2026-07-26, matched)
 artifact: Noetide-beta-v0.2.0-win64.zip (sha256 3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8, published)
-next_role: Product Owner (baseline approval)
-next_single_action: 审阅 PRDv06.md 草案并形成 DEC-PRD-V06-001 批准决定（切换基线索引与 hash、v0.5 转只读）；随后 S1-S9 兼容复核；批准前不得开始业务编码
+next_role: Slice Decision Owner (Y2-S1)
+next_single_action: 形成 Y2-S1（真实文件夹文本导入）切片决策 DEC-Y2-S1-001，随后 SPEC applicability review（重点 S9/S7/S1/S5）
 scope_in:
-  - PRDv06 批准流程（DEC-PRD-V06-001、基线索引切换）
-  - S1-S9 兼容复核准备
+  - Y2-S1 切片决策与 SPEC applicability review
+  - slice contract 起草准备
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
@@ -52,10 +52,11 @@ stop_condition: PRDv06 草案超出 DEC-Y2-ENTRY-001 §2.7 授权范围时停止
 - 全量回归 392 OK 0 skip；21 个 suite validator 全 PASSED（C6 审计 `c6-20260726.json` 8/8 passed）。
 - `DEC-Y2-ENTRY-001` 已裁决（2026-07-26）：本地模型优先 + 云端显式授权 + 红线舱室 local-only；首连接器 = 本地文件夹文本导入；真实数据生产合同前置；本地 Web UI；MCP 后置；Y2-S1..S5 排序；授权起草 PRDv06。
 - `PRDv06.md` 草案已完成（2026-07-27，Draft 状态）：27 章、32 FR、结构自查通过；基线索引仍指向 PRDv05，待 DEC-PRD-V06-001 批准。
+- `DEC-PRD-V06-001` 已批准（2026-08-01）：PRDv06 成为当前基线（hash `4513B268...CAD8`），v0.5 转只读；S1-S9 v0.6 兼容复核完成（绑定同步 + 最小升版，无语义修订）；两个 baseline validator 已同步并 exit 0。
 
 ## 回归基线（2026-07-26）
 
 - 全量 configured-adapter semantic regression：392 tests OK、0 skipped（16 个 adapter 环境变量，值为模块路径形式 `noetide_micro.<x>_testing_adapter`）。
 - suite validators：21 个全部 PASSED。
 - 已 verified：Micro、A1-A6、B1-B6、C1-C6、Synthetic Ingestion、Context Pack、D2 Installer、D3 Release。
-- 剩余路线：DEC-PRD-V06-001 批准 -> S1-S9 兼容复核 -> Y2-S1（真实文件夹导入）切片决策。
+- 剩余路线：Y2-S1（真实文件夹导入）切片决策 -> slice contract -> traceability -> ADR -> suite -> plan -> 编码。

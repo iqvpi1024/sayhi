@@ -96,7 +96,7 @@ Semantic Object Model
 
 目标：定义规范对象、派生对象、标识、引用、共同元数据和对象间不可跨越的语义边界，证明 Source、事实、观点、推断、预测和虚构不会被混为一类。依据为 PRD §6-§8、§13、§16。
 
-输入依赖：PRD v0.5 基线；`BQ-001` 至 `BQ-005` 已裁决并整合。当前 Approved 正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.6。
+输入依赖：PRD v0.6 基线；`BQ-001` 至 `BQ-005` 已裁决并整合。当前 Approved 正文：`docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md` v0.7。
 
 范围内：
 
@@ -119,7 +119,7 @@ Semantic Object Model
 
 目标：定义有效时间、记录时间、来源时间、摄取时间、CoverageWindow、证据引用和认知状态的语义。依据为 PRD §6、§9、§12、§13、§18.5、§26 Cases A/B/E/F/G。
 
-输入依赖：已确认 Semantic Object Model SPEC v0.6。当前 Approved 正文：`docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md` v0.5。
+输入依赖：已确认 Semantic Object Model SPEC v0.7。当前 Approved 正文：`docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md` v0.6。
 
 范围内：
 
@@ -141,7 +141,7 @@ Semantic Object Model
 
 目标：定义所有规范语义变更的唯一受控路径、原子发布、冲突、影响传播、回执、撤销和一致性等级。依据为 PRD §6.9、§10-§12、§20 FR-004/005/006/007/010、§21、§25.2、§26。
 
-输入依赖：S3 v0.4 的批准基线为 S1 v0.5/S2 v0.4；开发前兼容复审确认其继续适用于当前 S1 v0.6/S2 v0.5。当前 Approved 正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.4。
+输入依赖：S3 v0.5 的批准基线为 S1 v0.7/S2 v0.6（PRD v0.6 兼容复审同步）。当前 Approved 正文：`docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md` v0.5。
 
 范围内：
 
@@ -163,7 +163,7 @@ Semantic Object Model
 
 目标：定义主体、舱室、敏感度、动作、目的、时间、字段裁剪、封存、删除和导出的授权策略。依据为 PRD §6.10、§6.13、§12.4、§17、§19、§21.4、§25、§26 Case D。
 
-输入依赖：当前 Approved S1-S3。当前 Approved 正文：`docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md` v0.4。
+输入依赖：当前 Approved S1-S3。当前 Approved 正文：`docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md` v0.5。
 
 范围内：
 
@@ -185,7 +185,7 @@ Semantic Object Model
 
 目标：定义识灵可以观察、提出、排序、自动处理和声明什么，以及绝对禁止什么。依据为 PRD §6、§11.4、§14-§15、§19.3、§20 FR-003/101/102/107、§22.4、§25。
 
-输入依赖：当前 Approved S1-S4。当前 Approved 正文：`docs/specs/05_SHILING_POLICY_SPEC.md` v0.4。
+输入依赖：当前 Approved S1-S4。当前 Approved 正文：`docs/specs/05_SHILING_POLICY_SPEC.md` v0.5。
 
 范围内：
 
@@ -207,7 +207,7 @@ Semantic Object Model
 
 目标：定义用初始规范状态、Source、ChangeSet、预期状态、影响视图和禁止变化证明语义合同的方法。依据为 PRD §6.14、§22、§23.3、§24、§26。
 
-输入依赖：当前 Approved S1-S5，作为测试 oracle。当前 Approved 正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.5。
+输入依赖：当前 Approved S1-S5，作为测试 oracle。当前 Approved 正文：`docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md` v0.6。
 
 范围内：
 
@@ -229,7 +229,7 @@ Semantic Object Model
 
 目标：定义 Source Vault、Canonical Context、Revision Ledger、Derived Index 和 Context Pack 的持久性、重建与独立可读合同。依据为 PRD §1、§7、§8、§16、§21、§25。
 
-输入依赖：当前 Approved S1-S6，尤其是测试状态与删除合同。当前 Approved 正文：`docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md` v0.3。
+输入依赖：当前 Approved S1-S6，尤其是测试状态与删除合同。当前 Approved 正文：`docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md` v0.4。
 
 范围内：
 
@@ -251,7 +251,7 @@ Semantic Object Model
 
 目标：定义外部调用者读取、提出和执行受控动作时的最小能力接口、权限结果、revision、新鲜度和错误合同。依据为 PRD §7.3、§10.2、§19、§20 FR-304/306。
 
-输入依赖：当前 Approved S1-S7。当前 Approved 正文：`docs/specs/08_MCP_CONTRACT_SPEC.md` v0.3。
+输入依赖：当前 Approved S1-S7。当前 Approved 正文：`docs/specs/08_MCP_CONTRACT_SPEC.md` v0.4。
 
 范围内：
 
@@ -272,7 +272,7 @@ Semantic Object Model
 
 目标：定义外部材料进入 Source 层、解析产物进入候选层，以及旧版本规范包迁移的合同。依据为 PRD §7.2-§7.3、§19.4、§20 FR-001/002/108/302/303、§22.4、§25.2。
 
-输入依赖：当前 Approved S1-S8。当前 Approved 正文：`docs/specs/09_INGESTION_MIGRATION_SPEC.md` v0.4。
+输入依赖：当前 Approved S1-S8。当前 Approved 正文：`docs/specs/09_INGESTION_MIGRATION_SPEC.md` v0.5。
 
 范围内：
 
@@ -292,7 +292,7 @@ Semantic Object Model
 
 ## 7. 阶段门禁
 
-当前状态：PRD v0.5 Compatibility Review 已完成；开发前一致性修订将 S1/S2/S6 分别升为 v0.6/v0.5/v0.5，其余保持 S3-S5 v0.4、S7-S8 v0.3、S9 v0.4，均为当前 `Approved`。当前兼容结论以 `docs/reviews/MICRO_PRE_ADR_SPEC_CONSISTENCY_REVIEW_2026-07-16.md` 为准。Micro exact suite 已物化但未执行/通过；九份 SPEC 全量 suite 仍未物化。`DQ-011..013` 继续 deferred，并采用各 SPEC 明示的最保守临时行为。
+当前状态：PRD v0.6 Compatibility Review 已完成（`docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md`，2026-08-01）：九份 SPEC 绑定同步至 `PRDv06.md` 并最小升版（S1 v0.7、S2 v0.6、S3 v0.5、S4 v0.5、S5 v0.5、S6 v0.6、S7 v0.4、S8 v0.4、S9 v0.5），无语义修订，均保持 `Approved`。历史结论以 `docs/reviews/MICRO_PRE_ADR_SPEC_CONSISTENCY_REVIEW_2026-07-16.md` 为准。PRDv06 新增语义（§14.5/§18.8/§19.5/§21.6/§24.5）无 SPEC 覆盖，须由 Year 2 slice contract 闭合。`DQ-011..013` 继续 deferred，并采用各 SPEC 明示的最保守临时行为。
 
 兼容静态验证与追踪复核通过后，当前切片恢复到 `traceable`。下一步唯一建议动作才是只为 `SLICE-MICRO-RELATIONSHIP-001` 编制必要的最小 ADR；不得借 ADR 选择长期数据库、扩展 Micro 范围或提前编码。
 

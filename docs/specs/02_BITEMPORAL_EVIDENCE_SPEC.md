@@ -5,9 +5,9 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-BTE-001` |
-| 版本 | `0.5` |
+| 版本 | `0.6` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv05.md`，PRD v0.5 |
+| 产品基线 | `PRDv06.md`，PRD v0.6 |
 | 上游基线 | `SPEC-SOM-001` v0.6，`Approved` |
 | 当前阶段 | Phase 2：Bitemporal & Evidence |
 | 下一依赖 | ChangeSet & Consistency SPEC |
@@ -793,3 +793,5 @@ suite_passed: false
 - 测试状态继续如实区分 defined、materialized、executed、passed；未物化或未执行不得称为通过。✓
 
 当前结论：本 SPEC v0.5 于 2026-07-16 完成开发前一致性修订并保持 `Approved`。本次只修正上游版本引用并补齐测试四态措辞，不改变时间、证据、查询状态、不变量、验收 ID 或 Micro 范围；测试仍未物化、执行或通过。
+
+当前结论：本 SPEC v0.6 于 2026-08-01 完成 PRD v0.6 兼容复审并保持 `Approved`。本次仅将产品基线绑定同步至 `PRDv06.md` v0.6，无语义修订；PRDv06 新增语义不属于本 SPEC 既有范围，须由对应 Year 2 slice contract 覆盖后方可实现；测试仍未物化、执行或通过。

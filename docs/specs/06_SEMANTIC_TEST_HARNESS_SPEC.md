@@ -5,9 +5,9 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-HTH-001` |
-| 版本 | `0.5` |
+| 版本 | `0.6` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv05.md`，PRD v0.5 |
+| 产品基线 | `PRDv06.md`，PRD v0.6 |
 | 上游 | S1 v0.6、S2 v0.5、S3-S5 v0.4，均 `Approved` |
 | 产品裁决 | `IQ-014`，2026-07-13 已决定 |
 | 实现状态 | 未开始 |
@@ -265,3 +265,5 @@ suite_passed: false
 - 未选择测试框架；没有伪造 Implementation Module。
 
 当前结论：本 SPEC v0.5 于 2026-07-16 完成开发前一致性修订并保持 `Approved`。本次只修正验收表的三列结构，不改变测试枚举、状态机、不变量、验收 ID、required 映射或 Micro 范围；随后 Micro exact suite 已独立物化，但未执行、未通过，其他 SPEC suite 仍未物化。
+
+当前结论：本 SPEC v0.6 于 2026-08-01 完成 PRD v0.6 兼容复审并保持 `Approved`。本次仅将产品基线绑定同步至 `PRDv06.md` v0.6，无语义修订；PRDv06 新增语义不属于本 SPEC 既有范围，须由对应 Year 2 slice contract 覆盖后方可实现；测试仍未物化、执行或通过。

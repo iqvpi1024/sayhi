@@ -96,34 +96,34 @@ function Validate-MicroTextBlock([string]$label, [string]$block) {
     Add-Check "$label UTF-8 locator/hash agree on $($bytes.Length) bytes"
 }
 
-$expectedPreviousPrdHash = 'F2A4D795FC8A8131176F9E2FC3B624270038B455851D895B5AD97E05D4F171BC'
-$expectedCurrentPrdHash = '34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7'
-$actualPreviousPrdHash = Get-CanonicalTextHash 'PRDv04.md'
-$actualCurrentPrdHash = Get-CanonicalTextHash 'PRDv05.md'
+$expectedPreviousPrdHash = '34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7'
+$expectedCurrentPrdHash = '4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8'
+$actualPreviousPrdHash = Get-CanonicalTextHash 'PRDv05.md'
+$actualCurrentPrdHash = Get-CanonicalTextHash 'PRDv06.md'
 if ($actualPreviousPrdHash -ne $expectedPreviousPrdHash) {
-    $rawHash = (Get-FileHash -LiteralPath (Join-Path $root 'PRDv04.md') -Algorithm SHA256).Hash
-    Add-Error "Historical PRD v0.4 canonical LF hash mismatch: canonical=$actualPreviousPrdHash raw=$rawHash"
+    $rawHash = (Get-FileHash -LiteralPath (Join-Path $root 'PRDv05.md') -Algorithm SHA256).Hash
+    Add-Error "Historical PRD v0.5 canonical LF hash mismatch: canonical=$actualPreviousPrdHash raw=$rawHash"
 } else {
-    Add-Check 'Historical PRD v0.4 canonical LF hash remains immutable'
+    Add-Check 'Historical PRD v0.5 canonical LF hash remains immutable'
 }
 if ($actualCurrentPrdHash -ne $expectedCurrentPrdHash) {
-    $rawHash = (Get-FileHash -LiteralPath (Join-Path $root 'PRDv05.md') -Algorithm SHA256).Hash
-    Add-Error "Current PRD v0.5 canonical LF hash mismatch: canonical=$actualCurrentPrdHash raw=$rawHash"
+    $rawHash = (Get-FileHash -LiteralPath (Join-Path $root 'PRDv06.md') -Algorithm SHA256).Hash
+    Add-Error "Current PRD v0.6 canonical LF hash mismatch: canonical=$actualCurrentPrdHash raw=$rawHash"
 } else {
-    Add-Check 'Current PRD v0.5 canonical LF hash matches the approved product baseline'
+    Add-Check 'Current PRD v0.6 canonical LF hash matches the approved product baseline'
 }
 $productIndex = Read-RepoFile 'docs/product/CURRENT_PRODUCT_BASELINE.md'
 foreach ($requiredIndexValue in @(
-    'current_prd_path: PRDv05.md',
+    'current_prd_path: PRDv06.md',
     "current_prd_canonical_lf_sha256: $expectedCurrentPrdHash",
-    'previous_prd_path: PRDv04.md',
+    'previous_prd_path: PRDv05.md',
     "previous_prd_canonical_lf_sha256: $expectedPreviousPrdHash"
 )) {
     if (-not $productIndex.Contains($requiredIndexValue)) {
         Add-Error "Product baseline index missing or stale: $requiredIndexValue"
     }
 }
-Add-Check 'Product baseline index points to PRD v0.5 and protects v0.4 history'
+Add-Check 'Product baseline index points to PRD v0.6 and protects v0.4/v0.5 history'
 
 $attributes = Read-RepoFile '.gitattributes'
 foreach ($requiredAttribute in @('.gitattributes text eol=lf', '*.md text eol=lf', '*.ps1 text eol=lf', '*.yaml text eol=lf', '*.yml text eol=lf')) {
@@ -166,15 +166,15 @@ if ($errors.Count -eq $workflowErrorsBefore) {
 }
 
 $specs = [ordered]@{
-    SOM = @{ Path = 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'; Version = '0.6'; Tests = 28; Invariants = 16 }
-    BTE = @{ Path = 'docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md'; Version = '0.5'; Tests = 38; Invariants = 16 }
-    CS  = @{ Path = 'docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md'; Version = '0.4'; Tests = 32; Invariants = 16 }
-    PAP = @{ Path = 'docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md'; Version = '0.4'; Tests = 31; Invariants = 16 }
-    SHP = @{ Path = 'docs/specs/05_SHILING_POLICY_SPEC.md'; Version = '0.4'; Tests = 34; Invariants = 14 }
-    HTH = @{ Path = 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md'; Version = '0.5'; Tests = 27; Invariants = 12 }
-    SIP = @{ Path = 'docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md'; Version = '0.3'; Tests = 27; Invariants = 14 }
-    MCP = @{ Path = 'docs/specs/08_MCP_CONTRACT_SPEC.md'; Version = '0.3'; Tests = 27; Invariants = 12 }
-    IMM = @{ Path = 'docs/specs/09_INGESTION_MIGRATION_SPEC.md'; Version = '0.4'; Tests = 31; Invariants = 17 }
+    SOM = @{ Path = 'docs/specs/01_SEMANTIC_OBJECT_MODEL_SPEC.md'; Version = '0.7'; Tests = 28; Invariants = 16 }
+    BTE = @{ Path = 'docs/specs/02_BITEMPORAL_EVIDENCE_SPEC.md'; Version = '0.6'; Tests = 38; Invariants = 16 }
+    CS  = @{ Path = 'docs/specs/03_CHANGESET_CONSISTENCY_SPEC.md'; Version = '0.5'; Tests = 32; Invariants = 16 }
+    PAP = @{ Path = 'docs/specs/04_PRIVACY_ACCESS_POLICY_SPEC.md'; Version = '0.5'; Tests = 31; Invariants = 16 }
+    SHP = @{ Path = 'docs/specs/05_SHILING_POLICY_SPEC.md'; Version = '0.5'; Tests = 34; Invariants = 14 }
+    HTH = @{ Path = 'docs/specs/06_SEMANTIC_TEST_HARNESS_SPEC.md'; Version = '0.6'; Tests = 27; Invariants = 12 }
+    SIP = @{ Path = 'docs/specs/07_STORAGE_INDEX_PORTABILITY_SPEC.md'; Version = '0.4'; Tests = 27; Invariants = 14 }
+    MCP = @{ Path = 'docs/specs/08_MCP_CONTRACT_SPEC.md'; Version = '0.4'; Tests = 27; Invariants = 12 }
+    IMM = @{ Path = 'docs/specs/09_INGESTION_MIGRATION_SPEC.md'; Version = '0.5'; Tests = 31; Invariants = 17 }
 }
 
 $allTestIds = [System.Collections.Generic.HashSet[string]]::new()
@@ -201,10 +201,10 @@ foreach ($prefix in $specs.Keys) {
     if (-not [regex]::IsMatch($content, '(?m)^\| [^|\r\n]+ \| `Approved` \|$')) {
         Add-Error "$prefix is not Approved"
     }
-    $hasCurrentProductBaseline = $content.Contains('`PRDv05.md`') -and $content.Contains('PRD v0.5')
+    $hasCurrentProductBaseline = $content.Contains('`PRDv06.md`') -and $content.Contains('PRD v0.6')
     $hasHistoricalProductReference = $content.Contains('PRDv04.md')
     if (($hasCurrentProductBaseline -eq $false) -or ($hasHistoricalProductReference -eq $true)) {
-        Add-Error "$prefix does not bind exclusively to the current PRD v0.5 baseline"
+        Add-Error "$prefix does not bind exclusively to the current PRD v0.6 baseline"
     }
     foreach ($flag in @('suite_defined=true', 'suite_materialized=false', 'suite_executed=false', 'suite_passed=false')) {
         if (-not $content.Contains($flag)) {
@@ -382,7 +382,7 @@ if (-not $requiredBlock.Success) {
     Add-Check "Micro required mapping covers 10 scenarios and $($requiredUpstreamRefs.Count) unique upstream tests"
 }
 
-$prd = Read-RepoFile 'PRDv05.md'
+$prd = Read-RepoFile 'PRDv06.md'
 $matrix = Read-RepoFile 'docs/traceability/REQUIREMENTS_MATRIX.md'
 $prdFrs = @([regex]::Matches($prd, '\bFR-[0-9]{3}\b') | ForEach-Object { $_.Value } | Sort-Object -Unique)
 $matrixRowMatches = [regex]::Matches($matrix, '(?m)^\| (FR-[0-9]{3}) \|')
@@ -526,8 +526,10 @@ $privacyFiles = @(
     Get-Item -LiteralPath (Join-Path $root 'AGENTS.md')
     Get-Item -LiteralPath (Join-Path $root 'PRDv04.md')
     Get-Item -LiteralPath (Join-Path $root 'PRDv05.md')
+    Get-Item -LiteralPath (Join-Path $root 'PRDv06.md')
     Get-Item -LiteralPath (Join-Path $root 'docs/product/CURRENT_PRODUCT_BASELINE.md')
     Get-Item -LiteralPath (Join-Path $root 'docs/reviews/PRD_V05_SPEC_COMPATIBILITY_REVIEW.md')
+    Get-Item -LiteralPath (Join-Path $root 'docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md')
     Get-ChildItem -LiteralPath (Join-Path $root 'docs/specs') -Recurse -File -Filter '*.md'
     Get-ChildItem -LiteralPath (Join-Path $root 'docs/testing') -Recurse -File -Filter '*.md'
     Get-ChildItem -LiteralPath (Join-Path $root 'docs/process') -Recurse -File -Filter '*.md'

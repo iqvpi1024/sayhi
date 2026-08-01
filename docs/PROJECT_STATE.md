@@ -2,17 +2,17 @@
 
 ## 1. 恢复入口
 
-每次任务按 `AGENTS.md` 的顺序恢复。当前产品语义以 `docs/product/CURRENT_PRODUCT_BASELINE.md` 指向的 `PRDv05.md` v0.5 为准；历史 PRD、SPEC、结果和 tag 保留审计价值，不得覆盖动态状态。
+每次任务按 `AGENTS.md` 的顺序恢复。当前产品语义以 `docs/product/CURRENT_PRODUCT_BASELINE.md` 指向的 `PRDv06.md` v0.6 为准；历史 PRD、SPEC、结果和 tag 保留审计价值，不得覆盖动态状态。
 
 ## 2. 当前快照
 
 | 字段 | 值 |
 |---|---|
 | 项目 | 识海 Noetide |
-| 当前产品基线 | `PRDv05.md` v0.5 Approved，canonical LF SHA-256 `34DA32FF0C7CE7223ACC28755C16A9244FD42644C436666C41CC755E9FC4C8D7` |
+| 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
 | 当前公开发布 | `v0.2.0-beta` GitHub prerelease 已发布（D3 完成） |
-| 当前工作切片 | 无 active slice；`DEC-Y2-ENTRY-001` 已定 Year 2 入口，`PRDv06.md` 草案已完成待批准 |
-| 当前阶段 | `product_defined`（PRDv06 Draft）；首年全部 `recovery_point_published` |
+| 当前工作切片 | 无 active slice；PRDv06 已 Approved、S1-S9 兼容复核完成，待 Y2-S1 切片决策 |
+| 当前阶段 | `product_decided`（Y2-S1 决策待出）；首年全部 `recovery_point_published` |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
 | tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
@@ -82,6 +82,7 @@
 66. D3 发布已执行（2026-07-26）：annotated tag `v0.2.0-beta` 已创建并推送。计划偏差如实记录：tag 实际打在 `08095cc`（含 D3 发布说明文档），而非 `D3_RELEASE_PLAN.md` §3.1 字面指定的 `d2-installer-rp-20260726`（`db2f0cc`）。从 tag 重建产物并复核 SHA-256 一致（commit `963e6e7`，smoke 通过）；GitHub prerelease 已创建并上传 ZIP + SHA256SUMS 两个附件；经 GitHub API 复核远端附件 digest 与本地一致；README 双语化（`fd8a023`）为发布收尾提交，main 已推送至 origin。
 67. `DEC-Y2-ENTRY-001` 已裁决（2026-07-26，产品负责人委托代理定案）：模型接入本地优先 + 云端显式授权 + 红线舱室 local-only；首个连接器为本地文件夹文本导入；真实数据红线与真实数据生产合同前置；本地 Web UI（stdlib、127.0.0.1、离线）；MCP runtime 后置；Y2-S1..S5 排序；授权起草 PRDv06。仅文档与决策，无业务编码。
 68. `PRDv06.md` 草案已完成（2026-07-27）：以 v0.5 全文为底，仅并入 §2.2 五块新语义（§14.5 模型接入政策、§21.6 真实数据生产合同、§24.5 Year 2 切片、§18.8 本地 Web UI、§19.5 MCP 门禁时机）+ Case H + 风险/DQ 同步；结构自查 27 章、32 FR、围栏配对正常；文档状态 Draft，产品基线索引仍指向 v0.5，待 `DEC-PRD-V06-001` 批准后切换并做 S1-S9 兼容复核。
+69. `DEC-PRD-V06-001` 已批准（2026-08-01）：`PRDv06.md` v0.6 成为当前产品基线（hash `4513B268...CAD8`），v0.5 转只读；`CURRENT_PRODUCT_BASELINE.md` 索引已切换；九份 SPEC 完成 v0.6 兼容复核（`PRD_V06_SPEC_COMPATIBILITY_REVIEW.md`，绑定同步 + 最小升版：S1 v0.7、S2 v0.6、S3 v0.5、S4 v0.5、S5 v0.5、S6 v0.6、S7 v0.4、S8 v0.4、S9 v0.5，无语义修订）；两个 baseline validator 已同步 v05/v06 版本对并实际通过；业务编码仍未开始。
 
 ## 4. 真实验证结果
 
@@ -163,6 +164,7 @@
 | D2 一键安装 | `D2_BETA_V0.2.0_VERIFICATION.md`：构建 exit 0（产物 SHA-256 `3798971cb5471043bf3b0bf79e32b668bb85c6fdd9807ad70dd120bc47264147`）；clean-install、真实状态、升级（自动数据备份+回滚点）、卸载（保留数据/显式删除+强制校验备份）、三项失败行为全部真实验证通过；回归 392 OK 0 skip；21 个 suite validator 全 PASSED；未发布 GitHub Release |
 | D3 发布核验 | GitHub API 附件 digest：`Noetide-beta-v0.2.0-win64.zip` = `sha256:3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8`、`SHA256SUMS-0.2.0-win64.txt` = `sha256:7cd7fae68d662d0e55a534ed30014a8d02645dec6a1044bdc4716a3495f3f29a`，与 `D3_RELEASE_PLAN.md` 记录及本地 `dist/` 复核哈希逐项一致；prerelease published at 2026-07-26T06:59:35Z；tag 已推送远端 |
 | DEC-Y2-ENTRY-001 文档变更 | `validate_product_baseline.ps1` exit 0；`validate_spec_baseline.ps1` exit 0；`git diff --check` exit 0（2026-07-26，静态校验，非业务测试） |
+| DEC-PRD-V06-001 基线切换 | `validate_product_baseline.ps1` exit 0（v04/v05 immutable、v06 approved、27 章、32 FR、12 对象、DQ-001..013、隐私与围栏通过）；`validate_spec_baseline.ps1` exit 0（275 测试 ID、133 不变量、32 FR 行、185 引用、9 SPEC 绑定 v0.6、197 文件隐私扫描、643 文件围栏通过）（2026-08-01，静态校验，非业务测试） |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -175,4 +177,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**`PRDv06.md` 草案已完成。下一步唯一动作：产品负责人审阅草案并形成 `DEC-PRD-V06-001` 批准决定（更新 `docs/product/CURRENT_PRODUCT_BASELINE.md` 索引与 hash、v0.5 转只读、记录批准）；随后 S1-S9 逐份兼容复核。批准前不得开始业务编码，不得把草案当 Approved 基线引用。**
+**PRDv06 已 Approved、S1-S9 兼容复核完成。下一步唯一动作：Y2-S1（真实文件夹文本导入）切片决策 `DEC-Y2-S1-001`，随后按门禁链推进（SPEC applicability review -> slice contract -> traceability -> ADR -> suite 物化 -> Implementation Plan -> 编码）。**

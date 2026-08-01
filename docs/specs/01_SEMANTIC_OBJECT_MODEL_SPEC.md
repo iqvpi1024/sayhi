@@ -5,9 +5,9 @@
 | 字段 | 值 |
 |---|---|
 | 文档 ID | `SPEC-SOM-001` |
-| 版本 | `0.6` |
+| 版本 | `0.7` |
 | 状态 | `Approved` |
-| 产品基线 | `PRDv05.md`，PRD v0.5 |
+| 产品基线 | `PRDv06.md`，PRD v0.6 |
 | 产品裁决 | `BQ-001` 至 `BQ-005`，2026-07-13 已决定 |
 | 当前阶段 | Phase 1：Semantic Object Model |
 | 下一依赖 | Bitemporal & Evidence SPEC |
@@ -25,7 +25,7 @@
 
 1. 明确区分 Source、事实陈述、观点、推断、分析、预测、虚构和 Hypothesis。
 2. 明确区分规范对象与 Derived View，阻止派生结果反向成为事实证据。
-3. 封闭 PRD v0.5 的 12 个核心对象，并处理 PRD 中出现的别名词。
+3. 封闭 PRD v0.6 的 12 个核心对象，并处理 PRD 中出现的别名词。
 4. 为 Micro-MVP 的 `Source`、`Entity`、`Assertion`、`Relationship`、`State`/`RelationshipState`、`ChangeSet` 给出可测试的字段与边界。
 5. 保证联系状态变化不覆盖历史，不自动修改 `origin`、`role`、`trust`、`closeness` 或人格判断。
 6. 为后续双时态、ChangeSet、一致性、权限、存储和测试 SPEC 提供稳定上游合同。
@@ -58,7 +58,7 @@
 | State | 某主体在有效时间内的可变化值；历史 State 不因当前值变化而被覆盖 |
 | RelationshipState | `State` 的语义配置，`subject_ref` 指向 `Relationship`；不是独立核心对象 |
 | Review Status | 某条 Assertion/State 的审查处置状态，不等同于内容类型或查询回答状态 |
-| Answer Status | 事实型回答的六态结果：`verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown`；直接采用 PRD v0.5 §9.4 的正式六态 |
+| Answer Status | 事实型回答的六态结果：`verified`、`unconfirmed`、`disputed`、`not_covered`、`stale`、`unknown`；直接采用 PRD v0.6 §9.4 的正式六态 |
 | Evidence Ref | 指向 Source 及其稳定 locator 的引用；Derived View 不能成为直接证据 |
 | narrative_context | 结构化枚举无法表达的原话、背景或用户说明的可追溯容器 |
 | supersede | 以新修订替代当前解释，同时保留旧记录、证据和审计历史 |
@@ -235,7 +235,7 @@ inferred | analysis | predicted | fictional
 
 `disputed` 和 `unknown` MUST NOT 作为 `assertion_kind`。用户确认 MUST NOT 把 `opinion`、`inferred`、`analysis`、`predicted` 或 `fictional` 改写为 `observed`。
 
-上述八态直接采用 PRD v0.5 §8.1：`disputed` 属于 `review_status`/`answer_status`，`unknown` 属于 `answer_status` 或有类型的 State value；二者都不描述 Assertion 的内容来源或性质。依据：`BQ-002` 与 `SOM-INV-004`。
+上述八态直接采用 PRD v0.6 §8.1：`disputed` 属于 `review_status`/`answer_status`，`unknown` 属于 `answer_status` 或有类型的 State value；二者都不描述 Assertion 的内容来源或性质。依据：`BQ-002` 与 `SOM-INV-004`。
 
 ### 6.5 Relationship
 
@@ -779,3 +779,5 @@ suite_passed: false
 - 测试状态仍如实区分 defined、materialized、executed、passed；未物化或未执行不得称为通过。
 
 当前结论：本 SPEC v0.6 于 2026-07-16 完成开发前一致性修订并保持 `Approved`。本次只消除 §7.1 与 §8.1 的状态路径矛盾并补齐测试四态措辞，不改变对象、字段、状态集合、验收 ID 或 Micro 范围；测试仍未物化、执行或通过，也不授权扩大 Micro-MVP 或实现 Hypothesis 工作流。
+
+当前结论：本 SPEC v0.7 于 2026-08-01 完成 PRD v0.6 兼容复审并保持 `Approved`。本次仅将产品基线绑定与 §8.1/§9.4/12 对象引用同步至 `PRDv06.md` v0.6，无语义修订；PRDv06 新增语义不属于本 SPEC 既有范围，须由对应 Year 2 slice contract 覆盖后方可实现；测试仍未物化、执行或通过。
