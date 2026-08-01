@@ -682,6 +682,15 @@ class SemanticStore:
         ).fetchone()
         return json.loads(row[0]) if row else None
 
+    def source_hashes_by_kind(self, source_kind: str) -> set[str]:
+        """Narrow read-only helper (ADR-0020): content hashes of one source_kind."""
+        return {
+            row[0]
+            for row in self._connection.execute(
+                "SELECT content_hash FROM source_records WHERE source_kind = ?", (source_kind,)
+            )
+        }
+
     def append_source(self, source: Mapping[str, Any], receipt: Mapping[str, Any]) -> None:
         """Store one Source and its receipt without touching Canonical Context."""
         with self.transaction() as connection:
