@@ -387,3 +387,20 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 | `路线图 C6` | Beta 门禁文档核验 | `SPEC-C6-RELEASE-001` §2.2/§3 | `C6-008` | `tests.runner.run_c6_release_audit` | `passed`（c6-20260726.json） |
 
 状态：`product_decided=true`（`DEC-MVP-C-RELEASE-001`，2026-07-26）、`spec_approved=true`（`C6-CONTRACT-REVIEW-001`，2026-07-26）、`traceable=true`、`adr_accepted=true`（`ADR-0018`，2026-07-26）、`suite_defined=true`、`suite_materialized=true`（2026-07-26）、`suite_executed=true`、`suite_passed=true`（2026-07-26，审计 runner 同一次 run 8/8 passed，immutable result `docs/testing/results/c6-20260726.json`，manifest 已绑定；run1 失败留痕）、`gate_review_passed=true`（`C6_RELEASE_GATE_REVIEW_2026-07-26.md`，P0=0/P1=0）、`verified=true`（recovery tag `c6-mvp-release-gate-rp-20260726`）。
+
+## 4.21 Active Slice：Y2-S1 真实文件夹文本导入
+
+`SLICE-Y2-S1-FOLDER-IMPORT-001` 只实现 FR-302 的第一个连接器切片（`DEC-Y2-ENTRY-001`/`DEC-Y2-S1-001`）：本地文件夹 `.txt`/`.md` 批量导入 Source Vault + 单次 poll 轮询监视。它不代表语义解释（Y2-S2）、其余连接器或真实数据模式开放的单独宣告。
+
+- `PRD-§24.5 Y2-S1`、`FR-302`：批量导入 3 有效文件 stored、字段齐全、报告计数正确 -> `SPEC-Y2S1-FOLDER-IMPORT-001` §2-§7；S1 §6.2；S9 §4-§7 -> `Y2S1-001` -> `TBD` -> `not_executed`
+- `PRD-§9.2`、`§19.4`：每文件哈希、字节长度、来源时间、CoverageWindow、语言逐项核对 -> `SPEC-Y2S1-FOLDER-IMPORT-001` §2.1-§2.2；S9 §6 -> `Y2S1-002` -> `TBD` -> `not_executed`
+- `PRD-§21.1`：重复内容不同文件名，duplicate 指向既有 source_id -> `SPEC-Y2S1-FOLDER-IMPORT-001` §2.2/§8 -> `Y2S1-003` -> `TBD` -> `not_executed`
+- `PRD-§21.1`：重复扫描零新 Source -> `SPEC-Y2S1-FOLDER-IMPORT-001` §3/§8 -> `Y2S1-004` -> `TBD` -> `not_executed`
+- `PRD-§24.5`：非白名单扩展名 skipped、计数正确、其余正常 -> `SPEC-Y2S1-FOLDER-IMPORT-001` §3/§5 -> `Y2S1-005` -> `TBD` -> `not_executed`
+- `PRD-§21.1`、`§25.1`：根外/穿越/逃逸 rejected 零写入 -> `SPEC-Y2S1-FOLDER-IMPORT-001` §5/§8 -> `Y2S1-006` -> `TBD` -> `not_executed`
+- `PRD-§25.2`：无效 UTF-8 rejected(invalid_utf8)，其余正常 -> `SPEC-Y2S1-FOLDER-IMPORT-001` §5/§8 -> `Y2S1-007` -> `TBD` -> `not_executed`
+- `PRD-§21.6.5`：注入中断后重跑，终态与无中断一致 -> `SPEC-Y2S1-FOLDER-IMPORT-001` §6/§8 -> `Y2S1-008` -> `TBD` -> `not_executed`
+- `PRD-§24.5`：两次 poll，第一次导入新增、第二次零新增、游标只前进 -> `SPEC-Y2S1-FOLDER-IMPORT-001` §2.4/§3 -> `Y2S1-009` -> `TBD` -> `not_executed`
+- `PRD-§11.1`、`§21.6`：横切——Canonical digest/data_revision/Core View 不变、报告确定性、profile 外 fail closed -> `SPEC-Y2S1-FOLDER-IMPORT-001` §4/§7/§8 -> `Y2S1-010` -> `TBD` -> `not_executed`
+
+状态：`product_decided=true`（`DEC-Y2-S1-001`，2026-08-01）、`spec_applicability=pass_with_slice_contract_required`（`Y2S1-SPEC-APPLICABILITY-001`，2026-08-01）、`slice_contract=SPEC-Y2S1-FOLDER-IMPORT-001 v0.1`、`traceable=true`、`suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
