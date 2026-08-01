@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-PRDV06-APPROVED-001
-slice_id: none_y2s1_decision_pending
-current_phase: product_decided_prdv06_approved
+handoff_id: HANDOFF-Y2-S1-VERIFIED-001
+slice_id: none_y2s2_decision_pending
+current_phase: recovery_point_published_y2s1
 product_baseline:
   path: PRDv06.md
   version: 0.6
@@ -18,6 +18,7 @@ release:
   published_at: 2026-07-26T06:59:35Z
   delivery_level: D3_github_release_beta
 latest_recovery_points:
+  - y2s1-folder-import-rp-20260801
   - v0.2.0-beta
   - d2-installer-rp-20260726
   - c6-mvp-release-gate-rp-20260726
@@ -29,10 +30,10 @@ decision_ref: DEC-PRD-V06-001 (baseline), DEC-Y2-ENTRY-001 (scope)
 adr_ref: ADR-0019 (installer/upgrade/signing/channel)
 verification: docs/releases/D2_BETA_V0.2.0_VERIFICATION.md + D3 remote digest check via GitHub API (2026-07-26, matched)
 artifact: Noetide-beta-v0.2.0-win64.zip (sha256 3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8, published)
-next_role: Slice Decision Owner (Y2-S1)
-next_single_action: 形成 Y2-S1（真实文件夹文本导入）切片决策 DEC-Y2-S1-001，随后 SPEC applicability review（重点 S9/S7/S1/S5）
+next_role: Slice Decision Owner (Y2-S2)
+next_single_action: 形成 Y2-S2（模型能力接口 + 本地模型提议式整理）切片决策 DEC-Y2-S2-001，随后 SPEC applicability review（重点 S5/S1/S2）
 scope_in:
-  - Y2-S1 切片决策与 SPEC applicability review
+  - Y2-S2 切片决策与 SPEC applicability review
   - slice contract 起草准备
 scope_out:
   - real personal data
@@ -53,10 +54,11 @@ stop_condition: PRDv06 草案超出 DEC-Y2-ENTRY-001 §2.7 授权范围时停止
 - `DEC-Y2-ENTRY-001` 已裁决（2026-07-26）：本地模型优先 + 云端显式授权 + 红线舱室 local-only；首连接器 = 本地文件夹文本导入；真实数据生产合同前置；本地 Web UI；MCP 后置；Y2-S1..S5 排序；授权起草 PRDv06。
 - `PRDv06.md` 草案已完成（2026-07-27，Draft 状态）：27 章、32 FR、结构自查通过；基线索引仍指向 PRDv05，待 DEC-PRD-V06-001 批准。
 - `DEC-PRD-V06-001` 已批准（2026-08-01）：PRDv06 成为当前基线（hash `4513B268...CAD8`），v0.5 转只读；S1-S9 v0.6 兼容复核完成（绑定同步 + 最小升版，无语义修订）；两个 baseline validator 已同步并 exit 0。
+- Y2-S1 已 verified（2026-08-01）：文件夹导入 + 单次 poll 监视全链通过；official runner 10/10 passed/current（`y2s1-20260801.json`）；回归 412 OK 0 skip；Gate Review P0=0/P1=0；recovery tag `y2s1-folder-import-rp-20260801`。
 
 ## 回归基线（2026-07-26）
 
 - 全量 configured-adapter semantic regression：392 tests OK、0 skipped（16 个 adapter 环境变量，值为模块路径形式 `noetide_micro.<x>_testing_adapter`）。
 - suite validators：21 个全部 PASSED。
 - 已 verified：Micro、A1-A6、B1-B6、C1-C6、Synthetic Ingestion、Context Pack、D2 Installer、D3 Release。
-- 剩余路线：Y2-S1（真实文件夹导入）切片决策 -> slice contract -> traceability -> ADR -> suite -> plan -> 编码。
+- 剩余路线：Y2-S2（本地模型提议式整理）-> Y2-S3（本地 Web UI）-> Y2-S4（云端可选）-> Y2-S5（MCP）。
