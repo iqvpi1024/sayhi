@@ -1,0 +1,700 @@
+{
+  "schema_version": "noetide.y2s2-oracles.v1",
+  "scenarios": {
+    "Y2S2-001": {
+      "result": {
+        "batch": {
+          "batch_id": "batch_071afb349e4d9649",
+          "backend_kind": "fixture",
+          "model_id": "model_fixture_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1",
+          "sources_seen": [
+            "src_y2s2_001",
+            "src_y2s2_002"
+          ],
+          "candidates_proposed": [
+            {
+              "candidate_id": "cand_be3cee9ef953f263",
+              "candidate_kind": "entity",
+              "payload": {
+                "display_name": "识海实验",
+                "summary": "完成了一次识海记录实验"
+              },
+              "evidence_refs": [
+                {
+                  "locator": {
+                    "end_byte_exclusive": 37,
+                    "scheme": "text_utf8_byte_range_v1",
+                    "start_byte": 0
+                  },
+                  "source_id": "src_y2s2_001"
+                }
+              ],
+              "review_status": "unconfirmed",
+              "provenance": {
+                "model_id": "model_fixture_v1",
+                "model_version": "v1",
+                "prompt_version": "prompt_v1",
+                "backend_kind": "fixture",
+                "proposed_at": "2026-08-01T00:00:00+00:00"
+              }
+            },
+            {
+              "candidate_id": "cand_065ad5f53afdf1c9",
+              "candidate_kind": "episode",
+              "payload": {
+                "occurred_at": "2026-08-01T09:00:00+00:00",
+                "summary": "完成识海实验记录"
+              },
+              "evidence_refs": [
+                {
+                  "locator": {
+                    "end_byte_exclusive": 37,
+                    "scheme": "text_utf8_byte_range_v1",
+                    "start_byte": 0
+                  },
+                  "source_id": "src_y2s2_001"
+                }
+              ],
+              "review_status": "unconfirmed",
+              "provenance": {
+                "model_id": "model_fixture_v1",
+                "model_version": "v1",
+                "prompt_version": "prompt_v1",
+                "backend_kind": "fixture",
+                "proposed_at": "2026-08-01T00:00:00+00:00"
+              }
+            },
+            {
+              "candidate_id": "cand_f6e04278b41b557c",
+              "candidate_kind": "commitment",
+              "payload": {
+                "due_by": "2026-08-07T00:00:00+08:00",
+                "statement": "周五前整理本地文件夹"
+              },
+              "evidence_refs": [
+                {
+                  "locator": {
+                    "end_byte_exclusive": 40,
+                    "scheme": "text_utf8_byte_range_v1",
+                    "start_byte": 0
+                  },
+                  "source_id": "src_y2s2_002"
+                }
+              ],
+              "review_status": "unconfirmed",
+              "provenance": {
+                "model_id": "model_fixture_v1",
+                "model_version": "v1",
+                "prompt_version": "prompt_v1",
+                "backend_kind": "fixture",
+                "proposed_at": "2026-08-01T00:00:00+00:00"
+              }
+            }
+          ],
+          "rejected_outputs": [],
+          "proposed_at": "2026-08-01T00:00:00+00:00"
+        },
+        "candidates": [
+          {
+            "candidate_id": "cand_be3cee9ef953f263",
+            "candidate_kind": "entity",
+            "payload": {
+              "display_name": "识海实验",
+              "summary": "完成了一次识海记录实验"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          },
+          {
+            "candidate_id": "cand_065ad5f53afdf1c9",
+            "candidate_kind": "episode",
+            "payload": {
+              "occurred_at": "2026-08-01T09:00:00+00:00",
+              "summary": "完成识海实验记录"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          },
+          {
+            "candidate_id": "cand_f6e04278b41b557c",
+            "candidate_kind": "commitment",
+            "payload": {
+              "due_by": "2026-08-07T00:00:00+08:00",
+              "statement": "周五前整理本地文件夹"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 40,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_002"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          }
+        ],
+        "all_unconfirmed": true,
+        "canonical_unchanged": true,
+        "revision_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-002": {
+      "result": {
+        "candidates": [
+          {
+            "candidate_id": "cand_be3cee9ef953f263",
+            "candidate_kind": "entity",
+            "payload": {
+              "display_name": "识海实验",
+              "summary": "完成了一次识海记录实验"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          },
+          {
+            "candidate_id": "cand_065ad5f53afdf1c9",
+            "candidate_kind": "episode",
+            "payload": {
+              "occurred_at": "2026-08-01T09:00:00+00:00",
+              "summary": "完成识海实验记录"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          }
+        ],
+        "field_checks": {
+          "candidate_id_prefix": true,
+          "candidate_id_length": true,
+          "review_status_closed": true,
+          "evidence_refs_all_imported": true,
+          "provenance_complete": true
+        },
+        "determinism_byte_identical": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-003": {
+      "result": {
+        "batch": {
+          "batch_id": "batch_f01f98429fd6a070",
+          "backend_kind": "fixture",
+          "model_id": "model_fixture_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1",
+          "sources_seen": [
+            "src_y2s2_bad_json",
+            "src_y2s2_bad_missing",
+            "src_y2s2_bad_kind"
+          ],
+          "candidates_proposed": [],
+          "rejected_outputs": [
+            {
+              "source_id": "src_y2s2_bad_json",
+              "reason": "invalid_json"
+            },
+            {
+              "source_id": "src_y2s2_bad_missing",
+              "reason": "missing_field"
+            },
+            {
+              "source_id": "src_y2s2_bad_kind",
+              "reason": "unknown_kind"
+            }
+          ],
+          "proposed_at": "2026-08-01T00:00:00+00:00"
+        },
+        "zero_candidates": true,
+        "canonical_unchanged": true,
+        "revision_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-004": {
+      "result": {
+        "clean_source_batch": {
+          "batch_id": "batch_01e7394c726d97f8",
+          "backend_kind": "fixture",
+          "model_id": "model_fixture_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1",
+          "sources_seen": [
+            "src_y2s2_003"
+          ],
+          "candidates_proposed": [
+            {
+              "candidate_id": "cand_2f9bc891cacdc057",
+              "candidate_kind": "assertion",
+              "payload": {
+                "stance": "supports",
+                "statement": "用户指令不是事实"
+              },
+              "evidence_refs": [
+                {
+                  "locator": {
+                    "end_byte_exclusive": 73,
+                    "scheme": "text_utf8_byte_range_v1",
+                    "start_byte": 0
+                  },
+                  "source_id": "src_y2s2_003"
+                }
+              ],
+              "review_status": "unconfirmed",
+              "provenance": {
+                "model_id": "model_fixture_v1",
+                "model_version": "v1",
+                "prompt_version": "prompt_v1",
+                "backend_kind": "fixture",
+                "proposed_at": "2026-08-01T00:00:00+00:00"
+              }
+            }
+          ],
+          "rejected_outputs": [],
+          "proposed_at": "2026-08-01T00:00:00+00:00"
+        },
+        "clean_all_unconfirmed": true,
+        "escalated_batch": {
+          "batch_id": "batch_1bc68eacd3dedf65",
+          "backend_kind": "fixture",
+          "model_id": "model_fixture_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1",
+          "sources_seen": [
+            "src_y2s2_004"
+          ],
+          "candidates_proposed": [],
+          "rejected_outputs": [
+            {
+              "source_id": "src_y2s2_004",
+              "reason": "escalation_field"
+            }
+          ],
+          "proposed_at": "2026-08-01T00:00:00+00:00"
+        },
+        "escalated_zero_candidates": true,
+        "canonical_unchanged": true,
+        "revision_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-005": {
+      "result": {
+        "candidates": [
+          {
+            "candidate_id": "cand_be3cee9ef953f263",
+            "candidate_kind": "entity",
+            "payload": {
+              "display_name": "识海实验",
+              "summary": "完成了一次识海记录实验"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          },
+          {
+            "candidate_id": "cand_065ad5f53afdf1c9",
+            "candidate_kind": "episode",
+            "payload": {
+              "occurred_at": "2026-08-01T09:00:00+00:00",
+              "summary": "完成识海实验记录"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          }
+        ],
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "candidate_ids_not_in_canonical": true,
+        "candidate_ids_not_in_evidence": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-006": {
+      "result": {
+        "fixture_allowed": {
+          "candidates_proposed": 1,
+          "all_unconfirmed": true
+        },
+        "cloud_rejected": true,
+        "cloud_backend_not_called": true,
+        "canonical_unchanged": true,
+        "revision_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-007": {
+      "result": {
+        "batch": {
+          "batch_id": "batch_4c5c832cf4acb46f",
+          "backend_kind": "local_http",
+          "model_id": "model_local_http_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1",
+          "sources_seen": [
+            "src_y2s2_006"
+          ],
+          "candidates_proposed": [
+            {
+              "candidate_id": "cand_998baf78e3b63141",
+              "candidate_kind": "assertion",
+              "payload": {
+                "stance": "supports",
+                "statement": "本机回环服务完成一次模型提议"
+              },
+              "evidence_refs": [
+                {
+                  "locator": {
+                    "end_byte_exclusive": 46,
+                    "scheme": "text_utf8_byte_range_v1",
+                    "start_byte": 0
+                  },
+                  "source_id": "src_y2s2_006"
+                }
+              ],
+              "review_status": "unconfirmed",
+              "provenance": {
+                "model_id": "model_local_http_v1",
+                "model_version": "v1",
+                "prompt_version": "prompt_v1",
+                "backend_kind": "local_http",
+                "proposed_at": "2026-08-01T00:00:00+00:00"
+              }
+            }
+          ],
+          "rejected_outputs": [],
+          "proposed_at": "2026-08-01T00:00:00+00:00"
+        },
+        "candidates": [
+          {
+            "candidate_id": "cand_998baf78e3b63141",
+            "candidate_kind": "assertion",
+            "payload": {
+              "stance": "supports",
+              "statement": "本机回环服务完成一次模型提议"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 46,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_006"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_local_http_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "local_http",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          }
+        ],
+        "all_unconfirmed": true,
+        "non_loopback_rejected": true,
+        "canonical_unchanged": true,
+        "revision_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-008": {
+      "result": {
+        "v1_candidates": [
+          {
+            "candidate_id": "cand_be3cee9ef953f263",
+            "candidate_kind": "entity",
+            "payload": {
+              "display_name": "识海实验",
+              "summary": "完成了一次识海记录实验"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          },
+          {
+            "candidate_id": "cand_065ad5f53afdf1c9",
+            "candidate_kind": "episode",
+            "payload": {
+              "occurred_at": "2026-08-01T09:00:00+00:00",
+              "summary": "完成识海实验记录"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v1",
+              "prompt_version": "prompt_v1",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          }
+        ],
+        "v2_candidates": [
+          {
+            "candidate_id": "cand_be3cee9ef953f263",
+            "candidate_kind": "entity",
+            "payload": {
+              "display_name": "识海实验",
+              "summary": "完成了一次识海记录实验"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v2",
+              "prompt_version": "prompt_v2",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          },
+          {
+            "candidate_id": "cand_065ad5f53afdf1c9",
+            "candidate_kind": "episode",
+            "payload": {
+              "occurred_at": "2026-08-01T09:00:00+00:00",
+              "summary": "完成识海实验记录"
+            },
+            "evidence_refs": [
+              {
+                "locator": {
+                  "end_byte_exclusive": 37,
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0
+                },
+                "source_id": "src_y2s2_001"
+              }
+            ],
+            "review_status": "unconfirmed",
+            "provenance": {
+              "model_id": "model_fixture_v1",
+              "model_version": "v2",
+              "prompt_version": "prompt_v2",
+              "backend_kind": "fixture",
+              "proposed_at": "2026-08-01T00:00:00+00:00"
+            }
+          }
+        ],
+        "provenance_separated": true,
+        "unregistered_activation_rejected": true,
+        "rollback_active": {
+          "model_id": "model_fixture_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        },
+        "history_retained": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-009": {
+      "result": {
+        "confirmed_changeset": {
+          "changeset_id": "changeset_y2s2_cand_be3cee9ef953f263",
+          "base_revision": "rev_000",
+          "actor": "person_alpha",
+          "candidate_ref": "cand_be3cee9ef953f263",
+          "trigger_sources": [
+            {
+              "locator": {
+                "end_byte_exclusive": 37,
+                "scheme": "text_utf8_byte_range_v1",
+                "start_byte": 0
+              },
+              "source_id": "src_y2s2_001"
+            }
+          ],
+          "status": "proposed",
+          "published_revision": null,
+          "recorded_at": "2026-08-01T00:00:00+00:00",
+          "derived_only": true
+        },
+        "unconfirmed_changeset_rejected": true,
+        "changeset_not_published": true,
+        "canonical_unchanged": true,
+        "revision_unchanged": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S2-010": {
+      "result": {
+        "determinism_byte_identical": true,
+        "profile_rejected": "y2s2_unknown_profile_v9",
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "non_loopback_rejected": true,
+        "candidate_ids_not_in_canonical": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    }
+  }
+}
