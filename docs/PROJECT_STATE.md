@@ -11,12 +11,12 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
 | 当前公开发布 | `v0.2.0-beta` GitHub prerelease 已发布（D3 完成） |
-| 当前工作切片 | Y2-S4 已 verified；待 Y2-S5（MCP runtime）切片决策 |
-| 当前阶段 | `recovery_point_published`（Y2-S4）；首年全部 `recovery_point_published` |
+| 当前工作切片 | Y2-S5 已 verified；Year 2 切片全部完成 |
+| 当前阶段 | `recovery_point_published`（Y2-S5）；首年与 Y2-S1..S5 全部 `recovery_point_published` |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
 | tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
-| 交付级别 | D1 合成预览（v0.1.3）与 D2/D3 Beta（v0.2.0 一键安装）均已发布；首年路线图切片全部 verified |
+| 交付级别 | D1 合成预览（v0.1.3）与 D2/D3 Beta（v0.2.0 一键安装）均已发布；首年路线图与 Year 2 切片全部 verified |
 | 分支 | `main`，已推送至 `origin/main` |
 
 ## 3. 已完成内容
@@ -185,6 +185,10 @@
 | Y2-S4 contract（adapter） | 10/10 passed |
 | Y2-S4 官方 suite | `docs/testing/results/y2s4-20260803.json`：同一次 run 10/10 passed/current，网络阻断、stdlib only；manifest 已绑定；全量回归 462 OK 0 skip；25 个 suite validator 全 PASSED |
 | Y2-S4 Gate Review | `Y2_S4_CLOUD_MODEL_GATE_REVIEW_2026-08-03.md`：P0=0、P1=0 |
+| Y2-S5 定向测试 | TASK-001/002：unit 8/8 passed（`mcp_runtime` + `y2s5_testing_adapter`） |
+| Y2-S5 contract（adapter） | 10/10 passed |
+| Y2-S5 官方 suite | `docs/testing/results/y2s5-20260803.json`：同一次 run 10/10 passed/current，网络阻断、stdlib only；manifest 已绑定；全量回归 480 OK 0 skip；26 个 suite validator 全 PASSED |
+| Y2-S5 Gate Review | `Y2_S5_MCP_RUNTIME_GATE_REVIEW_2026-08-03.md`：P0=0、P1=0 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -192,9 +196,9 @@
 ## 5. 风险与边界
 
 - 当前发布只允许固定合成 demo 数据。不得输入、导入、提交或推断真实个人资料、凭据或工作区外数据。
-- 该版本不是完整 PRD 产品，不实现真实导入、通用 NLP、权限/MCP runtime、同步、连接器、分享、签名安装包、升级或真实数据生产合同。
+- 该版本不是完整 PRD 产品；Y2-S5 只实现本地 MCP runtime 最小子集，不实现完整 MCP、A2A、多 Agent、账户体系、真实数据模式、大文件传输、同步、连接器、分享、签名安装包、升级或真实数据生产合同。
 - v0.2.0-beta 已发布，但未代码签名、Windows-only、无自动更新；真实数据生产合同仍未完成；不得宣称“完整一键部署”或生产可用。
 
 ## 6. 下一步唯一建议动作
 
-**Y2-S4 已 verified（recovery tag `y2s4-cloud-model-rp-20260803`）。下一步唯一动作：重开 `DQ-013` 并形成 Y2-S5（MCP runtime 最小子集）切片决策 `DEC-Y2-S5-001`，保持本地优先、最小工具、显式授权、只读优先与 fail closed，按同一门禁链推进。**
+**Y2-S5 已 verified（recovery tag `y2s5-mcp-runtime-rp-20260803`）。Year 2 路线全部切片已完成。下一步唯一动作：按用户新指令或产品负责人决定进入 Year 2 收尾、发布决策或下一任务，不得静默扩大真实数据、账户、完整 MCP/A2A/多 Agent 范围。**

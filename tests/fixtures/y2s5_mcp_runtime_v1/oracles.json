@@ -1,0 +1,934 @@
+{
+  "schema_version": "noetide.y2s5-oracles.v1",
+  "scenarios": {
+    "Y2S5-001": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "resource_ids": [
+                "src_y2s5_001",
+                "src_y2s5_002"
+              ],
+              "view_names": [
+                "person_card",
+                "relationship_timeline"
+              ]
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_001a",
+            "result_status": "ok",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-experiment.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_001"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "byte_length": 34,
+              "compartments": [
+                "general"
+              ],
+              "content": "今天完成识海实验记录。\n",
+              "content_hash": "1594d31cda61dd6e6ec3a1dc25e47cc63f5e69f137691b472ebd9005a8ca0650",
+              "coverage_window": {
+                "continuous": true,
+                "end": "2026-08-03T09:00:00+00:00",
+                "gaps": [],
+                "start": "2026-08-03T09:00:00+00:00"
+              },
+              "fields": [
+                "content",
+                "metadata"
+              ],
+              "locator": {
+                "relative_path": "2026-08-03-experiment.md",
+                "root_ref": "y2s5_mcp_runtime_v1",
+                "scheme": "text_utf8_byte_range_v1"
+              },
+              "redacted": false,
+              "source_id": "src_y2s5_001",
+              "source_kind": "y2s5_text_v1"
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_001b",
+            "result_status": "ok",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [],
+            "freshness_status": "fresh",
+            "missing_evidence": false,
+            "payload": {
+              "contact_state": "active",
+              "display_name": "Alpha"
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_001c",
+            "result_status": "ok",
+            "view_revision": "view_y2s5_1"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "request_allowed"
+        ],
+        "source_count": 4,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-002": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_002a",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_002b",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_002c",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_002d",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_002e",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "request_denied"
+        ],
+        "source_count": 4,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-003": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed_with_redaction",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-experiment.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_001"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "byte_length": 34,
+              "compartments": [
+                "general"
+              ],
+              "content_hash": "1594d31cda61dd6e6ec3a1dc25e47cc63f5e69f137691b472ebd9005a8ca0650",
+              "coverage_window": {
+                "continuous": true,
+                "end": "2026-08-03T09:00:00+00:00",
+                "gaps": [],
+                "start": "2026-08-03T09:00:00+00:00"
+              },
+              "fields": [
+                "metadata"
+              ],
+              "locator": {
+                "relative_path": "2026-08-03-experiment.md",
+                "root_ref": "y2s5_mcp_runtime_v1",
+                "scheme": "text_utf8_byte_range_v1"
+              },
+              "redacted": true,
+              "source_id": "src_y2s5_001",
+              "source_kind": "y2s5_text_v1"
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_003a",
+            "result_status": "ok",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_003b",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "request_allowed",
+          "request_denied"
+        ],
+        "source_count": 4,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": true,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-004": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-experiment.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_001"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "base_revision": "rev_000",
+              "changeset_id": "changeset_y2s5_71580ae925eb68b5",
+              "status": "proposed"
+            },
+            "receipt_ref": "changeset_y2s5_71580ae925eb68b5",
+            "request_id": "req_y2s5_004",
+            "result_status": "accepted",
+            "view_revision": "not_applicable"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "changeset_proposed",
+          "request_allowed"
+        ],
+        "source_count": 4,
+        "changeset_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-005": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-new-note.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_new"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "receipt_id": "receipt_y2s5_4fbcf6962c466bed",
+              "source_id": "src_y2s5_new",
+              "status": "stored"
+            },
+            "receipt_ref": "receipt_y2s5_4fbcf6962c466bed",
+            "request_id": "req_y2s5_005",
+            "result_status": "accepted",
+            "view_revision": "not_applicable"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "request_allowed",
+          "source_appended"
+        ],
+        "source_count": 5,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-006": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-new-note.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_new"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "receipt_id": "receipt_y2s5_4fbcf6962c466bed",
+              "source_id": "src_y2s5_new",
+              "status": "stored"
+            },
+            "receipt_ref": "receipt_y2s5_4fbcf6962c466bed",
+            "request_id": "req_y2s5_006a",
+            "result_status": "accepted",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "receipt_id": "receipt_y2s5_4fbcf6962c466bed",
+              "source_id": "src_y2s5_new",
+              "status": "stored"
+            },
+            "receipt_ref": "receipt_y2s5_4fbcf6962c466bed",
+            "request_id": "req_y2s5_006b",
+            "result_status": "accepted",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": {
+              "code": "conflict",
+              "message": "conflict"
+            },
+            "evidence_refs": [],
+            "freshness_status": "not_applicable",
+            "missing_evidence": "not_applicable",
+            "payload": {
+              "current_revision": "rev_000"
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_006c",
+            "result_status": "conflict",
+            "view_revision": "not_applicable"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "idempotent_replayed",
+          "request_allowed",
+          "request_conflict",
+          "source_appended"
+        ],
+        "source_count": 5,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-007": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": {
+              "code": "conflict",
+              "message": "conflict"
+            },
+            "evidence_refs": [],
+            "freshness_status": "not_applicable",
+            "missing_evidence": "not_applicable",
+            "payload": {
+              "current_revision": "rev_000"
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_007a",
+            "result_status": "conflict",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-experiment.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_001"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "base_revision": "rev_000",
+              "changeset_id": "changeset_y2s5_8f0dbad2a6bc4f5a",
+              "status": "proposed"
+            },
+            "receipt_ref": "changeset_y2s5_8f0dbad2a6bc4f5a",
+            "request_id": "req_y2s5_007b",
+            "result_status": "accepted",
+            "view_revision": "not_applicable"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "changeset_proposed",
+          "request_allowed",
+          "request_conflict"
+        ],
+        "source_count": 4,
+        "changeset_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-008": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_008a",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_008b",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_008c",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "request_denied"
+        ],
+        "source_count": 4,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-009": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-experiment.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_001"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "byte_length": 34,
+              "compartments": [
+                "general"
+              ],
+              "content": "今天完成识海实验记录。\n",
+              "content_hash": "1594d31cda61dd6e6ec3a1dc25e47cc63f5e69f137691b472ebd9005a8ca0650",
+              "coverage_window": {
+                "continuous": true,
+                "end": "2026-08-03T09:00:00+00:00",
+                "gaps": [],
+                "start": "2026-08-03T09:00:00+00:00"
+              },
+              "fields": [
+                "content",
+                "metadata"
+              ],
+              "locator": {
+                "relative_path": "2026-08-03-experiment.md",
+                "root_ref": "y2s5_mcp_runtime_v1",
+                "scheme": "text_utf8_byte_range_v1"
+              },
+              "redacted": false,
+              "source_id": "src_y2s5_001",
+              "source_kind": "y2s5_text_v1"
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_009a",
+            "result_status": "ok",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "withheld",
+            "authorization": "denied",
+            "data_revision": "withheld",
+            "error": {
+              "code": "denied",
+              "message": "denied"
+            },
+            "evidence_refs": [],
+            "freshness_status": "withheld",
+            "missing_evidence": "withheld",
+            "payload": "withheld",
+            "receipt_ref": null,
+            "request_id": "req_y2s5_009b",
+            "result_status": "denied",
+            "view_revision": "withheld"
+          },
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": {
+              "code": "large_file_required",
+              "message": "large_file_required"
+            },
+            "evidence_refs": [],
+            "freshness_status": "not_applicable",
+            "missing_evidence": "not_applicable",
+            "payload": {
+              "import_reference_required": true,
+              "max_bytes": 65536
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_009c",
+            "result_status": "failed",
+            "view_revision": "not_applicable"
+          }
+        ],
+        "malformed_response": {
+          "answer_status": "withheld",
+          "authorization": "denied",
+          "data_revision": "withheld",
+          "error": {
+            "code": "invalid_request",
+            "message": "invalid_request"
+          },
+          "evidence_refs": [],
+          "freshness_status": "withheld",
+          "missing_evidence": "withheld",
+          "payload": "withheld",
+          "receipt_ref": null,
+          "request_id": "req_y2s5_009_malformed",
+          "result_status": "failed",
+          "view_revision": "withheld"
+        },
+        "policy_response": {
+          "answer_status": "withheld",
+          "authorization": "denied",
+          "data_revision": "withheld",
+          "error": {
+            "code": "denied",
+            "message": "denied"
+          },
+          "evidence_refs": [],
+          "freshness_status": "withheld",
+          "missing_evidence": "withheld",
+          "payload": "withheld",
+          "receipt_ref": null,
+          "request_id": "req_y2s5_009a",
+          "result_status": "denied",
+          "view_revision": "withheld"
+        },
+        "audit_event_types": [
+          "capability_created",
+          "request_allowed",
+          "request_denied",
+          "request_failed"
+        ],
+        "source_count": 4,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": true,
+        "redacted_no_content": false,
+        "determinism_byte_identical": false,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": null
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S5-010": {
+      "result": {
+        "responses": [
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "resource_ids": [
+                "src_y2s5_001",
+                "src_y2s5_002"
+              ],
+              "view_names": [
+                "person_card",
+                "relationship_timeline"
+              ]
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_010a",
+            "result_status": "ok",
+            "view_revision": "not_applicable"
+          },
+          {
+            "answer_status": "not_applicable",
+            "authorization": "allowed",
+            "data_revision": "rev_000",
+            "error": null,
+            "evidence_refs": [
+              {
+                "locator": {
+                  "relative_path": "2026-08-03-experiment.md",
+                  "root_ref": "y2s5_mcp_runtime_v1",
+                  "scheme": "text_utf8_byte_range_v1"
+                },
+                "source_id": "src_y2s5_001"
+              }
+            ],
+            "freshness_status": "not_applicable",
+            "missing_evidence": false,
+            "payload": {
+              "byte_length": 34,
+              "compartments": [
+                "general"
+              ],
+              "content": "今天完成识海实验记录。\n",
+              "content_hash": "1594d31cda61dd6e6ec3a1dc25e47cc63f5e69f137691b472ebd9005a8ca0650",
+              "coverage_window": {
+                "continuous": true,
+                "end": "2026-08-03T09:00:00+00:00",
+                "gaps": [],
+                "start": "2026-08-03T09:00:00+00:00"
+              },
+              "fields": [
+                "content",
+                "metadata"
+              ],
+              "locator": {
+                "relative_path": "2026-08-03-experiment.md",
+                "root_ref": "y2s5_mcp_runtime_v1",
+                "scheme": "text_utf8_byte_range_v1"
+              },
+              "redacted": false,
+              "source_id": "src_y2s5_001",
+              "source_kind": "y2s5_text_v1"
+            },
+            "receipt_ref": null,
+            "request_id": "req_y2s5_010b",
+            "result_status": "ok",
+            "view_revision": "not_applicable"
+          }
+        ],
+        "malformed_response": null,
+        "policy_response": null,
+        "audit_event_types": [
+          "capability_created",
+          "request_allowed"
+        ],
+        "source_count": 4,
+        "changeset_count": 0,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "denied_profile_exact": true,
+        "large_file_import_required": false,
+        "redacted_no_content": false,
+        "determinism_byte_identical": true,
+        "stdlib_only": true,
+        "loopback_only": true,
+        "synthetic_fixture": true,
+        "profile_rejected": "y2s5_unknown_profile_v9"
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    }
+  }
+}

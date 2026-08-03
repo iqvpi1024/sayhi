@@ -1,0 +1,115 @@
+{
+  "schema_version": "noetide.y2s5-run-result.v1",
+  "run_id": "y2s5-8995057f2c1a418d93701050999396f6",
+  "suite_id": "y2s5_mcp_runtime_v1",
+  "manifest_sha256": "eba99a1aae2dfc24bc0ea402af4e05299b539901b63b0673604a811a73f900bc",
+  "git_commit": "af9a61e189cd1261a329e75914c5915ceaf7edf8",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "loopback_only",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_y2s5_suite",
+    "--adapter",
+    "noetide_micro.y2s5_testing_adapter",
+    "--output",
+    "docs/testing/results/y2s5-20260803.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "Y2S5-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-009",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S5-010",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "sha256": "7695e7a7ae0af46b6e453e5292245f1a2010c6714e364a6f09cb0eb44d54453a",
+      "path": "tests/fixtures/y2s5_mcp_runtime_v1/fixture.json",
+      "role": "fixture"
+    },
+    {
+      "sha256": "2b41d543877e270ba026f5cc4921b9c71aafe789cab4bc571d9d280083e893aa",
+      "path": "tests/fixtures/y2s5_mcp_runtime_v1/oracles.json",
+      "role": "oracle"
+    },
+    {
+      "sha256": "2cf38242efc61bb8c06b7fff84b68b8bc7d3c554c5af8eaa077faa3d22d9eae2",
+      "path": "tests/integration/y2s5_mcp_runtime_scenarios.json",
+      "role": "scenario_plan"
+    },
+    {
+      "sha256": "be78ba00c6ba0ed45cbc1034dde25fd41441d5d5da3c602c5f469f6342cb967c",
+      "path": "tests/runner/y2s5_mcp_runtime_adapter_protocol.py",
+      "role": "adapter_protocol"
+    },
+    {
+      "sha256": "b660692dff524d11dbc53187fb68cdd15c2f570362c1e5144b9c191c0025153f",
+      "path": "tests/semantic/test_y2s5_mcp_runtime_contract.py",
+      "role": "business_test_module"
+    },
+    {
+      "sha256": "0385d63a860109771e6e903726ae74c424693397d6ad428512882df584d34168",
+      "path": "tests/runner/run_y2s5_suite.py",
+      "role": "offline_runner"
+    },
+    {
+      "sha256": "2cffd389205b04cbee5384da5ee391d70757324485c6367a743a0947ebf3d32a",
+      "path": "tools/validate_y2s5_suite.py",
+      "role": "suite_preflight_validator"
+    }
+  ]
+}

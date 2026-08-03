@@ -30,11 +30,11 @@
 
 ### 1.6 当前 Year 2 入口决定
 
-`DEC-Y2-ENTRY-001` 于 2026-07-26 由产品负责人委托代理裁决并单独记录在 `YEAR2_ENTRY_DECISION_2026-07-26.md`：模型接入（本地优先、云端显式授权、红线舱室 local-only）、首个连接器（本地文件夹文本导入）、真实数据红线、本地 Web UI、MCP 后置与 Y2-S1..S5 排序；授权起草 PRDv06。该决定只部分触及 `DQ-008`（首个连接器），`DQ-007/009/010/011/013` 保持 deferred。
+`DEC-Y2-ENTRY-001` 于 2026-07-26 由产品负责人委托代理裁决并单独记录在 `YEAR2_ENTRY_DECISION_2026-07-26.md`：模型接入（本地优先、云端显式授权、红线舱室 local-only）、首个连接器（本地文件夹文本导入）、真实数据红线、本地 Web UI、MCP 后置与 Y2-S1..S5 排序；授权起草 PRDv06。该决定只部分触及 `DQ-008`（首个连接器），`DQ-007/009/010/011` 保持 deferred；`DQ-013` 在 Y2-S5 切片前重开。
 
 ### 1.7 当前 PRD v0.6 基线决定
 
-`DEC-PRD-V06-001` 于 2026-08-01 批准 `PRDv06.md` v0.6 为当前产品基线（hash `4513B268...CAD8`），v0.5 转只读历史。v0.6 仅并入 `DEC-Y2-ENTRY-001` §2.7 授权的五块语义，32 条 FR 与 12 对象不变；九份 SPEC 已完成 v0.6 兼容复核（绑定同步 + 最小升版，无语义修订）。blocking=0；`DQ-001..013` 状态不变，仅 `DQ-008` 保持部分裁决（首个连接器）。
+`DEC-PRD-V06-001` 于 2026-08-01 批准 `PRDv06.md` v0.6 为当前产品基线（hash `4513B268...CAD8`），v0.5 转只读历史。v0.6 仅并入 `DEC-Y2-ENTRY-001` §2.7 授权的五块语义，32 条 FR 与 12 对象不变；九份 SPEC 已完成 v0.6 兼容复核（绑定同步 + 最小升版，无语义修订）。blocking=0；`DQ-001..013` 状态不变，仅 `DQ-008` 保持部分裁决（首个连接器）；`DQ-013` 已由 `DEC-Y2-S5-001` 重开并 `decided`（2026-08-03）。
 
 ### 1.5 当前 MVP-A 硬化切片决定
 
@@ -332,7 +332,7 @@
 | DQ-010 | A2A 或其他 Agent 协议选择 | §20 FR-306、§24.6 | 生态阶段，不影响 MCP 最小合同 |
 | DQ-011 | 用户预授权自动处理的最大范围 | §11.4、§27.1 | MVP-B / FR-107 前；Micro 不扩大自动权限 |
 | DQ-012 | Canonical `value=unknown` 与 Answer Status 的组合 | §9.4、§27.1 | 引入 unknown State 查询前 |
-| DQ-013 | MCP 不可逆动作是否存在非 verified 例外 | §19.3、§27.1 | Y2-S5 MCP runtime 切片前（`DEC-Y2-ENTRY-001` §2.5）；未裁决时采用最保守拒绝 |
+| DQ-013 | MCP 不可逆动作是否存在非 verified 例外 | §19.3、§27.1 | `decided`：`DEC-Y2-S5-001`（2026-08-03）关闭为无例外；未来开放不可逆动作须另立 Product Decision |
 
 ## 5. 决策记录模板
 
@@ -349,3 +349,14 @@
 ```
 
 不得删除原问题或用实现结果代替产品决定。
+
+
+### DQ-013：MCP 不可逆动作是否存在非 verified 例外？
+
+- 状态: decided
+- 决定: 不存在非 verified 例外。Y2-S5 最小 MCP runtime 不启用任何 destructive/irreversible tool；所有不可逆动作请求一律 `denied`，不因 `answer_status=verified`、caller 类型、urgency 或 owner grant 自动开放。未来若开放 controlled mutate/destructive，必须另立 Product Decision、SPEC 合同与独立 suite，并继续遵守 S8 §6.3 的 verified/fresh gate。
+- 决定日期: 2026-08-03
+- 决策人: 产品负责人（受托代理裁决）
+- 理由: `DEC-Y2-ENTRY-001` §2.5 要求进入 MCP 切片前重开本问题；最小 runtime 只证明本地读、propose、append 的授权与 fail-closed 边界，不扩大不可逆动作面。
+- 影响的 PRD/SPEC/测试: PRDv06 §19.2/§19.3/§19.5；S8 §6.3、`MCP-INV-004`；Y2-S5 slice contract 与 suite。
+- 是否需要新 PRD 基线: no

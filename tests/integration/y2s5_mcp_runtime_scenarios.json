@@ -1,0 +1,17 @@
+{
+  "suite_id": "y2s5_mcp_runtime_v1",
+  "fixture_ref": "tests/fixtures/y2s5_mcp_runtime_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/y2s5_mcp_runtime_v1/oracles.json",
+  "scenarios": [
+    {"scenario_id": "Y2S5-001", "contract_refs": ["Y2S5-INV-001", "Y2S5-INV-002", "Y2S5-INV-003", "Y2S5-INV-009"]},
+    {"scenario_id": "Y2S5-002", "contract_refs": ["Y2S5-INV-001", "Y2S5-INV-002", "Y2S5-INV-008"]},
+    {"scenario_id": "Y2S5-003", "contract_refs": ["Y2S5-INV-002", "Y2S5-INV-003", "Y2S5-INV-008"]},
+    {"scenario_id": "Y2S5-004", "contract_refs": ["Y2S5-INV-002", "Y2S5-INV-004"]},
+    {"scenario_id": "Y2S5-005", "contract_refs": ["Y2S5-INV-002", "Y2S5-INV-005"]},
+    {"scenario_id": "Y2S5-006", "contract_refs": ["Y2S5-INV-005", "Y2S5-INV-006"]},
+    {"scenario_id": "Y2S5-007", "contract_refs": ["Y2S5-INV-004", "Y2S5-INV-006"]},
+    {"scenario_id": "Y2S5-008", "contract_refs": ["Y2S5-INV-002", "Y2S5-INV-007", "Y2S5-INV-008"]},
+    {"scenario_id": "Y2S5-009", "contract_refs": ["Y2S5-INV-002", "Y2S5-INV-008"]},
+    {"scenario_id": "Y2S5-010", "contract_refs": ["Y2S5-INV-001", "Y2S5-INV-002", "Y2S5-INV-009"]}
+  ]
+}
