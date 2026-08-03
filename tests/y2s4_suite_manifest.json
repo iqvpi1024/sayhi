@@ -1,0 +1,79 @@
+{
+  "schema_version": "noetide.y2s4-suite-manifest.v1",
+  "suite_id": "y2s4_cloud_model_v1",
+  "slice_id": "SLICE-Y2-S4-CLOUD-MODEL-001",
+  "suite_artifact_version": "1.0.0",
+  "flags": {
+    "suite_defined": true,
+    "suite_materialized": true,
+    "suite_executed": true,
+    "suite_passed": true
+  },
+  "suite_artifact_state": "materialized",
+  "latest_verification_result": "passed",
+  "latest_run_applicability": "current",
+  "required_scenario_ids": [
+    "Y2S4-001",
+    "Y2S4-002",
+    "Y2S4-003",
+    "Y2S4-004",
+    "Y2S4-005",
+    "Y2S4-006",
+    "Y2S4-007",
+    "Y2S4-008",
+    "Y2S4-009",
+    "Y2S4-010"
+  ],
+  "baseline": {
+    "product_path": "PRDv06.md",
+    "product_canonical_lf_sha256": "4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8",
+    "decision_refs": [
+      "DEC-Y2-S4-001"
+    ],
+    "contract_ref": "SPEC-Y2S4-CLOUD-MODEL-001",
+    "adr_refs": [
+      "ADR-0023"
+    ],
+    "architecture_ref": "ARCH-Y2S4-CLOUD-MODEL-001"
+  },
+  "artifacts": [
+    {
+      "sha256": "dbc45d70dcc2a0f465962cdb5bdeb833a1b10e4d12a8595500274c92e712f318",
+      "path": "tests/fixtures/y2s4_cloud_model_v1/fixture.json",
+      "role": "fixture"
+    },
+    {
+      "sha256": "281c19337da0614a4b2daaca2cc0d78131bc0f8e9850ecc0f6e7f47286d329d6",
+      "path": "tests/fixtures/y2s4_cloud_model_v1/oracles.json",
+      "role": "oracle"
+    },
+    {
+      "sha256": "e3ec425bb5fa555df0607a8a75ceea076da519d3e43bd3233ffcac1fa50d2414",
+      "path": "tests/integration/y2s4_cloud_model_scenarios.json",
+      "role": "scenario_plan"
+    },
+    {
+      "sha256": "6666bf832a3642d77fc778df344e5da4ad7443857eb87e8f7d72903c55268463",
+      "path": "tests/runner/y2s4_cloud_model_adapter_protocol.py",
+      "role": "adapter_protocol"
+    },
+    {
+      "sha256": "20a22a5b13e82a1e563963592d27523e9497afe8bb11cfef778f314f8c9ec2fc",
+      "path": "tests/semantic/test_y2s4_cloud_model_contract.py",
+      "role": "business_test_module"
+    },
+    {
+      "sha256": "1fda5f8c05cedb1528a1b3c75950a7590d8a39463e21a95802add7a0012bbe02",
+      "path": "tests/runner/run_y2s4_suite.py",
+      "role": "offline_runner"
+    },
+    {
+      "sha256": "14aa861bc626d976ed89a3aebd28f9252a0dc7a260cd8095bc0711d8b38ac1d4",
+      "path": "tools/validate_y2s4_suite.py",
+      "role": "suite_preflight_validator"
+    }
+  ],
+  "latest_verification_result_path": "docs/testing/results/y2s4-20260803.json",
+  "latest_verification_result_sha256": "dfa8b518cd29aa397d2e95c4edc1934195d92c4c11a07045eeb9388950e63dff",
+  "latest_verification_manifest_sha256": "035ce482e79897d206aeab7d1bae5c9e2e6e587b48f3b16a008e9d67b3661564"
+}

@@ -1,0 +1,306 @@
+{
+  "schema_version": "noetide.y2s4-oracles.v1",
+  "scenarios": {
+    "Y2S4-001": {
+      "result": {
+        "batch_status": "rejected",
+        "rejected_reasons": [
+          "default_disabled"
+        ],
+        "backend_call_count": 0,
+        "candidate_count": 0,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "preview_built",
+          "send_denied"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-002": {
+      "result": {
+        "batch_status": "accepted",
+        "rejected_reasons": [],
+        "backend_call_count": 2,
+        "candidate_count": 3,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 2,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_allowed",
+          "send_succeeded"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-003": {
+      "result": {
+        "batch_status": "rejected",
+        "rejected_reasons": [
+          "red_line_denied",
+          "red_line_denied",
+          "red_line_denied",
+          "red_line_denied"
+        ],
+        "backend_call_count": 0,
+        "candidate_count": 0,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 4,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_denied"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-004": {
+      "result": {
+        "batch_status": "rejected",
+        "rejected_reasons": [
+          "purpose_mismatch"
+        ],
+        "backend_call_count": 0,
+        "candidate_count": 0,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_denied"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-005": {
+      "result": {
+        "batch_status": "rejected",
+        "rejected_reasons": [
+          "scope_mismatch"
+        ],
+        "backend_call_count": 0,
+        "candidate_count": 0,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_denied"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-006": {
+      "result": {
+        "batch_status": "rejected",
+        "rejected_reasons": [
+          "grant_expired",
+          "grant_revoked"
+        ],
+        "backend_call_count": 0,
+        "candidate_count": 0,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "grant_revoked",
+          "preview_built",
+          "send_denied"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-007": {
+      "result": {
+        "batch_status": "rejected",
+        "rejected_reasons": [
+          "preview_missing",
+          "preview_mismatch"
+        ],
+        "backend_call_count": 0,
+        "candidate_count": 0,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_denied"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-008": {
+      "result": {
+        "batch_status": "rejected",
+        "rejected_reasons": [
+          "invalid_output",
+          "transport_failed"
+        ],
+        "backend_call_count": 2,
+        "candidate_count": 0,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 2,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_allowed",
+          "send_failed"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        }
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-009": {
+      "result": {
+        "batch_status": "accepted",
+        "rejected_reasons": [],
+        "backend_call_count": 2,
+        "candidate_count": 3,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 2,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_allowed",
+          "send_succeeded"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        },
+        "candidate_provenance_authorized": true,
+        "rollback_retained": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    },
+    "Y2S4-010": {
+      "result": {
+        "batch_status": "accepted",
+        "rejected_reasons": [],
+        "backend_call_count": 1,
+        "candidate_count": 2,
+        "all_unconfirmed": true,
+        "preview_raw_content_present": false,
+        "preview_source_count": 1,
+        "canonical_unchanged": true,
+        "revision_unchanged": true,
+        "audit_event_types": [
+          "grant_created",
+          "preview_built",
+          "send_allowed",
+          "send_succeeded"
+        ],
+        "version_active": {
+          "model_id": "model_cloud_v1",
+          "model_version": "v1",
+          "prompt_version": "prompt_v1"
+        },
+        "determinism_byte_identical": true,
+        "stdlib_only": true,
+        "profile_rejected": "y2s4_unknown_profile_v9",
+        "http_non_loopback_rejected": true,
+        "http_loopback_accepted": true
+      },
+      "forbidden_mutations": [
+        "canonical_layer",
+        "revision_layer"
+      ]
+    }
+  }
+}

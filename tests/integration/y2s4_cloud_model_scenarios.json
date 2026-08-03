@@ -1,0 +1,81 @@
+{
+  "suite_id": "y2s4_cloud_model_v1",
+  "fixture_ref": "tests/fixtures/y2s4_cloud_model_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/y2s4_cloud_model_v1/oracles.json",
+  "scenarios": [
+    {
+      "scenario_id": "Y2S4-001",
+      "contract_refs": [
+        "Y2S4-INV-001",
+        "Y2S4-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-002",
+      "contract_refs": [
+        "Y2S4-INV-001",
+        "Y2S4-INV-003",
+        "Y2S4-INV-004",
+        "Y2S4-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-003",
+      "contract_refs": [
+        "Y2S4-INV-002",
+        "Y2S4-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-004",
+      "contract_refs": [
+        "Y2S4-INV-003",
+        "Y2S4-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-005",
+      "contract_refs": [
+        "Y2S4-INV-003",
+        "Y2S4-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-006",
+      "contract_refs": [
+        "Y2S4-INV-003",
+        "Y2S4-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-007",
+      "contract_refs": [
+        "Y2S4-INV-004",
+        "Y2S4-INV-005"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-008",
+      "contract_refs": [
+        "Y2S4-INV-005",
+        "Y2S4-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-009",
+      "contract_refs": [
+        "Y2S4-INV-005",
+        "Y2S4-INV-006"
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-010",
+      "contract_refs": [
+        "Y2S4-INV-001",
+        "Y2S4-INV-004",
+        "Y2S4-INV-005",
+        "Y2S4-INV-006"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,618 @@
+{
+  "schema_version": "noetide.y2s4-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "y2s4_cloud_model_v1",
+  "determinism": {
+    "clock": "2026-08-03T00:00:00+00:00",
+    "later": "2026-08-03T00:00:05+00:00",
+    "expired_at": "2026-08-02T00:00:00+00:00"
+  },
+  "defaults": {
+    "language": "zh",
+    "profile": "y2s4_cloud_model_v1",
+    "actor": "person_alpha",
+    "purpose": "summarize",
+    "model_id": "model_cloud_v1",
+    "model_version": "v1",
+    "prompt_version": "prompt_v1"
+  },
+  "sources": [
+    {
+      "source_id": "src_y2s4_001",
+      "append_receipt_id": "receipt_src_y2s4_001",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "02c9744dfd4982fb578d50e25a707de372714710b551bae78658afe6f6f72924",
+      "byte_length": 37,
+      "source_created_at": "2026-08-03T09:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "2026-08-03-experiment.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T09:00:00+00:00",
+        "end": "2026-08-03T09:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "今天完成了识海实验记录。\n",
+      "compartments": [
+        "general"
+      ]
+    },
+    {
+      "source_id": "src_y2s4_002",
+      "append_receipt_id": "receipt_src_y2s4_002",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "461fa28d7d0547505b788867655f2d4a9dfc77733f0dc84e7f5b3d73ae6ae28d",
+      "byte_length": 40,
+      "source_created_at": "2026-08-03T10:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "2026-08-03-commitment.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T10:00:00+00:00",
+        "end": "2026-08-03T10:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "承诺周五前整理本地文件夹。\n",
+      "compartments": [
+        "general"
+      ]
+    },
+    {
+      "source_id": "src_y2s4_003",
+      "append_receipt_id": "receipt_src_y2s4_003",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "e68c7c1766cd807d7999306007611cf3967f1393f09ad3e6091b4841e568f140",
+      "byte_length": 55,
+      "source_created_at": "2026-08-03T11:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "health-redline-synthetic.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T11:00:00+00:00",
+        "end": "2026-08-03T11:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "体检报告摘要：指标正常，待年度复查。\n",
+      "compartments": [
+        "health"
+      ]
+    },
+    {
+      "source_id": "src_y2s4_004",
+      "append_receipt_id": "receipt_src_y2s4_004",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "8b1c407b124baa7f9057de72e33668c7e7b77e95d06fbc586b63ed4391df50ea",
+      "byte_length": 40,
+      "source_created_at": "2026-08-03T12:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "finance-redline-synthetic.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T12:00:00+00:00",
+        "end": "2026-08-03T12:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "本月账单已结清，预算正常。\n",
+      "compartments": [
+        "finance"
+      ]
+    },
+    {
+      "source_id": "src_y2s4_005",
+      "append_receipt_id": "receipt_src_y2s4_005",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "bc81c3328bd51ad9a3f3291ea1b2bafcf0d78af8b19bf3645233ad7a70015e78",
+      "byte_length": 34,
+      "source_created_at": "2026-08-03T13:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "relationship-redline-synthetic.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T13:00:00+00:00",
+        "end": "2026-08-03T13:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "家庭成员今日通话正常。\n",
+      "compartments": [
+        "relationship"
+      ]
+    },
+    {
+      "source_id": "src_y2s4_006",
+      "append_receipt_id": "receipt_src_y2s4_006",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "4ef6dafe7f664302d8964eaf66abd23973b8bed693f006cbb716a224d225c16c",
+      "byte_length": 43,
+      "source_created_at": "2026-08-03T14:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "sealed-redline-synthetic.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T14:00:00+00:00",
+        "end": "2026-08-03T14:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "封存笔记内容仅用于本地验证。\n",
+      "compartments": [
+        "sealed"
+      ]
+    },
+    {
+      "source_id": "src_y2s4_bad_json",
+      "append_receipt_id": "receipt_src_y2s4_bad_json",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "f591d187c1a6fec46fe49df8dc15748cb5bc674b4e3b69f389dec22fb69b5204",
+      "byte_length": 36,
+      "source_created_at": "2026-08-03T15:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "bad-json.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T15:00:00+00:00",
+        "end": "2026-08-03T15:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "这条记录会返回非法 JSON。\n",
+      "compartments": [
+        "general"
+      ]
+    },
+    {
+      "source_id": "src_y2s4_http",
+      "append_receipt_id": "receipt_src_y2s4_http",
+      "source_kind": "y2s4_text_v1",
+      "content_hash": "91e2f7ecbec99c272be45d817a1d38a79d09a3d3123f42b15f2101b75b949453",
+      "byte_length": 52,
+      "source_created_at": "2026-08-03T16:00:00+00:00",
+      "ingested_at": "2026-08-03T00:00:00+00:00",
+      "language": "zh",
+      "locator": {
+        "scheme": "text_utf8_byte_range_v1",
+        "root_ref": "y2s4_cloud_model_v1",
+        "relative_path": "http-stub.md"
+      },
+      "coverage_window": {
+        "start": "2026-08-03T16:00:00+00:00",
+        "end": "2026-08-03T16:00:00+00:00",
+        "continuous": true,
+        "gaps": []
+      },
+      "content": "通过云端 HTTP 接口整理这条合成记录。\n",
+      "compartments": [
+        "general"
+      ]
+    }
+  ],
+  "model_responses": {
+    "src_y2s4_001": {
+      "kind": "valid",
+      "raw_json": {
+        "candidates": [
+          {
+            "candidate_kind": "entity",
+            "payload": {
+              "display_name": "识海实验",
+              "summary": "完成了一次识海记录实验"
+            },
+            "evidence_refs": [
+              {
+                "source_id": "src_y2s4_001",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 37
+                }
+              }
+            ]
+          },
+          {
+            "candidate_kind": "episode",
+            "payload": {
+              "occurred_at": "2026-08-03T09:00:00+00:00",
+              "summary": "完成识海实验记录"
+            },
+            "evidence_refs": [
+              {
+                "source_id": "src_y2s4_001",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 37
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "src_y2s4_002": {
+      "kind": "valid",
+      "raw_json": {
+        "candidates": [
+          {
+            "candidate_kind": "commitment",
+            "payload": {
+              "due_by": "2026-08-07T00:00:00+08:00",
+              "statement": "周五前整理本地文件夹"
+            },
+            "evidence_refs": [
+              {
+                "source_id": "src_y2s4_002",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 40
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "src_y2s4_003": {
+      "kind": "valid",
+      "raw_json": {
+        "candidates": []
+      }
+    },
+    "src_y2s4_004": {
+      "kind": "valid",
+      "raw_json": {
+        "candidates": []
+      }
+    },
+    "src_y2s4_005": {
+      "kind": "valid",
+      "raw_json": {
+        "candidates": []
+      }
+    },
+    "src_y2s4_006": {
+      "kind": "valid",
+      "raw_json": {
+        "candidates": []
+      }
+    },
+    "src_y2s4_bad_json": {
+      "kind": "invalid_json",
+      "raw": "{not-json"
+    },
+    "src_y2s4_http": {
+      "kind": "valid",
+      "raw_json": {
+        "candidates": [
+          {
+            "candidate_kind": "episode",
+            "payload": {
+              "occurred_at": "2026-08-03T16:00:00+00:00",
+              "summary": "云端接口整理合成记录"
+            },
+            "evidence_refs": [
+              {
+                "source_id": "src_y2s4_http",
+                "locator": {
+                  "scheme": "text_utf8_byte_range_v1",
+                  "start_byte": 0,
+                  "end_byte_exclusive": 42
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "cases": [
+    {
+      "scenario_id": "Y2S4-001",
+      "action": "default_closed",
+      "source_ids": [
+        "src_y2s4_001"
+      ],
+      "purpose": "summarize"
+    },
+    {
+      "scenario_id": "Y2S4-002",
+      "action": "explicit_grant",
+      "source_ids": [
+        "src_y2s4_001",
+        "src_y2s4_002"
+      ],
+      "purpose": "summarize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_002",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_001",
+              "src_y2s4_002"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-003",
+      "action": "redline_probe",
+      "source_ids": [
+        "src_y2s4_003",
+        "src_y2s4_004",
+        "src_y2s4_005",
+        "src_y2s4_006"
+      ],
+      "purpose": "summarize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_003",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "health",
+            "finance",
+            "relationship",
+            "sealed",
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_003",
+              "src_y2s4_004",
+              "src_y2s4_005",
+              "src_y2s4_006"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-004",
+      "action": "purpose_mismatch",
+      "source_ids": [
+        "src_y2s4_001"
+      ],
+      "purpose": "organize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_004",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_001"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-005",
+      "action": "scope_mismatch",
+      "source_ids": [
+        "src_y2s4_002"
+      ],
+      "purpose": "summarize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_005",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_001"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-006",
+      "action": "expiry_revocation",
+      "source_ids": [
+        "src_y2s4_001"
+      ],
+      "purpose": "summarize",
+      "expired_grant": {
+        "grant_id": "grant_y2s4_006a",
+        "actor": "person_alpha",
+        "purpose": "summarize",
+        "compartments": [
+          "general"
+        ],
+        "source_scope": {
+          "source_ids": [
+            "src_y2s4_001"
+          ]
+        },
+        "expires_at": "2026-08-02T00:00:00+00:00"
+      },
+      "revoked_grant": {
+        "grant_id": "grant_y2s4_006b",
+        "actor": "person_alpha",
+        "purpose": "summarize",
+        "compartments": [
+          "general"
+        ],
+        "source_scope": {
+          "source_ids": [
+            "src_y2s4_001"
+          ]
+        },
+        "expires_at": "2026-08-04T00:00:00+00:00"
+      }
+    },
+    {
+      "scenario_id": "Y2S4-007",
+      "action": "preview_required",
+      "source_ids": [
+        "src_y2s4_001"
+      ],
+      "purpose": "summarize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_007",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_001"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ],
+      "mismatch_source_ids": [
+        "src_y2s4_002"
+      ],
+      "mismatch_purpose": "organize"
+    },
+    {
+      "scenario_id": "Y2S4-008",
+      "action": "failure_probe",
+      "source_ids": [
+        "src_y2s4_bad_json"
+      ],
+      "purpose": "summarize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_008",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_bad_json"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        },
+        {
+          "grant_id": "grant_y2s4_008_http",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_http"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "scenario_id": "Y2S4-009",
+      "action": "audit_probe",
+      "source_ids": [
+        "src_y2s4_001",
+        "src_y2s4_002"
+      ],
+      "purpose": "summarize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_009",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_001",
+              "src_y2s4_002"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ],
+      "version_two": {
+        "model_id": "model_cloud_v1",
+        "model_version": "v2",
+        "prompt_version": "prompt_v2"
+      }
+    },
+    {
+      "scenario_id": "Y2S4-010",
+      "action": "determinism_probe",
+      "source_ids": [
+        "src_y2s4_001"
+      ],
+      "purpose": "summarize",
+      "grants": [
+        {
+          "grant_id": "grant_y2s4_010",
+          "actor": "person_alpha",
+          "purpose": "summarize",
+          "compartments": [
+            "general"
+          ],
+          "source_scope": {
+            "source_ids": [
+              "src_y2s4_001"
+            ]
+          },
+          "expires_at": "2026-08-04T00:00:00+00:00"
+        }
+      ],
+      "profile_override": "y2s4_unknown_profile_v9",
+      "http_source_id": "src_y2s4_http"
+    }
+  ]
+}
