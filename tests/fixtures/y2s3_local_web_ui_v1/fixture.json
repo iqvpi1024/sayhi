@@ -1,0 +1,51 @@
+{
+  "fixture_id": "y2s3_local_web_ui_v1",
+  "schema_version": "noetide.y2s3-fixture.v1",
+  "synthetic": true,
+  "external_data_used": false,
+  "synthetic_profile_id": "y2s3_local_web_ui_v1",
+  "determinism": {
+    "clock": "2031-10-15T02:00:00Z",
+    "timezone": "UTC",
+    "random_seed": 0
+  },
+  "host": "127.0.0.1",
+  "backup_id": "web_backup_001.nobak",
+  "expected": {
+    "source_id": "src_micro_001",
+    "receipt_id": "receipt_source_micro_001",
+    "changeset_id": "changeset_micro_001",
+    "publish_receipt_id": "receipt_publish_001",
+    "published_revision": "rev_011",
+    "revert_receipt_id": "receipt_compensation_001",
+    "compensation_revision": "rev_012",
+    "review_summary": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。",
+    "evidence_citations": [
+      "src_micro_001"
+    ],
+    "impact_preview": {
+      "will_create": [
+        "state_contact_002"
+      ],
+      "will_modify": [
+        "state_contact_001"
+      ],
+      "views_affected": [
+        "person_card",
+        "relationship_timeline"
+      ]
+    }
+  },
+  "cases": [
+    {"scenario_id": "Y2S3-001", "steps": ["home", "audit"]},
+    {"scenario_id": "Y2S3-002", "steps": ["record", "audit"]},
+    {"scenario_id": "Y2S3-003", "steps": ["record", "review", "audit"]},
+    {"scenario_id": "Y2S3-004", "steps": ["record", "review", "confirm", "audit"]},
+    {"scenario_id": "Y2S3-005", "steps": ["record", "review", "confirm", "views", "audit"]},
+    {"scenario_id": "Y2S3-006", "steps": ["record", "review", "confirm", "history", "audit"]},
+    {"scenario_id": "Y2S3-007", "steps": ["record", "review", "confirm", "revert", "views", "history", "audit"]},
+    {"scenario_id": "Y2S3-008", "steps": ["record", "review", "confirm", "revert", "export", "backup", "audit"]},
+    {"scenario_id": "Y2S3-009", "steps": ["fail", "audit"]},
+    {"scenario_id": "Y2S3-010", "steps": ["determinism", "audit"]}
+  ]
+}

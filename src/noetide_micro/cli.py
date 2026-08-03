@@ -116,6 +116,17 @@ def cmd_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_web(args: argparse.Namespace) -> int:
+    from .local_web import serve_local_web
+
+    return serve_local_web(
+        _data_dir(args),
+        host=args.host,
+        port=args.port,
+        backup_dir=args.backup_dir,
+    )
+
+
 def _open_existing_store(args: argparse.Namespace) -> SemanticStore | None:
     path = _data_dir(args) / "noetide.sqlite3"
     if not path.exists():
@@ -317,6 +328,11 @@ def main(argv: list[str] | None = None) -> int:
         command.set_defaults(handler=cmd_c1)
     review = commands.add_parser("review")
     review.set_defaults(handler=cmd_review)
+    web = commands.add_parser("web")
+    web.add_argument("--host", default="127.0.0.1")
+    web.add_argument("--port", type=int, default=8765)
+    web.add_argument("--backup-dir", default=None)
+    web.set_defaults(handler=cmd_web)
     guide = commands.add_parser("guide")
     guide.add_argument("--yes", action="store_true", help="skip interactive confirmations")
     guide.add_argument("--publish-key", default="cli_guide_publish_001")

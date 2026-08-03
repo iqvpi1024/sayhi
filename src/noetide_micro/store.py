@@ -24,10 +24,10 @@ class SeedValidationError(ValueError):
 class SemanticStore:
     """Owns SQLite setup, explicit transactions, and the rev_010 fixture seed."""
 
-    def __init__(self, database_path: str | Path) -> None:
+    def __init__(self, database_path: str | Path, *, check_same_thread: bool = True) -> None:
         path = Path(database_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        self._connection = sqlite3.connect(path, isolation_level=None)
+        self._connection = sqlite3.connect(path, isolation_level=None, check_same_thread=check_same_thread)
         try:
             self._connection.execute("PRAGMA foreign_keys = ON")
             self._connection.execute("PRAGMA journal_mode = DELETE")

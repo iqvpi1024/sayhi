@@ -1,0 +1,115 @@
+{
+  "schema_version": "noetide.y2s3-run-result.v1",
+  "run_id": "y2s3-22c8e3b822cd466987da79c1a61c782f",
+  "suite_id": "y2s3_local_web_ui_v1",
+  "manifest_sha256": "484efa0572ca725ca11bc6ccd090f0b1b3fbd180bff291859da88be8dffb8d0d",
+  "git_commit": "e08eff9fca614969be3b7f6435b459e5cefecbcf",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "loopback_only",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_y2s3_suite",
+    "--adapter",
+    "noetide_micro.y2s3_testing_adapter",
+    "--output",
+    "docs/testing/results/y2s3-20260803.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "Y2S3-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-009",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "Y2S3-010",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "sha256": "9ca18aa9ac8aa3438e2743773d77ae89baf322146866a1dbf9ec0546b6eb3b6d",
+      "path": "tests/fixtures/y2s3_local_web_ui_v1/fixture.json",
+      "role": "fixture"
+    },
+    {
+      "sha256": "9c9e357c277ed79a63a1fd944f84e62f918adcd7f19c23b70d84856b696caed3",
+      "path": "tests/fixtures/y2s3_local_web_ui_v1/oracles.json",
+      "role": "oracle"
+    },
+    {
+      "sha256": "0afff6b957e7db2489864580ddab3326785dafc4a977bea45262070cd17fe52a",
+      "path": "tests/integration/y2s3_local_web_ui_scenarios.json",
+      "role": "scenario_plan"
+    },
+    {
+      "sha256": "d5289d182b669297fb4d1efd134c172822e30888619195ea34fcf2802ca32335",
+      "path": "tests/runner/y2s3_local_web_ui_adapter_protocol.py",
+      "role": "adapter_protocol"
+    },
+    {
+      "sha256": "b4b0040372a4c47b03ff5522b22672572f3d881a4b175ed5a0ed0cbc629b63cf",
+      "path": "tests/semantic/test_y2s3_local_web_ui_contract.py",
+      "role": "business_test_module"
+    },
+    {
+      "sha256": "a3ddbac8eba469b3a8eb5f765365e2142a12bcc322c673c6920f2b437d63b999",
+      "path": "tests/runner/run_y2s3_suite.py",
+      "role": "offline_runner"
+    },
+    {
+      "sha256": "5705551e66548323f57a31592d645a97cb48add2f17d1aeefd199464c5733dfc",
+      "path": "tools/validate_y2s3_suite.py",
+      "role": "suite_preflight_validator"
+    }
+  ]
+}

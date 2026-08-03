@@ -1,0 +1,17 @@
+{
+  "suite_id": "y2s3_local_web_ui_v1",
+  "fixture_ref": "tests/fixtures/y2s3_local_web_ui_v1/fixture.json",
+  "oracle_ref": "tests/fixtures/y2s3_local_web_ui_v1/oracles.json",
+  "scenarios": [
+    {"scenario_id": "Y2S3-001", "contract_refs": ["Y2S3-INV-001", "Y2S3-INV-006"]},
+    {"scenario_id": "Y2S3-002", "contract_refs": ["Y2S3-INV-002", "Y2S3-INV-006"]},
+    {"scenario_id": "Y2S3-003", "contract_refs": ["Y2S3-INV-003"]},
+    {"scenario_id": "Y2S3-004", "contract_refs": ["Y2S3-INV-004", "Y2S3-INV-002"]},
+    {"scenario_id": "Y2S3-005", "contract_refs": ["Y2S3-INV-003"]},
+    {"scenario_id": "Y2S3-006", "contract_refs": ["Y2S3-INV-003"]},
+    {"scenario_id": "Y2S3-007", "contract_refs": ["Y2S3-INV-004"]},
+    {"scenario_id": "Y2S3-008", "contract_refs": ["Y2S3-INV-003", "Y2S3-INV-006"]},
+    {"scenario_id": "Y2S3-009", "contract_refs": ["Y2S3-INV-005"]},
+    {"scenario_id": "Y2S3-010", "contract_refs": ["Y2S3-INV-001", "Y2S3-INV-006"]}
+  ]
+}

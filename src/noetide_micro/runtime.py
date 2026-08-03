@@ -68,8 +68,13 @@ class LocalMicroRuntime:
         self.fixture = demo_fixture()
         self._failures: set[str] = set()
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        self._store = SemanticStore(self.data_dir / "noetide.sqlite3")
+        self._store = SemanticStore(self.data_dir / "noetide.sqlite3", check_same_thread=False)
         self._store.seed_rev_010(self.fixture)
+
+    @property
+    def store(self) -> SemanticStore:
+        """Read-only reference used by the local Web presentation layer."""
+        return self._store
 
     def close(self) -> None:
         self._store.close()

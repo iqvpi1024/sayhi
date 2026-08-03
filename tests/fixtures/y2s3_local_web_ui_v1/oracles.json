@@ -1,0 +1,438 @@
+{
+  "oracle_id": "y2s3_local_web_ui_v1",
+  "schema_version": "noetide.y2s3-oracle.v1",
+  "scenarios": {
+    "Y2S3-001": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "home": {
+            "status": "ok",
+            "html_title": "识海本地整理",
+            "visible_copy": [
+              "记录一条示例材料",
+              "生成整理建议",
+              "确认这次整理",
+              "查看当前视图",
+              "撤销这次整理",
+              "查看操作历史",
+              "导出为可读副本",
+              "创建本地备份"
+            ],
+            "contains_forbidden_visible_terms": false,
+            "uses_external_assets": false
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments", "ledger"]
+    },
+    "Y2S3-002": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "record": {
+            "status": "ok",
+            "source_id": "src_micro_001",
+            "receipt_id": "receipt_source_micro_001"
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments", "ledger"]
+    },
+    "Y2S3-003": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "record": {
+            "status": "ok",
+            "source_id": "src_micro_001",
+            "receipt_id": "receipt_source_micro_001"
+          },
+          "review": {
+            "status": "ok",
+            "review": {
+              "candidate_ref": "changeset_micro_001",
+              "summary_text": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。",
+              "evidence_citations": ["src_micro_001"],
+              "presentation_revision": "a5_shell_v1"
+            },
+            "preview": {
+              "will_create": ["state_contact_002"],
+              "will_modify": ["state_contact_001"],
+              "views_affected": ["person_card", "relationship_timeline"],
+              "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。",
+              "presentation_revision": "a5_shell_v1"
+            }
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments"]
+    },
+    "Y2S3-004": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "record": {
+            "status": "ok",
+            "source_id": "src_micro_001",
+            "receipt_id": "receipt_source_micro_001"
+          },
+          "review": {
+            "status": "ok",
+            "review": {
+              "candidate_ref": "changeset_micro_001",
+              "summary_text": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。",
+              "evidence_citations": ["src_micro_001"],
+              "presentation_revision": "a5_shell_v1"
+            },
+            "preview": {
+              "will_create": ["state_contact_002"],
+              "will_modify": ["state_contact_001"],
+              "views_affected": ["person_card", "relationship_timeline"],
+              "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。",
+              "presentation_revision": "a5_shell_v1"
+            }
+          },
+          "confirm": {
+            "status": "ok",
+            "publish_status": "published",
+            "published_revision": "rev_011",
+            "receipt_id": "receipt_publish_001"
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_011"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "Y2S3-005": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "record": {
+            "status": "ok",
+            "source_id": "src_micro_001",
+            "receipt_id": "receipt_source_micro_001"
+          },
+          "review": {
+            "status": "ok",
+            "review": {
+              "candidate_ref": "changeset_micro_001",
+              "summary_text": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。",
+              "evidence_citations": ["src_micro_001"],
+              "presentation_revision": "a5_shell_v1"
+            },
+            "preview": {
+              "will_create": ["state_contact_002"],
+              "will_modify": ["state_contact_001"],
+              "views_affected": ["person_card", "relationship_timeline"],
+              "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。",
+              "presentation_revision": "a5_shell_v1"
+            }
+          },
+          "confirm": {
+            "status": "ok",
+            "publish_status": "published",
+            "published_revision": "rev_011",
+            "receipt_id": "receipt_publish_001"
+          },
+          "views": {
+            "status": "ok",
+            "person_card": {
+              "contact_state": "no_contact"
+            },
+            "relationship_timeline": {
+              "current_contact_state": "no_contact",
+              "history_count": 2
+            }
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_011"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "Y2S3-006": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "record": {
+            "status": "ok",
+            "source_id": "src_micro_001",
+            "receipt_id": "receipt_source_micro_001"
+          },
+          "review": {
+            "status": "ok",
+            "review": {
+              "candidate_ref": "changeset_micro_001",
+              "summary_text": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。",
+              "evidence_citations": ["src_micro_001"],
+              "presentation_revision": "a5_shell_v1"
+            },
+            "preview": {
+              "will_create": ["state_contact_002"],
+              "will_modify": ["state_contact_001"],
+              "views_affected": ["person_card", "relationship_timeline"],
+              "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。",
+              "presentation_revision": "a5_shell_v1"
+            }
+          },
+          "confirm": {
+            "status": "ok",
+            "publish_status": "published",
+            "published_revision": "rev_011",
+            "receipt_id": "receipt_publish_001"
+          },
+          "history": {
+            "status": "ok",
+            "events": [
+              {
+                "action": "record",
+                "label": "已记录一条示例材料",
+                "source_id": "src_micro_001",
+                "receipt_id": "receipt_source_micro_001"
+              },
+              {
+                "action": "confirm",
+                "label": "已确认这次整理",
+                "changeset_id": "changeset_micro_001",
+                "receipt_id": "receipt_publish_001"
+              }
+            ]
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_011"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "Y2S3-007": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "record": {
+            "status": "ok",
+            "source_id": "src_micro_001",
+            "receipt_id": "receipt_source_micro_001"
+          },
+          "review": {
+            "status": "ok",
+            "review": {
+              "candidate_ref": "changeset_micro_001",
+              "summary_text": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。",
+              "evidence_citations": ["src_micro_001"],
+              "presentation_revision": "a5_shell_v1"
+            },
+            "preview": {
+              "will_create": ["state_contact_002"],
+              "will_modify": ["state_contact_001"],
+              "views_affected": ["person_card", "relationship_timeline"],
+              "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。",
+              "presentation_revision": "a5_shell_v1"
+            }
+          },
+          "confirm": {
+            "status": "ok",
+            "publish_status": "published",
+            "published_revision": "rev_011",
+            "receipt_id": "receipt_publish_001"
+          },
+          "revert": {
+            "status": "ok",
+            "revert_status": "published",
+            "compensation_revision": "rev_012",
+            "receipt_id": "receipt_compensation_001"
+          },
+          "views": {
+            "status": "ok",
+            "person_card": {
+              "contact_state": "active"
+            },
+            "relationship_timeline": {
+              "current_contact_state": "active",
+              "history_count": 1
+            }
+          },
+          "history": {
+            "status": "ok",
+            "events": [
+              {
+                "action": "record",
+                "label": "已记录一条示例材料",
+                "source_id": "src_micro_001",
+                "receipt_id": "receipt_source_micro_001"
+              },
+              {
+                "action": "confirm",
+                "label": "已确认这次整理",
+                "changeset_id": "changeset_micro_001",
+                "receipt_id": "receipt_publish_001"
+              },
+              {
+                "action": "revert",
+                "label": "已撤销这次整理",
+                "changeset_id": "changeset_micro_001",
+                "receipt_id": "receipt_compensation_001"
+              }
+            ]
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_012"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "Y2S3-008": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "record": {
+            "status": "ok",
+            "source_id": "src_micro_001",
+            "receipt_id": "receipt_source_micro_001"
+          },
+          "review": {
+            "status": "ok",
+            "review": {
+              "candidate_ref": "changeset_micro_001",
+              "summary_text": "识灵建议：Synthetic Alpha 与 Synthetic Beta 的联系状态从 active 改为 no_contact，自 2031-09-01T00:00:00+08:00 起生效。",
+              "evidence_citations": ["src_micro_001"],
+              "presentation_revision": "a5_shell_v1"
+            },
+            "preview": {
+              "will_create": ["state_contact_002"],
+              "will_modify": ["state_contact_001"],
+              "views_affected": ["person_card", "relationship_timeline"],
+              "impact_text": "确认后将新增 1 条联系状态记录并结束 1 条历史记录；受影响视图：person_card、relationship_timeline。",
+              "presentation_revision": "a5_shell_v1"
+            }
+          },
+          "confirm": {
+            "status": "ok",
+            "publish_status": "published",
+            "published_revision": "rev_011",
+            "receipt_id": "receipt_publish_001"
+          },
+          "revert": {
+            "status": "ok",
+            "revert_status": "published",
+            "compensation_revision": "rev_012",
+            "receipt_id": "receipt_compensation_001"
+          },
+          "export": {
+            "status": "ok",
+            "data_revision": "rev_012",
+            "files": [
+              "markdown/sources.md",
+              "markdown/canonical.md",
+              "markdown/ledger.md"
+            ],
+            "read_only": true
+          },
+          "backup": {
+            "status": "ok",
+            "backup_id": "web_backup_001.nobak",
+            "backup_file_exists": true,
+            "source_db_sha256_matches": true,
+            "created_at": "2031-10-15T02:00:00Z"
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true,
+            "export_store_read_only": true,
+            "backup_store_read_only": true,
+            "backup_path_controlled": true
+          }
+        },
+        "data_revision": "rev_012"
+      },
+      "forbidden_mutations": ["trust_closeness", "personality_judgments"]
+    },
+    "Y2S3-009": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "fail": {
+            "status": "ok",
+            "rejections": [
+              {"method": "GET", "path": "/api/unknown", "http_status": 404, "reason": "not_found"},
+              {"method": "POST", "path": "/api/record", "http_status": 400, "reason": "malformed_json"},
+              {"method": "POST", "path": "/api/review", "http_status": 409, "reason": "record_first"},
+              {"method": "POST", "path": "/api/confirm", "http_status": 409, "reason": "review_first"},
+              {"method": "POST", "path": "/api/revert", "http_status": 409, "reason": "confirm_first"},
+              {"method": "POST", "path": "/api/backup", "http_status": 409, "reason": "path_not_allowed"}
+            ],
+            "zero_business_write": true,
+            "non_loopback_rejected": true
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments", "ledger"]
+    },
+    "Y2S3-010": {
+      "result": {
+        "status": "web_case_completed",
+        "step_results": {
+          "determinism": {
+            "status": "ok",
+            "determinism_byte_identical": true,
+            "non_loopback_rejected": true,
+            "zero_bypass": true,
+            "stdlib_only": true,
+            "synthetic_fixture": true,
+            "canonical_unchanged": true,
+            "revision_unchanged": true
+          },
+          "audit": {
+            "zero_bypass": true,
+            "synthetic_fixture": true,
+            "stdlib_server": true
+          }
+        },
+        "data_revision": "rev_010"
+      },
+      "forbidden_mutations": ["canonical_objects", "revisions", "trust_closeness", "personality_judgments"]
+    }
+  }
+}

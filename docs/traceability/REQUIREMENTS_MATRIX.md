@@ -421,3 +421,19 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 - `PRD-§14.5`：横切——确定性、无回环外网络、profile fail closed、候选不作证据 -> `SPEC-Y2S2-LOCAL-MODEL-001` §7/§8 -> `Y2S2-010` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
 
 状态：`product_decided=true`（`DEC-Y2-S2-001`，2026-08-01）、`spec_applicability=pass_with_slice_contract_required`（`Y2S2-SPEC-APPLICABILITY-001`，2026-08-01）、`slice_contract=SPEC-Y2S2-LOCAL-MODEL-001 v0.1`、`traceable=true`、`suite_defined=true`、`adr_accepted=true`（`ADR-0021`，2026-08-03）、`suite_materialized=true`（2026-08-03）、`suite_executed=true`、`suite_passed=true`（2026-08-03，official runner 同一次 run 10/10 passed，immutable result `docs/testing/results/y2s2-20260803.json`，manifest 已绑定）、`gate_review_passed=true`（`Y2_S2_LOCAL_MODEL_GATE_REVIEW_2026-08-03.md`，P0=0/P1=0）、`verified=true`（recovery tag `y2s2-local-model-rp-20260803`）。
+## 4.23 Active Slice：Y2-S3 本地 Web UI
+
+`SLICE-Y2-S3-LOCAL-WEB-UI-001` 只实现 PRDv06 §18.8 的本地 Web 呈现层首片（`DEC-Y2-ENTRY-001`/`DEC-Y2-S3-001`）：stdlib HTTP、127.0.0.1/::1、无账户，固定合成旅程覆盖记录/审查/确认/视图/历史/撤销/导出/备份入口。它不代表云端后端（Y2-S4）、账户、MCP 或真实数据模式。
+
+- `PRD-§18.8`、`§24.5 Y2-S3`：本地回环首页、日常中文可见文案、无外部网络 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §2/§3/§7；S4/S6 -> `Y2S3-001` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§18.8`：记录入口只 append Source，Canonical digest 与 revision 不变 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §3/§7；S3/S9 -> `Y2S3-002` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§11`、`§18.8`：自然语言摘要、证据引用与影响预览；呈现不含 ChangeSet JSON 内部字段 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §3/§7；S5 -> `Y2S3-003` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§11`、`§18.8`：确认经 approve+publish；revision 前进、receipt 生成 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §3/§7；S3 -> `Y2S3-004` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§6`、`§18.8`：视图呈现新状态；读请求零写入 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §3/§7；S1 -> `Y2S3-005` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§18.8`、`§22`：历史返回 record/confirm/revert 日常事件标签；来自 Ledger -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §3/§7；S3/S7 -> `Y2S3-006` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§11`、`§18.8`：撤销经补偿路径；视图恢复一致、历史保留 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §3/§7；S3 -> `Y2S3-007` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§18.8`、`§21`：导出为只读 Derived Markdown；备份只写入服务配置目录 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §2/§4/§7；S7 -> `Y2S3-008` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§18.8`：未知路由、畸形请求、缺前置步骤全部 reject 零业务写入 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §6/§7；S3/S4 -> `Y2S3-009` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+- `PRD-§18.8`、`§21`、`§22`：横切——确定性、无直接 store 写、仅回环、stdlib only、显式合成 -> `SPEC-Y2S3-LOCAL-WEB-UI-001` §4/§5/§7；S6/S7 -> `Y2S3-010` -> `noetide_micro.local_web` / `noetide_micro.y2s3_testing_adapter` -> `passed`（y2s3-20260803.json）
+
+状态：`product_decided=true`（`DEC-Y2-S3-001`，2026-08-03）、`spec_applicability=pass_with_slice_contract_required`（`Y2S3-SPEC-APPLICABILITY-001`，2026-08-03）、`slice_contract=SPEC-Y2S3-LOCAL-WEB-UI-001 v0.1`、`traceable=true`、`adr_accepted=true`（`ADR-0022`，2026-08-03）、`suite_defined=true`、`suite_materialized=true`（2026-08-03）、`suite_executed=true`、`suite_passed=true`（2026-08-03，official runner 同一次 run 10/10 passed，immutable result `docs/testing/results/y2s3-20260803.json`，manifest 已绑定）、`gate_review_passed=true`（`Y2_S3_LOCAL_WEB_UI_GATE_REVIEW_2026-08-03.md`，P0=0/P1=0）、`verified=true`（recovery tag `y2s3-local-web-ui-rp-20260803`）。

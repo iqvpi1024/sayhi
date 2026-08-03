@@ -11,8 +11,8 @@
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
 | 当前公开发布 | `v0.2.0-beta` GitHub prerelease 已发布（D3 完成） |
-| 当前工作切片 | Y2-S2 已 verified；待 Y2-S3（本地 Web UI）切片决策 |
-| 当前阶段 | `recovery_point_published`（Y2-S2）；首年全部 `recovery_point_published` |
+| 当前工作切片 | Y2-S3 已 verified；待 Y2-S4（云端可选）切片决策 |
+| 当前阶段 | `recovery_point_published`（Y2-S3）；首年全部 `recovery_point_published` |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
 | tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
@@ -85,6 +85,7 @@
 69. `DEC-PRD-V06-001` 已批准（2026-08-01）：`PRDv06.md` v0.6 成为当前产品基线（hash `4513B268...CAD8`），v0.5 转只读；`CURRENT_PRODUCT_BASELINE.md` 索引已切换；九份 SPEC 完成 v0.6 兼容复核（`PRD_V06_SPEC_COMPATIBILITY_REVIEW.md`，绑定同步 + 最小升版：S1 v0.7、S2 v0.6、S3 v0.5、S4 v0.5、S5 v0.5、S6 v0.6、S7 v0.4、S8 v0.4、S9 v0.5，无语义修订）；两个 baseline validator 已同步 v05/v06 版本对并实际通过；业务编码仍未开始。
 70. Y2-S1（真实文件夹文本导入）全门禁链完成并 verified（2026-08-01）：`DEC-Y2-S1-001`、applicability（pass_with_slice_contract_required）、`SPEC-Y2S1-FOLDER-IMPORT-001` v0.1 + 合同复核、矩阵 §4.21、`ADR-0020`、`ARCH-Y2S1-FOLDER-IMPORT-001`、suite 物化（10 场景）、`PLAN-Y2-S1-IMPL-001`；TASK-001/002 实现（`folder_import.py` importer+watcher、store 窄辅助）定向 10/10；TASK-003 adapter contract 10/10（3 次复跑稳定）；TASK-004 official runner `y2s1-20260801.json` 同一次 run 10/10 passed/current 并绑定 manifest；全量回归 412 OK 0 skip；22 个 suite validator 全过；Gate Review P0=0/P1=0。切片只证明合成文件夹树的 Source Vault 导入与单次 poll 监视，不宣告真实数据模式开放。
 71. Y2-S2（本地模型提议式整理）全门禁链完成并 verified（2026-08-03）：`DEC-Y2-S2-001`、applicability（pass_with_slice_contract_required）、`SPEC-Y2S2-LOCAL-MODEL-001` v0.1 + 合同复核、矩阵 §4.22、`ADR-0021`、`ARCH-Y2S2-LOCAL-MODEL-001`、suite 物化（10 场景）、`PLAN-Y2-S2-IMPL-001`；TASK-001/002 实现（`model_capability.py`、`y2s2_testing_adapter.py`）unit 8/8；adapter contract 10/10；official runner `y2s2-20260803.json` 同一次 run 10/10 passed/current 并绑定 manifest；全量回归 430 OK 0 skip；23 个 suite validator 全过；Gate Review P0=0/P1=0。切片只证明本地模型候选 propose-only 与版本审计，不宣告云端后端、真实模型评估或自动发布。
+72. Y2-S3（本地 Web UI 呈现层）全门禁链完成并 verified（2026-08-03）：`DEC-Y2-S3-001`、applicability（pass_with_slice_contract_required）、`SPEC-Y2S3-LOCAL-WEB-UI-001` v0.1 + 合同复核、矩阵 §4.23、`ADR-0022`、`ARCH-Y2S3-LOCAL-WEB-UI-001`、suite 物化（10 场景）、`PLAN-Y2-S3-IMPL-001`；TASK-001/002 实现（`local_web.py`、`y2s3_testing_adapter.py`）unit 7/7；adapter contract 10/10；official runner `y2s3-20260803.json` 同一次 run 10/10 passed/current 并绑定 manifest；全量回归 447 OK 0 skip；24 个 suite validator 全过；Gate Review P0=0/P1=0。切片只证明本地回环 Web 呈现链，不宣告云端后端、MCP、真实数据模式或生产级加密密钥管理。
 
 ## 4. 真实验证结果
 
@@ -175,6 +176,10 @@
 | Y2-S2 contract（adapter） | 10/10 passed |
 | Y2-S2 官方 suite | `docs/testing/results/y2s2-20260803.json`：同一次 run 10/10 passed/current，网络阻断、stdlib only；manifest 已绑定；全量回归 430 OK 0 skip；23 个 suite validator 全 PASSED |
 | Y2-S2 Gate Review | `Y2_S2_LOCAL_MODEL_GATE_REVIEW_2026-08-03.md`：P0=0、P1=0 |
+| Y2-S3 定向测试 | TASK-001/002：unit 7/7 passed（`local_web` + `y2s3_testing_adapter`） |
+| Y2-S3 contract（adapter） | 10/10 passed |
+| Y2-S3 官方 suite | `docs/testing/results/y2s3-20260803.json`：同一次 run 10/10 passed/current，网络阻断、stdlib only；manifest 已绑定；全量回归 447 OK 0 skip；24 个 suite validator 全 PASSED |
+| Y2-S3 Gate Review | `Y2_S3_LOCAL_WEB_UI_GATE_REVIEW_2026-08-03.md`：P0=0、P1=0 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -187,4 +192,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**Y2-S2 已 verified（recovery tag `y2s2-local-model-rp-20260803`）。下一步唯一动作：Y2-S3（本地 Web UI，PRDv06 §18.8/§24.5）切片决策 `DEC-Y2-S3-001`，按同一门禁链推进。**
+**Y2-S3 已 verified（recovery tag `y2s3-local-web-ui-rp-20260803`）。下一步唯一动作：Y2-S4（云端可选）切片决策 `DEC-Y2-S4-001`，默认禁用、按舱室显式授权、红线 fail closed，按同一门禁链推进。**
