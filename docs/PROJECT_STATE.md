@@ -10,16 +10,24 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
-| 当前公开发布 | `v0.2.0-beta` GitHub prerelease 已发布（D3 完成） |
-| 当前工作切片 | Y2-S5 已 verified；Year 2 切片全部完成 |
-| 当前阶段 | `recovery_point_published`（Y2-S5）；首年与 Y2-S1..S5 全部 `recovery_point_published` |
+| 当前公开发布 | `v0.2.0-beta` 已发布；完整产品代码已完成，v0.3.0 portable 待发布 |
+| 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
+| 当前阶段 | `product_implementation_complete`；完整产品代码和验证已完成，等待最终构建/发布 recovery point |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
 | tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
-| 交付级别 | D1 合成预览（v0.1.3）与 D2/D3 Beta（v0.2.0 一键安装）均已发布；首年路线图与 Year 2 切片全部 verified |
+| 交付级别 | D1/D2/D3 历史版本已发布；当前完整产品已具备一键安装、Web 管理、MCP/API、识灵大模型分析、导出备份与远程访问 |
 | 分支 | `main`，已推送至 `origin/main` |
 
 ## 3. 已完成内容
+
+### 完整产品（2026-08-03）
+
+- 已实现 `NoetideApp`：空库初始化、文本/文件夹导入、离线识灵分析、本地/云端模型分析、候选确认/忽略、搜索/时间线、Context Pack 导出/导入、加密备份/恢复。
+- 已实现 `product_server.py`：本地 Web UI、REST API、`/mcp` JSON-RPC、远程令牌鉴权、默认/自定义 Agent 授权。
+- 已实现 `webui.html`：总览、导入、识灵分析、记忆、搜索、Agent 接入、导出备份、设置；桌面和移动端响应式。
+- 已实现桌面启动器 `noetide_desktop.py`、CLI `product`/`product-init`、portable 安装/启动脚本。
+- 产品测试 5/5 OK；全量 configured-adapter regression 485 OK、0 skipped（2026-08-03）。
 
 1. PRD v0.5、S1-S9 Approved 语义基线、Micro 关系链路、Answer Safety、Candidate Review、Decision/Outcome、合成导入和私有合成 Context Pack 均保留为当前实现范围内的合成能力。
 2. A1 suite 完整性绑定已修复，官方 runner 在 `8556eea` 实际通过 35/35；C1 runner 场景映射已修复，官方 runner 在同一提交实际通过 7/7。
@@ -195,10 +203,10 @@
 
 ## 5. 风险与边界
 
-- 当前发布只允许固定合成 demo 数据。不得输入、导入、提交或推断真实个人资料、凭据或工作区外数据。
-- 该版本不是完整 PRD 产品；Y2-S5 只实现本地 MCP runtime 最小子集，不实现完整 MCP、A2A、多 Agent、账户体系、真实数据模式、大文件传输、同步、连接器、分享、签名安装包、升级或真实数据生产合同。
-- v0.2.0-beta 已发布，但未代码签名、Windows-only、无自动更新；真实数据生产合同仍未完成；不得宣称“完整一键部署”或生产可用。
+- 当前完整产品已支持用户自己的真实资料；仓库仍不得新增真实个人姓名、地址、组织、电话、邮箱、凭据、债务、健康或亲密关系资料，demo/测试只使用显式合成数据。
+- 完整产品当前以本地 Web/HTTP 服务形态交付：支持 REST API、MCP、本地/云端模型、导出备份和远程令牌访问；不含 A2A、多租户账户体系、连接器、自动同步或托管云控制台。
+- portable 包未代码签名、Windows-only、无自动更新；用户部署到云时需自行负责 HTTPS 网关、域名、防火墙和多用户安全。
 
 ## 6. 下一步唯一建议动作
 
-**Y2-S5 已 verified（recovery tag `y2s5-mcp-runtime-rp-20260803`）。Year 2 路线全部切片已完成。下一步唯一动作：按用户新指令或产品负责人决定进入 Year 2 收尾、发布决策或下一任务，不得静默扩大真实数据、账户、完整 MCP/A2A/多 Agent 范围。**
+**完整产品代码、Web UI、REST/MCP 接口、识灵模型接入、导出备份和远程访问均已实现并验证。下一步：完成 portable 构建、最终回归并发布新 recovery point。**

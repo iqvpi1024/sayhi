@@ -47,21 +47,21 @@ try {
             "uninstall-noetide.ps1",
             "Noetide Setup.cmd",
             "Noetide Shell.cmd",
+            "Noetide Start.cmd",
             "Noetide Upgrade.cmd",
             "Noetide Uninstall.cmd"
         )
         foreach ($scriptName in $d2Scripts) {
             Copy-Item -Force (Join-Path $sourceRoot "scripts\portable\$scriptName") (Join-Path $bundleRoot "scripts")
         }
-        Set-Content -LiteralPath (Join-Path $bundleRoot "scripts\Noetide Start.cmd") -Value @("@echo off", 'call "%~dp0Noetide Shell.cmd" status', "pause") -Encoding ascii
         $manifest = [ordered]@{
             schema_version = "noetide.d2-beta.v1"
             version = $Version
             source_ref = $Ref
             delivery_level = "D2"
             runtime = @{ version = "3.12.10"; source_url = $runtimeUrl; sha256 = $runtimeSha256 }
-            synthetic_only = $true
-            real_personal_data_supported = $false
+            synthetic_only = $false
+            real_personal_data_supported = $true
             code_signed = $false
             upgrade = "run scripts/Noetide Upgrade.cmd from the new bundle; data is backed up before any replacement"
             uninstall = "scripts/Noetide Uninstall.cmd removes only the app folder by default; data deletion requires explicit confirmation and creates a verified backup first"

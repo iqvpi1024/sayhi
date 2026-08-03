@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>识海 Noetide</title>
+<style>
+:root{--bg:#f4f6f8;--surface:#ffffff;--text:#1f2933;--muted:#52606d;--border:#d7dee4;--accent:#0d7a72;--accent-soft:#e5f5f2;--warn:#b45309;--warn-soft:#fff4e5;--danger:#b42318;--danger-soft:#fff1f0;--ok:#0f7b4d;--ok-soft:#e8f6ef}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:system-ui,"Microsoft YaHei","PingFang SC",sans-serif;line-height:1.5}
+button,input,select,textarea{font:inherit}
+#app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#edf4f2;border-right:1px solid var(--border);padding:16px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font-size:18px;font-weight:800;margin:2px 0 18px}
+.brand small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:2px}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{text-align:left;min-height:40px;padding:8px 10px;border:1px solid transparent;background:transparent;border-radius:6px;color:var(--text);cursor:pointer}
+.nav button:hover{background:#fff}
+.nav button.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+.content{min-width:0;padding:22px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px}
+.topbar h1{margin:0;font-size:22px;line-height:1.25}
+.status{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--muted);font-size:12px;white-space:nowrap}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.view{display:none}
+.view.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px}
+.stat-title{color:var(--muted);font-size:12px;margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:800;line-height:1.1}
+.stat-note{color:var(--muted);font-size:12px;margin-top:6px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:14px}
+.panel h2,.panel h3{margin:0 0 10px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:0}
+.row-main{min-width:0}
+.row-title{font-weight:700;word-break:break-word}
+.row-sub{color:var(--muted);font-size:12px;margin-top:3px;word-break:break-word}
+textarea{width:100%;min-height:170px;resize:vertical;border:1px solid var(--border);border-radius:6px;padding:10px;background:var(--surface)}
+input,select{width:100%;min-height:38px;border:1px solid var(--border);border-radius:6px;padding:7px 9px;background:var(--surface);color:var(--text)}
+label{display:block;color:var(--muted);font-size:12px;margin:10px 0 4px}
+button{min-height:38px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.warn{background:var(--warn-soft);border-color:#e5a94f;color:var(--warn)}
+button.danger{background:var(--danger-soft);border-color:#f0a6a1;color:var(--danger)}
+button.small{min-height:30px;padding:3px 8px;font-size:12px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.tab{min-height:34px;padding:5px 12px;border-radius:6px}
+.tab.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.pill{display:inline-flex;align-items:center;min-height:24px;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;white-space:nowrap}
+.pill.muted{background:#eef2f5;color:var(--muted)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.code{white-space:pre-wrap;word-break:break-word;background:#101f2d;color:#d7f5ef;border-radius:6px;padding:10px;font-family:ui-monospace,Consolas,monospace;font-size:12px;max-height:260px;overflow:auto}
+.muted{color:var(--muted)}
+.empty{padding:18px 0;color:var(--muted);text-align:center}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border)}
+.check:last-child{border-bottom:0}
+.check input{width:16px;min-height:16px;margin-top:3px;accent-color:var(--accent)}
+.segmented{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:760px){#app{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border)}.nav{flex-direction:row;overflow-x:auto}.nav button{flex:0 0 auto;white-space:nowrap}.content{padding:14px}}
+</style>
+</head>
+<body>
+<div id="app">
+<aside class="sidebar">
+<div class="brand">识海<small>Noetide</small></div>
+<nav class="nav" id="nav">
+<button data-view="overview" class="active">总览</button>
+<button data-view="import">导入</button>
+<button data-view="analyze">识灵分析</button>
+<button data-view="memory">记忆</button>
+<button data-view="search">搜索</button>
+<button data-view="agent">Agent 接入</button>
+<button data-view="export">导出备份</button>
+<button data-view="settings">设置</button>
+</nav>
+</aside>
+<main class="content">
+<div class="topbar">
+<h1 id="viewTitle">总览</h1>
+<span class="status" id="status">连接中</span>
+</div>
+
+<section class="view active" id="view-overview">
+<div class="grid">
+<div class="card"><div class="stat-title">资料</div><div class="stat-value" id="statSources">-</div></div>
+<div class="card"><div class="stat-title">已确认记忆</div><div class="stat-value" id="statObjects">-</div></div>
+<div class="card"><div class="stat-title">待确认候选</div><div class="stat-value" id="statCandidates">-</div></div>
+<div class="card"><div class="stat-title">版本</div><div class="stat-value" id="statRevision">-</div></div>
+</div>
+<div class="panel"><h2>最近资料</h2><div id="recentSources"></div></div>
+<div class="panel"><h2>最近记忆</h2><div id="recentObjects"></div></div>
+</section>
+
+<section class="view" id="view-import">
+<div class="panel">
+<h2>粘贴文本</h2>
+<label for="importTitle">标题</label>
+<input id="importTitle" placeholder="可留空">
+<label for="importText">内容</label>
+<textarea id="importText" placeholder="输入聊天记录、笔记或任意碎片"></textarea>
+<div class="actions"><button class="primary" id="importTextBtn">保存资料</button></div>
+</div>
+<div class="panel">
+<h2>导入文件夹</h2>
+<label for="folderPath">文件夹路径</label>
+<input id="folderPath" placeholder="D:\notes">
+<div class="actions"><button class="primary" id="importFolderBtn">导入文件夹</button></div>
+</div>
+<div class="panel"><h2>结果</h2><div id="importResult" class="empty">暂无结果</div></div>
+</section>
+
+<section class="view" id="view-analyze">
+<div class="panel">
+<h2>分析来源</h2>
+<div class="actions"><button class="primary" id="analyzeBtn">运行识灵分析</button><span class="pill" id="analyzeMode">离线规则</span></div>
+<div id="sourceCheckList"></div>
+</div>
+<div class="panel"><h2>候选</h2><div id="candidateList"></div></div>
+</section>
+
+<section class="view" id="view-memory">
+<div class="tabs">
+<button class="tab active" data-tab="sources">资料</button>
+<button class="tab" data-tab="objects">记忆</button>
+<button class="tab" data-tab="timeline">时间线</button>
+</div>
+<div id="memoryTabSources"></div>
+<div id="memoryTabObjects" class="hidden"></div>
+<div id="memoryTabTimeline" class="hidden"></div>
+</section>
+
+<section class="view" id="view-search">
+<div class="panel">
+<h2>搜索</h2>
+<div class="actions"><input id="searchInput" placeholder="搜索人物、项目、关键词" style="flex:1"><button class="primary" id="searchBtn">搜索</button></div>
+<div id="searchResult"></div>
+</div>
+</section>
+
+<section class="view" id="view-agent">
+<div class="panel">
+<h2>本机入口</h2>
+<div class="row"><div class="row-main"><div class="row-title">Web 地址</div><div class="row-sub" id="webUrl">-</div></div><button class="small" data-copy="webUrl">复制</button></div>
+<div class="row"><div class="row-main"><div class="row-title">MCP 地址</div><div class="row-sub" id="mcpUrl">-</div></div><button class="small" data-copy="mcpUrl">复制</button></div>
+<div class="row"><div class="row-main"><div class="row-title">访问令牌</div><div class="row-sub" id="apiToken">-</div></div><button class="small" id="refreshTokenBtn">重新生成</button></div>
+<div class="actions"><button class="primary" id="createCapabilityBtn">创建默认 MCP 授权</button></div>
+<div class="row"><div class="row-main"><div class="row-title">自定义授权</div><div class="row-sub"><input id="capabilityResourceIds" placeholder="src_p_xxx, src_p_yyy"></div></div><button class="small" id="createResourceCapabilityBtn">创建</button></div>
+</div>
+<div class="panel"><h2>MCP 授权</h2><div id="capabilityList"></div></div>
+</section>
+
+<section class="view" id="view-export">
+<div class="panel">
+<h2>导出与备份</h2>
+<div class="actions"><button class="primary" id="exportBtn">导出上下文包</button><button class="primary" id="backupBtn">创建本地备份</button></div>
+</div>
+<div class="panel">
+<h2>导入上下文包</h2>
+<label for="importPackPath">包路径</label>
+<input id="importPackPath" placeholder="D:\exports\pack_...">
+<div class="actions"><button class="primary" id="importPackBtn">导入包</button></div>
+</div>
+<div class="panel">
+<h2>恢复备份</h2>
+<label for="restorePath">备份文件</label>
+<input id="restorePath" placeholder="D:\backups\noetide_....nobak">
+<label for="restoreKey">密钥</label>
+<input id="restoreKey" type="password" placeholder="本地设置中的备份密钥">
+<div class="actions"><button class="primary" id="restoreBtn">恢复到新数据库</button></div>
+</div>
+<div class="panel"><h2>结果</h2><div id="exportResult" class="empty">暂无结果</div></div>
+</section>
+
+<section class="view" id="view-settings">
+<div class="panel">
+<h2>识灵模型</h2>
+<label for="modelMode">模式</label>
+<select id="modelMode"><option value="offline">离线规则</option><option value="local">本地模型</option><option value="cloud">云端模型</option></select>
+<label for="modelEndpoint">接口地址</label>
+<input id="modelEndpoint" placeholder="http://127.0.0.1:11434/v1/chat/completions 或 https://...">
+<label for="modelApiKey">API 密钥</label>
+<input id="modelApiKey" type="password" placeholder="云端可选">
+<label for="modelName">模型名称</label>
+<input id="modelName" placeholder="offline-rule-v1">
+</div>
+<div class="panel">
+<h2>远程访问</h2>
+<label for="remoteAccess">允许手机/云端访问</label>
+<select id="remoteAccess"><option value="false">仅本机</option><option value="true">开启令牌访问</option></select>
+<label for="remoteHost">监听地址</label>
+<input id="remoteHost" placeholder="0.0.0.0">
+<label for="remotePort">端口</label>
+<input id="remotePort" placeholder="8765">
+<div class="actions"><button class="primary" id="saveSettingsBtn">保存设置</button><span class="pill muted">重启服务后生效</span></div>
+</div>
+<div class="panel"><h2>结果</h2><div id="settingsResult" class="empty">暂无结果</div></div>
+</section>
+</main>
+</div>
+<style>.hidden{display:none}</style>
+<script>
+const state={view:'overview',token:localStorage.getItem('noetide_token')||''};
+const $=(s)=>document.querySelector(s);
+const $$=(s)=>Array.from(document.querySelectorAll(s));
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function setStatus(text,ok=true){const el=$('#status');el.textContent=text;el.style.background=ok?'':'var(--danger-soft)';}
+async function api(path,options={}){
+  const headers=Object.assign({'Content-Type':'application/json'},options.headers||{});
+  if(state.token)headers['Authorization']='Bearer '+state.token;
+  const resp=await fetch(path,Object.assign({},options,{headers}));
+  if(resp.status===401){
+    const token=prompt('请输入访问令牌');
+    if(token){state.token=token.trim();localStorage.setItem('noetide_token',state.token);return api(path,options);}
+  }
+  return resp.json();
+}
+async function post(path,body){return api(path,{method:'POST',body:JSON.stringify(body||{})});}
+function row(title,sub='',actions=''){
+  return `<div class="row"><div class="row-main"><div class="row-title">${esc(title)}</div>${sub?`<div class="row-sub">${esc(sub)}</div>`:''}</div>${actions?`<div class="actions" style="margin:0">${actions}</div>`:''}</div>`;
+}
+function empty(text='暂无数据'){return `<div class="empty">${esc(text)}</div>`;}
+function pill(text,cls=''){return `<span class="pill ${cls}">${esc(text)}</span>`;}
+
+async function loadOverview(){
+  const data=(await api('/api/overview')).data||{};
+  $('#statSources').textContent=data.sources??'-';
+  $('#statObjects').textContent=data.canonical??'-';
+  $('#statCandidates').textContent=data.candidates_pending??'-';
+  $('#statRevision').textContent=data.revision||'-';
+  $('#recentSources').innerHTML=(data.recent_sources||[]).map(s=>row(s.title||s.source_id,s.source_id)).join('')||empty();
+  $('#recentObjects').innerHTML=(data.recent_objects||[]).map(o=>{
+    const p=o.payload||{};const label=p.canonical_label||p.title||p.statement||o.object_id;
+    return row(label,`${o.object_type} · ${o.object_id}`);
+  }).join('')||empty();
+  setStatus('已连接');
+}
+
+async function loadImport(){
+  $('#importResult').innerHTML=empty('暂无结果');
+}
+
+async function loadAnalyze(){
+  const [sources,candidates]=await Promise.all([api('/api/sources'),api('/api/candidates')]);
+  const list=sources.sources||[];
+  $('#sourceCheckList').innerHTML=list.map(s=>`<div class="check"><input type="checkbox" value="${esc(s.source_id)}" checked><div class="row-main"><div class="row-title">${esc(s.title||s.source_id)}</div><div class="row-sub">${esc(s.preview||'')}</div></div></div>`).join('')||empty('请先导入资料');
+  $('#analyzeMode').textContent=(await api('/api/settings')).settings?.model_mode==='offline'?'离线规则':'外部模型';
+  renderCandidates(candidates.candidates||[]);
+}
+function renderCandidates(items){
+  $('#candidateList').innerHTML=items.filter(c=>c.status!=='rejected').map(c=>{
+    const p=c.payload||{};
+    const label=p.canonical_label||p.title||p.statement||p.canonical_text||c.candidate_kind;
+    const actions=`<button class="small primary" data-confirm="${esc(c.candidate_id)}">确认</button><button class="small danger" data-reject="${esc(c.candidate_id)}">忽略</button>`;
+    return row(label,`${c.candidate_kind} · ${c.status} · ${esc(p.summary||'')}`,actions);
+  }).join('')||empty('还没有候选');
+}
+
+async function loadMemory(){
+  const [sources,objects,timeline]=await Promise.all([api('/api/sources'),api('/api/objects'),api('/api/timeline')]);
+  $('#memoryTabSources').innerHTML=(sources.sources||[]).map(s=>row(s.title||s.source_id,`${s.source_kind||''} · ${s.ingested_at||''}`,pill('资料'))).join('')||empty();
+  $('#memoryTabObjects').innerHTML=(objects.objects||[]).map(o=>{
+    const p=o.payload||{};const label=p.canonical_label||p.title||p.statement||o.object_id;
+    return row(label,`${o.object_type} · ${o.object_id}`,pill(o.object_type));
+  }).join('')||empty();
+  $('#memoryTabTimeline').innerHTML=(timeline.timeline||[]).map(e=>row(e.title||e.id,`${e.kind} · ${e.at||''} · ${esc(e.summary||'')}`,pill(e.kind))).join('')||empty();
+}
+function loadMemoryTab(name){
+  $$('#view-memory .tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===name));
+  $('#memoryTabSources').classList.toggle('hidden',name!=='sources');
+  $('#memoryTabObjects').classList.toggle('hidden',name!=='objects');
+  $('#memoryTabTimeline').classList.toggle('hidden',name!=='timeline');
+}
+async function loadSearch(){
+  $('#searchResult').innerHTML=empty('输入关键词后搜索');
+}
+async function doSearch(){
+  const q=$('#searchInput').value.trim();
+  const data=(await api('/api/search?q='+encodeURIComponent(q))).data||{};
+  const src=(data.sources||[]).map(s=>row(s.title||s.source_id,s.snippet||'',pill('资料'))).join('');
+  const obj=(data.objects||[]).map(o=>{const p=o.payload||{};return row(p.canonical_label||p.title||p.statement||o.object_id,`${o.object_type} · ${esc(p.summary||'')}`,pill('记忆'));}).join('');
+  $('#searchResult').innerHTML=(src+obj)||empty('没有找到匹配项');
+}
+
+async function loadAgent(){
+  const [settings,cap] = await Promise.all([api('/api/settings'),api('/api/mcp')]);
+  const s=settings.settings||{};
+  $('#webUrl').textContent=location.origin;
+  $('#mcpUrl').textContent=location.origin+'/mcp';
+  $('#apiToken').textContent=s.api_token||'-';
+  const caps=cap.capabilities||[];
+  $('#capabilityList').innerHTML=caps.map(c=>row(c.capability_id,c.purpose+' · '+(c.tools||[]).join(', '),pill(c.revoked?'已撤销':'有效'))).join('')||empty('尚未创建授权');
+}
+async function loadExport(){$('#exportResult').innerHTML=empty('暂无结果');}
+async function loadSettings(){
+  const s=(await api('/api/settings')).settings||{};
+  $('#modelMode').value=s.model_mode||'offline';
+  $('#modelEndpoint').value=s.model_endpoint||'';
+  $('#modelApiKey').value='';
+  $('#modelName').value=s.model_name||'offline-rule-v1';
+  $('#remoteAccess').value=String(!!s.remote_access);
+  $('#remoteHost').value=s.remote_host||'127.0.0.1';
+  $('#remotePort').value=s.port||'8765';
+  $('#settingsResult').innerHTML=empty('暂无结果');
+}
+function switchView(name){
+  state.view=name;
+  $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
+  $$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));
+  const titles={overview:'总览',import:'导入',analyze:'识灵分析',memory:'记忆',search:'搜索',agent:'Agent 接入',export:'导出备份',settings:'设置'};
+  $('#viewTitle').textContent=titles[name]||name;
+  ({overview:loadOverview,import:loadImport,analyze:loadAnalyze,memory:loadMemory,search:loadSearch,agent:loadAgent,export:loadExport,settings:loadSettings}[name])();
+}
+
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(b)switchView(b.dataset.view);});
+$('#importTextBtn').addEventListener('click',async()=>{
+  const content=$('#importText').value.trim();
+  if(!content){$('#importResult').innerHTML='<div class="empty">内容为空</div>';return;}
+  const r=await post('/api/ingest/text',{content,title:$('#importTitle').value.trim()});
+  $('#importResult').innerHTML=r.status==='ok'?row('已保存',`${r.data?.source_id||''} · ${r.data?.status||''}`):empty(r.reason||'保存失败');
+  $('#importText').value='';$('#importTitle').value='';
+});
+$('#importFolderBtn').addEventListener('click',async()=>{
+  const path=$('#folderPath').value.trim();
+  if(!path){$('#importResult').innerHTML='<div class="empty">请输入路径</div>';return;}
+  const r=await post('/api/ingest/folder',{path});
+  if(r.status==='ok'){$('#importResult').innerHTML=row('导入完成',`${r.data?.stored||0} 个新文件，${r.data?.duplicate||0} 个重复`);$('#folderPath').value='';}
+  else $('#importResult').innerHTML=empty(r.reason||'导入失败');
+});
+$('#analyzeBtn').addEventListener('click',async()=>{
+  const ids=$$('#sourceCheckList input:checked').map(i=>i.value);
+  if(!ids.length){$('#candidateList').innerHTML=empty('请选择来源');return;}
+  const r=await post('/api/analyze',{source_ids:ids});
+  renderCandidates((r.data?.candidates_proposed||[]));
+  if(r.data?.rejected_outputs?.length){$('#candidateList').insertAdjacentHTML('beforeend','<div class="empty">部分模型输出被拒绝</div>');}
+});
+document.addEventListener('click',async e=>{
+  const confirmBtn=e.target.closest('[data-confirm]');
+  const rejectBtn=e.target.closest('[data-reject]');
+  if(confirmBtn){const r=await post('/api/candidates/'+encodeURIComponent(confirmBtn.dataset.confirm)+'/confirm',{});await loadAnalyze();}
+  if(rejectBtn){await post('/api/candidates/'+encodeURIComponent(rejectBtn.dataset.reject)+'/reject',{});await loadAnalyze();}
+});
+$$('#view-memory .tab').forEach(t=>t.addEventListener('click',()=>loadMemoryTab(t.dataset.tab)));
+$('#searchBtn').addEventListener('click',doSearch);
+$('#searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+$('#createCapabilityBtn').addEventListener('click',async()=>{const r=await post('/api/mcp/capability',{});if(r.status==='ok')await loadAgent();});
+$('#createResourceCapabilityBtn').addEventListener('click',async()=>{const ids=$('#capabilityResourceIds').value.trim().split(/[,，\s]+/).filter(Boolean);const r=await post('/api/mcp/capability',{resource_ids:ids});if(r.status==='ok')await loadAgent();});
+$('#refreshTokenBtn').addEventListener('click',async()=>{await post('/api/settings',{api_token:true});await loadAgent();});
+$('#exportBtn').addEventListener('click',async()=>{const r=await post('/api/export',{});$('#exportResult').innerHTML=r.status==='ok'?row('已导出',r.data?.path||''):empty(r.reason||'导出失败');});
+$('#backupBtn').addEventListener('click',async()=>{const r=await post('/api/backup',{});$('#exportResult').innerHTML=r.status==='ok'?row('已备份',r.data?.path||''):empty(r.reason||'备份失败');});
+$('#importPackBtn').addEventListener('click',async()=>{const r=await post('/api/import',{path:$('#importPackPath').value.trim()});$('#exportResult').innerHTML=r.status==='ok'?row('已导入',`资料 ${r.data?.sources_imported||0} · 记忆 ${r.data?.canonical_imported||0}`):empty(r.reason||'导入失败');});
+$('#restoreBtn').addEventListener('click',async()=>{const r=await post('/api/restore',{path:$('#restorePath').value.trim(),key:$('#restoreKey').value});$('#exportResult').innerHTML=r.status==='ok'?row('已恢复',JSON.stringify(r.data||{})):empty(r.reason||'恢复失败');});
+$('#saveSettingsBtn').addEventListener('click',async()=>{
+  const r=await post('/api/settings',{
+    model_mode:$('#modelMode').value,
+    model_endpoint:$('#modelEndpoint').value.trim(),
+    model_name:$('#modelName').value.trim(),
+    model_api_key:$('#modelApiKey').value.trim(),
+    remote_access:$('#remoteAccess').value==='true',
+    remote_host:$('#remoteHost').value.trim()||'127.0.0.1',
+    port:Number($('#remotePort').value)||8765,
+  });
+  $('#settingsResult').innerHTML=r.status==='ok'?row('已保存','重启服务后生效'):empty(r.reason||'保存失败');
+  await loadAgent();
+});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(b){navigator.clipboard?.writeText($('#'+b.dataset.copy).textContent);setStatus('已复制');}});
+switchView('overview');
+</script>
+</body>
+</html>

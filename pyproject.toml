@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "noetide"
-version = "0.1.3"
+version = "0.3.0"
 description = "Local-first Personal Context and Growth Engine"
 readme = {file = "README.md", content-type = "text/markdown"}
 license = {text = "MIT"}
@@ -21,6 +21,7 @@ classifiers = [
 
 [project.scripts]
 noetide = "noetide_micro.cli:main"
+noetide-product = "noetide_micro.product_server:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -29,4 +30,4 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-noetide_micro = ["schema.sql"]
+noetide_micro = ["schema.sql", "webui.html"]

@@ -32,7 +32,7 @@ try {
     else {
         Add-Type -AssemblyName System.Windows.Forms
         $notice = [System.Windows.Forms.MessageBox]::Show(
-            "Noetide Beta is local-only: your data stays on this computer and is never uploaded.`nThis build runs on synthetic demo data only; do not enter real personal information.`n`nContinue with first-time setup?",
+            "Noetide is local-first: your data stays in the folder you choose unless you explicitly enable remote access.`nYou own the data and can export or back it up at any time.`n`nContinue with setup?",
             "Noetide Beta - Privacy",
             [System.Windows.Forms.MessageBoxButtons]::YesNo,
             [System.Windows.Forms.MessageBoxIcon]::Information
@@ -79,7 +79,7 @@ try {
     New-Item -ItemType Directory -Force -Path $resolvedData, $settingsRoot | Out-Null
     if (-not (Test-Path -LiteralPath $resolvedData -PathType Container)) { throw "data folder is not writable: $resolvedData" }
 
-    & $runtime -m noetide_micro --data-dir $resolvedData init
+    & $runtime -m noetide_micro --data-dir $resolvedData product-init
     if ($LASTEXITCODE -ne 0) { throw "data initialization failed; the existing folder was not modified - pick an empty folder or restore from a backup" }
 
     $privacy = [ordered]@{
@@ -87,7 +87,7 @@ try {
         chosen_at = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
         data_directory = $resolvedData
         acknowledged_local_only = $ackLocalOnly
-        acknowledged_synthetic_only = $ackSyntheticOnly
+        acknowledged_synthetic_only = $false
         acknowledged_unsigned = $ackUnsigned
     }
     ($privacy | ConvertTo-Json -Depth 4) | Set-Content -LiteralPath $privacyPath -Encoding utf8
@@ -97,7 +97,7 @@ try {
     Write-Step "privacy choices recorded: $privacyPath"
     & $runtime -m noetide_micro --data-dir $resolvedData status
     if ($LASTEXITCODE -ne 0) { throw "status check failed after setup" }
-    Write-Step "setup complete. Use 'Noetide Shell.cmd' for commands, or 'Noetide Start.cmd' for a quick status view."
+    Write-Step "setup complete. Use 'Noetide Start.cmd' to open the web management UI, or 'Noetide Shell.cmd' for command line."
     exit 0
 }
 catch {

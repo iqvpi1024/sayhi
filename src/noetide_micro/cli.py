@@ -127,6 +127,29 @@ def cmd_web(args: argparse.Namespace) -> int:
     )
 
 
+def cmd_product(args: argparse.Namespace) -> int:
+    from .product_server import serve_product
+
+    return serve_product(
+        _data_dir(args),
+        host=args.host,
+        port=args.port,
+        settings_path=args.settings_path,
+    )
+
+
+def cmd_product_init(args: argparse.Namespace) -> int:
+    from .product import NoetideApp
+
+    app = NoetideApp(_data_dir(args))
+    try:
+        revision = app.store.current_revision()
+    finally:
+        app.close()
+    print(f"Product data initialized: {_data_dir(args)} (revision {revision})")
+    return 0
+
+
 def _open_existing_store(args: argparse.Namespace) -> SemanticStore | None:
     path = _data_dir(args) / "noetide.sqlite3"
     if not path.exists():
@@ -333,6 +356,13 @@ def main(argv: list[str] | None = None) -> int:
     web.add_argument("--port", type=int, default=8765)
     web.add_argument("--backup-dir", default=None)
     web.set_defaults(handler=cmd_web)
+    product = commands.add_parser("product")
+    product.add_argument("--host", default="127.0.0.1")
+    product.add_argument("--port", type=int, default=8765)
+    product.add_argument("--settings-path", default=None)
+    product.set_defaults(handler=cmd_product)
+    product_init = commands.add_parser("product-init")
+    product_init.set_defaults(handler=cmd_product_init)
     guide = commands.add_parser("guide")
     guide.add_argument("--yes", action="store_true", help="skip interactive confirmations")
     guide.add_argument("--publish-key", default="cli_guide_publish_001")
