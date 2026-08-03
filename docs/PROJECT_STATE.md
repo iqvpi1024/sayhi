@@ -10,7 +10,7 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
-| 当前公开发布 | `v0.2.0-beta` 已发布；完整产品代码已完成，v0.3.0 portable 待发布 |
+| 当前公开发布 | `v0.2.0-beta` 已发布；完整产品代码已完成，v0.3.0 portable 已构建（未发布 GitHub） |
 | 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
 | 当前阶段 | `product_implementation_complete`；完整产品代码和验证已完成，等待最终构建/发布 recovery point |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
@@ -28,6 +28,7 @@
 - 已实现 `webui.html`：总览、导入、识灵分析、记忆、搜索、Agent 接入、导出备份、设置；桌面和移动端响应式。
 - 已实现桌面启动器 `noetide_desktop.py`、CLI `product`/`product-init`、portable 安装/启动脚本。
 - 产品测试 5/5 OK；全量 configured-adapter regression 485 OK、0 skipped（2026-08-03）。
+- `dist/Noetide-beta-v0.3.0-win64.zip` 构建成功，SHA-256 `55c26e39aca14ef3839978093d55856403ce19f6ca8e222e6543f0aecb3b80f2`；portable 空库初始化与 `/api/health` 启动检查通过。
 
 1. PRD v0.5、S1-S9 Approved 语义基线、Micro 关系链路、Answer Safety、Candidate Review、Decision/Outcome、合成导入和私有合成 Context Pack 均保留为当前实现范围内的合成能力。
 2. A1 suite 完整性绑定已修复，官方 runner 在 `8556eea` 实际通过 35/35；C1 runner 场景映射已修复，官方 runner 在同一提交实际通过 7/7。
@@ -209,4 +210,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**完整产品代码、Web UI、REST/MCP 接口、识灵模型接入、导出备份和远程访问均已实现并验证。下一步：完成 portable 构建、最终回归并发布新 recovery point。**
+**完整产品代码、Web UI、REST/MCP 接口、识灵模型接入、导出备份和远程访问均已实现并验证，v0.3.0 portable 构建成功。下一步：将本次提交作为 product-complete recovery point 发布。**

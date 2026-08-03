@@ -17,7 +17,7 @@
 
 ## 一分钟启动（Windows）
 
-1. 下载并解压 `Noetide-beta-v0.3.0-win64.zip`。
+1. 下载并解压 `Noetide-beta-v0.3.0-win64.zip`（SHA-256 `55c26e39aca14ef3839978093d55856403ce19f6ca8e222e6543f0aecb3b80f2`）。
 2. 双击 `scripts/Noetide Setup.cmd`，选一个你自己的数据文件夹。
 3. 双击 `scripts/Noetide Start.cmd`。
 4. 浏览器打开 `http://127.0.0.1:8765`。

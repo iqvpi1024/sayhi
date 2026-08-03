@@ -13,6 +13,7 @@ product_baseline:
 release:
   public: v0.2.0-beta (historical)
   working_tree: complete product local app
+  portable: Noetide-beta-v0.3.0-win64.zip built
 latest_recovery_points:
   - product-complete (current working tree, pending final build/tag)
   - y2s5-mcp-runtime-rp-20260803
@@ -25,7 +26,7 @@ decision_ref: DEC-PRD-V06-001 (baseline), user instruction to remove development
 adr_ref: ADR-0019, ADR-0021..0024, plus product facade implementation
 verification: product tests 5/5 OK; final full configured-adapter regression to be recorded after this turn
 next_role: Product Owner / end-user handoff
-next_single_action: finish portable build, run final regression, commit and create the product-complete recovery point
+next_single_action: portable build and final regression are done; publish the product-complete recovery point
 scope_in:
   - 用户已明确授权不再走开发门禁，直接完成完整产品
   - 本地安装与桌面启动
@@ -59,6 +60,7 @@ stop_condition: 无；用户已取消开发门禁并要求直接完成
 
 - 产品定向测试 5/5 OK（空库初始化、导入、分析、确认、导出、备份、搜索、API、设置、MCP、自定义 Agent 授权）。
 - 本轮全量 configured-adapter regression 485 OK、0 skipped（2026-08-03，网络禁用）。
+- `dist/Noetide-beta-v0.3.0-win64.zip` 构建成功，SHA-256 `55c26e39aca14ef3839978093d55856403ce19f6ca8e222e6543f0aecb3b80f2`；portable 空库初始化与健康检查通过。
 - 端到端服务验证：启动空库、导入文本、运行识灵分析、API overview、桌面/移动 Web UI 截图均通过。
 
 ## 用户已明确的要求
