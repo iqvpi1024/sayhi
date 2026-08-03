@@ -6,11 +6,11 @@
   "flags": {
     "suite_defined": true,
     "suite_materialized": true,
-    "suite_executed": false,
-    "suite_passed": false
+    "suite_executed": true,
+    "suite_passed": true
   },
   "suite_artifact_state": "materialized",
-  "latest_verification_result": "not_executed",
+  "latest_verification_result": "passed",
   "latest_run_applicability": "current",
   "required_scenario_ids": [
     "Y2S2-001",
@@ -73,7 +73,7 @@
       "role": "suite_preflight_validator"
     }
   ],
-  "latest_verification_result_path": "",
-  "latest_verification_result_sha256": "",
-  "latest_verification_manifest_sha256": ""
+  "latest_verification_result_path": "docs/testing/results/y2s2-20260803.json",
+  "latest_verification_result_sha256": "c42cbc34b8c8eaa93f47ba28a8b0ec17dd0de0e3a5ea0ac3a02baa82ad2bf8e1",
+  "latest_verification_manifest_sha256": "488fa977367c1b5e984654d3d309a0111a3f079ad1502fdc5d39ac97f62b65aa"
 }

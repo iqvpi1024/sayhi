@@ -3,9 +3,9 @@
 本文件是动态执行入口，不替代 `AGENTS.md`、PRD、Approved SPEC、ADR、suite、fixture/oracle 或 Implementation Plan。
 
 ```yaml
-handoff_id: HANDOFF-Y2-S1-VERIFIED-001
-slice_id: none_y2s2_decision_pending
-current_phase: recovery_point_published_y2s1
+handoff_id: HANDOFF-Y2-S2-VERIFIED-001
+slice_id: none_y2s3_decision_pending
+current_phase: recovery_point_published_y2s2
 product_baseline:
   path: PRDv06.md
   version: 0.6
@@ -18,6 +18,7 @@ release:
   published_at: 2026-07-26T06:59:35Z
   delivery_level: D3_github_release_beta
 latest_recovery_points:
+  - y2s2-local-model-rp-20260803
   - y2s1-folder-import-rp-20260801
   - v0.2.0-beta
   - d2-installer-rp-20260726
@@ -26,22 +27,22 @@ latest_recovery_points:
 previous_release:
   tag: v0.1.3-synthetic-preview
   commit: c340eac939cdbc094d6ec8da7f4e710d879cf1c1
-decision_ref: DEC-PRD-V06-001 (baseline), DEC-Y2-ENTRY-001 (scope)
-adr_ref: ADR-0019 (installer/upgrade/signing/channel)
-verification: docs/releases/D2_BETA_V0.2.0_VERIFICATION.md + D3 remote digest check via GitHub API (2026-07-26, matched)
+decision_ref: DEC-PRD-V06-001 (baseline), DEC-Y2-ENTRY-001 (scope), DEC-Y2-S2-001 (slice)
+adr_ref: ADR-0019 (installer/upgrade/signing/channel), ADR-0021 (Y2-S2 local model)
+verification: docs/testing/results/y2s2-20260803.json (10/10 passed/current) + docs/releases/D2_BETA_V0.2.0_VERIFICATION.md + D3 remote digest check via GitHub API (2026-07-26, matched)
 artifact: Noetide-beta-v0.2.0-win64.zip (sha256 3456b2b67d8788a006c7906629b25556af5d42ba02a84a892542d7f3f0f4b8a8, published)
-next_role: Slice Decision Owner (Y2-S2)
-next_single_action: 形成 Y2-S2（模型能力接口 + 本地模型提议式整理）切片决策 DEC-Y2-S2-001，随后 SPEC applicability review（重点 S5/S1/S2）
+next_role: Slice Decision Owner (Y2-S3)
+next_single_action: 形成 Y2-S3（本地 Web UI）切片决策 DEC-Y2-S3-001，随后 SPEC applicability review（重点 S1/S7/S9）
 scope_in:
-  - Y2-S2 切片决策与 SPEC applicability review
+  - Y2-S3 切片决策与 SPEC applicability review
   - slice contract 起草准备
 scope_out:
   - real personal data
   - fixture/oracle changes, moving existing tags
-  - 任何 Year 2 业务编码（需新 Product Decision）
+  - 超出 Y2-S3 授权的 Year 2 业务编码（需新 Product Decision）
   - 修改已发布 Release 附件或移动既有 tag
   - 超出 §2.7 范围的新产品语义（须回到产品负责人）
-stop_condition: PRDv06 草案超出 DEC-Y2-ENTRY-001 §2.7 授权范围时停止并回到产品负责人
+stop_condition: Y2-S3 切片超出 DEC-Y2-ENTRY-001 §2.7 授权范围时停止并回到产品负责人
 ```
 
 ## 当前事实
@@ -55,10 +56,11 @@ stop_condition: PRDv06 草案超出 DEC-Y2-ENTRY-001 §2.7 授权范围时停止
 - `PRDv06.md` 草案已完成（2026-07-27，Draft 状态）：27 章、32 FR、结构自查通过；基线索引仍指向 PRDv05，待 DEC-PRD-V06-001 批准。
 - `DEC-PRD-V06-001` 已批准（2026-08-01）：PRDv06 成为当前基线（hash `4513B268...CAD8`），v0.5 转只读；S1-S9 v0.6 兼容复核完成（绑定同步 + 最小升版，无语义修订）；两个 baseline validator 已同步并 exit 0。
 - Y2-S1 已 verified（2026-08-01）：文件夹导入 + 单次 poll 监视全链通过；official runner 10/10 passed/current（`y2s1-20260801.json`）；回归 412 OK 0 skip；Gate Review P0=0/P1=0；recovery tag `y2s1-folder-import-rp-20260801`。
+- Y2-S2 已 verified（2026-08-03）：本地模型 propose-only 全链通过；official runner 10/10 passed/current（`y2s2-20260803.json`）；回归 430 OK 0 skip；23 validators PASSED；Gate Review P0=0/P1=0；recovery tag `y2s2-local-model-rp-20260803`。
 
-## 回归基线（2026-07-26）
+## 回归基线（2026-08-03）
 
-- 全量 configured-adapter semantic regression：392 tests OK、0 skipped（16 个 adapter 环境变量，值为模块路径形式 `noetide_micro.<x>_testing_adapter`）。
-- suite validators：21 个全部 PASSED。
-- 已 verified：Micro、A1-A6、B1-B6、C1-C6、Synthetic Ingestion、Context Pack、D2 Installer、D3 Release。
-- 剩余路线：Y2-S2（本地模型提议式整理）-> Y2-S3（本地 Web UI）-> Y2-S4（云端可选）-> Y2-S5（MCP）。
+- 全量 configured-adapter semantic regression：430 tests OK、0 skipped（18 个 adapter 环境变量，值为模块路径形式 `noetide_micro.<x>_testing_adapter`）。
+- suite validators：23 个全部 PASSED。
+- 已 verified：Micro、A1-A6、B1-B6、C1-C6、Synthetic Ingestion、Context Pack、D2 Installer、D3 Release、Y2-S1、Y2-S2。
+- 剩余路线：Y2-S3（本地 Web UI）-> Y2-S4（云端可选）-> Y2-S5（MCP）。

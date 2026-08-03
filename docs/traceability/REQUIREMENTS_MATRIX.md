@@ -409,15 +409,15 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 
 `SLICE-Y2-S2-LOCAL-MODEL-001` 只实现 PRDv06 §14.5 的模型接入首片（`DEC-Y2-ENTRY-001`/`DEC-Y2-S2-001`）：propose-only 模型能力接口、本地回环后端、红线 local-only、版本审计。它不代表云端后端（Y2-S4）、真实模型评估或自动发布。
 
-- `PRD-§14.5`、`§24.5 Y2-S2`：fixture 后端提议 3 候选全 unconfirmed、Canonical 零变化 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2-§7；S5 §4-§7 -> `Y2S2-001` -> `TBD` -> `not_executed`
-- `PRD-§14.5`、`§22.4`：候选 envelope、证据定位、provenance 逐项核对 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2.2/§4 -> `Y2S2-002` -> `TBD` -> `not_executed`
-- `PRD-§14.5`、`§25.2`：畸形输出三型整批拒绝零候选 -> `SPEC-Y2S2-LOCAL-MODEL-001` §3/§8 -> `Y2S2-003` -> `TBD` -> `not_executed`
-- `PRD-§14.4`：注入 source 与升格标志无效果 -> `SPEC-Y2S2-LOCAL-MODEL-001` §6/§8 -> `Y2S2-004` -> `TBD` -> `not_executed`
-- `PRD-§11.1`、`§14.5`：提议轮后 Canonical digest 与 revision 不变 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2.3/§8 -> `Y2S2-005` -> `TBD` -> `not_executed`
-- `PRD-§14.5`、`§17.4`：红线舱室只允许本地后端，cloud kind 拒绝 -> `SPEC-Y2S2-LOCAL-MODEL-001` §5/§8 -> `Y2S2-006` -> `TBD` -> `not_executed`
-- `PRD-§14.5`：local_http 对 stub 服务 propose 并记录版本；非回环 URL 拒绝不连接 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2.1/§5 -> `Y2S2-007` -> `TBD` -> `not_executed`
-- `PRD-§22.4`：双版本 provenance 分离、回滚、未注册版本拒绝 -> `SPEC-Y2S2-LOCAL-MODEL-001` §4/§8 -> `Y2S2-008` -> `TBD` -> `not_executed`
-- `PRD-§11`、`§14.5`：确认 1 候选 -> ChangeSet proposed 未发布；未确认候选被拒 -> `SPEC-Y2S2-LOCAL-MODEL-001` §6/§8 -> `Y2S2-009` -> `TBD` -> `not_executed`
-- `PRD-§14.5`：横切——确定性、无回环外网络、profile fail closed、候选不作证据 -> `SPEC-Y2S2-LOCAL-MODEL-001` §7/§8 -> `Y2S2-010` -> `TBD` -> `not_executed`
+- `PRD-§14.5`、`§24.5 Y2-S2`：fixture 后端提议 3 候选全 unconfirmed、Canonical 零变化 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2-§7；S5 §4-§7 -> `Y2S2-001` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§14.5`、`§22.4`：候选 envelope、证据定位、provenance 逐项核对 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2.2/§4 -> `Y2S2-002` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§14.5`、`§25.2`：畸形输出三型整批拒绝零候选 -> `SPEC-Y2S2-LOCAL-MODEL-001` §3/§8 -> `Y2S2-003` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§14.4`：注入 source 与升格标志无效果 -> `SPEC-Y2S2-LOCAL-MODEL-001` §6/§8 -> `Y2S2-004` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§11.1`、`§14.5`：提议轮后 Canonical digest 与 revision 不变 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2.3/§8 -> `Y2S2-005` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§14.5`、`§17.4`：红线舱室只允许本地后端，cloud kind 拒绝 -> `SPEC-Y2S2-LOCAL-MODEL-001` §5/§8 -> `Y2S2-006` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§14.5`：local_http 对 stub 服务 propose 并记录版本；非回环 URL 拒绝不连接 -> `SPEC-Y2S2-LOCAL-MODEL-001` §2.1/§5 -> `Y2S2-007` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§22.4`：双版本 provenance 分离、回滚、未注册版本拒绝 -> `SPEC-Y2S2-LOCAL-MODEL-001` §4/§8 -> `Y2S2-008` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§11`、`§14.5`：确认 1 候选 -> ChangeSet proposed 未发布；未确认候选被拒 -> `SPEC-Y2S2-LOCAL-MODEL-001` §6/§8 -> `Y2S2-009` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
+- `PRD-§14.5`：横切——确定性、无回环外网络、profile fail closed、候选不作证据 -> `SPEC-Y2S2-LOCAL-MODEL-001` §7/§8 -> `Y2S2-010` -> `noetide_micro.model_capability` / `noetide_micro.y2s2_testing_adapter` -> `passed`（y2s2-20260803.json）
 
-状态：`product_decided=true`（`DEC-Y2-S2-001`，2026-08-01）、`spec_applicability=pass_with_slice_contract_required`（`Y2S2-SPEC-APPLICABILITY-001`，2026-08-01）、`slice_contract=SPEC-Y2S2-LOCAL-MODEL-001 v0.1`、`traceable=true`、`suite_defined=true`、`suite_materialized=false`、`suite_executed=false`、`suite_passed=false`。
+状态：`product_decided=true`（`DEC-Y2-S2-001`，2026-08-01）、`spec_applicability=pass_with_slice_contract_required`（`Y2S2-SPEC-APPLICABILITY-001`，2026-08-01）、`slice_contract=SPEC-Y2S2-LOCAL-MODEL-001 v0.1`、`traceable=true`、`suite_defined=true`、`adr_accepted=true`（`ADR-0021`，2026-08-03）、`suite_materialized=true`（2026-08-03）、`suite_executed=true`、`suite_passed=true`（2026-08-03，official runner 同一次 run 10/10 passed，immutable result `docs/testing/results/y2s2-20260803.json`，manifest 已绑定）、`gate_review_passed=true`（`Y2_S2_LOCAL_MODEL_GATE_REVIEW_2026-08-03.md`，P0=0/P1=0）、`verified=true`（recovery tag `y2s2-local-model-rp-20260803`）。
