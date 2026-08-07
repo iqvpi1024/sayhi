@@ -10,14 +10,15 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
-| 当前公开发布 | `v0.2.0-beta` 已发布；完整产品代码已完成，v0.3.0 portable 已构建（未发布 GitHub） |
+| 当前公开发布 | **`v0.3.0-beta` 已发布（2026-08-08，GitHub prerelease，含审核整改安全修复）；仓库已转公开** |
 | 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
-| 当前阶段 | `product_implementation_complete`；完整产品代码、验证与 v0.3.0 portable 构建已完成，product-complete recovery point 已发布；2026-08-07 全面审核整改已完成（§3 第 75–78 条） |
-| 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
-| tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
+| 当前阶段 | `v0.3.0-beta released + repo public`；2026-08-07 全面审核整改已完成（§3 第 75–78 条），README 已为公开发布重写 |
+| 当前公开版本 | `v0.3.0-beta` GitHub prerelease |
+| tag / commit | annotated tag `v0.3.0-beta` -> `0dcc89d`（README 公开发布重写提交）；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | product-complete recovery tag | annotated tag `product-complete-rp-20260803`（tag object `a64fb89`）-> `9e3875d0c32c7a1aab249a90d6b7cd84911f533d`，已创建并推送 origin |
 | audit-remediation recovery tag | annotated tag `audit-remediation-rp-20260808` -> `8ea83d2`（整改提交，76 文件），已创建并推送 origin |
-| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
+| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.0-beta`（仓库已公开，匿名 HTTP 200） |
+| v0.3.0 发布产物 | `Noetide-beta-v0.3.0-win64.zip` SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（从 tag `v0.3.0-beta` 重建，含安全修复；GitHub API 远端 digest 与本地一致）；smoke：初始化、/api/health、/api/overview、Web UI 200、恶意 Origin 403 全部通过 |
 | 交付级别 | D1/D2/D3 历史版本已发布；当前完整产品已具备一键安装、Web 管理、MCP/API、识灵大模型分析、导出备份与远程访问 |
 | 分支 | `main`，已推送至 `origin/main` |
 
@@ -225,4 +226,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**2026-08-07 全面审核整改已完成并固化为 recovery point（tag `audit-remediation-rp-20260808`）：安全闭环（product_server CORS/鉴权/NOBAK2 备份加密）、核心工程加固（CloudGate 接入、统一 revision 分配、写入事务化、并发锁）、测试工具链修复（B3-002 adapter、validator 对齐、8 个 suite rebind）与文档收尾均已落地；整改后全量回归 485 OK 0 skipped、26 个 suite validator 与 2 个 baseline validator 全 exit 0（2026-08-08 实测，见 §4）。下一步：v0.3.0 发布决定（打 tag + GitHub 发布，或补 internal build 记录）；其后可选处理 oracle 锁定的 Change Control 事项（scenarios revision 账本、C5 encryption 标签更名、decision 持久化）。**
+**v0.3.0-beta 已发布、仓库已公开（2026-08-08）：README 已为公开发布重写（定位、三条铁律、红线舱室、证据链工程、英文摘要），发布包从 tag `v0.3.0-beta` 重建（含安全修复，旧 zip 已作废），smoke 全过，远端附件 digest 与本地一致。下一步：可选处理 oracle 锁定的 Change Control 事项（scenarios revision 账本、C5 encryption 标签更名、decision 持久化）；持续关注公开后的外部反馈与安全问题响应（SECURITY.md 已含上报渠道）。**
