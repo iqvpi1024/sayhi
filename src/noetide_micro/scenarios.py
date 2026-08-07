@@ -1,4 +1,10 @@
-"""C4 scenario trio and action follow-ups: predicted scenarios with deterministic feasibility and confirmed-only writes."""
+"""C4 scenario trio and action follow-ups: predicted scenarios with deterministic feasibility and confirmed-only writes.
+
+合同缺口(需 Change Control):本模块的 Canonical 写入不登记 canonical_revisions
+revision 与 changeset 账本行。c4 oracle 的 forbidden_mutations 锁定
+revision_ledger(revision_ids 摘要)不变,补齐 revision/changeset 语义必须先
+变更 c4 合同;当前仅以事务保证多语句写入的原子性,可观察输出保持不变。
+"""
 
 from __future__ import annotations
 
@@ -53,28 +59,31 @@ def create_scenario_set(
         return {"outcome": "rejected", "reason": "decision_ref not found"}
     created: dict[str, JsonObject] = {}
     for kind in SCENARIO_KINDS:
-        spec = specs.get(kind)
-        if spec is None:
+        if specs.get(kind) is None:
             return {"outcome": "rejected", "reason": f"missing spec for {kind}"}
-        scenario_id = f"SCN-{decision_ref}-{kind}"
-        payload: JsonObject = {
-            "object_type": "assertion",
-            "object_revision": 1,
-            "assertion_kind": "predicted",
-            "scenario_kind": kind,
-            "decision_ref": decision_ref,
-            "assumptions": list(spec["assumptions"]),
-            "projected_result": spec["projected_result"],
-            "feasibility_constraints": {
-                "hard_blockers": list(spec["hard_blockers"]),
-                "soft_constraints": list(spec["soft_constraints"]),
-            },
-            "feasibility_status": evaluate_feasibility(spec),
-            "created_at": at,
-            "synthetic": True,
-        }
-        store.add_canonical_object(scenario_id, payload)
-        created[kind] = payload
+    # 三件套装入一个事务:任一写入失败即整体回滚,不留半套 scenario
+    with store.transaction():
+        for kind in SCENARIO_KINDS:
+            spec = specs[kind]
+            scenario_id = f"SCN-{decision_ref}-{kind}"
+            payload: JsonObject = {
+                "object_type": "assertion",
+                "object_revision": 1,
+                "assertion_kind": "predicted",
+                "scenario_kind": kind,
+                "decision_ref": decision_ref,
+                "assumptions": list(spec["assumptions"]),
+                "projected_result": spec["projected_result"],
+                "feasibility_constraints": {
+                    "hard_blockers": list(spec["hard_blockers"]),
+                    "soft_constraints": list(spec["soft_constraints"]),
+                },
+                "feasibility_status": evaluate_feasibility(spec),
+                "created_at": at,
+                "synthetic": True,
+            }
+            store.add_canonical_object(scenario_id, payload)
+            created[kind] = payload
     return {"outcome": "applied", "scenarios": created}
 
 
@@ -116,22 +125,24 @@ def create_follow_ups(
     if not _selected(store, scenario_id):
         return {"outcome": "rejected", "reason": "scenario not selected"}
     created: list[JsonObject] = []
-    for action in actions:
-        payload: JsonObject = {
-            "object_type": "commitment",
-            "object_revision": 1,
-            "follow_up_id": action["follow_up_id"],
-            "scenario_ref": scenario_id,
-            "decision_ref": scenario["decision_ref"],
-            "title": action["title"],
-            "due_date": action["due_date"],
-            "status": "open",
-            "revision_history": [],
-            "created_at": at,
-            "synthetic": True,
-        }
-        store.add_canonical_object(action["follow_up_id"], payload)
-        created.append(payload)
+    # 全部 follow-up 装入一个事务,避免部分创建
+    with store.transaction():
+        for action in actions:
+            payload: JsonObject = {
+                "object_type": "commitment",
+                "object_revision": 1,
+                "follow_up_id": action["follow_up_id"],
+                "scenario_ref": scenario_id,
+                "decision_ref": scenario["decision_ref"],
+                "title": action["title"],
+                "due_date": action["due_date"],
+                "status": "open",
+                "revision_history": [],
+                "created_at": at,
+                "synthetic": True,
+            }
+            store.add_canonical_object(action["follow_up_id"], payload)
+            created.append(payload)
     return {"outcome": "applied", "follow_ups": created}
 
 
@@ -151,15 +162,17 @@ def complete_follow_up(store: SemanticStore, follow_up_id: str, confirmed: bool,
     updated["status"] = "done"
     updated["object_revision"] = payload["object_revision"] + 1
     updated["completed_at"] = at
-    store.replace_canonical_object(follow_up_id, updated)
-    record_id = f"followup-transition:{follow_up_id}:r{updated['object_revision']}"
-    store.put_ledger_record(record_id, FOLLOWUP_TRANSITION_RECORD_TYPE, {
-        "record_id": record_id,
-        "follow_up_id": follow_up_id,
-        "from_status": "open",
-        "to_status": "done",
-        "at": at,
-    })
+    # 对象替换与账本回执是一个原子单元
+    with store.transaction():
+        store.replace_canonical_object(follow_up_id, updated)
+        record_id = f"followup-transition:{follow_up_id}:r{updated['object_revision']}"
+        store.put_ledger_record(record_id, FOLLOWUP_TRANSITION_RECORD_TYPE, {
+            "record_id": record_id,
+            "follow_up_id": follow_up_id,
+            "from_status": "open",
+            "to_status": "done",
+            "at": at,
+        })
     return {"outcome": "applied", "follow_up": updated}
 
 

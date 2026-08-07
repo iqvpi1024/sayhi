@@ -220,6 +220,7 @@ def main() -> int:
         "exit_code": exit_code,
         "run_result": run_result,
         "required_results": required_results,
+        "bound_artifacts": manifest["artifacts"],
         "privacy_scan": {
             "status": "failed" if privacy_matches else "passed",
             "scope": "synthetic fixture and structured result fields",

@@ -12,9 +12,9 @@
   "suite_artifact_state": "materialized",
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/a1-release-8556eea-20260719.json",
-  "latest_verification_manifest_sha256": "912568db98d3a02ce7a083425f9d18a1c7194bae7cea31178378be297894367f",
-  "latest_verification_result_sha256": "45f100c3a28f83930055ec08b3392c7d48a1332ed0dbdabeec8b1676f9687d73",
+  "latest_verification_result_path": "docs/testing/results/a1-20260807.json",
+  "latest_verification_manifest_sha256": "1afb642a9ebd534305c6a43335f47ac423a1660f4f5a6268e1ab57884a08f790",
+  "latest_verification_result_sha256": "7cde4385515e2f5335c75a42af94d805c9eef295b2f9ca19ae3bad9addbc5e2c",
   "historical_verification_results": [
     {
       "applicability": "superseded",
@@ -25,6 +25,13 @@
       "applicability": "superseded",
       "path": "docs/testing/results/a1-ws02-2375fc7-20260718.json",
       "reason": "Suite preflight validator changed after this result and invalidated its bound artifact set."
+    },
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/a1-release-8556eea-20260719.json",
+      "manifest_sha256": "912568db98d3a02ce7a083425f9d18a1c7194bae7cea31178378be297894367f",
+      "result_sha256": "45f100c3a28f83930055ec08b3392c7d48a1332ed0dbdabeec8b1676f9687d73",
+      "reason": "Contract module switched to skipUnless gating when the adapter env var is absent; superseded by a1-20260807.json."
     }
   ],
   "baseline": {
@@ -38,8 +45,12 @@
       "S6": "0.5",
       "S7": "0.3"
     },
-    "decision_refs": ["DEC-MVP-A-AS-001"],
-    "adr_refs": ["ADR-0002"],
+    "decision_refs": [
+      "DEC-MVP-A-AS-001"
+    ],
+    "adr_refs": [
+      "ADR-0002"
+    ],
     "architecture_ref": "ARCH-MVP-A-AS-001",
     "architecture_path": "docs/architecture/MVP_A_ANSWER_SAFETY_ARCHITECTURE.md",
     "traceability_path": "docs/traceability/REQUIREMENTS_MATRIX.md",
@@ -72,7 +83,7 @@
     {
       "role": "business_test_module",
       "path": "tests/semantic/test_answer_safety_contract.py",
-      "sha256": "843768e3b88d292b6ce09287116a75fb6583addbc7c7499b4cc7e1f78b79990b"
+      "sha256": "29f2d15f37179f3d176516f4212fdd7ae5462b92c19b15479b135e4a785f3473"
     },
     {
       "role": "offline_runner",
@@ -91,8 +102,12 @@
     "manifest_self_digest": "recorded_by_gate_review_not_embedded",
     "logical_layer_digest": "sha256_stable_id_sorted_canonical_json_v1"
   },
-  "fixture_refs": ["tests/fixtures/answer_safety_v1/fixture.json"],
-  "oracle_refs": ["tests/fixtures/answer_safety_v1/oracles.json"],
+  "fixture_refs": [
+    "tests/fixtures/answer_safety_v1/fixture.json"
+  ],
+  "oracle_refs": [
+    "tests/fixtures/answer_safety_v1/oracles.json"
+  ],
   "scenario_mapping_ref": "tests/integration/answer_safety_scenarios.json",
   "adapter_protocol_ref": "tests/runner/answer_safety_adapter_protocol.py",
   "semantic_test_ref": "tests/semantic/test_answer_safety_contract.py",

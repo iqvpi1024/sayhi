@@ -88,7 +88,7 @@ Micro 不包含通用抽取、模糊时间解析、实体消歧、权限运行�
 | FR-205 | `boundary_only_deferred` | S2 §10.3-§10.4；S5 §6.5 | `BTE-AT-003/004/033`；跨阶段行为比较 suite `TBD` | `TBD` | `not_executed` |
 | FR-206 | `boundary_only_deferred` | S5 §5、§6.5、§12、§14 | `SHP-AT-029`；行动跟进 suite `TBD` | `TBD` | `not_executed` |
 | FR-301 | `boundary_only_deferred` | S7 §2、§10、§16、§20 | 加密同步、设备冲突与密钥恢复 suite `TBD`（Year 2）；当前没有功能验收测试 | `TBD` | `not_executed` |
-| FR-302 | `boundary_only_deferred` | S9 §2、§4、§14、§20 | 连接器能力 suite `TBD`（Year 2）；当前只有输入旁路边界 | `TBD` | `not_executed` |
+| FR-302 | `boundary_only_deferred` | S9 §2、§4、§14、§20 | 连接器能力 suite `TBD`（Year 2）；当前只有输入旁路边界；切片级进展：Y2-S1 真实文件夹文本导入已于 2026-08-01 完成 10/10 功能验收（见 §4.21），FR-302 全量长期范围不变 | `TBD` | `not_executed` |
 | FR-303 | `specified_not_implemented` | S7 §6-§16；S9 §6.5、§7.2、§13-§16 | `SIP-AT-001` 至 `SIP-AT-009`、`SIP-AT-012` 至 `SIP-AT-016`、`SIP-AT-020/025/026`、`IMM-AT-015` 至 `IMM-AT-021`、`IMM-AT-027/028/031` | `TBD` | `not_executed` |
 | FR-304 | `boundary_only_deferred` | S4 §6、§12；S8 §6、§12 | 专业 Agent 权限模板 suite `TBD`；`PAP-AT-001/008` 与 `MCP-AT-001-003/006` 只证明通用授权及不可逆动作边界 | `TBD` | `not_executed` |
 | FR-305 | `boundary_only_deferred` | S4 §2、§12-§16、§20 | 家庭授权/数字遗产工作流 suite `TBD`；当前明确非目标 | `TBD` | `not_executed` |
@@ -114,7 +114,7 @@ Harness required refs `HTH-AT-002/019/020/023` 由 `AS-011` 证明，不单独�
 - 32/32 条 FR 已登记且有责任归属，不等于 32/32 已完成规范闭环。
 - `micro_required_slice` 共 9 条 FR；每条只代表进入 Micro 的部分，FR-105 只覆盖传播失败切片。
 - `specified_not_implemented` 共 8 条 FR。
-- `boundary_only_deferred` 共 15 条 FR；其中 FR-301/302/304/305/306 的功能验收仍为显式 `TBD`。
+- `boundary_only_deferred` 共 15 条 FR；其中 FR-301/302/304/305/306 的功能验收仍为显式 `TBD`。切片级进展：FR-302 的 Y2-S1 真实文件夹文本导入切片已完成 10/10 功能验收（见 §4.21），但这只是 FR-302 的一个固定合成子集，不改变上述长期状态定性。
 - 在 fixture、manifest、runner 与 implementation 不存在时，Acceptance Test 表中的 ID 只是合同目录，不能产生 passed 结果。
 - 后续每次真实 run 必须回填模块、命令、环境、时间、exit code、artifact digest 与单项结果；SPEC 升版会使旧结果 superseded。
 

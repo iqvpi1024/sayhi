@@ -12,9 +12,9 @@
   "suite_artifact_state": "materialized",
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/micro-ws12-a603085-pyspath-20260718.json",
-  "latest_verification_manifest_sha256": "29644fbff7a90fd73aa575bf16fe2143940bee35af356a2e24a65d73b3068bc9",
-  "latest_verification_result_sha256": "9c4c35727878384a135d383b35fa71ce3a24a77da2d001b5c8578dda4c8a569e",
+  "latest_verification_result_path": "docs/testing/results/micro-20260807.json",
+  "latest_verification_manifest_sha256": "6aa39fa165883aa33cc7611be3383034c763670ba45ead6910c77c26c60136e4",
+  "latest_verification_result_sha256": "ca63b903119305b299fb2fd5b9718a3255ffa6a39d02e1cb57e353d2f2047337",
   "historical_verification_results": [
     {
       "applicability": "superseded",
@@ -27,6 +27,13 @@
       "manifest_sha256": "ad0f9283fd1d2258dbd9125297cf44d4d07e072551ab209847e9190f9b8e5450",
       "result_sha256": "20fabfafb061c20fcf1d941c0e84b191ea9bb32be28769aadeaab961a10f2817",
       "reason": "Current shared implementation has unverified changes; a current official runner result is required."
+    },
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/micro-ws12-a603085-pyspath-20260718.json",
+      "manifest_sha256": "29644fbff7a90fd73aa575bf16fe2143940bee35af356a2e24a65d73b3068bc9",
+      "result_sha256": "9c4c35727878384a135d383b35fa71ce3a24a77da2d001b5c8578dda4c8a569e",
+      "reason": "Contract module switched to skipUnless gating, runner now emits bound_artifacts, validator rechecks the artifact binding; superseded by micro-20260807.json."
     }
   ],
   "baseline": {
@@ -82,17 +89,17 @@
     {
       "role": "business_test_module",
       "path": "tests/semantic/test_micro_relationship_contract.py",
-      "sha256": "eaeef672758b4c747848d33e4da6dc9253f8574c6ac90dec3d2edb2ee30009d9"
+      "sha256": "19434bd13bdac2fe8c727bffb42e166385c883e71f77f198d38c8c07cb076b05"
     },
     {
       "role": "offline_runner",
       "path": "tests/runner/run_micro_suite.py",
-      "sha256": "94ad8b849e4df28fe4887653ff088d7b982d6182a5152e691d4aef0a9e7e3060"
+      "sha256": "1c5aeaf5c709074f0a60a6c5fe97e5f02378c1a7064fbf556008d6bac69cf259"
     },
     {
       "role": "suite_preflight_validator",
       "path": "tools/validate_micro_suite.py",
-      "sha256": "667358517066d0997a732777dbb98a30738d0d75373a60b6928fa7fc50020e96"
+      "sha256": "b73de1c4304db8aefc4bee47a6899c072e7da1c5badf9e548c94b04bdc990bfa"
     }
   ],
   "artifact_digest_strategy": {

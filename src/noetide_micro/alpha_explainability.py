@@ -48,7 +48,7 @@ def create_reference_backup(
     runtime = open_runtime(data_dir)
     try:
         profile_id = str(fixture.get("synthetic_profile_id", "synthetic_demo_profile"))
-        manifest = ContextPackExporter(EXPORTED_AT).export(runtime._store, destination)
+        manifest = ContextPackExporter(EXPORTED_AT).export(runtime.store, destination)
     finally:
         runtime.close()
     verifier = ContextPackVerifier()
@@ -77,7 +77,7 @@ def export_roundtrip(data_dir: str | Path, destination: str | Path) -> JsonObjec
     """Export then verify the same pack twice; prove read-only Round Trip."""
     runtime = open_runtime(data_dir)
     try:
-        ContextPackExporter(EXPORTED_AT).export(runtime._store, destination)
+        ContextPackExporter(EXPORTED_AT).export(runtime.store, destination)
         revision_before = runtime.revision()
     finally:
         runtime.close()

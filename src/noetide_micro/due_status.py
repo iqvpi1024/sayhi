@@ -32,7 +32,6 @@ class DueStatusService:
         self._store = store
         self._now = now
         self._fail_next_rebuild = False
-        self._receipt_index = 0
 
     def project(self, projection_id: str, commitment_id: str, clock: str) -> dict[str, Any]:
         commitment = self._store.commitment_record(commitment_id)
@@ -102,5 +101,6 @@ class DueStatusService:
         self._fail_next_rebuild = True
 
     def _receipt_id(self, projection_id: str, revision: str, status: str) -> str:
-        self._receipt_index += 1
-        return f"due_receipt_{projection_id}_{revision}_{status}_{self._receipt_index:03d}"
+        # 序号基于库内现有回执分配:新实例对同库再 build 不会撞主键
+        index = len(self._store.due_rebuild_receipts()) + 1
+        return f"due_receipt_{projection_id}_{revision}_{status}_{index:03d}"

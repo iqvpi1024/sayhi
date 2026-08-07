@@ -12,6 +12,8 @@
 | 上游 | S1 v0.6、S2 v0.5、S3 v0.4、S6 v0.5 |
 | 适用范围 | `SLICE-MVP-A-ENTITY-MERGE-001`，仅固定合成数据 |
 
+> v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+
 ## 1. 目标与非目标
 
 目标：证明两个固定合成 Person Entity 的 merge proposal 经用户确认的 ChangeSet 原子发布（来源实体 `identity_status=merged`、`merged_into` 指向目标、全部 Canonical 引用重定向），以及 split compensation 经新 ChangeSet 精确恢复合并前引用与活跃状态；全程历史不删除、trust/closeness/人格判断不被自动修改。

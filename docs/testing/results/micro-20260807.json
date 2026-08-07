@@ -1,0 +1,480 @@
+{
+  "schema_version": "noetide.micro-run-result.v1",
+  "run_id": "micro-20260807T155132Z-1e2aa89e",
+  "suite_id": "micro_mvp_relationship_state_v3",
+  "suite_artifact_version": "1.0.0",
+  "manifest_sha256": "6aa39fa165883aa33cc7611be3383034c763670ba45ead6910c77c26c60136e4",
+  "applicability": "current",
+  "started_at": "2026-08-07T15:51:32.990376Z",
+  "finished_at": "2026-08-07T15:51:35.971092Z",
+  "git_commit": "9e3875d0c32c7a1aab249a90d6b7cd84911f533d",
+  "implementation_adapter": "noetide_micro.testing_adapter",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "dependencies": "stdlib_only",
+    "network": "blocked",
+    "business_clock": "fixture_injected",
+    "timezone": "fixture_injected",
+    "locale": "zh-CN",
+    "random_seed": 0
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_micro_suite",
+    "--adapter",
+    "noetide_micro.testing_adapter",
+    "--output",
+    "docs/testing/results/micro-20260807.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "MM-001",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-001"
+      ]
+    },
+    {
+      "test_id": "MM-002",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-002"
+      ]
+    },
+    {
+      "test_id": "MM-003",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-003"
+      ]
+    },
+    {
+      "test_id": "MM-004",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-004"
+      ]
+    },
+    {
+      "test_id": "MM-005",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-005"
+      ]
+    },
+    {
+      "test_id": "MM-006",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-006"
+      ]
+    },
+    {
+      "test_id": "MM-007",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-007"
+      ]
+    },
+    {
+      "test_id": "MM-008",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-008"
+      ]
+    },
+    {
+      "test_id": "MM-009",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-009"
+      ]
+    },
+    {
+      "test_id": "MM-010",
+      "individual_test_result": "passed",
+      "detail": "",
+      "coverage_scenarios": [
+        "MM-010"
+      ]
+    },
+    {
+      "test_id": "BTE-AT-001",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002",
+        "MM-004"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002",
+        "MM-004",
+        "MM-006"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-017",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-027",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-006"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-029",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "BTE-AT-034",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-002",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-003",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-004"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-004",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-004"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-007"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-008",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-013",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-005"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-014",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-005",
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-016",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-017",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-008"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-018",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-008"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-019",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-008"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-021",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-022",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-010"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-024",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-030",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "CS-AT-031",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-009"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-001",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-006",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-029",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "IMM-AT-030",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "PAP-AT-029",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "PAP-AT-030",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SHP-AT-002",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SHP-AT-004",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SHP-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002",
+        "MM-007"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-004",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-005",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-003"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-013",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-002"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-014",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-007"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-015",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-006"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-026",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    },
+    {
+      "test_id": "SOM-AT-027",
+      "individual_test_result": "passed",
+      "coverage_scenarios": [
+        "MM-001"
+      ],
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/micro_relationship_v1/fixture.json",
+      "sha256": "e1786f4e12a565116261c0b42e0fd1fdf951e02de70c2d79061587cf59ac16c3"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/micro_relationship_v1/oracles.json",
+      "sha256": "de14c82d0b6b6de36e9a6db3124c19e135d261efea809b2a876dd0a5574e8965"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/micro_relationship_scenarios.json",
+      "sha256": "356c576eb3a86180754043ffadd04460f609afc27d7075c04619d17c6d9f094d"
+    },
+    {
+      "role": "runner_contract",
+      "path": "tests/runner/runner_contract.json",
+      "sha256": "348282e89ade89877020ba138863a4d498ab4acbfd6951033d06483df5686a20"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/adapter_protocol.py",
+      "sha256": "28605faafb132b05fa3f9a698389dc8c5e0c9e1e5ede972c1be359894ad0633c"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_micro_relationship_contract.py",
+      "sha256": "19434bd13bdac2fe8c727bffb42e166385c883e71f77f198d38c8c07cb076b05"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_micro_suite.py",
+      "sha256": "1c5aeaf5c709074f0a60a6c5fe97e5f02378c1a7064fbf556008d6bac69cf259"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_micro_suite.py",
+      "sha256": "b73de1c4304db8aefc4bee47a6899c072e7da1c5badf9e548c94b04bdc990bfa"
+    }
+  ],
+  "privacy_scan": {
+    "status": "passed",
+    "scope": "synthetic fixture and structured result fields",
+    "matched_patterns": []
+  }
+}

@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import hmac
 import http.server
+import ipaddress
 import json
 import sys
-import threading
 import urllib.parse
 from pathlib import Path
 from typing import Any, Mapping
@@ -14,13 +15,32 @@ from .product import NoetideApp
 
 JsonObject = dict[str, Any]
 APP_HTML_NAME = "webui.html"
+_MAX_BODY_BYTES = 1 << 20  # 请求体上限 1 MiB，防止内存耗尽
+_LOOPBACK_NAMES = frozenset({"localhost"})
 
 
-def _read_json(path: str) -> JsonObject | None:
+def _split_host(value: str) -> str:
+    """去掉 Host/Origin 主机部分的端口，兼容 IPv6 方括号写法。"""
+    value = value.strip()
+    if value.startswith("["):
+        end = value.find("]")
+        return value[1:end] if end != -1 else value
+    if value.count(":") == 1:
+        host, _, port = value.rpartition(":")
+        if port.isdigit():
+            return host
+    return value
+
+
+def _is_loopback_host(value: str) -> bool:
+    host = _split_host(value).lower()
+    if host in _LOOPBACK_NAMES:
+        return True
     try:
-        return json.loads(Path(path).read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return None
+        return ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        return False
+
 
 class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
     server_version = "NoetideProduct"
@@ -31,7 +51,6 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
-        self.send_header("Access-Control-Allow-Origin", "*")
         for key, value in (extra_headers or {}).items():
             self.send_header(key, value)
         self.end_headers()
@@ -46,7 +65,12 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _read_body(self) -> Any:
-        length = int(self.headers.get("Content-Length") or "0")
+        try:
+            length = int(self.headers.get("Content-Length") or "0")
+        except ValueError:
+            return {"_malformed": True}
+        if length < 0 or length > _MAX_BODY_BYTES:
+            return {"_too_large": True}
         raw = self.rfile.read(max(0, length))
         if not raw:
             return None
@@ -54,6 +78,24 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
             return json.loads(raw.decode("utf-8"))
         except (json.JSONDecodeError, UnicodeDecodeError):
             return {"_malformed": True}
+
+    def _remote_mode(self) -> bool:
+        settings = self.server.app.public_settings()
+        return bool(settings.get("remote_access")) and bool(settings.get("api_token"))
+
+    def _request_origin_allowed(self) -> bool:
+        """回环服务只接受回环 Host/Origin；remote_access+token 模式下放宽，由令牌认证兜底。"""
+        if self._remote_mode():
+            return True
+        host = self.headers.get("Host") or ""
+        if not host or not _is_loopback_host(host):
+            return False
+        origin = self.headers.get("Origin")
+        if origin:
+            origin_host = urllib.parse.urlparse(origin).hostname or ""
+            if not _is_loopback_host(origin_host):
+                return False
+        return True
 
     def _authorized(self) -> bool:
         settings = self.server.app.public_settings()
@@ -63,7 +105,7 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
         if not token:
             return False
         header = self.headers.get("Authorization") or ""
-        return header == "Bearer " + token or header == "Token " + token
+        return hmac.compare_digest(header, "Bearer " + token) or hmac.compare_digest(header, "Token " + token)
 
     def _route_api(self, method: str, path: str, body: Any) -> tuple[int, JsonObject]:
         app = self.server.app
@@ -146,9 +188,14 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
                     return 200, {"status": "ok", "candidate": app.reject_candidate(segments[2], (body or {}).get("actor") or "local_user")}
             return 404, {"status": "rejected", "reason": "not_found"}
         except (KeyError, ValueError, RuntimeError, OSError) as exc:
-            return 400, {"status": "rejected", "reason": str(exc)}
+            # 细节只进 stderr，不把内部异常信息回给客户端
+            print(f"识海 API 请求处理失败：{exc}", file=sys.stderr)
+            return 400, {"status": "rejected", "reason": "request_failed"}
 
     def do_GET(self) -> None:
+        if not self._request_origin_allowed():
+            self._json(403, {"status": "rejected", "reason": "forbidden_origin"})
+            return
         if self.path == "/" or self.path == "/index.html":
             html_path = Path(__file__).with_name(APP_HTML_NAME)
             if not html_path.exists():
@@ -160,7 +207,13 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
         self._json(status, payload)
 
     def do_POST(self) -> None:
+        if not self._request_origin_allowed():
+            self._json(403, {"status": "rejected", "reason": "forbidden_origin"})
+            return
         body = self._read_body()
+        if isinstance(body, dict) and body.get("_too_large"):
+            self._json(413, {"status": "rejected", "reason": "body_too_large"})
+            return
         if isinstance(body, dict) and body.get("_malformed"):
             self._json(400, {"status": "rejected", "reason": "malformed_json"})
             return
@@ -176,14 +229,6 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
             return
         status, payload = self._route_api("POST", self.path, body)
         self._json(status, payload)
-
-    def do_OPTIONS(self) -> None:
-        self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Authorization, Content-Type")
-        self.send_header("Content-Length", "0")
-        self.end_headers()
 
     def log_message(self, format: str, *args: Any) -> None:
         return
@@ -204,6 +249,13 @@ def serve_product(
     settings_path: str | Path | None = None,
 ) -> int:
     app = NoetideApp(data_dir, settings_path=settings_path)
+    if not _is_loopback_host(host):
+        settings = app.public_settings()
+        if not (settings.get("remote_access") and settings.get("api_token")):
+            # 绑定非回环地址会暴露到局域网/公网，必须显式开启 remote_access 并配置 token
+            print("拒绝启动：绑定非回环地址需在设置中开启 remote_access 并配置 api_token", file=sys.stderr)
+            app.close()
+            return 2
     server = ProductHttpServer(app, (host, port))
     actual_port = server.server_address[1]
     print(f"识海已启动：http://{host}:{actual_port}", flush=True)

@@ -12,6 +12,8 @@
 | 上游 | S1 v0.6、S2 v0.5、S3 v0.4、S6 v0.5、S7 v0.3 |
 | 适用范围 | `SLICE-MVP-B-RECONCILIATION-001`，仅固定合成数据 |
 
+> v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+
 ## 1. 目标与非目标
 
 目标：在一个固定合成 profile 上证明三类对账能力——写后校验与日常增量对账（失败队列、stale 视图、孤儿引用、未消费 ChangeSet）、周期深度对账（从 Canonical 重建核心投影并比较）、以及只读 Semantic Diff（两个 revision 间的字段级差异呈现）。

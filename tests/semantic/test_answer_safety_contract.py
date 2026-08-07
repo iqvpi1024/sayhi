@@ -23,6 +23,7 @@ def scenario(scenario_id: str) -> Callable[[Callable[..., Any]], Callable[..., A
     return decorate
 
 
+@unittest.skipUnless(os.environ.get("NOETIDE_ANSWER_ADAPTER"), "Answer Safety adapter not configured")
 class AnswerSafetyContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:

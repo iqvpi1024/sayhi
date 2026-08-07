@@ -2,6 +2,8 @@
 
 Contract: SPEC-C2-HYPOTHESIS-001. ADR: ADR-0014.
 No automatic transitions exist in this module; every write requires confirmed=True.
+每次写入在事务内完成:revision 记录 + Canonical 对象 + transition 回执 +
+changeset 账本行(noetide.changeset.v1)同事务提交。
 """
 
 from __future__ import annotations
@@ -68,6 +70,42 @@ def _write_receipt(store: SemanticStore, hypothesis_id: str, kind: str, payload:
     )
 
 
+def _write_changeset(
+    store: SemanticStore,
+    hypothesis_id: str,
+    operation: str,
+    object_revision: int,
+    base_revision: str,
+    revision_id: str,
+    at: str,
+) -> None:
+    """补全 ChangeSet 合同:每次 Canonical 写入登记一条 changeset 账本行。"""
+    changeset_id = f"changeset_c2_{hypothesis_id}_r{object_revision:03d}"
+    store.put_ledger_record(
+        changeset_id,
+        "changeset",
+        {
+            "changeset_id": changeset_id,
+            "schema_version": "noetide.changeset.v1",
+            "base_revision": base_revision,
+            "actor": "synthetic_user",
+            "requested_at": at,
+            "confirmation_policy": "single_confirmation",
+            "status": "published",
+            "published_revision": revision_id,
+            "reversibility": "reversible",
+            "proposals": [
+                {
+                    "proposal_id": f"proposal_c2_{hypothesis_id}_r{object_revision:03d}",
+                    "operation": operation,
+                    "target_ref": {"object_type": "hypothesis", "object_id": hypothesis_id},
+                }
+            ],
+        },
+        revision_id=revision_id,
+    )
+
+
 def create_hypothesis(
     store: SemanticStore,
     spec: Mapping[str, Any],
@@ -109,11 +147,13 @@ def create_hypothesis(
         "created_at": at,
     }
     revision_id = _revision_id(hypothesis_id, 1)
+    base_revision = store.current_revision()
     with store.transaction():
         store.add_revision(revision_id, at)
         store.add_canonical_object(hypothesis_id, payload)
         store.replace_evidence_refs(hypothesis_id, _evidence_rows(hypothesis_id, refs))
         _write_receipt(store, hypothesis_id, "create", {"from_status": None, "to_status": "active", "object_revision": 1}, at, revision_id)
+        _write_changeset(store, hypothesis_id, "add", 1, base_revision, revision_id, at)
     return {"outcome": "applied", "hypothesis_id": hypothesis_id, "status": "active", "object_revision": 1}
 
 
@@ -146,11 +186,13 @@ def attach_evidence(
     updated[key] = list(payload.get(key, [])) + [new_ref]
     all_refs = updated["evidence_for"] + updated["evidence_against"] + updated["evidence_contextual"]
     revision_id = _revision_id(hypothesis_id, new_revision)
+    base_revision = store.current_revision()
     with store.transaction():
         store.add_revision(revision_id, at)
         store.replace_canonical_object(hypothesis_id, updated)
         store.replace_evidence_refs(hypothesis_id, _evidence_rows(hypothesis_id, all_refs))
         _write_receipt(store, hypothesis_id, "attach_evidence", {"stance": new_ref["stance"], "status": payload["status"], "object_revision": new_revision}, at, revision_id)
+        _write_changeset(store, hypothesis_id, "replace", new_revision, base_revision, revision_id, at)
     return {"outcome": "applied", "hypothesis_id": hypothesis_id, "status": payload["status"], "object_revision": new_revision}
 
 
@@ -182,10 +224,12 @@ def transition_status(
     updated["object_revision"] = new_revision
     updated["status"] = to_status
     revision_id = _revision_id(hypothesis_id, new_revision)
+    base_revision = store.current_revision()
     with store.transaction():
         store.add_revision(revision_id, at)
         store.replace_canonical_object(hypothesis_id, updated)
         _write_receipt(store, hypothesis_id, "transition", {"from_status": payload["status"], "to_status": to_status, "reason": reason, "object_revision": new_revision}, at, revision_id)
+        _write_changeset(store, hypothesis_id, "replace", new_revision, base_revision, revision_id, at)
     return {"outcome": "applied", "hypothesis_id": hypothesis_id, "status": to_status, "object_revision": new_revision}
 
 

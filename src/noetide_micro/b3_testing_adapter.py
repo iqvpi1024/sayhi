@@ -87,10 +87,9 @@ class B3System:
             return self._publish()
         if scenario == "B3-002":
             try:
-                self.commitments.propose(self._candidate())
+                return self.commitments.propose(self._candidate())
             except ValueError:
-                pass
-            return {"status": "failed", "reason_code": "commitment_preflight_invalid", "data_revision": self.store.current_revision()}
+                return {"status": "failed", "reason_code": "commitment_preflight_invalid", "data_revision": self.store.current_revision()}
         if scenario == "B3-003":
             self.due.project(case["projection_id"], "commitment_b3_001", _NOW)
             statuses = [self.due.read(case["projection_id"], clock)["due_status"] for clock in case["clock_readings"]]

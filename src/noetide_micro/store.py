@@ -7,10 +7,36 @@ import hashlib
 import json
 from pathlib import Path
 import sqlite3
+import threading
 from typing import Any, Iterator, Mapping
 
 
 JsonObject = dict[str, Any]
+
+
+class _LockedConnection:
+    """Serialize every statement on the store lock.
+
+    The local Web runtime opens the store with check_same_thread=False and
+    shares one connection across HTTP handler threads; routing all statements
+    through the store-level RLock keeps a concurrent writer from interleaving
+    statements into another thread's open transaction.
+    """
+
+    def __init__(self, connection: sqlite3.Connection, lock: threading.RLock) -> None:
+        self._raw = connection
+        self._lock = lock
+
+    def execute(self, sql: str, parameters: Any = ()) -> sqlite3.Cursor:
+        with self._lock:
+            return self._raw.execute(sql, parameters)
+
+    def executescript(self, script: str) -> sqlite3.Cursor:
+        with self._lock:
+            return self._raw.executescript(script)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._raw, name)
 
 
 class SeedConflictError(RuntimeError):
@@ -27,7 +53,12 @@ class SemanticStore:
     def __init__(self, database_path: str | Path, *, check_same_thread: bool = True) -> None:
         path = Path(database_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        self._connection = sqlite3.connect(path, isolation_level=None, check_same_thread=check_same_thread)
+        self._lock = threading.RLock()
+        self._transaction_depth = 0
+        self._connection = _LockedConnection(
+            sqlite3.connect(path, isolation_level=None, check_same_thread=check_same_thread),
+            self._lock,
+        )
         try:
             self._connection.execute("PRAGMA foreign_keys = ON")
             self._connection.execute("PRAGMA journal_mode = DELETE")
@@ -44,14 +75,37 @@ class SemanticStore:
 
     @contextmanager
     def transaction(self) -> Iterator[sqlite3.Connection]:
-        self._connection.execute("BEGIN IMMEDIATE")
-        try:
-            yield self._connection
-        except BaseException:
-            self._connection.execute("ROLLBACK")
-            raise
-        else:
-            self._connection.execute("COMMIT")
+        """Run statements as one atomic unit; nested calls join via SAVEPOINT.
+
+        The store lock is held for the whole transaction body so no other
+        thread can write into the open transaction. A nested transaction()
+        reuses the outer transaction through a savepoint instead of failing
+        with "cannot start a transaction within a transaction".
+        """
+        with self._lock:
+            depth = self._transaction_depth
+            savepoint = f"noetide_sp_{depth}" if depth > 0 else None
+            if savepoint is None:
+                self._connection.execute("BEGIN IMMEDIATE")
+            else:
+                self._connection.execute(f"SAVEPOINT {savepoint}")
+            self._transaction_depth = depth + 1
+            try:
+                yield self._connection
+            except BaseException:
+                self._transaction_depth = depth
+                if savepoint is None:
+                    self._connection.execute("ROLLBACK")
+                else:
+                    self._connection.execute(f"ROLLBACK TO {savepoint}")
+                    self._connection.execute(f"RELEASE {savepoint}")
+                raise
+            else:
+                self._transaction_depth = depth
+                if savepoint is None:
+                    self._connection.execute("COMMIT")
+                else:
+                    self._connection.execute(f"RELEASE {savepoint}")
 
     def pragma_values(self) -> JsonObject:
         return {
@@ -240,6 +294,22 @@ class SemanticStore:
             "INSERT INTO canonical_revisions (revision_id, recorded_at, revision_kind) VALUES (?, ?, ?)",
             (revision_id, recorded_at, revision_kind),
         )
+
+    def next_revision(self, prefix: str = "rev") -> str:
+        """Allocate the next ``{prefix}_NNN`` revision id from the revisions table.
+
+        Takes the global maximum numeric suffix across every known revision id,
+        so non-numeric ids (``rev_c1_*``, ``rev_011_test``) are skipped instead
+        of crashing the caller. Call inside ``transaction()`` for race-free
+        allocation when several writers share one store.
+        """
+        marker = prefix + "_"
+        numbers = [
+            int(revision_id[len(marker):])
+            for revision_id in self.revision_ids()
+            if revision_id.startswith(marker) and revision_id[len(marker):].isdigit()
+        ]
+        return f"{marker}{max(numbers) + 1:03d}" if numbers else f"{marker}001"
 
     def projection_record(self, view_name: str) -> JsonObject:
         row = self._connection.execute(

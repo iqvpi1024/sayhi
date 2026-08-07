@@ -15,7 +15,7 @@ release:
   working_tree: complete product local app
   portable: Noetide-beta-v0.3.0-win64.zip built
 latest_recovery_points:
-  - product-complete (current working tree, pending final build/tag)
+  - product-complete-rp-20260803 (annotated a64fb89 -> HEAD 9e3875d, pushed to origin)
   - y2s5-mcp-runtime-rp-20260803
   - y2s4-cloud-model-rp-20260803
   - y2s3-local-web-ui-rp-20260803
@@ -24,9 +24,9 @@ latest_recovery_points:
   - v0.2.0-beta
 decision_ref: DEC-PRD-V06-001 (baseline), user instruction to remove development gates and complete the full local product
 adr_ref: ADR-0019, ADR-0021..0024, plus product facade implementation
-verification: product tests 5/5 OK; final full configured-adapter regression to be recorded after this turn
+verification: product tests 5/5 OK; full configured-adapter regression 485 OK, 0 skipped (2026-08-03, network disabled); 26 suite validators PASSED
 next_role: Product Owner / end-user handoff
-next_single_action: portable build and final regression are done; publish the product-complete recovery point
+next_single_action: execute the 2026-08-07 full-audit remediation: security closure (product_server CORS/auth), engineering hardening and documentation wrap-up (in progress)
 scope_in:
   - 用户已明确授权不再走开发门禁，直接完成完整产品
   - 本地安装与桌面启动
@@ -53,7 +53,7 @@ stop_condition: 无；用户已取消开发门禁并要求直接完成
 - `NoetideApp` 支持空库初始化、设置持久化、文本/文件夹导入、离线规则识灵分析、OpenAI 兼容本地/云端模型接入、候选生成/确认/忽略、列表/搜索/时间线、Context Pack 导出、加密备份/恢复、包导入、默认与自定义 MCP 授权。
 - `product_server.py` 提供本地 Web、REST API、`/mcp` JSON-RPC 和远程令牌鉴权。
 - `webui.html` 提供中文可视化管理界面，覆盖总览、导入、识灵分析、记忆、搜索、Agent 接入、导出备份、设置；桌面与移动端响应式。
-- `noetide_desktop.py`、CLI `product`/`product-init`、portable 安装/启动脚本均已改为完整产品启动方式。
+- `noetide_desktop.py`、CLI `noetide product` / `noetide product-init` 子命令（console script `noetide` / `noetide-product`）、portable 安装/启动脚本均已改为完整产品启动方式。
 - `scripts/build-d2-beta.ps1` 已改为打包完整产品，并声明 `real_personal_data_supported=true`。
 
 ## 验证

@@ -1,4 +1,9 @@
-"""Decision object for MVP-C C1."""
+"""Decision object for MVP-C C1.
+
+注意:``decide``/``close``/``set_predicted_outcome`` 仅内存语义——它们返回
+新的 Decision 字典但不写库。持久化只经 c1.py 的 add-only ChangeSet 路径
+(``C1ChangeSetService.publish``);要保存状态变化,请构造新对象走该路径。
+"""
 
 from __future__ import annotations
 

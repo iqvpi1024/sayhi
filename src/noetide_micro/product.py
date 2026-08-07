@@ -6,6 +6,7 @@ Additive product facade over the existing semantic store and MCP runtime.
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 import re
 import secrets
@@ -15,7 +16,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+from .cloud_model import CloudGate
 from .mcp_runtime import McpRuntime, SUPPORTED_PROFILE as MCP_PROFILE
+from .model_capability import RED_LINE_COMPARTMENTS
 from .pack_backup import create_backup, export_markdown_pack, restore_backup
 from .portability import ContextPackVerifier
 from .store import SemanticStore
@@ -28,6 +31,17 @@ SETTINGS_KEYS = (
     "model_mode", "model_endpoint", "model_api_key", "model_name",
     "remote_access", "remote_host", "port", "api_token", "backup_key", "language",
 )
+# 产品云端通路复用 Y2-S4 CloudGate:授权门 + 红线门 + 预览门 + 审计账本。
+CLOUD_PURPOSE = "organize"
+CLOUD_ACTOR = "local_user"
+CLOUD_GRANT_RECORD_TYPE = "product_cloud_grant"
+CLOUD_GRANT_EXPIRES_AT = "2099-12-31T23:59:59+00:00"
+# 最小确定性红线启发式:命中健康/财务关键词的 source 额外标注红线 compartment,
+# CloudGate 对红线 compartment 一律拒绝发送(red_line_denied)。
+_RED_LINE_KEYWORDS = {
+    "health": ("病历", "体检", "诊断", "症状", "用药", "医疗", "疾病"),
+    "finance": ("工资", "存款", "债务", "借款", "欠款", "余额", "账单"),
+}
 
 
 def _sha256(value: str) -> str:
@@ -56,6 +70,26 @@ def _source_content(source: Mapping[str, Any]) -> str:
         return value
     value = source.get("inline_content")
     return str(value or "")
+
+
+def _classify_compartments(content: str) -> list[str]:
+    """确定性红线标注:健康/财务关键词命中即附加对应红线 compartment。"""
+    compartments = ["personal"]
+    for compartment in sorted(_RED_LINE_KEYWORDS):
+        if any(keyword in content for keyword in _RED_LINE_KEYWORDS[compartment]):
+            compartments.append(compartment)
+    return compartments
+
+
+def _is_loopback_host(host: str | None) -> bool:
+    if not host:
+        return False
+    if host.lower() == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        return False
 
 
 def _snippet(text: str, needle: str, radius: int = 80) -> str:
@@ -126,12 +160,8 @@ class NoetideApp:
             self._store.upsert_projection("product_overview", revision, revision, "fresh", {"revision": revision})
 
     def _next_revision(self) -> str:
-        numbers = [
-            int(rid[4:])
-            for rid in self._store.revision_ids()
-            if rid.startswith("rev_") and rid[4:].isdigit()
-        ]
-        return f"rev_{max(numbers) + 1:03d}" if numbers else "rev_001"
+        # 委托给 store 的全局分配器:非 rev_NNN 格式(如 rev_c1_*)跳过而非崩溃
+        return self._store.next_revision()
 
     def _refresh_projection(self) -> None:
         revision = self._store.current_revision()
@@ -245,7 +275,7 @@ class NoetideApp:
             "owner_ref": "local_user",
             "recorder_ref": "local_user",
             "sensitivity": "private",
-            "compartments": ["personal"],
+            "compartments": _classify_compartments(content),
             "third_party_present": "unknown",
             "retention_policy_ref": "user_controlled_v1",
             "retention_state": "active",
@@ -267,7 +297,7 @@ class NoetideApp:
             "coverage_raw_status": "present",
             "policy_profile_ref": "owner_intake_private_v1",
             "policy_resolution_status": "declared",
-            "effective_policy": {"sensitivity": "private", "compartments": ["personal"]},
+            "effective_policy": {"sensitivity": "private", "compartments": list(source.get("compartments") or ["personal"])},
             "failure": None,
             "actor": "local_user",
         }
@@ -432,10 +462,21 @@ class NoetideApp:
         if not endpoint:
             return [], "model_endpoint_missing"
         parsed = urllib.parse.urlparse(endpoint)
-        if self._settings.get("model_mode") == "local" and parsed.scheme != "http":
-            return [], "local_endpoint_must_be_http"
-        if self._settings.get("model_mode") == "cloud" and parsed.scheme != "https":
+        mode = self._settings.get("model_mode")
+        if mode == "local":
+            if parsed.scheme != "http":
+                return [], "local_endpoint_must_be_http"
+            if not _is_loopback_host(parsed.hostname):
+                return [], "local_endpoint_must_be_loopback"
+        if mode == "cloud" and parsed.scheme != "https":
             return [], "cloud_endpoint_must_be_https"
+        gate: CloudGate | None = None
+        grant_ref = ""
+        preview_id: str | None = None
+        if mode == "cloud":
+            gate, grant_ref, preview_id, failure = self._cloud_authorize(source, endpoint)
+            if failure is not None:
+                return [], failure
         prompt = (
             "你是识海识灵。请从材料中提取少量可审核候选，只输出 JSON。\n"
             '格式：{"candidates":[{"candidate_kind":"entity|assertion|commitment|episode",'
@@ -461,6 +502,8 @@ class NoetideApp:
                 response_payload = json.loads(response.read().decode("utf-8"))
             raw = response_payload["choices"][0]["message"]["content"]
         except Exception as exc:
+            if gate is not None:
+                self._cloud_audit_send(gate, "send_failed", source, grant_ref, preview_id, "transport_failed")
             return [], "model_call_failed:" + str(exc)
         raw = str(raw).strip()
         if raw.startswith("```"):
@@ -468,16 +511,102 @@ class NoetideApp:
         try:
             parsed_obj = json.loads(raw)
         except json.JSONDecodeError:
+            if gate is not None:
+                self._cloud_audit_send(gate, "send_failed", source, grant_ref, preview_id, "invalid_output")
             return [], "invalid_model_json"
         items = parsed_obj.get("candidates") if isinstance(parsed_obj, dict) else parsed_obj
         if not isinstance(items, list):
+            if gate is not None:
+                self._cloud_audit_send(gate, "send_failed", source, grant_ref, preview_id, "invalid_output")
             return [], "invalid_candidates_shape"
         valid: list[JsonObject] = []
         for item in items:
             if not isinstance(item, dict) or item.get("candidate_kind") not in CANDIDATE_KINDS or not isinstance(item.get("payload"), dict):
                 continue
             valid.append({"candidate_kind": item["candidate_kind"], "payload": item["payload"]})
+        if gate is not None:
+            self._cloud_audit_send(gate, "send_succeeded", source, grant_ref, preview_id, None)
         return valid, None
+
+    def _cloud_authorize(
+        self, source: Mapping[str, Any], endpoint: str
+    ) -> tuple[CloudGate, str, str | None, str | None]:
+        """云端发送前的授权门 + 红线门 + 预览门(复用 Y2-S4 CloudGate 合同)。
+
+        用户显式配置 cloud endpoint+key 即视为授权:为此生成并持久化一份
+        bounded grant(仅覆盖该 source、purpose=organize、仅 personal 舱室),
+        grant/preview/send 全过程审计落 cloud_audit 账本;红线 compartment
+        的 source 一律 red_line_denied,不发送。
+        """
+        now = utc_now()
+        gate = CloudGate(self._store, now)
+        for record in self._store.ledger_records_of_type(CLOUD_GRANT_RECORD_TYPE):
+            grant = record.get("grant")
+            if isinstance(grant, Mapping):
+                gate.restore_grant(grant)
+        source_id = source["source_id"]
+        preview = gate.build_preview([source_id], CLOUD_PURPOSE, CLOUD_ACTOR, now)
+        preview_id = preview["preview_id"]
+        if set(source.get("compartments") or []) & RED_LINE_COMPARTMENTS:
+            # 红线舱室在创建任何 grant 之前即拒绝,不为红线内容留存授权记录
+            gate._audit("send_denied", {
+                "actor": CLOUD_ACTOR, "purpose": CLOUD_PURPOSE,
+                "preview_id": preview_id, "source_ids": [source_id],
+                "reason": "red_line_denied",
+            })
+            return gate, "", preview_id, "cloud_denied:red_line_denied"
+        grant_id = "grant_product_" + _sha256(_canonical_json({
+            "actor": CLOUD_ACTOR, "purpose": CLOUD_PURPOSE,
+            "endpoint": endpoint, "sources": [source_id],
+        }))[:16]
+        if self._store.ledger_record(grant_id) is None:
+            # grant 创建与持久化是一个原子单元(审计行与 grant 记录同生共死)
+            with self._store.transaction():
+                grant = gate.create_grant({
+                    "grant_id": grant_id,
+                    "actor": CLOUD_ACTOR,
+                    "purpose": CLOUD_PURPOSE,
+                    "compartments": ["personal"],
+                    "source_scope": {"source_ids": [source_id]},
+                    "expires_at": CLOUD_GRANT_EXPIRES_AT,
+                    "created_at": now,
+                })
+                self._store.put_ledger_record(grant_id, CLOUD_GRANT_RECORD_TYPE, {
+                    "grant_id": grant_id, "grant": grant,
+                    "endpoint": endpoint, "recorded_at": now,
+                })
+        grant_refs, reasons = gate.evaluate_batch([source_id], CLOUD_PURPOSE, CLOUD_ACTOR, now)
+        if reasons[0]:
+            gate._audit("send_denied", {
+                "actor": CLOUD_ACTOR, "purpose": CLOUD_PURPOSE,
+                "preview_id": preview_id, "source_ids": [source_id],
+                "reason": reasons[0],
+            })
+            return gate, "", preview_id, "cloud_denied:" + reasons[0]
+        gate._audit("send_allowed", {
+            "actor": CLOUD_ACTOR, "purpose": CLOUD_PURPOSE,
+            "grant_ref": grant_refs[0], "preview_id": preview_id,
+            "source_ids": [source_id],
+        })
+        return gate, grant_refs[0], preview_id, None
+
+    def _cloud_audit_send(
+        self,
+        gate: CloudGate,
+        event_type: str,
+        source: Mapping[str, Any],
+        grant_ref: str,
+        preview_id: str | None,
+        reason: str | None,
+    ) -> None:
+        payload: JsonObject = {
+            "actor": CLOUD_ACTOR, "purpose": CLOUD_PURPOSE,
+            "grant_ref": grant_ref, "preview_id": preview_id,
+            "source_ids": [source["source_id"]],
+        }
+        if reason:
+            payload["reason"] = reason
+        gate._audit(event_type, payload)
 
     def _persist_candidate(self, item: Mapping[str, Any], source: Mapping[str, Any]) -> JsonObject | None:
         kind = item.get("candidate_kind")
@@ -518,34 +647,39 @@ class NoetideApp:
             raise KeyError(candidate_id)
         if candidate.get("status") == "confirmed":
             return candidate
-        new_revision = self._next_revision()
         now = utc_now()
-        object_payload = self._build_object(candidate, new_revision, actor, now)
-        object_id = object_payload["object_id"]
-        if self._store.canonical_object_or_none(object_id) is None:
-            self._store.add_revision(new_revision, now, "changeset")
-            self._store.add_canonical_object(object_id, object_payload)
-            self._store.replace_evidence_refs(object_id, candidate["evidence_refs"])
-            self._store.put_ledger_record(
-                "changeset_" + candidate_id,
-                "product_changeset",
-                {
-                    "changeset_id": "changeset_" + candidate_id,
-                    "candidate_ref": candidate_id,
-                    "object_ref": object_id,
-                    "base_revision": new_revision,
-                    "published_revision": new_revision,
-                    "status": "published",
-                    "actor": actor,
-                    "recorded_at": now,
-                },
-                revision_id=new_revision,
-            )
-            self._store.mark_all_projections_stale(new_revision)
-        candidate["status"] = "confirmed"
-        candidate["confirmed_at"] = now
-        candidate["object_id"] = object_id
-        self._store.replace_ledger_record(candidate_id, candidate, revision_id=new_revision)
+        with self._store.transaction():
+            base_revision = self._store.current_revision()
+            new_revision = self._store.next_revision()
+            object_payload = self._build_object(candidate, new_revision, actor, now)
+            object_id = object_payload["object_id"]
+            published_revision: str | None = None
+            if self._store.canonical_object_or_none(object_id) is None:
+                self._store.add_revision(new_revision, now, "changeset")
+                self._store.add_canonical_object(object_id, object_payload)
+                self._store.replace_evidence_refs(object_id, candidate["evidence_refs"])
+                self._store.put_ledger_record(
+                    "changeset_" + candidate_id,
+                    "product_changeset",
+                    {
+                        "changeset_id": "changeset_" + candidate_id,
+                        "candidate_ref": candidate_id,
+                        "object_ref": object_id,
+                        "base_revision": base_revision,
+                        "published_revision": new_revision,
+                        "status": "published",
+                        "actor": actor,
+                        "recorded_at": now,
+                    },
+                    revision_id=new_revision,
+                )
+                self._store.mark_all_projections_stale(new_revision)
+                published_revision = new_revision
+            candidate["status"] = "confirmed"
+            candidate["confirmed_at"] = now
+            candidate["object_id"] = object_id
+            # 对象已存在(去重路径)时不产生新 revision,账本行不引用未发布的 revision
+            self._store.replace_ledger_record(candidate_id, candidate, revision_id=published_revision)
         self._refresh_projection()
         return candidate
 
@@ -721,35 +855,37 @@ class NoetideApp:
             "sources_imported": 0, "sources_duplicate": 0,
             "canonical_imported": 0, "canonical_duplicate": 0, "ledger_imported": 0,
         }
-        for source in snapshot.get("sources", []):
-            source_id = source.get("source_id")
-            if not source_id or self._store.seeded_source(source_id) is not None:
-                report["sources_duplicate"] += 1
-                continue
-            source = dict(source)
-            source.setdefault("append_receipt_id", f"receipt_{source_id}")
-            self._store.append_source(source, {
-                "receipt_id": source["append_receipt_id"], "source_id": source_id,
-                "status": "stored", "actor": "pack_import",
-            })
-            report["sources_imported"] += 1
-        for obj in snapshot.get("canonical", []):
-            object_id = obj.get("object_id")
-            if not object_id or self._store.canonical_object_or_none(object_id) is not None:
-                report["canonical_duplicate"] += 1
-                continue
-            payload = dict(obj)
-            payload.setdefault("object_revision", self._store.current_revision())
-            self._store.add_canonical_object(object_id, payload)
-            if isinstance(payload.get("evidence_refs"), list):
-                self._store.replace_evidence_refs(object_id, payload["evidence_refs"])
-            report["canonical_imported"] += 1
-        for record in snapshot.get("ledger", []):
-            record_id = record.get("record_id")
-            if not record_id or self._store.ledger_record(record_id) is not None:
-                continue
-            self._store.put_ledger_record(record_id, record.get("record_type") or "product_event", record.get("payload") or record)
-            report["ledger_imported"] += 1
+        # 整个导入是一个原子单元:任一记录失败即整体回滚,不留半导入状态
+        with self._store.transaction():
+            for source in snapshot.get("sources", []):
+                source_id = source.get("source_id")
+                if not source_id or self._store.seeded_source(source_id) is not None:
+                    report["sources_duplicate"] += 1
+                    continue
+                source = dict(source)
+                source.setdefault("append_receipt_id", f"receipt_{source_id}")
+                self._store.append_source(source, {
+                    "receipt_id": source["append_receipt_id"], "source_id": source_id,
+                    "status": "stored", "actor": "pack_import",
+                })
+                report["sources_imported"] += 1
+            for obj in snapshot.get("canonical", []):
+                object_id = obj.get("object_id")
+                if not object_id or self._store.canonical_object_or_none(object_id) is not None:
+                    report["canonical_duplicate"] += 1
+                    continue
+                payload = dict(obj)
+                payload.setdefault("object_revision", self._store.current_revision())
+                self._store.add_canonical_object(object_id, payload)
+                if isinstance(payload.get("evidence_refs"), list):
+                    self._store.replace_evidence_refs(object_id, payload["evidence_refs"])
+                report["canonical_imported"] += 1
+            for record in snapshot.get("ledger", []):
+                record_id = record.get("record_id")
+                if not record_id or self._store.ledger_record(record_id) is not None:
+                    continue
+                self._store.put_ledger_record(record_id, record.get("record_type") or "product_event", record.get("payload") or record)
+                report["ledger_imported"] += 1
         self._refresh_projection()
         return report
 

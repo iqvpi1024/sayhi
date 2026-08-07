@@ -12,6 +12,8 @@
 | 上游 | S1 v0.6、S2 v0.5、S3 v0.4、S6 v0.5、S7 v0.3 |
 | 适用范围 | `SLICE-MVP-A-CURRENT-STATE-001`，仅固定合成数据 |
 
+> v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+
 ## 1. 目标与非目标
 
 目标：证明第三个 MVP-A Core View `current_state` 可在固定合成 Canonical snapshot 上构建 fresh 投影、在 Canonical 变更后显式 stale、重建等价，且永不反向成为事实证据。

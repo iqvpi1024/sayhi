@@ -12,6 +12,8 @@
 | 上游 | S1 v0.6、S2 v0.5、S3 v0.4、S6 v0.5 |
 | 适用范围 | `SLICE-MVP-C-SCENARIO-001`，仅固定合成数据 |
 
+> v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+
 ## 1. 目标与非目标
 
 目标：在一个固定合成 profile 上证明情景推演与行动跟进的完整管理——用户确认创建 baseline/optimistic/pessimistic 情景三元组（`assertion_kind=predicted` 恒定）、可执行性约束的确定性评估、用户确认的情景选择、用户确认的跟进动作创建与完成、过期未完成的 Derived `missed` 视图；情景永不成为事实、永不生成专业建议。

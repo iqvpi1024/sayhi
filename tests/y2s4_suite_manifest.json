@@ -68,12 +68,21 @@
       "role": "offline_runner"
     },
     {
-      "sha256": "14aa861bc626d976ed89a3aebd28f9252a0dc7a260cd8095bc0711d8b38ac1d4",
+      "sha256": "4eda2799ad50bdb1353c160959a5eb5c64b78601ff6f6e65bdb91376186cc62b",
       "path": "tools/validate_y2s4_suite.py",
       "role": "suite_preflight_validator"
     }
   ],
-  "latest_verification_result_path": "docs/testing/results/y2s4-20260803.json",
-  "latest_verification_result_sha256": "dfa8b518cd29aa397d2e95c4edc1934195d92c4c11a07045eeb9388950e63dff",
-  "latest_verification_manifest_sha256": "035ce482e79897d206aeab7d1bae5c9e2e6e587b48f3b16a008e9d67b3661564"
+  "latest_verification_result_path": "docs/testing/results/y2s4-20260807.json",
+  "latest_verification_result_sha256": "b6b8ddad1b26a52a0ef9db9f0752f9a8037f1a969a66992f9c55e246b23b4741",
+  "latest_verification_manifest_sha256": "4fb23c7df39d075c8fafa4c48a1087aaaa4d35b9ad8742811dd2e6a48d4bea25",
+  "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/y2s4-20260803.json",
+      "manifest_sha256": "035ce482e79897d206aeab7d1bae5c9e2e6e587b48f3b16a008e9d67b3661564",
+      "result_sha256": "dfa8b518cd29aa397d2e95c4edc1934195d92c4c11a07045eeb9388950e63dff",
+      "reason": "Suite preflight validator success wording fixed to reflect the executed/bound state; superseded by y2s{n}-20260807.json."
+    }
+  ]
 }

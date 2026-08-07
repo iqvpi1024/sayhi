@@ -12,9 +12,11 @@
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
 | 当前公开发布 | `v0.2.0-beta` 已发布；完整产品代码已完成，v0.3.0 portable 已构建（未发布 GitHub） |
 | 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
-| 当前阶段 | `product_implementation_complete`；完整产品代码和验证已完成，等待最终构建/发布 recovery point |
+| 当前阶段 | `product_implementation_complete`；完整产品代码、验证与 v0.3.0 portable 构建已完成，product-complete recovery point 已发布；2026-08-07 全面审核整改已完成（§3 第 75–78 条） |
 | 当前公开版本 | `v0.2.0-beta` GitHub prerelease |
 | tag / commit | annotated tag `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
+| product-complete recovery tag | annotated tag `product-complete-rp-20260803`（tag object `a64fb89`）-> `9e3875d0c32c7a1aab249a90d6b7cd84911f533d`，已创建并推送 origin |
+| audit-remediation recovery tag | annotated tag `audit-remediation-rp-20260808` -> 本次整改提交，随提交创建并推送 origin |
 | GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.2.0-beta` |
 | 交付级别 | D1/D2/D3 历史版本已发布；当前完整产品已具备一键安装、Web 管理、MCP/API、识灵大模型分析、导出备份与远程访问 |
 | 分支 | `main`，已推送至 `origin/main` |
@@ -26,7 +28,7 @@
 - 已实现 `NoetideApp`：空库初始化、文本/文件夹导入、离线识灵分析、本地/云端模型分析、候选确认/忽略、搜索/时间线、Context Pack 导出/导入、加密备份/恢复。
 - 已实现 `product_server.py`：本地 Web UI、REST API、`/mcp` JSON-RPC、远程令牌鉴权、默认/自定义 Agent 授权。
 - 已实现 `webui.html`：总览、导入、识灵分析、记忆、搜索、Agent 接入、导出备份、设置；桌面和移动端响应式。
-- 已实现桌面启动器 `noetide_desktop.py`、CLI `product`/`product-init`、portable 安装/启动脚本。
+- 已实现桌面启动器 `noetide_desktop.py`、CLI `noetide product` / `noetide product-init` 子命令（console script `noetide` / `noetide-product`）、portable 安装/启动脚本。
 - 产品测试 5/5 OK；全量 configured-adapter regression 485 OK、0 skipped（2026-08-03）。
 - `dist/Noetide-beta-v0.3.0-win64.zip` 构建成功，SHA-256 `55c26e39aca14ef3839978093d55856403ce19f6ca8e222e6543f0aecb3b80f2`；portable 空库初始化与 `/api/health` 启动检查通过。
 
@@ -36,6 +38,9 @@
 4. GitHub Actions 对 `main` 和 tag 的两个 run 均通过，包含 Linux 合同/语义回归与 Windows portable smoke。
 5. B2 Episode/summary 已完成合同、ADR、suite、实现、官方 runner、Gate Review 与 recovery point；它只证明 FR-103 的固定合成切片。
 6. B2 official suite 的 `B2-001..008` 为 8/8 passed/current；recovery tag `b2-episode-summary-rp-20260719` 已推送。
+
+> 编者注（2026-08-07）：编号 7-13 为历史重编号遗留的断档；为保持既有文档对条目标号的引用稳定，此处不重排编号。
+
 14. `DEC-MVP-B-COMMITMENT-001` 已选择 B3 的固定合成 Commitment 生命周期切片；尚未开始 B3 代码或 suite 物化。
 15. B3 applicability review 结论为 `pass_with_slice_contract_required`；基础 SPEC 不足以直接授权 Commitment 业务实现。
 16. `SPEC-B3-COMMITMENT-001` 与合同复核已完成；尚未建立 B3 traceability、ADR、suite 或代码。
@@ -96,6 +101,11 @@
 71. Y2-S2（本地模型提议式整理）全门禁链完成并 verified（2026-08-03）：`DEC-Y2-S2-001`、applicability（pass_with_slice_contract_required）、`SPEC-Y2S2-LOCAL-MODEL-001` v0.1 + 合同复核、矩阵 §4.22、`ADR-0021`、`ARCH-Y2S2-LOCAL-MODEL-001`、suite 物化（10 场景）、`PLAN-Y2-S2-IMPL-001`；TASK-001/002 实现（`model_capability.py`、`y2s2_testing_adapter.py`）unit 8/8；adapter contract 10/10；official runner `y2s2-20260803.json` 同一次 run 10/10 passed/current 并绑定 manifest；全量回归 430 OK 0 skip；23 个 suite validator 全过；Gate Review P0=0/P1=0。切片只证明本地模型候选 propose-only 与版本审计，不宣告云端后端、真实模型评估或自动发布。
 72. Y2-S3（本地 Web UI 呈现层）全门禁链完成并 verified（2026-08-03）：`DEC-Y2-S3-001`、applicability（pass_with_slice_contract_required）、`SPEC-Y2S3-LOCAL-WEB-UI-001` v0.1 + 合同复核、矩阵 §4.23、`ADR-0022`、`ARCH-Y2S3-LOCAL-WEB-UI-001`、suite 物化（10 场景）、`PLAN-Y2-S3-IMPL-001`；TASK-001/002 实现（`local_web.py`、`y2s3_testing_adapter.py`）unit 7/7；adapter contract 10/10；official runner `y2s3-20260803.json` 同一次 run 10/10 passed/current 并绑定 manifest；全量回归 447 OK 0 skip；24 个 suite validator 全过；Gate Review P0=0/P1=0。切片只证明本地回环 Web 呈现链，不宣告云端后端、MCP、真实数据模式或生产级加密密钥管理。
 73. Y2-S4（云端模型可选后端）全门禁链完成并 verified（2026-08-03）：`DEC-Y2-S4-001`、applicability（pass_with_slice_contract_required）、`SPEC-Y2S4-CLOUD-MODEL-001` v0.1 + 合同复核、矩阵 §4.24、`ADR-0023`、`ARCH-Y2S4-CLOUD-MODEL-001`、suite 物化（10 场景）、`PLAN-Y2-S4-IMPL-001`；TASK-001/002 实现（`cloud_model.py`、`y2s4_testing_adapter.py`）unit 5/5；adapter contract 10/10；official runner `y2s4-20260803.json` 同一次 run 10/10 passed/current 并绑定 manifest；全量回归 462 OK 0 skip；25 个 suite validator 全过；Gate Review P0=0/P1=0。切片只证明云端可选后端的授权门、红线门、预览门、审计与诚实降级，不宣告 MCP runtime、真实数据模式或自动上传。
+74. Y2-S5（MCP runtime 最小子集）全门禁链完成并 verified（2026-08-03）：`DEC-Y2-S5-001`、applicability（pass_with_slice_contract_required）、`SPEC-Y2S5-MCP-RUNTIME-001` v0.1 + 合同复核、矩阵 §4.25、`ADR-0024`、`ARCH-Y2S5-MCP-RUNTIME-001`、suite 物化（10 场景）、`PLAN-Y2-S5-IMPL-001`；TASK-001/002 实现（`mcp_runtime.py`、`y2s5_testing_adapter.py`）unit 8/8；adapter contract 10/10；official runner `y2s5-20260803.json` 同一次 run 10/10 passed/current 并绑定 manifest；全量回归 480 OK 0 skip；26 个 suite validator 全过；Gate Review P0=0/P1=0；recovery tag `y2s5-mcp-runtime-rp-20260803` 已创建并推送。切片只证明 MCP runtime 最小子集的只读接入，不宣告 controlled mutate、A2A、多 Agent、真实数据模式或云端调用。
+75. 2026-08-07 全面审核整改（2026-08-07/08 执行）：双份独立审核（`项目全面审核报告-2026-08-07.md`、`Review-report/FULL_AUDIT_REPORT_2026-08-07.md`）后实施四包整改。安全闭环：`product_server.py` 去除 `ACAO: *`、Host/Origin 回环校验、非回环绑定无 token 拒绝启动、`hmac.compare_digest` 令牌比较、请求体 1 MiB 上限、错误信息不外泄；`pack_backup.py` 备份格式升级 NOBAK2（PBKDF2 20 万轮 + HMAC-SHA256，去除明文哈希爆破 oracle，旧格式明确拒绝）；`local_web.py` 移除硬编码备份密钥（改环境变量/随机持久化）；`webui.html` 增加非生产级加密风险提示；`SECURITY.md` 重写覆盖 v0.3.0 真实攻击面；`.gitignore` `/devdata/` 行尾 `\r` 失效修复。
+76. 整改（核心工程加固，2026-08-08）：产品云通路接入 `CloudGate` 授权/红线/预览三门并全审计落账（`product.py:459-592`）；source 红线舱室确定性启发式标注；local 模型模式强制 loopback；`SemanticStore.next_revision()` 统一 revision 分配消除跨模块碰撞；`confirm_candidate`/`import_pack` 写入事务化并修正 base_revision 语义；`hypotheses.py` 补 changeset 账本；`access_policy.py` 畸形输入 fail-closed deny；时间戳比较统一 UTC epoch；receipt id 改库内计数分配；`store.py` 全连接 RLock 序列化 + 嵌套事务 SAVEPOINT；其余 P2（answers freshness、b1 幂等、candidate_aggregator fail-closed、shadow_migration 半成品清理等）一并修复。oracle 锁定项（scenarios revision 账本、changesets/episodes 硬编码 rev 命名、decision 持久化、C5 encryption 标签更名）仅做 docstring 标注，待 Change Control。
+77. 整改（测试与工具链，2026-08-08）：`b3_testing_adapter.py` B3-002 自问自答修复为真实业务判定；micro/answer_safety contract 改 `skipUnless`（裸跑 errors 2→0）；micro validator 补 `bound_artifacts` 复核、y2s1..y2s5 validator 修正成功措辞（6 个 validator 与其余 20 个对齐）；`validate_pre_development_gate.ps1` 加一次性门禁标注并修复 `$PSHOME` 调用；新增 `pytest.ini`（`pythonpath = src`）；`docs/testing/README.md` 固化 canonical 回归命令。按 Change Control 对 8 个 suite 重跑 official runner 并 rebind manifest：`b3-20260807.json`(8/8)、`micro-20260807.json`(49/49)、`a1-20260807.json`(35/35)、`y2s1..y2s5-20260807.json`（各 10/10)，旧结果以 superseded 入 historical_verification_results。
+78. 整改（文档收尾，2026-08-08）：`PROJECT_STATE.md` §2/§3/§6 收尾（product-complete tag 补记、Y2-S5 补登、编号断档编者注）；`CURRENT_HANDOFF.md` 三字段同步；`docs/process/README.md` §10 与 `docs/adrs/README.md` §5 过期快照改为指向 PROJECT_STATE 的指针；`LATEST_*` 加时效声明；矩阵 FR-302 与 §5 补切片级进展；新建合并 Recovery Record `docs/releases/Y2_AND_PRODUCT_COMPLETE_RECOVERY_RECORDS_2026-08-03.md`；基线索引补路径解析基准说明；15 份首年切片合同补 v0.6 适用性注记；CLI 表述修订为 `noetide product`/`noetide product-init` 子命令。
 
 ## 4. 真实验证结果
 
@@ -198,6 +208,11 @@
 | Y2-S5 contract（adapter） | 10/10 passed |
 | Y2-S5 官方 suite | `docs/testing/results/y2s5-20260803.json`：同一次 run 10/10 passed/current，网络阻断、stdlib only；manifest 已绑定；全量回归 480 OK 0 skip；26 个 suite validator 全 PASSED |
 | Y2-S5 Gate Review | `Y2_S5_MCP_RUNTIME_GATE_REVIEW_2026-08-03.md`：P0=0、P1=0 |
+| 审核整改 rebind（2026-08-08） | 8 个 suite 重跑 official runner 并 rebind manifest：`b3-20260807.json` 8/8、`micro-20260807.json` 49/49、`a1-20260807.json` 35/35、`y2s1..y2s5-20260807.json` 各 10/10，均同一次 run passed/current；旧结果以 superseded 留痕 |
+| 整改后裸跑回归（2026-08-08） | 无 adapter `unittest discover`：Ran 485，OK，skipped=209，errors=0（修复前 errors=2） |
+| 整改后全量回归（2026-08-08，最终树） | `PYTHONPATH=src` + 21 adapter 环境变量 + `python -m unittest discover -s tests -t .`：exit 0，Ran 485 tests，OK，0 skipped |
+| 整改后 validator 复扫（2026-08-08） | 26 个 suite validator 全部 exit 0；`validate_product_baseline.ps1` / `validate_spec_baseline.ps1` 均 exit 0 |
+| 整改安全定点实测（2026-08-07） | 无 ACAO 头、恶意 Origin 403、非回环 Host 403、OPTIONS 501、非法 Content-Length 400、超大 body 413、`0.0.0.0` 无 token 拒绝启动 rc=2、NOBAK2 往返/错密钥/篡改/旧格式四项拒绝、remote_access token 组合、4 线程并发写无错误：全部符合预期（代理手写端到端脚本实测） |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -210,4 +225,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**完整产品代码、Web UI、REST/MCP 接口、识灵模型接入、导出备份和远程访问均已实现并验证，v0.3.0 portable 构建成功。下一步：将本次提交作为 product-complete recovery point 发布。**
+**2026-08-07 全面审核整改已完成并固化为 recovery point（tag `audit-remediation-rp-20260808`）：安全闭环（product_server CORS/鉴权/NOBAK2 备份加密）、核心工程加固（CloudGate 接入、统一 revision 分配、写入事务化、并发锁）、测试工具链修复（B3-002 adapter、validator 对齐、8 个 suite rebind）与文档收尾均已落地；整改后全量回归 485 OK 0 skipped、26 个 suite validator 与 2 个 baseline validator 全 exit 0（2026-08-08 实测，见 §4）。下一步：v0.3.0 发布决定（打 tag + GitHub 发布，或补 internal build 记录）；其后可选处理 oracle 锁定的 Change Control 事项（scenarios revision 账本、C5 encryption 标签更名、decision 持久化）。**

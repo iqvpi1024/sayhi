@@ -16,6 +16,7 @@ approval_decision: DEC-PRD-V06-001
 
 规则：
 
+- 上述 YAML 中的 PRD 路径均相对于仓库根目录解析。
 - `PRDv04.md`、`PRDv05.md` 是不可修改的历史基线，不因 superseded 失去审计价值。
 - 新版本必须创建新文件；不得覆盖旧版本来伪造历史连续性。
 - current 变化后，所有下游 SPEC、Matrix、suite、ADR、plan 和 result 必须做 applicability/兼容复核。

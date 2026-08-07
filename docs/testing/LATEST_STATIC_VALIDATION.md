@@ -1,5 +1,7 @@
 # 最近静态与规划门禁验证结果
 
+> **时效声明（2026-08-07 补记）**：本文件内容定格于 2026-07-18（见“当前记录”节），仅保留历史审计价值，不代表当前状态；项目最新状态以 `docs/PROJECT_STATE.md` 为准。
+
 ## 当前记录：RC evidence rebind（2026-07-18）
 
 在 `0452a0c` 的后续证据工作树上，以下静态命令均实际返回 exit code `0`：`validate_micro_suite.py`、`validate_answer_safety_suite.py`、`validate_b1_suite.py`、`validate_c1_suite.py`、`validate_synthetic_ingestion_suite.py`、`validate_context_pack_suite.py`、`validate_product_baseline.ps1`、`validate_spec_baseline.ps1` 与 `git diff --check`。

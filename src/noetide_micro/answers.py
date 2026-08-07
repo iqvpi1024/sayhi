@@ -1,9 +1,31 @@
 from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 from typing import Any, Mapping
 
 JsonObject = dict[str, Any]
+
+
+def _utc_epoch(value):
+    # 解析 ISO 时间为 UTC epoch;不可解析返回 None
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.timestamp()
+
+
+def _is_before(left, right):
+    # 跨时区偏移('+08:00' vs 'Z')正确的时刻比较;不可解析时保持原字典序语义
+    left_epoch = _utc_epoch(left)
+    right_epoch = _utc_epoch(right)
+    if left_epoch is None or right_epoch is None:
+        return left < right
+    return left_epoch < right_epoch
 
 class AnswerEvaluator:
     def __init__(self, store, fixture_case, clock):
@@ -225,13 +247,13 @@ class AnswerEvaluator:
             continuity = cw['continuity']
 
             # Check if valid_time is within coverage window
-            if coverage_start != 'unbounded' and valid_time < coverage_start:
+            if coverage_start != 'unbounded' and _is_before(valid_time, coverage_start):
                 return {
                     'status': 'not_covered',
                     'reason_codes': ['outside_coverage_window'],
                     'gaps': [{'start': 'unbounded', 'end': coverage_start, 'reason': 'outside_window'}]
                 }
-            if coverage_end != 'unbounded' and valid_time > coverage_end:
+            if coverage_end != 'unbounded' and _is_before(coverage_end, valid_time):
                 return {
                     'status': 'not_covered',
                     'reason_codes': ['outside_coverage_window'],
@@ -305,11 +327,19 @@ class AnswerEvaluator:
         evaluated_at = policy.get('evaluated_at', self.clock)
         policy_ref = policy.get('policy_id', 'not_applicable')
 
-        # Find evidence effective time from source records
-        evidence_effective_at = None
-        for src in self.initial.get('source_records', []):
-            evidence_effective_at = src.get('source_created_at')
-            break
+        # Find evidence effective time from the sources the assertion actually cites
+        referenced = {ref.get('source_id') for ref in evidence_refs}
+        referenced_times = [
+            src.get('source_created_at')
+            for src in self.initial.get('source_records', [])
+            if src.get('source_id') in referenced and isinstance(src.get('source_created_at'), str)
+        ]
+        if referenced_times:
+            # 多条证据时以最晚(最新)的证据时间作为证据生效时间
+            parseable = [ts for ts in referenced_times if _utc_epoch(ts) is not None]
+            evidence_effective_at = max(parseable, key=_utc_epoch) if parseable else max(referenced_times)
+        else:
+            evidence_effective_at = None
 
         if evidence_effective_at and evaluated_at:
             from datetime import datetime

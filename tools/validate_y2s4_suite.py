@@ -73,7 +73,7 @@ def main() -> int:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print("PASSED: Y2S4 suite materialization preflight (no business test executed)")
+    print("PASSED: Y2S4 suite materialized and current business runner result is bound" if flags == passed_flags else "PASSED: Y2S4 suite materialization preflight; no business test was executed")
     return 0
 
 

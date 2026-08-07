@@ -176,6 +176,8 @@ elif flags == executed_flags:
             fail("passed state does not bind a complete passing Verification Result")
         if result.get("manifest_sha256") != manifest.get("latest_verification_manifest_sha256"):
             fail("passed state does not bind the materialized manifest used by the run")
+        if result.get("bound_artifacts") != manifest.get("artifacts"):
+            fail("passed state does not bind the exact artifact set used by the run")
         if result_digest != manifest.get("latest_verification_result_sha256"):
             fail("passed state does not bind the raw immutable Verification Result")
     if manifest.get("latest_verification_result") != "passed":
@@ -411,4 +413,7 @@ print(f"Manifest SHA-256: {sha256_file(MANIFEST_PATH)}")
 if errors:
     print(f"RESULT: FAILED ({len(errors)} error(s)); no business test was executed")
     raise SystemExit(1)
-print("RESULT: PASSED (suite artifact checks only; no business test was executed)")
+if flags == executed_flags:
+    print("RESULT: PASSED (suite artifact checks passed; current business runner result is bound)")
+else:
+    print("RESULT: PASSED (suite artifact checks only; no business test was executed)")

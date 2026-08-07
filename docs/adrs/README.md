@@ -41,6 +41,4 @@ Accepted ADR 的实质决定不原地改写。需要改变时创建新 ADR，并
 
 ## 5. 当前状态
 
-`ADR-0001_MICRO_RUNTIME_AND_PERSISTENCE.md` 已为完成的 Micro 切片提供技术基线。
-
-当前 A1 已完成 SPEC applicability 与 Trace，并接受 `ADR-0002_ANSWER_SAFETY_RUNTIME_AND_STORAGE.md`：只在 Python 3.12 stdlib + 单进程 SQLite 基线上增加固定合成、只读 Answer Safety 切片。该决定不替代长期 runtime ADR，也不授权业务开发；下一步仅允许物化 A1 suite。
+ADR 的当前生效集合与切片进展是动态信息，不在本规则文件中固化；以 `docs/PROJECT_STATE.md` 为动态状态的唯一权威来源，各 ADR 的编号、状态与 Superseded 链以 `docs/adrs/` 目录内文件自身为准。

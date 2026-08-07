@@ -12,6 +12,8 @@
 | 上游 | S1 v0.6、S2 v0.5、S6 v0.5、S7 v0.4 |
 | 适用范围 | `SLICE-MVP-C-PACK-001`，仅固定合成数据 |
 
+> v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+
 ## 1. 目标与非目标
 
 目标：在一个固定合成 profile 上证明——Markdown+JSON Pack（确定性 Markdown 渲染 + 严格校验 fail closed）、本地加密备份（密文非明文、正确密钥字节一致恢复、错误密钥 fail closed 零写入）、删除与恢复诚实性（八成分回执、`pending_expiry`/`out_of_control` 合法标记、partial failure 显式报告）。

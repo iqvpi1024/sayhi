@@ -12,6 +12,8 @@
 | 上游 | S1 v0.6、S2 v0.5、S6 v0.5 |
 | 适用范围 | `SLICE-MVP-C-REVIEW-001`，仅固定合成数据 |
 
+> v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+
 ## 1. 目标与非目标
 
 目标：在一个固定合成 profile 上证明两类 Derived 能力——周期性复盘报告（周/月/年度窗口的确定性计数，fresh/stale 随底层 Canonical 变化、历史版本保留、可删除可重建且重建等价）与跨阶段比较（同一指标集两个窗口的逐指标 signed delta，不合法比较 fail closed 且无写入）；两者永不成为 Canonical 证据、永不修改任何 Canonical 对象（含 Hypothesis 状态）。

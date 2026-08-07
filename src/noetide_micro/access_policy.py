@@ -41,6 +41,16 @@ def _parse_instant(value: str) -> datetime:
     return parsed
 
 
+def _try_parse_instant(value: Any) -> datetime | None:
+    """畸形/缺失时间输入返回 None,由调用方 fail-closed 为 deny。"""
+    if not isinstance(value, str):
+        return None
+    try:
+        return _parse_instant(value)
+    except ValueError:
+        return None
+
+
 def build_policy_context(
     *,
     callers: list[Mapping[str, Any]],
@@ -90,7 +100,12 @@ def _grant_matches_scope(grant: Mapping[str, Any], request: Mapping[str, Any]) -
 
 
 def _grant_in_window(grant: Mapping[str, Any], requested_at: datetime) -> bool:
-    return _parse_instant(grant["valid_from"]) <= requested_at <= _parse_instant(grant["valid_until"])
+    # grant 时间窗畸形时视为不在窗内(fail-closed),由调用方记 grant_expired
+    valid_from = _try_parse_instant(grant.get("valid_from"))
+    valid_until = _try_parse_instant(grant.get("valid_until"))
+    if valid_from is None or valid_until is None:
+        return False
+    return valid_from <= requested_at <= valid_until
 
 
 def _evaluate_resource(request: Mapping[str, Any], context: Mapping[str, Any], resource: str) -> JsonObject:
@@ -121,7 +136,10 @@ def _evaluate_resource(request: Mapping[str, Any], context: Mapping[str, Any], r
     scoped = [grant for grant in covering if _grant_matches_scope(grant, request)]
     if not scoped:
         return _deny(request, "grant_scope_mismatch")
-    requested_at = _parse_instant(request["requested_at"])
+    requested_at = _try_parse_instant(request.get("requested_at"))
+    if requested_at is None:
+        # 请求时间缺失/畸形:无法验证任何 grant 时间窗,fail-closed 拒绝
+        return _deny(request, "grant_expired")
     valid = [grant for grant in scoped if _grant_in_window(grant, requested_at)]
     if not valid:
         return _deny(request, "grant_expired")

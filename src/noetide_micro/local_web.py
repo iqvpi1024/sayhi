@@ -13,7 +13,9 @@ import hashlib
 import http.server
 import ipaddress
 import json
+import os
 import re
+import secrets
 import socket
 import sys
 import threading
@@ -30,7 +32,9 @@ HOME_TITLE = "识海本地整理"
 BACKUP_FILENAME = "web_backup_001.nobak"
 PUBLISH_KEY = "web_publish_001"
 REVERT_KEY = "web_revert_001"
-BACKUP_KEY_HINT = "c5-synthetic-key-hint"
+# 备份密钥环境变量名；本切片为合成演示，密钥不再使用源码常量，
+# 未设置环境变量时在 backup_dir 下持久化一份随机密钥（.web_backup_key）。
+BACKUP_KEY_ENV = "NOETIDE_WEB_BACKUP_KEY"
 SOURCE_ID = "src_micro_001"
 CHANGESET_ID = "changeset_micro_001"
 RECORD_RECEIPT_ID = "receipt_source_micro_001"
@@ -396,6 +400,24 @@ class WebService:
             "read_only": True,
         }
 
+    def _backup_key(self) -> str:
+        """备份密钥：优先环境变量，否则生成并持久化随机密钥；禁止用源码常量当密钥。"""
+        env_key = os.environ.get(BACKUP_KEY_ENV)
+        if env_key:
+            return env_key
+        key_path = self.backup_dir / ".web_backup_key"
+        try:
+            if key_path.is_file():
+                stored = key_path.read_text(encoding="utf-8").strip()
+                if stored:
+                    return stored
+        except OSError:
+            pass
+        self.backup_dir.mkdir(parents=True, exist_ok=True)
+        generated = secrets.token_urlsafe(24)
+        key_path.write_text(generated, encoding="utf-8")
+        return generated
+
     def _backup(self, body: Any) -> tuple[int, JsonObject]:
         if not isinstance(body, dict) or body:
             return 409, {"status": "rejected", "reason": "path_not_allowed"}
@@ -407,7 +429,7 @@ class WebService:
         try:
             result = create_backup(
                 db_path,
-                key=BACKUP_KEY_HINT,
+                key=self._backup_key(),
                 backup_path=backup_path,
                 created_at=self.runtime.fixture["determinism"]["clock"],
             )

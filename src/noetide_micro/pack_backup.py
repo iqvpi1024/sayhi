@@ -1,14 +1,16 @@
 """C5 Markdown+JSON pack rendering, local encrypted backup, restore, and honest deletion receipts.
 
-Encryption note (ADR-0017): the backup cipher is a deterministic stdlib construction
-(sha256 keystream XOR) labelled stdlib_deterministic_v1. It proves the slice semantics
-(ciphertext != plaintext, key-sensitive, byte-identical restore) and is NOT production
-cryptography. Production AEAD/KDF selection is deferred to the D2/D3 decision.
+Encryption note (ADR-0017): the backup cipher is a stdlib-only construction
+(PBKDF2-HMAC-SHA256 派生密钥 + sha256 密钥流 XOR + HMAC-SHA256 认证，格式标记 NOBAK2)。
+It proves the slice semantics (ciphertext != plaintext, key-sensitive, tamper-evident,
+byte-identical restore) and is NOT production cryptography. Production AEAD/KDF
+selection is deferred to the D2/D3 decision. 旧版无版本标记的备份格式一律拒绝恢复。
 """
 
 from __future__ import annotations
 
 import hashlib
+import hmac
 import json
 import os
 from pathlib import Path
@@ -19,7 +21,14 @@ from .store import SemanticStore
 
 
 JsonObject = dict[str, Any]
+# receipt 标签被 C5-005 oracle 哈希绑定，暂保持 stdlib_deterministic_v1；
+# 实际构造已升级为 NOBAK2（见模块 docstring），标签更名需走 Change Control。
 ENCRYPTION_LABEL = "stdlib_deterministic_v1"
+_BACKUP_MAGIC = b"NOBAK2"  # 备份格式版本标记：PBKDF2 派生 + HMAC 认证
+_KDF_ITERATIONS = 200_000
+_SALT_LEN = 16
+_NONCE_LEN = 16
+_TAG_LEN = 32
 _BASE_FILES = ("sources.json", "canonical.json", "ledger.json", "README.md")
 _MARKDOWN_FILES = ("markdown/sources.md", "markdown/canonical.md", "markdown/ledger.md")
 _DELETION_COMPONENTS = (
@@ -166,6 +175,12 @@ def _xor(data: bytes, stream: bytes) -> bytes:
     return bytes(a ^ b for a, b in zip(data, stream))
 
 
+def _derive_keys(key: str, salt: bytes) -> tuple[bytes, bytes]:
+    """PBKDF2-HMAC-SHA256 派生加密密钥与 MAC 密钥，避免直接用口令做密钥流种子。"""
+    derived = hashlib.pbkdf2_hmac("sha256", key.encode("utf-8"), salt, _KDF_ITERATIONS, dklen=64)
+    return derived[:32], derived[32:]
+
+
 def create_backup(db_path: str | Path, key: str, backup_path: str | Path, created_at: str) -> JsonObject:
     """Encrypts the DB file into .nobak; read-only on the source (C5-INV-003/005)."""
     db = Path(db_path)
@@ -174,9 +189,13 @@ def create_backup(db_path: str | Path, key: str, backup_path: str | Path, create
         return {"outcome": "rejected", "reason": "backup destination already exists"}
     plaintext = db.read_bytes()
     source_sha = _sha256(plaintext)
-    nonce = os.urandom(16)
-    ciphertext = _xor(plaintext, _keystream(key.encode("utf-8"), nonce, len(plaintext)))
-    payload = nonce + hashlib.sha256(plaintext).digest() + ciphertext
+    salt = os.urandom(_SALT_LEN)
+    nonce = os.urandom(_NONCE_LEN)
+    enc_key, mac_key = _derive_keys(key, salt)
+    ciphertext = _xor(plaintext, _keystream(enc_key, nonce, len(plaintext)))
+    header = _BACKUP_MAGIC + salt + nonce
+    tag = hmac.new(mac_key, header + ciphertext, hashlib.sha256).digest()
+    payload = header + tag + ciphertext
     target.write_bytes(payload)
     return {
         "outcome": "created",
@@ -199,10 +218,21 @@ def restore_backup(backup_path: str | Path, key: str, target_path: str | Path) -
         return {"outcome": "rejected", "reason": "restore target already exists"}
     try:
         payload = source.read_bytes()
-        nonce, expected_sha, ciphertext = payload[:16], payload[16:48], payload[48:]
-        plaintext = _xor(ciphertext, _keystream(key.encode("utf-8"), nonce, len(ciphertext)))
-        if hashlib.sha256(plaintext).digest() != expected_sha:
+        if not payload.startswith(_BACKUP_MAGIC):
+            # 旧版无版本标记格式（无 KDF/MAC）一律拒绝，beta 不做兼容
+            return {"outcome": "rejected", "reason": "unsupported backup format: pre-NOBAK2 backups cannot be restored"}
+        header_len = len(_BACKUP_MAGIC) + _SALT_LEN + _NONCE_LEN
+        if len(payload) < header_len + _TAG_LEN:
             return {"outcome": "rejected", "reason": "key mismatch or corrupted backup"}
+        salt = payload[len(_BACKUP_MAGIC):len(_BACKUP_MAGIC) + _SALT_LEN]
+        nonce = payload[len(_BACKUP_MAGIC) + _SALT_LEN:header_len]
+        tag = payload[header_len:header_len + _TAG_LEN]
+        ciphertext = payload[header_len + _TAG_LEN:]
+        enc_key, mac_key = _derive_keys(key, salt)
+        expected_tag = hmac.new(mac_key, payload[:header_len] + ciphertext, hashlib.sha256).digest()
+        if not hmac.compare_digest(tag, expected_tag):
+            return {"outcome": "rejected", "reason": "key mismatch or corrupted backup"}
+        plaintext = _xor(ciphertext, _keystream(enc_key, nonce, len(ciphertext)))
         target.write_bytes(plaintext)
     except (OSError, ValueError):
         if target.exists():

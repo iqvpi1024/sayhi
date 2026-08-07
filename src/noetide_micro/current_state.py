@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from typing import Any
 
 from .store import SemanticStore
@@ -11,6 +12,32 @@ _VIEW = "current_state"
 _POLICY = "a2_deterministic_v1"
 _PROFILE = "a2_current_state_v1"
 _ALLOWED_TYPES = {"entity", "relationship", "state", "assertion"}
+
+
+def _utc_epoch(value: Any) -> float | None:
+    """Parse an ISO-8601 instant to a UTC epoch; None when unparseable."""
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.timestamp()
+
+
+def _is_before(left: str, right: str) -> bool:
+    """Instant comparison correct across timezone offsets ('+08:00' vs 'Z').
+
+    Falls back to the historical lexicographic order when either side is not a
+    parseable ISO instant, preserving prior behavior for sentinel values.
+    """
+    left_epoch = _utc_epoch(left)
+    right_epoch = _utc_epoch(right)
+    if left_epoch is None or right_epoch is None:
+        return left < right
+    return left_epoch < right_epoch
 
 
 def current_objects(store: SemanticStore, clock: str) -> list[dict[str, Any]]:
@@ -24,9 +51,9 @@ def current_objects(store: SemanticStore, clock: str) -> list[dict[str, Any]]:
             continue
         start = valid_time.get("start")
         end = valid_time.get("end")
-        if not isinstance(start, str) or start > clock:
+        if not isinstance(start, str) or _is_before(clock, start):
             continue
-        if end is not None and end <= clock:
+        if end is not None and not _is_before(clock, end):
             continue
         objects.append({
             "object_id": row["object_id"],
@@ -46,7 +73,6 @@ class CurrentStateService:
         self._clock = clock
         self._profile = synthetic_profile_id
         self._fail_next_rebuild = False
-        self._receipt_index = 0
 
     def build(self) -> dict[str, Any]:
         if self._profile != _PROFILE:
@@ -116,5 +142,6 @@ class CurrentStateService:
         self._fail_next_rebuild = True
 
     def _receipt_id(self, revision: str, status: str) -> str:
-        self._receipt_index += 1
-        return f"a2_receipt_{revision}_{status}_{self._receipt_index:03d}"
+        # 序号基于库内现有回执分配:新实例对同库再 build 不会撞主键
+        index = len(self._store.a2_view_receipts()) + 1
+        return f"a2_receipt_{revision}_{status}_{index:03d}"

@@ -31,6 +31,7 @@ def canonical_digest(value: Mapping[str, Any]) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+@unittest.skipUnless(os.environ.get("NOETIDE_MICRO_ADAPTER"), "Micro adapter not configured")
 class MicroRelationshipContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:

@@ -156,16 +156,24 @@ class CandidateAggregator:
         return max(0.0, score)
 
 
+def _order_index(order: list[str], value: str) -> int:
+    """fail-closed:未知值按最严格档(末位之后)处理,而不是抛 ValueError。"""
+    try:
+        return order.index(value)
+    except ValueError:
+        return len(order)
+
+
 def _max_risk(a: str, b: str) -> str:
     order = ["low", "medium", "high", "critical"]
-    return a if order.index(a) >= order.index(b) else b
+    return a if _order_index(order, a) >= _order_index(order, b) else b
 
 
 def _max_priority(a: str, b: str) -> str:
     order = ["low", "normal", "high", "critical"]
-    return a if order.index(a) >= order.index(b) else b
+    return a if _order_index(order, a) >= _order_index(order, b) else b
 
 
 def _stricter_policy(a: str, b: str) -> str:
     order = ["automatic", "posthoc_revertible", "single_confirmation", "double_confirmation", "automatic_forbidden"]
-    return a if order.index(a) >= order.index(b) else b
+    return a if _order_index(order, a) >= _order_index(order, b) else b

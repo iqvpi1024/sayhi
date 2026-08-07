@@ -55,6 +55,9 @@ class CandidateReviewService:
         candidate = self._store.ledger_record(record_id)
         if candidate is None:
             raise KeyError(candidate_id)
+        if candidate.get("last_review_action") == action:
+            # 幂等:重复动作直接返回现状,避免固定时钟下事件主键碰撞与重复审计
+            return candidate
         updated = copy.deepcopy(candidate)
         updated["status"] = {"later": "deferred", "reject": "rejected", "never_ask": "suppressed"}[action]
         updated["last_review_action"] = action

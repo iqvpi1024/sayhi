@@ -254,8 +254,5 @@ class EntityMergeService:
         )
 
     def _next_revision(self) -> str:
-        current = self._store.current_revision()
-        prefix, _, digits = current.rpartition("_")
-        if not digits.isdigit():
-            raise RuntimeError("unexpected revision format")
-        return f"{prefix}_{int(digits) + 1:03d}"
+        # 委托给 store 的全局分配器:遇到 rev_c1_* 等非数值 revision 跳过而非崩溃
+        return self._store.next_revision()

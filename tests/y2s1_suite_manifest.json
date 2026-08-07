@@ -70,10 +70,19 @@
     {
       "role": "suite_preflight_validator",
       "path": "tools/validate_y2s1_suite.py",
-      "sha256": "32871e452dcc00e99272e38333afbff4cf02b7587f570213844097a41e11e8ef"
+      "sha256": "97fad9d06e7aef1f6a6641f67872702d1c2efb91c4ebdf82554a6dcb25c74ce2"
     }
   ],
-  "latest_verification_result_path": "docs/testing/results/y2s1-20260801.json",
-  "latest_verification_result_sha256": "909cc545fe26d387467a117f2e6d84093739e27d14ae3da45b589883985de990",
-  "latest_verification_manifest_sha256": "2629a16b511e62edaeee245b8c8163e235bd370536aa44ad42eb2fbe39d5ef86"
+  "latest_verification_result_path": "docs/testing/results/y2s1-20260807.json",
+  "latest_verification_result_sha256": "bf93ac2582029a31254f468b652511fb3f8ef8678d5ec2ffb93b7fb9c54618ba",
+  "latest_verification_manifest_sha256": "7bc7c92e6eff109bbc8b989a1d340c898f345b35bfe8310faeee7d5da1c1d7f2",
+  "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/y2s1-20260801.json",
+      "manifest_sha256": "2629a16b511e62edaeee245b8c8163e235bd370536aa44ad42eb2fbe39d5ef86",
+      "result_sha256": "909cc545fe26d387467a117f2e6d84093739e27d14ae3da45b589883985de990",
+      "reason": "Suite preflight validator success wording fixed to reflect the executed/bound state; superseded by y2s{n}-20260807.json."
+    }
+  ]
 }

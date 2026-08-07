@@ -8,9 +8,9 @@
 2. 产品、语义、架构、测试、实现和验证各自有唯一职责，不能互相越权。
 3. 每个可交付切片都有明确门禁、失败回退和 Git 恢复点。
 
-流程按“切片”运行，不表示整个项目一次性从左走到右。`SLICE-MICRO-RELATIONSHIP-001` 已完成并发布恢复点；当前切片是 `SLICE-MVP-A-ANSWER-SAFETY-001`，只覆盖合成 AnswerEnvelope 六态与最小冲突呈现。
+流程按“切片”运行，不表示整个项目一次性从左走到右。各切片的当前阶段与最新进展不在本文固化，以 `docs/PROJECT_STATE.md` 为动态状态的唯一权威来源。
 
-依据：PRD v0.5 §6、§10-§12、§20-§22、§24-§27；S6 v0.5；`DEC-PRD-V05-001`。
+依据：当前产品基线由 `docs/product/CURRENT_PRODUCT_BASELINE.md` 唯一指向；流程语义的历史出处见各时期 PRD 与 Decision，当前有效组合以 `docs/PROJECT_STATE.md` 为准。
 
 ## 2. 权威链路
 
@@ -154,21 +154,7 @@ delivery_phase_values: [product_defined, product_decided, spec_approved, traceab
 
 ## 10. 当前与上一切片
 
-| 字段 | 当前值 |
-|---|---|
-| Active Slice | `SLICE-MVP-A-ANSWER-SAFETY-001` |
-| Active Phase | `implementation_planned` |
-| 当前 PRD | `PRDv05.md` v0.5 Approved |
-| Product Decision | `DEC-MVP-A-AS-001` decided |
-| SPEC Applicability | `passed`：S1/S2/S3/S6/S7 keep current |
-| Trace / ADR / Architecture | Matrix §4.1 complete；`ADR-0002` Accepted；`ARCH-MVP-A-AS-001` Accepted Design Baseline |
-| Suite | `defined=true`、`materialized=true`、`executed=false`、`passed=false` |
-| Plan | suite-only Plan completed；Implementation Plan 与 Task Cards Approved |
-| Business Implementation | `absent` |
-| Business Verification | `not_executed` |
-| Previous Slice | `SLICE-MICRO-RELATIONSHIP-001` = `recovery_point_published`；49/49 required passed |
-
-下一步唯一动作是按 `PLAN-MVP-A-AS-IMPL-001` 和 `CARDS-MVP-A-AS-001` 执行 `AS-TASK-001`。每轮只执行一张 Task Card；A1 统一 business runner 保持 `not_executed`，直到 `AS-TASK-008`。
+切片的当前/上一状态是动态信息，不在本流程基线中固化；唯一权威来源是 `docs/PROJECT_STATE.md`（当前快照、已完成内容与下一步唯一建议动作），交接细节见 `docs/process/CURRENT_HANDOFF.md`。
 
 ## 11. 相关说明与模板
 

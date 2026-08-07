@@ -12,6 +12,8 @@
 | 上游 | S1 v0.6、S2 v0.5、S6 v0.5、S7 v0.3 |
 | 适用范围 | `SLICE-MVP-B-MULTILINGUAL-001`，仅固定合成数据 |
 
+> v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+
 ## 1. 目标与非目标
 
 目标：在一个固定合成 profile 上证明多语言 Source 的三类能力——原文与翻译分离存储（原文进 Source Vault 带 content hash，翻译为独立派生对照记录）、原文/翻译对照读取（并排 Derived 视图，缺失翻译显式降级）、证据完整性（Evidence Ref 永远解析到原文；以翻译覆盖原文的写入被拒绝；翻译修订保留历史）。

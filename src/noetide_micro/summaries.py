@@ -11,6 +11,28 @@ from .store import SemanticStore
 _POLICY = "b2_deterministic_v1"
 
 
+def _utc_epoch(value: Any) -> float | None:
+    """Parse an ISO-8601 instant to a UTC epoch; None when unparseable."""
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.timestamp()
+
+
+def _is_before(left: str, right: str) -> bool:
+    """Instant comparison correct across timezone offsets; lexicographic fallback."""
+    left_epoch = _utc_epoch(left)
+    right_epoch = _utc_epoch(right)
+    if left_epoch is None or right_epoch is None:
+        return left < right
+    return left_epoch < right_epoch
+
+
 class EpisodeSummaryService:
     """Builds B2 Derived projections without exposing them as evidence."""
 
@@ -18,7 +40,6 @@ class EpisodeSummaryService:
         self._store = store
         self._now = now
         self._fail_next_rebuild = False
-        self._receipt_index = 0
 
     def build_for_episode(self, episode_id: str) -> dict[str, Any]:
         episode = self._store.episode_record(episode_id)
@@ -96,7 +117,7 @@ class EpisodeSummaryService:
 
     @staticmethod
     def _overlaps(episode: dict[str, Any], window: dict[str, str]) -> bool:
-        return episode["valid_start"] < window["end"] and window["start"] < episode["valid_end"]
+        return _is_before(episode["valid_start"], window["end"]) and _is_before(window["start"], episode["valid_end"])
 
     @staticmethod
     def _projection_id(level: str, episode_id: str) -> str:
@@ -111,5 +132,6 @@ class EpisodeSummaryService:
         return {"start": start.isoformat().replace("+00:00", "Z"), "end": end.isoformat().replace("+00:00", "Z")}
 
     def _receipt_id(self, projection_id: str, revision: str, status: str) -> str:
-        self._receipt_index += 1
-        return f"derived_receipt_{projection_id}_{revision}_{status}_{self._receipt_index:03d}"
+        # 序号基于库内现有回执分配:新实例对同库再 build 不会撞主键
+        index = len(self._store.derived_rebuild_receipts()) + 1
+        return f"derived_receipt_{projection_id}_{revision}_{status}_{index:03d}"

@@ -73,6 +73,11 @@ def run_shadow_migration(
             "deep_result": deep_result,
             "derived_only": True,
         }
+    except Exception:
+        # 非注入异常同样丢弃半成品 shadow,原始库不受影响
+        shadow_store.close()
+        shadow.unlink(missing_ok=True)
+        raise
     finally:
         shadow_store.close()
 

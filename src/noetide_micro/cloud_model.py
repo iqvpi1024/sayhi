@@ -183,7 +183,6 @@ class CloudGate:
         self._clock = clock
         self._grants: dict[str, JsonObject] = {}
         self._previews: dict[str, JsonObject] = {}
-        self._next_audit_seq = 1
 
     def grants(self) -> list[JsonObject]:
         return [dict(item) for item in self._grants.values()]
@@ -197,8 +196,11 @@ class CloudGate:
     def _audit(self, event_type: str, payload: Mapping[str, Any]) -> JsonObject:
         if event_type not in AUDIT_EVENT_TYPES:
             raise ValueError(event_type)
-        record_id = f"cloud_audit_{self._next_audit_seq:03d}"
-        self._next_audit_seq += 1
+        # 序号基于账本现有记录分配,避免跨实例/重开库后审计主键碰撞
+        seq = len(self._store.ledger_records_of_type("cloud_audit")) + 1
+        while self._store.ledger_record(f"cloud_audit_{seq:03d}") is not None:
+            seq += 1
+        record_id = f"cloud_audit_{seq:03d}"
         record = {
             "record_id": record_id,
             "event_type": event_type,
@@ -207,6 +209,16 @@ class CloudGate:
         }
         self._store.put_ledger_record(record_id, "cloud_audit", record)
         return record
+
+    def restore_grant(self, grant: Mapping[str, Any]) -> JsonObject:
+        """Register an already-audited persisted grant without a new audit row."""
+        grant = dict(grant)
+        grant_id = grant.get("grant_id")
+        if not grant_id:
+            raise ValueError("cloud grant missing field: grant_id")
+        if grant_id not in self._grants:
+            self._grants[grant_id] = grant
+        return dict(self._grants[grant_id])
 
     def create_grant(self, grant: Mapping[str, Any]) -> JsonObject:
         grant = dict(grant)

@@ -1,6 +1,13 @@
 [CmdletBinding()]
 param()
 
+# ============================================================================
+# 一次性门禁说明：本脚本把 2026-07-16 恢复点的“开发前置”状态固化为断言
+# （无 src/ 业务实现、无依赖清单、无业务结果、Micro manifest 未执行）。
+# 它仅对 2026-07-16 恢复点有效；开发启动后预期 RESULT: FAILED，属于设计使然，
+# 不代表当前仓库损坏。不要删除或移动本文件——历史文档引用它。
+# ============================================================================
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
@@ -21,7 +28,7 @@ function Read-RepoFile([string]$RelativePath) {
 }
 
 function Invoke-RequiredValidator([string]$RelativePath, [string]$Label) {
-    $output = & powershell -ExecutionPolicy Bypass -File (Join-Path $root $RelativePath) 2>&1
+    $output = & "$PSHOME\powershell.exe" -ExecutionPolicy Bypass -File (Join-Path $root $RelativePath) 2>&1
     $exitCode = $LASTEXITCODE
     if ($exitCode -ne 0) {
         Add-Error "$Label failed (exit $exitCode): $($output -join ' | ')"

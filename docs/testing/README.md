@@ -49,8 +49,43 @@
 
 结果模板见 `VERIFICATION_RESULT_TEMPLATE.md`。
 
+## 4.1 官方回归命令（canonical）
+
+在仓库根目录、Git Bash 下执行全量回归的 canonical 命令是：
+
+```bash
+PYTHONPATH=src \
+NOETIDE_MICRO_ADAPTER=noetide_micro.testing_adapter \
+NOETIDE_ANSWER_ADAPTER=noetide_micro.answer_testing_adapter \
+NOETIDE_A2_ADAPTER=noetide_micro.a2_testing_adapter \
+NOETIDE_A3_ADAPTER=noetide_micro.a3_testing_adapter \
+NOETIDE_A4_ADAPTER=noetide_micro.a4_testing_adapter \
+NOETIDE_A5_ADAPTER=noetide_micro.a5_testing_adapter \
+NOETIDE_A6_ADAPTER=noetide_micro.a6_testing_adapter \
+NOETIDE_B2_ADAPTER=noetide_micro.b2_testing_adapter \
+NOETIDE_B3_ADAPTER=noetide_micro.b3_testing_adapter \
+NOETIDE_B4_ADAPTER=noetide_micro.b4_testing_adapter \
+NOETIDE_B5_ADAPTER=noetide_micro.b5_testing_adapter \
+NOETIDE_B6_ADAPTER=noetide_micro.b6_testing_adapter \
+NOETIDE_C2_ADAPTER=noetide_micro.c2_testing_adapter \
+NOETIDE_C3_ADAPTER=noetide_micro.c3_testing_adapter \
+NOETIDE_C4_ADAPTER=noetide_micro.c4_testing_adapter \
+NOETIDE_C5_ADAPTER=noetide_micro.c5_testing_adapter \
+NOETIDE_Y2S1_ADAPTER=noetide_micro.y2s1_testing_adapter \
+NOETIDE_Y2S2_ADAPTER=noetide_micro.y2s2_testing_adapter \
+NOETIDE_Y2S3_ADAPTER=noetide_micro.y2s3_testing_adapter \
+NOETIDE_Y2S4_ADAPTER=noetide_micro.y2s4_testing_adapter \
+NOETIDE_Y2S5_ADAPTER=noetide_micro.y2s5_testing_adapter \
+python -m unittest discover -s tests -t .
+```
+
+- 21 个 adapter 环境变量必须全部设置；缺哪一个，对应 contract 模块整体 `skip`（`@unittest.skipUnless`），不会 error。
+- 裸跑 `PYTHONPATH=src python -m unittest discover -s tests -t .`（不设 adapter）应全部 skip、0 error。
+- 仓库根的 `pytest.ini` 已声明 `pythonpath = src`，pytest 直跑无需再设 `PYTHONPATH`。
+- 该 discover 命令是套件级回归；每个 suite 的权威结论仍以各自 official runner（`tests/runner/run_*_suite.py`）产生的不可改写 Verification Result 为准。
+
 ## 5. 当前验证状态
 
-exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。`micro-task009-lf-20260717.json` 在提交 `195a8fb2dfe3716c1f97a19edd8d7ec5c34d80de` 上以 exit code `0` 实际执行，49 个 required result IDs 均为 `passed`，隐私扫描为 `passed`，原始字节使用 LF；因此 `suite_executed=true`、`suite_passed=true`。该结论只覆盖已定义的 Micro 合同，不替代后续 Gate Review 与 Recovery Point。
+exact Micro suite 已按 `MICRO_MVP_ACCEPTANCE.md` §6 物化为 10 个 `MM-*` 场景和 39 个去重 upstream refs。Micro suite 的 current 绑定以 `tests/micro_suite_manifest.json` 为准（当前 `micro-ws12-a603085-pyspath-20260718.json`）；该绑定结果 49 个 required result IDs 均为 `passed`，隐私扫描为 `passed`，因此 `suite_executed=true`、`suite_passed=true`。该结论只覆盖已定义的 Micro 合同，不替代后续 Gate Review 与 Recovery Point。
 
 当前 A1 的 `MVP_A_ANSWER_SAFETY_ACCEPTANCE.md` 已物化为独立 manifest、11 个 `AS-*` 场景和 24 个唯一 upstream refs，共 35 个 required result IDs。当前 A1 official runner 在 `8556eea` 实际通过 35/35，当前绑定结果为 `docs/testing/results/a1-release-8556eea-20260719.json`。C1 official runner 在同一提交实际通过 7/7，当前绑定结果为 `docs/testing/results/c1-release-8556eea-20260719.json`；历史失败结果保留为诊断证据，未被改写。
