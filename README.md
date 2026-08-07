@@ -1,104 +1,118 @@
-# Noetide 识海
+# 识海 Noetide
 
-本地优先的个人记忆管理软件。你把聊天记录、笔记、文件碎片放进识海，识海帮你整理成人物、项目、承诺、事件、断言等结构化记忆；所有记忆先出“候选”，你确认后才正式写入。它自带网页管理界面、REST API 和 MCP 接口，可以接本地或云端 AI 大模型。
+**一个能为自己的记忆出庭作证的个人记忆系统。**
+**A personal memory system that can testify for what it remembers.**
 
-这不是一个只能看演示的 MVP。这个版本已经能安装到 Windows、导入你自己的资料、用离线规则或大模型整理、让 Agent 通过 MCP/API 接入、导出上下文包、加密备份和远程访问。
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Runtime deps: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen.svg)](pyproject.toml)
+[![Tests: 485 passed / 0 skipped](https://img.shields.io/badge/tests-485%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
+[![Suites: 26 hash-bound](https://img.shields.io/badge/verification%20suites-26%20hash--bound-brightgreen.svg)](docs/testing/README.md)
+[![Platform: Windows](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey.svg)](dist/)
+
+---
+
+## 为什么世界还需要一个"知识库"?
+
+不需要。所以识海不是知识库。
+
+- **Obsidian / Notion / Logseq** 是**仓库**:你写进去什么,它就存什么。它不关心真假。
+- **"跟你的数据聊天"类 RAG 工具**是**黑箱**:它给你答案,但答案从哪来、是事实还是模型现编的,你无法追问。
+- **各种 AI 笔记/第二大脑**是**速写员**:模型读完就替你"总结入库",幻觉和你的真话从此混为一谈,再也分不开。
+
+识海做的是另一件事:**管理记忆的真实性**。
+
+在识海里,每一条记忆都不是一句话,而是一份**带证据链的档案**。你导入的聊天记录原文(Source)、从中学到的事实(Fact)、你的观点(Opinion)、系统的推断(Inference)、对未来的预测(Prediction)、虚构创作(Fiction)——六种东西永远分开存放,永不混淆。任何一条记忆,你都能一层层追回去:**它是谁说的、出自哪份原始资料、什么时候进入系统、经过谁的确认。**
+
+## 三条铁律
+
+**1. AI 只提议,不写入。**
+识灵(本地规则 / 本地大模型 / 云端模型,任选)读完你的资料后,只生成"候选记忆"。候选躺在待审区,你点头才入库,你忽略就消失。Agent 通过 MCP 接入时也一样——`propose_changeset` 是它唯一能碰写入口径的工具,直接写库的通道根本不存在。
+
+**2. 当下不覆盖历史。**
+识海是双时态的:今天的你会覆盖昨天的事实吗?不会——今天的认知只是新的一层。改口、矛盾、合并、拆分,全部留痕可查。Current State 永不覆盖 Historical State,Hypothesis 永不自动升级为 Fact。
+
+**3. 推论永远成不了证据。**
+系统计算出的任何"派生视图"(时间线、摘要、到期状态)都标注为 Derived,永远不能反过来充当事实的证据。投影过期了会明确告诉你"这是旧数据",绝不假装新鲜。
+
+这三条不是产品文案,是写进存储层、被测试钉死的合同。
+
+## 红线舱室:有些东西,永不出本机
+
+健康、财务、亲密关系——这些 compartment 被标注为红线。识海的云端模型调用要连过三门才出得去:
+
+1. **红线门**:红线舱室的内容直接拒绝,连授权记录都不留;
+2. **授权门**:每一次外发都需要一个你显式签发的、有范围、有过期时间的 grant;
+3. **预览门**:外发前先生成摘要留痕,发没发、发了什么,全量审计台账可查。
+
+本地模式强制回环地址,连内网其他机器都指不过去。默认状态:零网络出口。
+
+## 零依赖,真本地
+
+- **纯 Python 标准库 + SQLite**。没有 pip install,没有 Docker,没有云服务,没有遥测。
+- Windows portable 包自带运行时:解压 → 双击 → 浏览器打开 `127.0.0.1:8765`,完事。
+- 你的数据就是一个 SQLite 文件加几个导出包,在你自己的文件夹里。卸载默认不删数据。
 
 ## 它现在能做什么
 
-- 本地安装：解压后运行安装脚本，双击启动，浏览器管理。
-- 导入资料：粘贴文本，或把 `.md/.txt/.json/.csv` 文件夹一次性导入。
-- 识灵分析：离线规则不需要大模型；也可以接本地模型或云端 OpenAI 兼容接口。
-- 候选确认：识灵只生成候选，你在网页里确认或忽略，不会自动乱写。
-- 记忆管理：人物、项目、承诺、事件、断言，带证据来源、搜索和时间线。
-- Agent 接入：提供 `http://127.0.0.1:8765/mcp`，支持 `list_resources`、`read_resource`、`propose_changeset`、`record_source`。
-- 导出与备份：导出上下文包，加密备份，恢复备份，导入上下文包。
-- 远程访问：开启令牌后，手机、其他电脑或云端服务器可以通过 REST API 访问。
+- **导入**:粘贴文本,或整个文件夹的 `.md/.txt/.json/.csv` 一次导入(含文件夹监视)。
+- **识灵分析**:离线规则(不联网)、本地模型(Ollama 等 OpenAI 兼容接口)、云端模型(三门管控),三种后端。
+- **候选确认**:网页里逐条确认/忽略,模型永远没有自动入库的手。
+- **记忆管理**:人物、项目、承诺、事件、断言——带证据来源、搜索、时间线,桌面和移动端自适应。
+- **Agent 接入**:MCP(JSON-RPC)+ REST API,令牌鉴权;默认工具集 `list_resources` / `read_resource` / `propose_changeset` / `record_source`。
+- **导出与备份**:Context Pack 导出/导入(往返一致)、NOBAK2 加密备份(PBKDF2 + HMAC)、恢复前校验。
+- **远程访问**:默认只听回环;显式开启令牌后才可远程,未配置令牌时服务拒绝绑定公网地址。
 
-## 一分钟启动（Windows）
+## 一分钟启动(Windows)
 
-1. 下载并解压 `Noetide-beta-v0.3.0-win64.zip`（SHA-256 `55c26e39aca14ef3839978093d55856403ce19f6ca8e222e6543f0aecb3b80f2`）。
-2. 双击 `scripts/Noetide Setup.cmd`，选一个你自己的数据文件夹。
+1. 到 [Releases](https://github.com/iqvpi1024/sayhi/releases) 下载 `Noetide-beta-v0.3.0-win64.zip` 并解压(校验值见同页的 `SHA256SUMS`)。
+2. 双击 `scripts/Noetide Setup.cmd`,选一个你自己的数据文件夹。
 3. 双击 `scripts/Noetide Start.cmd`。
 4. 浏览器打开 `http://127.0.0.1:8765`。
 
-从源码启动：
+从源码启动(只需要 Python 3.12+,什么都不用装):
 
-```powershell
-python noetide_desktop.py --data-dir D:\sayhi-data
+```bash
+python noetide_desktop.py --data-dir D:\noetide-data
 ```
-
-或安装 Python 包后：
-
-```powershell
-noetide-product --data-dir D:\sayhi-data
-```
-
-## 第一次使用
-
-1. 打开“导入”，粘贴一段聊天记录或笔记，点“保存资料”；也可以填文件夹路径，点“导入文件夹”。
-2. 打开“识灵分析”，勾选资料，点“运行识灵分析”。
-3. 在候选列表里确认你认可的记忆，忽略不想要的。
-4. 打开“记忆”查看资料、已确认记忆和时间线；打开“搜索”找内容。
 
 更详细的大白话操作说明见 [用户指南](docs/product/PRODUCT_USER_GUIDE.md)。
 
-## 识灵怎么分析
+## 凭什么相信它?——证据链工程
 
-- 离线规则：默认模式，不联网、不需要大模型，用本地规则提取人物/项目/承诺/事件/断言。
-- 本地模型：填本地 OpenAI 兼容地址，例如 `http://127.0.0.1:11434/v1/chat/completions`。
-- 云端模型：填 `https://.../v1/chat/completions` 和 API Key。
-- 模型只做“候选生成”，不会自动确认；确认动作始终由你或你授权的 Agent 发起。
+这是识海和"vibe coding"产物的根本区别。
 
-## Agent / MCP 怎么接入
+识海的每一个功能切片,交付时都走完整条门禁链:**产品决策 → 合同 SPEC → 可执行测试(固定 fixture + oracle)→ 实现 → 官方 runner 出结果 → 门禁复审 → Git recovery tag**。测试结果文件与测试资产之间用 SHA-256 双向哈希绑定——改过任何一行测试,绑定立刻断裂,谁都能发现。
 
-在网页“Agent 接入”页复制 MCP 地址和访问令牌，然后让 Agent 向 `/mcp` 发 JSON-RPC 格式请求。默认授权包含：
+今天的状态,任何人都可以独立复核:
 
-- `list_resources`：列出资料
-- `read_resource`：读取资料
-- `propose_changeset`：写入待确认候选
-- `record_source`：追加资料
+- **485 项语义回归,0 跳过**,全绿;
+- **26 个验证套件**,每个的 fixture、oracle、结果文件哈希绑定可逐字节重算;
+- **PRD 基线哈希链**:v04 → v05 → v06 三代产品需求文档逐字锚定,历史版本永久只读;
+- **49 个 git tag**,每个 recovery tag 都指向一组可复现的验证记录;
+- 零真实个人数据进入仓库(770 个跟踪文件 + 全部历史经扫描复核)。
 
-请求包外层格式示例（用户指南里有完整示例）：
+我们不说"相信我"。我们说:**去查,证据都在。**
 
-```json
-{"jsonrpc":"2.0","id":"1","method":"noetide.mcp","params":{"request":{...},"payload":{...}}}
-```
+## 诚实的边界
 
-## 远程访问
+- Windows 优先,未代码签名(SmartScreen 会提示,预期现象),暂无自动更新。
+- 备份加密是 stdlib 约束下的自研构造(PBKDF2 20 万轮 + HMAC-SHA256),诚实声明:**非生产级密码学**,请用高强度密钥。
+- 单用户设计:没有多租户、账户体系、A2A、托管云。远程访问 = 你自己的服务器 + 令牌,HTTPS 网关你自己负责。
+- MCP 当前是只读 + 提议式写入的最小子集,不含 controlled mutate。
 
-默认只监听 `127.0.0.1`，只有本机能用。要远程/手机访问：
+## Noetide in English (short version)
 
-1. 打开“设置”，把“远程访问”设为“开启令牌访问”。
-2. 填 `0.0.0.0` 和端口，保存后重启服务。
-3. 在“Agent 接入”复制令牌。
-4. 手机或其他电脑请求 `/api/...` 或 `/mcp` 时带 `Authorization: Bearer <token>`。
+Noetide (识海, "sea of awareness") is a **local-first, zero-dependency personal memory system** for Windows — pure Python stdlib + SQLite, with a local web UI, REST API and MCP endpoint.
 
-## 数据与隐私
+Its difference from note apps and "chat with your data" tools is **epistemic discipline**: sources, facts, opinions, inferences, predictions and fiction are never mixed; AI (offline rules, local LLMs, or gated cloud models) can only *propose* candidates — nothing enters memory without your confirmation; current state never overwrites history; derived views can never become evidence. Red-line compartments (health/finance/relationships) are fail-closed against any cloud egress, and every cloud call passes grant + preview + audit gates.
 
-- 数据默认只存在你选择的数据文件夹；不开启远程访问时，服务只在本机监听。
-- 可以导入你自己的真实资料；是否把资料发给云端模型由你设置决定。
-- 导出上下文包、加密备份都从网页“导出备份”页操作。
-- 卸载默认不删数据；删除数据前会先做校验备份。
+Every shipped slice carries a verifiable evidence chain: hash-bound test oracles, 485 green regression tests, 26 verification suites, and a hash-chained PRD lineage. Don't trust it — audit it.
 
-## 测试状态
+## 更多
 
-当前工作区已完成产品级验证：
+- 大白话用户指南:[docs/product/PRODUCT_USER_GUIDE.md](docs/product/PRODUCT_USER_GUIDE.md)
+- 项目状态与全部验证记录:[docs/PROJECT_STATE.md](docs/PROJECT_STATE.md)
+- 独立安全审核报告:[项目全面审核报告-2026-08-07.md](项目全面审核报告-2026-08-07.md)
+- License:[MIT](LICENSE)
 
-- 产品定向测试：5/5 OK（空库初始化、导入、分析、确认、导出、备份、搜索、API、设置、MCP、自定义 Agent 授权）。
-- 全量 configured-adapter 语义回归：485 OK、0 skipped（2026-08-03）。
-- 端到端验证：启动空库、导入文本、识灵分析、API overview、桌面/移动 Web UI 截图均通过。
-
-## 当前边界
-
-- Windows 桌面优先；未代码签名，Windows SmartScreen 可能提示，这是预期现象。
-- 无自动更新；升级包脚本会先备份数据。
-- MCP 当前是完整产品所需的本地/远程 HTTP 接口，不含 A2A、多租户账户体系或连接器。
-- 云端部署可以把本服务放到有公网地址的服务器并开启令牌，但多用户账户、HTTPS 网关、域名和运维由部署者负责。
-
-## 更多文档
-
-- 大白话用户指南：`docs/product/PRODUCT_USER_GUIDE.md`
-- 项目状态：`docs/PROJECT_STATE.md`
-- 当前交接：`docs/process/CURRENT_HANDOFF.md`
-- License：`LICENSE`
+如果"记忆应该带证据链"这件事说到了你心里,点个 Star——这是一个人用严格工程纪律打磨出来的作品,你的 Star 是它继续生长的证据。
