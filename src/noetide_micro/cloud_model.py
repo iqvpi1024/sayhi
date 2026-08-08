@@ -196,18 +196,21 @@ class CloudGate:
     def _audit(self, event_type: str, payload: Mapping[str, Any]) -> JsonObject:
         if event_type not in AUDIT_EVENT_TYPES:
             raise ValueError(event_type)
-        # 序号基于账本现有记录分配,避免跨实例/重开库后审计主键碰撞
-        seq = len(self._store.ledger_records_of_type("cloud_audit")) + 1
-        while self._store.ledger_record(f"cloud_audit_{seq:03d}") is not None:
-            seq += 1
-        record_id = f"cloud_audit_{seq:03d}"
-        record = {
-            "record_id": record_id,
-            "event_type": event_type,
-            "recorded_at": self._clock,
-            **dict(payload),
-        }
-        self._store.put_ledger_record(record_id, "cloud_audit", record)
+        # 序号基于账本现有记录分配,避免跨实例/重开库后审计主键碰撞;
+        # 读序号+写记录必须在同一事务内:并行分析下多个工作线程同时 _audit,
+        # 否则读到相同 seq 撞主键 IntegrityError(2026-08-09 实测复现)。
+        with self._store.transaction():
+            seq = len(self._store.ledger_records_of_type("cloud_audit")) + 1
+            while self._store.ledger_record(f"cloud_audit_{seq:03d}") is not None:
+                seq += 1
+            record_id = f"cloud_audit_{seq:03d}"
+            record = {
+                "record_id": record_id,
+                "event_type": event_type,
+                "recorded_at": self._clock,
+                **dict(payload),
+            }
+            self._store.put_ledger_record(record_id, "cloud_audit", record)
         return record
 
     def restore_grant(self, grant: Mapping[str, Any]) -> JsonObject:

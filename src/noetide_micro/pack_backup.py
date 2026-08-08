@@ -216,6 +216,10 @@ def restore_backup(backup_path: str | Path, key: str, target_path: str | Path) -
     target = Path(target_path)
     if target.exists():
         return {"outcome": "rejected", "reason": "restore target already exists"}
+    # 目标父目录可能尚不存在(产品侧 restored/ 首次使用前不会预建):
+    # 不预建会让 write_bytes 抛 OSError,被下方兜底误报成 "key mismatch"
+    # (2026-08-09 ces 真人测试实测复现:正确 key 恢复必失败)。
+    target.parent.mkdir(parents=True, exist_ok=True)
     try:
         payload = source.read_bytes()
         if not payload.startswith(_BACKUP_MAGIC):

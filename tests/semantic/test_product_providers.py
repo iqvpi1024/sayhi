@@ -392,6 +392,46 @@ class ParallelAnalysisTests(unittest.TestCase):
             server.server_close()
 
 
+    def test_cloud_mode_parallel_authorize_and_audit_are_race_free(self) -> None:
+        """cloud 模式并行分析:授权门/审计写并发安全(2026-08-09 实测竞态回归)。
+
+        竞态原貌:多个工作线程同时 _audit 读到相同 seq 撞主键 IntegrityError,
+        懒游标迭代与他线程写入交错读到 None 行。修复后:游标物化 + 审计事务化。
+        chat_completion 打桩为固定回显,不访问外网。
+        """
+        entries = [{"object_type": "entity", "label": "回显实体", "summary": "回显:并行云授权", "evidence_quote": "并行云"}]
+
+        def _fake_completion(provider, endpoint, api_key, model, messages, timeout=15.0, temperature=None, max_tokens=4096):
+            return json.dumps(entries, ensure_ascii=False)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            app = NoetideApp(Path(tmp) / "data")
+            for index in range(4):
+                app.ingest_text(f"合成资料{index}:并行云授权竞态回归样本。")
+            app.update_settings({
+                "model_mode": "cloud",
+                "model_provider": "openai",
+                "model_endpoint": "https://example.invalid/v1/chat/completions",
+                "model_api_key": "sk-synthetic-CLOUD-KEY",
+            })
+            original = llm_providers.chat_completion
+            llm_providers.chat_completion = _fake_completion
+            try:
+                result = app.analyze_sources()
+            finally:
+                llm_providers.chat_completion = original
+            try:
+                self.assertEqual(len(result["sources_seen"]), 4)
+                self.assertEqual(len(result["candidates_proposed"]), 4)
+                self.assertEqual(result["rejected_outputs"], [])
+                audits = app.store.ledger_records_of_type("cloud_audit")
+                record_ids = [record["record_id"] for record in audits]
+                self.assertEqual(len(record_ids), len(set(record_ids)))
+                self.assertTrue(any(record.get("event_type") == "send_succeeded" for record in audits))
+            finally:
+                app.close()
+
+
 class DocxImportTests(unittest.TestCase):
     def test_ingest_folder_docx_and_broken_docx(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

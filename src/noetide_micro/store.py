@@ -14,6 +14,35 @@ from typing import Any, Iterator, Mapping
 JsonObject = dict[str, Any]
 
 
+class _LockedCursor:
+    """Materialized cursor: rows are fetched while the store lock is held.
+
+    A lazy sqlite3.Cursor lets another thread's statement interleave with
+    iteration on the shared connection (2026-08-09 并行分析实测:懒迭代读到
+    None 行 / 审计序号主键碰撞)。物化后读结果在锁内成形,迭代在锁外也安全。
+    支持既有调用点用到的 fetchone/fetchall/迭代/rowcount/description。
+    """
+
+    def __init__(self, rows: list[Any], description: Any, rowcount: int) -> None:
+        self._rows = rows
+        self._pos = 0
+        self.description = description
+        self.rowcount = rowcount
+
+    def fetchone(self) -> Any:
+        if self._pos >= len(self._rows):
+            return None
+        row = self._rows[self._pos]
+        self._pos += 1
+        return row
+
+    def fetchall(self) -> list[Any]:
+        return list(self._rows)
+
+    def __iter__(self) -> Iterator[Any]:
+        return iter(self._rows)
+
+
 class _LockedConnection:
     """Serialize every statement on the store lock.
 
@@ -27,13 +56,15 @@ class _LockedConnection:
         self._raw = connection
         self._lock = lock
 
-    def execute(self, sql: str, parameters: Any = ()) -> sqlite3.Cursor:
+    def execute(self, sql: str, parameters: Any = ()) -> _LockedCursor:
         with self._lock:
-            return self._raw.execute(sql, parameters)
+            cursor = self._raw.execute(sql, parameters)
+            return _LockedCursor(cursor.fetchall(), cursor.description, cursor.rowcount)
 
-    def executescript(self, script: str) -> sqlite3.Cursor:
+    def executescript(self, script: str) -> _LockedCursor:
         with self._lock:
-            return self._raw.executescript(script)
+            cursor = self._raw.executescript(script)
+            return _LockedCursor(cursor.fetchall(), cursor.description, cursor.rowcount)
 
     def __getattr__(self, name: str) -> Any:
         return getattr(self._raw, name)

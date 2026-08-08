@@ -13,3 +13,12 @@
 - 修改后升 fixture version，并使旧 Verification Result applicability 可被判定。
 
 Micro 的人类可读权威合同仍在 `docs/testing/MICRO_MVP_ACCEPTANCE.md`；机器 artifact 已由 `tests/micro_suite_manifest.json` 绑定并实际通过。A1 fixture 不存在，必须等 exact required contract 确定后再创建。
+
+## 演示/评测语料（与 hash 绑定 fixture 不同类）
+
+`leijun-corpus/` 是公众人物（雷军）演示语料，2026-08-09 经项目所有者明确决定入库：
+
+- **不属于**任何 suite/oracle 哈希绑定 fixture；上述合成 fixture 规则对绑定 fixture 不变。
+- 事实条目均为公开来源可查内容；06/07/09 三个文件为显著标注的虚构创作（见其文件头与库内 README 的标注约定），仅用于演示系统对隐私文本的处理（红线门拦截）。
+- 不含私人个体的真实私密数据、凭据或联系方式。
+- 任何新演示语料入库必须满足同三条：公开可查 / 虚构内容显著标注 / 不绑定 oracle。

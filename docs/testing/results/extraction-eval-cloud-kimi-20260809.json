@@ -1,0 +1,190 @@
+{
+  "schema_version": "noetide.extraction-eval-result.v1",
+  "suite_id": "extraction_eval_v1",
+  "run_result": "completed",
+  "mode": "cloud",
+  "provider": "custom",
+  "model": "kimi-for-coding",
+  "api_key": "provided(masked)",
+  "generated_at": "2026-08-08T17:08:39.212682+00:00",
+  "git_commit": "08ea18415fde508993d25f5db3e3970e8a108af0",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "tools/eval_extraction.py",
+    "--mode",
+    "cloud",
+    "--provider",
+    "custom",
+    "--endpoint",
+    "https://api.kimi.com/coding/v1/chat/completions",
+    "--model",
+    "kimi-for-coding",
+    "--output",
+    "docs/testing/results/extraction-eval-cloud-kimi-20260809.json"
+  ],
+  "corpus_dir": "tests/fixtures/extraction_eval_v1",
+  "corpus_count": 6,
+  "results": [
+    {
+      "file": "01_project_meeting.md",
+      "char_count": 336,
+      "items_extracted": 6,
+      "parse_success": 1,
+      "stats": {
+        "parsed": 6,
+        "dropped_invalid": 0,
+        "dropped_fabricated_evidence": 1,
+        "error": null
+      },
+      "duration_ms": 25117.3,
+      "expected_facts_total": 7,
+      "facts_recalled": 5,
+      "fact_recall": 0.7143,
+      "missing_facts": [
+        "01-f5",
+        "01-f6"
+      ],
+      "verbatim_total": 3,
+      "verbatim_retained": 0,
+      "verbatim_retention": 0.0,
+      "missing_verbatim": [
+        "48 万元",
+        "2026-09-30",
+        "2026-08-15"
+      ]
+    },
+    {
+      "file": "02_study_mnemonics.md",
+      "char_count": 287,
+      "items_extracted": 5,
+      "parse_success": 1,
+      "stats": {
+        "parsed": 5,
+        "dropped_invalid": 0,
+        "dropped_fabricated_evidence": 0,
+        "error": null
+      },
+      "duration_ms": 65499.6,
+      "expected_facts_total": 4,
+      "facts_recalled": 4,
+      "fact_recall": 1.0,
+      "missing_facts": [],
+      "verbatim_total": 2,
+      "verbatim_retained": 2,
+      "verbatim_retention": 1.0,
+      "missing_verbatim": []
+    },
+    {
+      "file": "03_commitments.txt",
+      "char_count": 223,
+      "items_extracted": 5,
+      "parse_success": 1,
+      "stats": {
+        "parsed": 5,
+        "dropped_invalid": 0,
+        "dropped_fabricated_evidence": 0,
+        "error": null
+      },
+      "duration_ms": 38727.1,
+      "expected_facts_total": 4,
+      "facts_recalled": 4,
+      "fact_recall": 1.0,
+      "missing_facts": [],
+      "verbatim_total": 2,
+      "verbatim_retained": 2,
+      "verbatim_retention": 1.0,
+      "missing_verbatim": []
+    },
+    {
+      "file": "04_chit_chat_noise.md",
+      "char_count": 265,
+      "items_extracted": 4,
+      "parse_success": 1,
+      "stats": {
+        "parsed": 4,
+        "dropped_invalid": 0,
+        "dropped_fabricated_evidence": 1,
+        "error": null
+      },
+      "duration_ms": 36684.1,
+      "expected_facts_total": 2,
+      "facts_recalled": 0,
+      "fact_recall": 0.0,
+      "missing_facts": [
+        "04-f1",
+        "04-f2"
+      ],
+      "verbatim_total": 2,
+      "verbatim_retained": 0,
+      "verbatim_retention": 0.0,
+      "missing_verbatim": [
+        "2026-08-20",
+        "68 元"
+      ]
+    },
+    {
+      "file": "05_trip_event.md",
+      "char_count": 296,
+      "items_extracted": 8,
+      "parse_success": 1,
+      "stats": {
+        "parsed": 8,
+        "dropped_invalid": 0,
+        "dropped_fabricated_evidence": 0,
+        "error": null
+      },
+      "duration_ms": 24704.1,
+      "expected_facts_total": 5,
+      "facts_recalled": 5,
+      "fact_recall": 1.0,
+      "missing_facts": [],
+      "verbatim_total": 3,
+      "verbatim_retained": 3,
+      "verbatim_retention": 1.0,
+      "missing_verbatim": []
+    },
+    {
+      "file": "06_recipe_checklist.md",
+      "char_count": 286,
+      "items_extracted": 5,
+      "parse_success": 1,
+      "stats": {
+        "parsed": 5,
+        "dropped_invalid": 0,
+        "dropped_fabricated_evidence": 0,
+        "error": null
+      },
+      "duration_ms": 19829.6,
+      "expected_facts_total": 4,
+      "facts_recalled": 4,
+      "fact_recall": 1.0,
+      "missing_facts": [],
+      "verbatim_total": 3,
+      "verbatim_retained": 3,
+      "verbatim_retention": 1.0,
+      "missing_verbatim": []
+    }
+  ],
+  "aggregate": {
+    "parse_success_rate": 1.0,
+    "dropped_fabricated_evidence_total": 2,
+    "dropped_invalid_total": 0,
+    "fact_recall": 0.8462,
+    "facts_recalled": "22/26",
+    "verbatim_retention": 0.6667,
+    "verbatim_retained": "10/15",
+    "total_duration_ms": 210580.8
+  },
+  "metric_definitions": {
+    "parse_success": "模型输出被 parse_extraction_output 成功解析(stats.error 为空)记 1,否则 0;offline 不经解析记 null",
+    "fact_recall": "期望事实的全部 phrases 出现在该语料全部提取文本(候选所有字符串字段拼接)中记为召回",
+    "verbatim_retention": "期望实质片段(口诀/数字/日期)原样出现在提取文本中",
+    "dropped_fabricated_evidence": "evidence_quote 未在原文逐字出现而被丢弃的候选数(offline 不产出证据,恒为 0)"
+  },
+  "notes": []
+}

@@ -33,6 +33,12 @@ class NoetideProductTests(unittest.TestCase):
             backup = app.backup()
             self.assertEqual(backup["status"], "ok")
             self.assertTrue(Path(backup["path"]).is_file())
+            # 恢复到尚不存在的 restored/ 目录必须成功(2026-08-09 实测:父目录缺失
+            # 曾被兜底误报为 key mismatch);错误 key 仍须 fail-closed
+            restored = app.restore_backup(backup["path"], app._settings["backup_key"])
+            self.assertEqual(restored["outcome"], "restored")
+            wrong = app.restore_backup(backup["path"], "wrong-key")
+            self.assertEqual(wrong["outcome"], "rejected")
             search = app.search("小明")
             self.assertTrue(search["sources"])
             app.close()
