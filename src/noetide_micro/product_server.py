@@ -20,7 +20,7 @@ APP_HTML_NAME = "webui.html"
 _MAX_BODY_BYTES = 1 << 20  # 请求体上限 1 MiB，防止内存耗尽
 _LOOPBACK_NAMES = frozenset({"localhost"})
 # 标准 MCP 协议 initialize 握手回的 serverInfo 版本(随发布手动同步)
-MCP_SERVER_VERSION = "0.3.2"
+MCP_SERVER_VERSION = "0.3.3"
 
 
 def _split_host(value: str) -> str:
