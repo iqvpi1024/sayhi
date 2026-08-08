@@ -55,7 +55,7 @@ class _ServerCase(unittest.TestCase):
 class StandardMcpProtocolTests(_ServerCase):
     def test_initialize_and_tools_list(self) -> None:
         init = _rpc(self.port, {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05"}})
-        self.assertEqual(init["result"]["serverInfo"]["name"], "noetide")
+        self.assertEqual(init["result"]["serverInfo"]["name"], "sayhi")
         self.assertIn("tools", init["result"]["capabilities"])
         tools = _rpc(self.port, {"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
         names = {tool["name"] for tool in tools["result"]["tools"]}

@@ -9,7 +9,7 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-function Write-Step([string]$Message) { Write-Output "[Noetide Uninstall] $Message" }
+function Write-Step([string]$Message) { Write-Output "[sayhi Uninstall] $Message" }
 
 try {
     if ([string]::IsNullOrWhiteSpace($InstallRoot)) { throw "-InstallRoot is required" }
@@ -65,7 +65,7 @@ try {
         $message = "Remove the Noetide application folder? " + $install + [Environment]::NewLine + [Environment]::NewLine + "Your data folder and backups are kept."
         $go = [System.Windows.Forms.MessageBox]::Show(
             $message,
-            "Noetide Uninstall",
+            "sayhi Uninstall",
             [System.Windows.Forms.MessageBoxButtons]::YesNo,
             [System.Windows.Forms.MessageBoxIcon]::Question
         )

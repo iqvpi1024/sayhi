@@ -13,6 +13,7 @@ import secrets
 import threading
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
@@ -33,7 +34,7 @@ FOLDER_EXTENSIONS = (".md", ".txt", ".json", ".csv", ".docx")
 CANDIDATE_KINDS = ("entity", "assertion", "commitment", "episode")
 SETTINGS_KEYS = (
     "model_mode", "model_provider", "model_endpoint", "model_api_key", "model_name",
-    "model_temperature", "model_max_tokens",
+    "model_temperature", "model_max_tokens", "model_embed_name", "ask_retrieval",
     "remote_access", "remote_host", "port", "api_token", "backup_key", "language",
 )
 # 产品云端通路复用 Y2-S4 CloudGate:授权门 + 红线门 + 预览门 + 审计账本。
@@ -438,28 +439,24 @@ class NoetideApp:
         extraction_stats: JsonObject = {}
         seen_ids = [source["source_id"] for source in sources]
         mode = self._settings.get("model_mode", "offline")
-        for source in sources:
-            if progress is not None:
-                progress["current"] = source.get("title") or source_id_title(source)
-            if mode == "offline":
-                items = self._offline_items(source)
-                failure = None
-                stats: JsonObject = {}
-            else:
-                items, failure, stats = self._model_items(source)
+        # 外部模型模式并行调用(每份资料一次请求,串行太慢:10 份实测约 7 分钟);
+        # 离线规则是纯 CPU 快路径,保持串行。pool.map 保序,候选按来源顺序落库,
+        # 与串行结果一致;store 全连接 RLock 序列化,审计写入线程安全。
+        if mode == "offline" or len(sources) <= 1:
+            outcomes = [self._analyze_one(source, mode, progress) for source in sources]
+        else:
+            with ThreadPoolExecutor(max_workers=3, thread_name_prefix="noetide-analyze") as pool:
+                outcomes = list(pool.map(lambda s: self._analyze_one(s, mode, progress), sources))
+        for source, items, failure, stats in outcomes:
             if stats:
                 extraction_stats[source["source_id"]] = stats
             if failure:
                 rejected.append({"source_id": source["source_id"], "reason": failure})
-                if progress is not None:
-                    progress["done"] += 1
                 continue
             for item in items:
                 candidate = self._persist_candidate(item, source)
                 if candidate is not None:
                     candidates.append(candidate)
-            if progress is not None:
-                progress["done"] += 1
         self._refresh_projection()
         result: JsonObject = {
             "batch_id": "batch_p_" + _sha256(_canonical_json({"mode": mode, "sources": seen_ids}))[:16],
@@ -505,6 +502,22 @@ class NoetideApp:
     def analysis_status(self) -> JsonObject:
         with self._analysis_lock:
             return dict(self._analysis_progress)
+
+    def _analyze_one(
+        self, source: Mapping[str, Any], mode: str, progress: JsonObject | None
+    ) -> tuple[Mapping[str, Any], list[JsonObject], str | None, JsonObject]:
+        """单份资料的提取单元(可并行);进度计数在此推进,落库由调用方串行完成。"""
+        if progress is not None:
+            progress["current"] = source.get("title") or source_id_title(source)
+        if mode == "offline":
+            items = self._offline_items(source)
+            failure = None
+            stats: JsonObject = {}
+        else:
+            items, failure, stats = self._model_items(source)
+        if progress is not None:
+            progress["done"] += 1
+        return source, items, failure, stats
 
     def _has_candidates(self, source_id: str) -> bool:
         return any(
@@ -977,6 +990,21 @@ class NoetideApp:
         )
         relevant = [item for score, item in scored if score >= threshold][:8] if threshold else []
 
+        # 召回方式:默认字面匹配;ask_retrieval=embedding 且 local 模式时用本地向量召回。
+        # 向量只决定"哪些记忆送核对器",是否作答仍由 AnswerEvaluator 逐条核对,
+        # 诚实性不依赖向量相似度;embedding 不可用时如实标注并回落字面匹配。
+        retrieval_mode = "lexical"
+        if (
+            str(self._settings.get("ask_retrieval") or "lexical") == "embedding"
+            and self._settings.get("model_mode") == "local"
+        ):
+            embedded = self._ask_relevant_embedding(adapted, question)
+            if embedded is not None:
+                relevant = embedded
+                retrieval_mode = "embedding"
+            else:
+                retrieval_mode = "embedding_unavailable_fallback_lexical"
+
         verified: list[tuple[JsonObject, JsonObject]] = []
         rejected: list[tuple[JsonObject, JsonObject]] = []
         for item in relevant:
@@ -1066,6 +1094,7 @@ class NoetideApp:
                     "sources": len(sources),
                 },
                 "reason_codes": sorted(reason_codes),
+                "retrieval": retrieval_mode,
             },
             "evidence": evidence,
             "freshness": self._ask_freshness(evidence, source_by_id),
@@ -1077,6 +1106,37 @@ class NoetideApp:
             ),
             "evaluated_at": now,
         }
+
+    def _ask_relevant_embedding(self, adapted: list[JsonObject], question: str) -> list[JsonObject] | None:
+        """本地向量召回(隐私边界:仅 local 模式 + loopback 端点,记忆文本不出本机)。
+
+        返回 None 表示不可用(端点缺失/非回环/调用失败),调用方回落字面匹配。
+        向量只决定"哪些记忆送核对器",是否作为回答依据仍由 AnswerEvaluator
+        逐条核对——诚实性不依赖向量相似度,所以相似度门槛可以宽(0.25)。
+        """
+        if not adapted:
+            return []
+        provider = str(self._settings.get("model_provider") or "openai_compatible").strip()
+        endpoint = str(self._settings.get("model_endpoint") or "").strip() or llm_providers.default_endpoint(provider)
+        parsed = urllib.parse.urlparse(endpoint)
+        if parsed.scheme != "http" or not _is_loopback_host(parsed.hostname):
+            return None
+        model = str(self._settings.get("model_embed_name") or "").strip() or "nomic-embed-text"
+        api_key = str(self._settings.get("model_api_key") or "").strip()
+        try:
+            vectors = llm_providers.embed_texts(
+                endpoint, api_key, model,
+                [question] + [item["canonical_text"] for item in adapted],
+                timeout=30,
+            )
+        except Exception:
+            return None
+        query_vector, doc_vectors = vectors[0], vectors[1:]
+        ranked = sorted(
+            ((_cosine(query_vector, doc_vector), item) for item, doc_vector in zip(adapted, doc_vectors)),
+            key=lambda pair: (-pair[0], str(pair[1]["assertion_id"])),
+        )
+        return [item for score, item in ranked if score >= 0.25][:8]
 
     @staticmethod
     def _ask_adapt_assertion(obj: Mapping[str, Any]) -> JsonObject | None:
@@ -1481,6 +1541,18 @@ _ASK_REASON_TEXT = {
 
 def _ask_reason_text(codes: Iterable[str]) -> str:
     return ";".join(_ASK_REASON_TEXT.get(code, code) for code in codes) or "未通过证据核对"
+
+
+def _cosine(left: list[float], right: list[float]) -> float:
+    """余弦相似度;维度不齐或零向量返回 0.0(视为不相关)。"""
+    if not left or not right or len(left) != len(right):
+        return 0.0
+    dot = sum(a * b for a, b in zip(left, right))
+    norm_left = sum(a * a for a in left) ** 0.5
+    norm_right = sum(b * b for b in right) ** 0.5
+    if not norm_left or not norm_right:
+        return 0.0
+    return dot / (norm_left * norm_right)
 
 
 def _ask_terms(question: str) -> tuple[list[str], int]:

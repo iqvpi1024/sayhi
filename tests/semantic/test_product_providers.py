@@ -344,6 +344,54 @@ class ProductProviderWiringTests(unittest.TestCase):
                 app.close()
 
 
+class _EchoExtractionHandler(BaseHTTPRequestHandler):
+    """按请求内容回显提取结果的假提供商:每份资料一条实体候选,evidence 逐字取自原文。"""
+
+    def do_POST(self) -> None:
+        length = int(self.headers.get("Content-Length") or 0)
+        body = json.loads(self.rfile.read(length).decode("utf-8"))
+        text = str(body["messages"][-1]["content"]).split("材料:\n", 1)[1]
+        entries = [{"object_type": "entity", "label": "回显实体", "summary": "回显:" + text[:12], "evidence_quote": text[:10]}]
+        payload = json.dumps({"choices": [{"message": {"content": json.dumps(entries, ensure_ascii=False)}}]}, ensure_ascii=False).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(payload)))
+        self.end_headers()
+        self.wfile.write(payload)
+
+    def log_message(self, *args: object) -> None:
+        return
+
+
+class ParallelAnalysisTests(unittest.TestCase):
+    def test_model_mode_analyzes_sources_concurrently_and_completely(self) -> None:
+        """多份资料并行提取:所有来源都有候选与 stats,结果与串行语义一致。"""
+        server = ThreadingHTTPServer(("127.0.0.1", 0), _EchoExtractionHandler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            endpoint = f"http://127.0.0.1:{server.server_address[1]}/v1/chat/completions"
+            with tempfile.TemporaryDirectory() as tmp:
+                app = NoetideApp(Path(tmp) / "data")
+                app.update_settings({"model_mode": "local", "model_endpoint": endpoint})
+                for index in range(4):
+                    app.ingest_text(f"合成资料{index}:小明是识海项目的创始人之一。")
+                try:
+                    progress: dict = {}
+                    result = app.analyze_sources(progress=progress)
+                    self.assertEqual(len(result["sources_seen"]), 4)
+                    self.assertEqual(len(result["candidates_proposed"]), 4)
+                    self.assertEqual(result["rejected_outputs"], [])
+                    self.assertEqual(len(result["extraction_stats"]), 4)
+                    self.assertEqual(progress["done"], 4)
+                    self.assertEqual(progress["total"], 4)
+                finally:
+                    app.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+
+
 class DocxImportTests(unittest.TestCase):
     def test_ingest_folder_docx_and_broken_docx(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

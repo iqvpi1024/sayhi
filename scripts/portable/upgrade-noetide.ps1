@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-function Write-Step([string]$Message) { Write-Output "[Noetide Upgrade] $Message" }
+function Write-Step([string]$Message) { Write-Output "[sayhi Upgrade] $Message" }
 
 try {
     $newBundle = Split-Path -Parent $PSScriptRoot

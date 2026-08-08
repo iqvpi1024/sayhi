@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>识海 Noetide</title>
+<title>识海 sayhi</title>
 <style>
 :root{--bg:#f4f6f8;--surface:#ffffff;--text:#1f2933;--muted:#52606d;--border:#d7dee4;--accent:#0d7a72;--accent-soft:#e5f5f2;--warn:#b45309;--warn-soft:#fff4e5;--danger:#b42318;--danger-soft:#fff1f0;--ok:#0f7b4d;--ok-soft:#e8f6ef}
 *{box-sizing:border-box}
@@ -66,7 +66,7 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <body>
 <div id="app">
 <aside class="sidebar">
-<div class="brand">识海<small>Noetide</small></div>
+<div class="brand">识海<small>sayhi</small></div>
 <nav class="nav" id="nav">
 <button data-view="overview" class="active">总览</button>
 <button data-view="ask">问识海</button>
@@ -163,8 +163,11 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <div class="row"><div class="row-main"><div class="row-title">Web 地址</div><div class="row-sub" id="webUrl">-</div></div><button class="small" data-copy="webUrl">复制</button></div>
 <div class="row"><div class="row-main"><div class="row-title">MCP 地址</div><div class="row-sub" id="mcpUrl">-</div></div><button class="small" data-copy="mcpUrl">复制</button></div>
 <div class="row"><div class="row-main"><div class="row-title">访问令牌</div><div class="row-sub" id="apiToken">-</div></div><button class="small" id="refreshTokenBtn">重新生成</button></div>
-<div class="actions"><button class="primary" id="createCapabilityBtn">创建默认 MCP 授权</button></div>
-<div class="row"><div class="row-main"><div class="row-title">自定义授权</div><div class="row-sub"><input id="capabilityResourceIds" placeholder="src_p_xxx, src_p_yyy"></div></div><button class="small" id="createResourceCapabilityBtn">创建</button></div>
+<div class="actions"><button class="primary" id="createCapabilityBtn">创建默认授权(全部资料)</button></div>
+<div class="row-sub" style="margin:10px 0 6px">或创建限定范围授权——勾选这个 Agent 可以访问的资料(红线资料对 Agent 永远不可见,无需手动排除):</div>
+<div id="capSourceList"></div>
+<div class="actions"><button class="small" id="createResourceCapabilityBtn">创建限定范围授权</button></div>
+<div id="capabilityResult"></div>
 </div>
 <div class="panel"><h2>MCP 授权</h2><div id="capabilityList"></div></div>
 <div class="panel"><h2>Agent 可用工具</h2><div class="row-sub" style="margin-bottom:8px">任何支持 MCP 的 Agent(Claude Code、Codex 等)把上面的 MCP 地址配为 server 即可使用以下工具;提议的记忆在「识灵分析」页由你确认后生效。</div><div id="mcpToolList"></div></div>
@@ -217,6 +220,14 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <input id="modelApiKey" type="password" placeholder="云端可选">
 <label for="modelName">模型名称</label>
 <input id="modelName" placeholder="留空使用提供商默认模型">
+<label for="modelTemperature">温度(可选)</label>
+<input id="modelTemperature" placeholder="留空不发送;推理模型(如 Kimi)请留空">
+<label for="modelMaxTokens">最大输出 token(可选)</label>
+<input id="modelMaxTokens" placeholder="默认 4096;推理模型建议 4096 以上">
+<label for="askRetrieval">问识海召回方式</label>
+<select id="askRetrieval"><option value="lexical">字面匹配(默认,零依赖)</option><option value="embedding">本地向量(仅本地模型,记忆不出本机)</option></select>
+<label for="modelEmbedName">向量模型名(可选)</label>
+<input id="modelEmbedName" placeholder="默认 nomic-embed-text(需 Ollama 已拉取)">
 </div>
 <div class="panel">
 <h2>远程访问</h2>
@@ -284,12 +295,24 @@ async function loadAnalyze(){
   if(st.running)pollAnalysis();
   else if(st.finished_at)$('#analyzeProgress').textContent=st.error?`上次分析中断:${st.error}`:`上次分析:候选 ${st.candidates||0} 条${st.rejected?`,拒绝 ${st.rejected} 份`:''}`;
 }
+function candLabel(c){const p=c.payload||{};return p.canonical_label||p.title||p.statement||p.canonical_text||c.candidate_kind;}
+let _lastCandidates=[];
 function renderCandidates(items){
-  $('#candidateList').innerHTML=items.filter(c=>c.status!=='rejected').map(c=>{
-    const p=c.payload||{};
-    const label=p.canonical_label||p.title||p.statement||p.canonical_text||c.candidate_kind;
-    const actions=`<button class="small primary" data-confirm="${esc(c.candidate_id)}">确认</button><button class="small danger" data-reject="${esc(c.candidate_id)}">忽略</button>`;
-    return row(label,`${c.candidate_kind} · ${c.status} · ${esc(p.summary||'')}`,actions);
+  _lastCandidates=items.filter(c=>c.status!=='rejected');
+  const groups=new Map();
+  _lastCandidates.forEach(c=>{
+    const key=c.candidate_kind+'|'+candLabel(c);
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(c);
+  });
+  $('#candidateList').innerHTML=[...groups.entries()].map(([key,list])=>{
+    const first=list[0];
+    const pending=list.filter(c=>c.status!=='confirmed');
+    const sub=`${first.candidate_kind} · ${first.status} · ${esc(first.payload?.summary||'')}`+(list.length>1?` · ${list.length} 条相似候选已合并`:'');
+    let actions='';
+    if(pending.length===1)actions=`<button class="small primary" data-confirm="${esc(pending[0].candidate_id)}">确认</button><button class="small danger" data-reject="${esc(pending[0].candidate_id)}">忽略</button>`;
+    else if(pending.length>1)actions=`<button class="small primary" data-confirm-group="${esc(key)}">全部确认(${pending.length})</button><button class="small danger" data-reject-group="${esc(key)}">全部忽略</button>`;
+    return row(candLabel(first),sub,actions);
   }).join('')||empty('还没有候选');
 }
 
@@ -320,7 +343,7 @@ async function doSearch(){
 }
 
 async function loadAgent(){
-  const [settings,cap] = await Promise.all([api('/api/settings'),api('/api/mcp')]);
+  const [settings,cap,sources] = await Promise.all([api('/api/settings'),api('/api/mcp'),api('/api/sources')]);
   const s=settings.settings||{};
   $('#webUrl').textContent=location.origin;
   $('#mcpUrl').textContent=location.origin+'/mcp';
@@ -328,6 +351,7 @@ async function loadAgent(){
   const caps=cap.capabilities||[];
   $('#capabilityList').innerHTML=caps.map(c=>row(c.capability_id,c.purpose+' · '+(c.tools||[]).join(', '),pill(c.revoked?'已撤销':'有效'))).join('')||empty('尚未创建授权');
   $('#mcpToolList').innerHTML=(cap.tools||[]).map(t=>row(t.name,esc(t.description||''),pill('工具'))).join('')||empty('无可用工具');
+  $('#capSourceList').innerHTML=(sources.sources||[]).map(x=>`<div class="check"><input type="checkbox" value="${esc(x.source_id)}"><div class="row-main"><div class="row-title">${esc(x.title||x.source_id)}</div><div class="row-sub">${esc(x.source_id)}</div></div></div>`).join('')||empty('请先导入资料');
 }
 async function loadExport(){$('#exportResult').innerHTML=empty('暂无结果');}
 async function loadSettings(){
@@ -337,6 +361,10 @@ async function loadSettings(){
   $('#modelEndpoint').value=s.model_endpoint||'';
   $('#modelApiKey').value='';
   $('#modelName').value=s.model_name||'';
+  $('#modelTemperature').value=s.model_temperature??'';
+  $('#modelMaxTokens').value=s.model_max_tokens??'';
+  $('#askRetrieval').value=s.ask_retrieval||'lexical';
+  $('#modelEmbedName').value=s.model_embed_name||'';
   $('#remoteAccess').value=String(!!s.remote_access);
   $('#remoteHost').value=s.remote_host||'127.0.0.1';
   $('#remotePort').value=s.port||'8765';
@@ -424,8 +452,20 @@ async function pollAnalysis(){
 document.addEventListener('click',async e=>{
   const confirmBtn=e.target.closest('[data-confirm]');
   const rejectBtn=e.target.closest('[data-reject]');
+  const confirmGroup=e.target.closest('[data-confirm-group]');
+  const rejectGroup=e.target.closest('[data-reject-group]');
   if(confirmBtn){const r=await post('/api/candidates/'+encodeURIComponent(confirmBtn.dataset.confirm)+'/confirm',{});await loadAnalyze();}
   if(rejectBtn){await post('/api/candidates/'+encodeURIComponent(rejectBtn.dataset.reject)+'/reject',{});await loadAnalyze();}
+  if(confirmGroup){
+    const key=confirmGroup.dataset.confirmGroup;
+    for(const c of _lastCandidates){if(c.candidate_kind+'|'+candLabel(c)===key&&c.status!=='confirmed')await post('/api/candidates/'+encodeURIComponent(c.candidate_id)+'/confirm',{});}
+    await loadAnalyze();
+  }
+  if(rejectGroup){
+    const key=rejectGroup.dataset.rejectGroup;
+    for(const c of _lastCandidates){if(c.candidate_kind+'|'+candLabel(c)===key)await post('/api/candidates/'+encodeURIComponent(c.candidate_id)+'/reject',{});}
+    await loadAnalyze();
+  }
 });
 $$('#view-memory .tab').forEach(t=>t.addEventListener('click',()=>loadMemoryTab(t.dataset.tab)));
 $('#searchBtn').addEventListener('click',doSearch);
@@ -442,7 +482,16 @@ document.addEventListener('click',async e=>{
   }
 });
 $('#createCapabilityBtn').addEventListener('click',async()=>{const r=await post('/api/mcp/capability',{});if(r.status==='ok')await loadAgent();});
-$('#createResourceCapabilityBtn').addEventListener('click',async()=>{const ids=$('#capabilityResourceIds').value.trim().split(/[,，\s]+/).filter(Boolean);const r=await post('/api/mcp/capability',{resource_ids:ids});if(r.status==='ok')await loadAgent();});
+$('#createResourceCapabilityBtn').addEventListener('click',async()=>{
+  const ids=$$('#capSourceList input:checked').map(i=>i.value);
+  if(!ids.length){$('#capabilityResult').innerHTML=empty('请先勾选至少一份资料');return;}
+  const r=await post('/api/mcp/capability',{resource_ids:ids});
+  if(r.status==='ok'){
+    const cid=r.capability.capability_id;
+    $('#capabilityResult').innerHTML=`<div class="row"><div class="row-main"><div class="row-title">已创建授权 ${esc(cid)}</div><div class="row-sub">Agent 端配置:MCP 地址填 ${esc(location.origin+'/mcp')},请求头加 <span class="code">X-Noetide-Capability: ${esc(cid)}</span>;不加请求头则使用默认授权。该 Agent 只能访问你勾选的 ${ids.length} 份资料。</div></div></div>`;
+    await loadAgent();
+  }else{$('#capabilityResult').innerHTML=empty(r.reason||'创建失败');}
+});
 $('#refreshTokenBtn').addEventListener('click',async()=>{await post('/api/settings',{api_token:true});await loadAgent();});
 $('#exportBtn').addEventListener('click',async()=>{const r=await post('/api/export',{});$('#exportResult').innerHTML=r.status==='ok'?row('已导出',r.data?.path||''):empty(r.reason||'导出失败');});
 $('#backupBtn').addEventListener('click',async()=>{const r=await post('/api/backup',{});$('#exportResult').innerHTML=r.status==='ok'?row('已备份',r.data?.path||''):empty(r.reason||'备份失败');});
@@ -454,6 +503,10 @@ $('#saveSettingsBtn').addEventListener('click',async()=>{
     model_provider:$('#modelProvider').value,
     model_endpoint:$('#modelEndpoint').value.trim(),
     model_name:$('#modelName').value.trim(),
+    model_temperature:$('#modelTemperature').value.trim(),
+    model_max_tokens:$('#modelMaxTokens').value.trim(),
+    ask_retrieval:$('#askRetrieval').value,
+    model_embed_name:$('#modelEmbedName').value.trim(),
     model_api_key:$('#modelApiKey').value.trim(),
     remote_access:$('#remoteAccess').value==='true',
     remote_host:$('#remoteHost').value.trim()||'127.0.0.1',

@@ -40,8 +40,8 @@ try {
         Copy-Item -Recurse -Force (Join-Path $sourceRoot "src\noetide_micro") (Join-Path $bundleRoot "app\src\noetide_micro")
         Copy-Item -Force (Join-Path $sourceRoot "LICENSE"), (Join-Path $sourceRoot "README.md"), (Join-Path $sourceRoot "SUPPORT.md") $bundleRoot
         Copy-Item -Force (Join-Path $sourceRoot "scripts\portable\setup-synthetic-preview.ps1") (Join-Path $bundleRoot "scripts")
-        Copy-Item -Force (Join-Path $sourceRoot "scripts\portable\Noetide Console.cmd") (Join-Path $bundleRoot "scripts")
-        Copy-Item -Force (Join-Path $sourceRoot "scripts\portable\Noetide Start.cmd") (Join-Path $bundleRoot "scripts")
+        Copy-Item -Force (Join-Path $sourceRoot "scripts\portable\sayhi Console.cmd") (Join-Path $bundleRoot "scripts")
+        Copy-Item -Force (Join-Path $sourceRoot "scripts\portable\sayhi Start.cmd") (Join-Path $bundleRoot "scripts")
         $manifest = @{ schema_version = "noetide.portable-preview.v1"; version = $Version; source_ref = $Ref; runtime = @{ version = "3.12.10"; source_url = $runtimeUrl; sha256 = $runtimeSha256 }; synthetic_only = $true; real_personal_data_supported = $false }
         $manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $bundleRoot "RUNTIME_MANIFEST.json") -Encoding utf8
         $archivePath = Join-Path $outputPath "$bundleName.zip"

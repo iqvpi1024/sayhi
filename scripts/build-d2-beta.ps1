@@ -26,7 +26,7 @@ try {
     if ($actualRuntimeHash -ne $runtimeSha256) { throw "embedded Python runtime SHA-256 mismatch" }
 
     $stageRoot = Join-Path $env:TEMP ("noetide-d2beta-" + [Guid]::NewGuid().ToString("N"))
-    $bundleName = "Noetide-beta-v$Version-win64"
+    $bundleName = "sayhi-beta-v$Version-win64"
     $bundleRoot = Join-Path $stageRoot $bundleName
     try {
         New-Item -ItemType Directory -Force -Path $stageRoot | Out-Null
@@ -45,11 +45,11 @@ try {
             "setup-noetide.ps1",
             "upgrade-noetide.ps1",
             "uninstall-noetide.ps1",
-            "Noetide Setup.cmd",
-            "Noetide Shell.cmd",
-            "Noetide Start.cmd",
-            "Noetide Upgrade.cmd",
-            "Noetide Uninstall.cmd"
+            "sayhi Setup.cmd",
+            "sayhi Shell.cmd",
+            "sayhi Start.cmd",
+            "sayhi Upgrade.cmd",
+            "sayhi Uninstall.cmd"
         )
         foreach ($scriptName in $d2Scripts) {
             Copy-Item -Force (Join-Path $sourceRoot "scripts\portable\$scriptName") (Join-Path $bundleRoot "scripts")
@@ -63,8 +63,8 @@ try {
             synthetic_only = $false
             real_personal_data_supported = $true
             code_signed = $false
-            upgrade = "run scripts/Noetide Upgrade.cmd from the new bundle; data is backed up before any replacement"
-            uninstall = "scripts/Noetide Uninstall.cmd removes only the app folder by default; data deletion requires explicit confirmation and creates a verified backup first"
+            upgrade = "run scripts/sayhi Upgrade.cmd from the new bundle; data is backed up before any replacement"
+            uninstall = "scripts/sayhi Uninstall.cmd removes only the app folder by default; data deletion requires explicit confirmation and creates a verified backup first"
         }
         ($manifest | ConvertTo-Json -Depth 4) | Set-Content -LiteralPath (Join-Path $bundleRoot "RUNTIME_MANIFEST.json") -Encoding utf8
         $archivePath = Join-Path $outputPath "$bundleName.zip"

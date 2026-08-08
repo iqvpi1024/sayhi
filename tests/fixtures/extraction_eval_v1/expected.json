@@ -1,0 +1,64 @@
+{
+  "schema_version": "noetide.extraction-eval-expected.v1",
+  "suite_id": "extraction_eval_v1",
+  "synthetic": true,
+  "description": "识灵提取质量评测期望集:全部人物/项目/事件/数字均为显式合成虚构数据,不对应任何真实个人数据。expected_facts 的 phrases 全部出现在提取文本中记为该事实被召回;verbatim_fragments 要求原样出现在提取文本中(实质保留)。",
+  "corpora": {
+    "01_project_meeting.md": {
+      "expected_facts": [
+        {"id": "01-f1", "phrases": ["林蔚然"], "note": "人物:林蔚然"},
+        {"id": "01-f2", "phrases": ["沈栀"], "note": "人物:沈栀"},
+        {"id": "01-f3", "phrases": ["星灯计划"], "note": "项目名"},
+        {"id": "01-f4", "phrases": ["白榆工作室"], "note": "组织名"},
+        {"id": "01-f5", "phrases": ["48 万", "2026-08-15"], "note": "一期预算 48 万元 + 首批到账日期"},
+        {"id": "01-f6", "phrases": ["2026-09-30", "2026-11-15"], "note": "里程碑:内测版与正式上线日期"},
+        {"id": "01-f7", "phrases": ["周五", "交互稿"], "note": "承诺:周五前把交互稿意见发给沈栀"}
+      ],
+      "verbatim_fragments": ["48 万元", "2026-09-30", "2026-08-15"]
+    },
+    "02_study_mnemonics.md": {
+      "expected_facts": [
+        {"id": "02-f1", "phrases": ["顾行舟"], "note": "人物:顾行舟"},
+        {"id": "02-f2", "phrases": ["先搭骨架"], "note": "三段回忆法口诀"},
+        {"id": "02-f3", "phrases": ["5 分钟", "21 天"], "note": "每日练习时长与周期数字"},
+        {"id": "02-f4", "phrases": ["第 3 天", "第 7 天", "第 30 天"], "note": "间隔复习清单节奏"}
+      ],
+      "verbatim_fragments": ["先搭骨架,再填血肉,最后抛光", "第 7 天第三次"]
+    },
+    "03_commitments.txt": {
+      "expected_facts": [
+        {"id": "03-f1", "phrases": ["沈栀", "周五", "交互稿"], "note": "承诺:本周五前发交互稿意见"},
+        {"id": "03-f2", "phrases": ["顾行舟", "下周三"], "note": "承诺:下周三前下单带书"},
+        {"id": "03-f3", "phrases": ["8 月 31 日", "季度复盘"], "note": "承诺:8 月 31 日前写完季度复盘"},
+        {"id": "03-f4", "phrases": ["8 月 30 日", "回家吃饭"], "note": "约定:8 月 30 日晚回家吃饭"}
+      ],
+      "verbatim_fragments": ["8 月 31 日", "大约 3000 字"]
+    },
+    "04_chit_chat_noise.md": {
+      "expected_facts": [
+        {"id": "04-f1", "phrases": ["顾行舟", "2026-08-20", "临港美术馆"], "note": "闲聊中埋的真实约定:看展"},
+        {"id": "04-f2", "phrases": ["68 元"], "note": "门票价格"}
+      ],
+      "verbatim_fragments": ["2026-08-20", "68 元"]
+    },
+    "05_trip_event.md": {
+      "expected_facts": [
+        {"id": "05-f1", "phrases": ["林蔚然"], "note": "人物:林蔚然"},
+        {"id": "05-f2", "phrases": ["青岛", "潮汐音乐节"], "note": "事件:参加潮汐音乐节"},
+        {"id": "05-f3", "phrases": ["G7206", "336 元"], "note": "去程车次与票价"},
+        {"id": "05-f4", "phrases": ["灯塔青年旅舍", "540 元"], "note": "住宿与总价"},
+        {"id": "05-f5", "phrases": ["沈栀"], "note": "人物:沈栀(下次想带的人)"}
+      ],
+      "verbatim_fragments": ["2026-06-11", "336 元", "540 元"]
+    },
+    "06_recipe_checklist.md": {
+      "expected_facts": [
+        {"id": "06-f1", "phrases": ["一粉十二水"], "note": "冷萃配方口诀"},
+        {"id": "06-f2", "phrases": ["30 克", "360 毫升", "1:12"], "note": "配方参数数字"},
+        {"id": "06-f3", "phrases": ["16 小时"], "note": "冷藏时长"},
+        {"id": "06-f4", "phrases": ["顾行舟", "1:10"], "note": "观点分歧:顾行舟喜欢 1:10"}
+      ],
+      "verbatim_fragments": ["一粉十二水,冷藏十六时,粗磨不过筛", "粉水比 1:12", "30 克"]
+    }
+  }
+}

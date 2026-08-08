@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import tempfile
@@ -9,6 +10,7 @@ import threading
 import unittest
 import urllib.error
 import urllib.request
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from noetide_micro.product import NoetideApp
@@ -177,6 +179,90 @@ class ProductAskTests(unittest.TestCase):
             result = app.ask("小米是哪一年创立的?")
             self.assertEqual(result["answer_status"], "answered")
             self.assertIn("2010", result["answer_text"])
+            app.close()
+
+
+# -- 本地向量召回(ask_retrieval=embedding) ------------------------------------
+
+_EMBED_GROUPS = ["创立创办成立", "小米", "雷军劳模", "年份"]
+
+
+def _fake_embed(text: str) -> list[float]:
+    """确定性假向量:按语义组计数,同义词(创立/创办)落在同一维度。"""
+    return [float(sum(text.count(ch) for ch in group)) for group in _EMBED_GROUPS]
+
+
+class _FakeEmbedHandler(BaseHTTPRequestHandler):
+    def do_POST(self) -> None:
+        length = int(self.headers.get("Content-Length") or 0)
+        body = json.loads(self.rfile.read(length).decode("utf-8"))
+        payload = json.dumps({"data": [{"embedding": _fake_embed(text)} for text in body.get("input", [])]}).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(payload)))
+        self.end_headers()
+        self.wfile.write(payload)
+
+    def log_message(self, *args: object) -> None:
+        return
+
+
+@contextlib.contextmanager
+def _embed_server():
+    server = ThreadingHTTPServer(("127.0.0.1", 0), _FakeEmbedHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield f"http://127.0.0.1:{server.server_address[1]}/v1/chat/completions"
+    finally:
+        server.shutdown()
+        server.server_close()
+
+
+class EmbeddingRetrievalTests(unittest.TestCase):
+    def _app_with_memory(self, tmp: str, endpoint: str) -> NoetideApp:
+        app = NoetideApp(tmp)
+        app.ingest_text("小米集团由雷军于2010年创立,2018年在港股上市。")
+        app.ingest_text("雷军被业界公认为劳模,以高强度工作著称。")
+        app.analyze_sources()  # offline 规则提取 + 确认,与检索方式无关
+        for candidate in app.list_candidates():
+            app.confirm_candidate(candidate["candidate_id"])
+        app.update_settings({
+            "model_mode": "local",
+            "model_endpoint": endpoint,
+            "ask_retrieval": "embedding",
+        })
+        return app
+
+    def test_embedding_recalls_synonym_lexical_misses(self) -> None:
+        """"创办年份"字面匹配不到"创立":字面模式诚实 no_coverage,向量模式召回后核对通过。"""
+        with tempfile.TemporaryDirectory() as tmp, _embed_server() as endpoint:
+            app = self._app_with_memory(tmp, endpoint)
+            result = app.ask("小米的创办年份?")
+            self.assertEqual(result["answer_status"], "answered")
+            self.assertIn("2010", result["answer_text"])
+            self.assertEqual(result["coverage"]["retrieval"], "embedding")
+            app.update_settings({"ask_retrieval": "lexical"})
+            lexical = app.ask("小米的创办年份?")
+            self.assertEqual(lexical["answer_status"], "no_coverage")
+            self.assertEqual(lexical["coverage"]["retrieval"], "lexical")
+            app.close()
+
+    def test_embedding_unavailable_falls_back_honestly(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            app = self._app_with_memory(tmp, "http://127.0.0.1:1/v1/chat/completions")
+            result = app.ask("小米的创办年份?")
+            self.assertEqual(result["coverage"]["retrieval"], "embedding_unavailable_fallback_lexical")
+            self.assertIn(result["answer_status"], ("answered", "no_coverage"))
+            app.close()
+
+    def test_embedding_never_used_in_cloud_mode(self) -> None:
+        """隐私边界:cloud 模式即使开了 ask_retrieval=embedding 也不用向量——记忆文本不出网。"""
+        with tempfile.TemporaryDirectory() as tmp, _embed_server() as endpoint:
+            app = self._app_with_memory(tmp, endpoint)
+            app.update_settings({"model_mode": "cloud"})
+            result = app.ask("小米的创办年份?")
+            self.assertEqual(result["coverage"]["retrieval"], "lexical")
             app.close()
 
 if __name__ == "__main__":    unittest.main()

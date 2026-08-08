@@ -23,6 +23,8 @@ _LOOPBACK_NAMES = frozenset({"localhost"})
 # 标准 MCP 协议 initialize 握手回的 serverInfo 版本:单一来源 = 包 __version__
 # (与 pyproject.toml 同步;2026-08-08 起不再单独手工维护)
 MCP_SERVER_VERSION = NOETIDE_VERSION
+# 服务端实际支持的 MCP 协议版本(initialize 协商用,新→旧)
+MCP_PROTOCOL_VERSIONS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
 
 def _split_host(value: str) -> str:
@@ -208,6 +210,10 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
         if not self._request_origin_allowed():
             self._json(403, {"status": "rejected", "reason": "forbidden_origin"})
             return
+        if self.path == "/mcp":
+            # 无会话实现不支持独立 SSE 流;规范要求回 405 而非 404
+            self._json(405, {"jsonrpc": "2.0", "id": None, "error": {"code": -32601, "message": "standalone SSE stream not supported"}})
+            return
         if self.path == "/" or self.path == "/index.html":
             html_path = Path(__file__).with_name(APP_HTML_NAME)
             if not html_path.exists():
@@ -255,12 +261,16 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
         msg_id = body.get("id")
         params = body.get("params") if isinstance(body.get("params"), dict) else {}
         if method == "initialize":
+            requested = str(params.get("protocolVersion") or "")
+            # 版本协商:只在支持清单内才回显,否则回服务端实际支持的最高版本,
+            # 由客户端决定是否继续(2026-08-08 真实 MCP SDK 客户端验证发现)
+            negotiated = requested if requested in MCP_PROTOCOL_VERSIONS else MCP_PROTOCOL_VERSIONS[-1]
             self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {
-                "protocolVersion": str(params.get("protocolVersion") or "2024-11-05"),
+                "protocolVersion": negotiated,
                 "capabilities": {"tools": {"listChanged": False}, "resources": {"listChanged": False}},
-                "serverInfo": {"name": "noetide", "version": MCP_SERVER_VERSION},
+                "serverInfo": {"name": "sayhi", "version": MCP_SERVER_VERSION},
                 "instructions": (
-                    "识海 Noetide:本地优先的个人记忆中枢。ask_memory 用自然语言查询用户"
+                    "识海 sayhi:本地优先的个人记忆中枢。ask_memory 用自然语言查询用户"
                     "已确认的记忆(只读、有证据才答、绝不编造);propose_changeset 提议新记忆,"
                     "由用户在网页上确认后生效;read_resource 读取授权范围内的原始资料。"
                     "默认使用本地默认能力令牌;限定范围时用 X-Noetide-Capability 请求头"
@@ -268,8 +278,14 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
                 ),
             }})
             return
-        if method == "ping" or (isinstance(method, str) and method.startswith("notifications/")):
+        if method == "ping":
             self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {}})
+            return
+        if isinstance(method, str) and method.startswith("notifications/"):
+            # 规范:notification 无 id,服务端回 202 Accepted 且无 body
+            self.send_response(202)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
             return
         if method == "tools/list":
             self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {"tools": MCP_TOOL_DESCRIPTORS}})
@@ -355,6 +371,13 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
             "idempotency_key": idem,
         }
         return app.mcp_handle(request, payload)
+
+    def do_DELETE(self) -> None:
+        if self.path == "/mcp":
+            # 无会话实现没有可终止的会话;规范要求回 405(JSON,不是默认 HTML 错误页)
+            self._json(405, {"jsonrpc": "2.0", "id": None, "error": {"code": -32601, "message": "session termination not supported"}})
+            return
+        self._json(404, {"status": "rejected", "reason": "not_found"})
 
     def log_message(self, format: str, *args: Any) -> None:
         return

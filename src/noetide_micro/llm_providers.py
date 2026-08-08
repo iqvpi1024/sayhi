@@ -218,6 +218,47 @@ def chat_completion(
         raise ProviderCallError(_scrub(str(exc), key)) from exc
 
 
+def embeddings_endpoint(chat_endpoint: str) -> str:
+    """从 chat completions 端点推导 OpenAI 兼容 /embeddings 端点;无法推导返回空。"""
+    endpoint = str(chat_endpoint or "").strip()
+    if endpoint.endswith("/chat/completions"):
+        return endpoint[: -len("/chat/completions")] + "/embeddings"
+    return ""
+
+
+def embed_texts(
+    endpoint: str | None,
+    api_key: str | None,
+    model: str | None,
+    texts: list[str],
+    timeout: float = 30.0,
+) -> list[list[float]]:
+    """OpenAI 兼容 /embeddings 调用,返回与输入等长的向量列表。
+
+    隐私边界:本函数不做门禁,调用方(product.py `_ask_relevant_embedding`)
+    负责只在 local 模式 + loopback 端点下使用——记忆文本不因召回而出本机。
+    所有异常收敛为 ProviderCallError 且 message 经脱敏。
+    """
+    url = embeddings_endpoint(str(endpoint or ""))
+    if not url:
+        raise ProviderCallError("embeddings_endpoint_missing")
+    key = str(api_key or "").strip()
+    headers: JsonObject = {}
+    if key:
+        headers["Authorization"] = "Bearer " + key
+    body = {"model": str(model or "").strip() or "nomic-embed-text", "input": [str(text) for text in texts]}
+    try:
+        payload = _post_json(url, headers, body, timeout)
+        vectors = [[float(value) for value in item["embedding"]] for item in payload["data"]]
+        if len(vectors) != len(texts):
+            raise ProviderCallError("embeddings_count_mismatch")
+        return vectors
+    except ProviderCallError as exc:
+        raise ProviderCallError(_scrub(str(exc), key)) from exc
+    except Exception as exc:
+        raise ProviderCallError(_scrub(str(exc), key)) from exc
+
+
 # -- 结构化提取 prompt 与解析器 ------------------------------------------------
 
 EXTRACTION_OBJECT_TYPES = ("entity", "project", "commitment", "event", "assertion")

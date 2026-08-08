@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 Set-StrictMode -Version Latest
 
-function Write-Step([string]$Message) { Write-Output "[Noetide Setup] $Message" }
+function Write-Step([string]$Message) { Write-Output "[sayhi Setup] $Message" }
 
 try {
     $bundleRoot = Split-Path -Parent $PSScriptRoot
@@ -95,9 +95,11 @@ try {
 
     Write-Step "data folder: $resolvedData"
     Write-Step "privacy choices recorded: $privacyPath"
-    & $runtime -m noetide_micro --data-dir $resolvedData status
-    if ($LASTEXITCODE -ne 0) { throw "status check failed after setup" }
-    Write-Step "setup complete. Use 'Noetide Start.cmd' to open the web management UI, or 'Noetide Shell.cmd' for command line."
+    # 健康检查走产品层 NoetideApp:`status` 命令面向 demo fixture 库,对
+    # product-init 的数据库会误报 SeedConflictError(2026-08-08 实测确认)
+    & $runtime -c "from noetide_micro.product import NoetideApp; app = NoetideApp(r'$resolvedData'); app.overview(); app.close()"
+    if ($LASTEXITCODE -ne 0) { throw "health check failed after setup" }
+    Write-Step "setup complete. Use 'sayhi Start.cmd' to open the web management UI, or 'sayhi Shell.cmd' for command line."
     exit 0
 }
 catch {

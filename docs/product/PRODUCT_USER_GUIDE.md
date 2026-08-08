@@ -18,9 +18,9 @@
 Windows 下推荐用便携包：
 
 1. 下载并解压 `Noetide-beta-v0.2.0-win64.zip`（或本轮构建的新包）。
-2. 双击 `scripts/Noetide Setup.cmd`。
+2. 双击 `scripts/sayhi Setup.cmd`。
 3. 第一次会问你数据文件夹放在哪，选一个你认识、能随时找到的文件夹。
-4. 双击 `scripts/Noetide Start.cmd`。
+4. 双击 `scripts/sayhi Start.cmd`。
 5. 浏览器打开 `http://127.0.0.1:8765`。
 
 如果你在源码目录里运行，也可以：
