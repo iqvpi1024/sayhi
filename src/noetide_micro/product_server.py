@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hmac
+import hashlib
 import http.server
 import ipaddress
 import json
@@ -11,12 +12,15 @@ import urllib.parse
 from pathlib import Path
 from typing import Any, Mapping
 
-from .product import NoetideApp
+from .mcp_runtime import CONTRACT_VERSION as MCP_CONTRACT_VERSION, TOOL_DESCRIPTORS as MCP_TOOL_DESCRIPTORS
+from .product import NoetideApp, utc_now
 
 JsonObject = dict[str, Any]
 APP_HTML_NAME = "webui.html"
 _MAX_BODY_BYTES = 1 << 20  # 请求体上限 1 MiB，防止内存耗尽
 _LOOPBACK_NAMES = frozenset({"localhost"})
+# 标准 MCP 协议 initialize 握手回的 serverInfo 版本(随发布手动同步)
+MCP_SERVER_VERSION = "0.3.2"
 
 
 def _split_host(value: str) -> str:
@@ -138,7 +142,9 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
                 if path_only == "/api/settings":
                     return 200, {"status": "ok", "settings": app.public_settings()}
                 if path_only == "/api/mcp":
-                    return 200, {"status": "ok", "capabilities": app.mcp_capabilities()}
+                    return 200, {"status": "ok", "capabilities": app.mcp_capabilities(), "tools": MCP_TOOL_DESCRIPTORS}
+                if path_only == "/api/analyze/status":
+                    return 200, {"status": "ok", "data": app.analysis_status()}
                 if len(segments) == 3 and segments[0] == "api" and segments[1] == "sources":
                     source = app.get_source(segments[2])
                     return (200, {"status": "ok", "source": source}) if source else (404, {"status": "rejected", "reason": "source_not_found"})
@@ -158,7 +164,7 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
                     return 200, {"status": "ok", "data": result}
                 if path_only == "/api/analyze":
                     source_ids = body.get("source_ids") if isinstance(body, dict) else None
-                    result = app.analyze_sources(source_ids)
+                    result = app.start_analysis(source_ids)
                     return 200, {"status": "ok", "data": result}
                 if path_only == "/api/ask":
                     if not isinstance(body, dict) or not isinstance(body.get("question"), str) or not body["question"].strip():
@@ -225,14 +231,128 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
             if not self._authorized():
                 self._json(401, {"jsonrpc": "2.0", "id": body.get("id") if isinstance(body, dict) else None, "error": {"code": -32001, "message": "unauthorized"}})
                 return
-            if not isinstance(body, dict) or not isinstance(body.get("params"), dict) or not isinstance(body["params"].get("request"), dict):
-                self._json(400, {"jsonrpc": "2.0", "id": body.get("id") if isinstance(body, dict) else None, "error": {"code": -32602, "message": "invalid params"}})
+            if isinstance(body, dict) and isinstance(body.get("params"), dict) and isinstance(body["params"].get("request"), dict):
+                # 遗留合同形状(params.request)原样保留,内部工具与测试继续可用
+                result = self.server.app.mcp_handle(body["params"]["request"], body["params"].get("payload"))
+                self._json(200, {"jsonrpc": "2.0", "id": body.get("id"), "result": result})
                 return
-            result = self.server.app.mcp_handle(body["params"]["request"], body["params"].get("payload"))
-            self._json(200, {"jsonrpc": "2.0", "id": body.get("id"), "result": result})
+            if isinstance(body, dict) and isinstance(body.get("method"), str):
+                # 标准 MCP 协议(initialize/tools/list/tools/call/resources/*),
+                # 主流 Agent(Claude Code、Codex 等)可直接把 /mcp 配为 MCP server
+                self._handle_standard_mcp(body)
+                return
+            self._json(400, {"jsonrpc": "2.0", "id": body.get("id") if isinstance(body, dict) else None, "error": {"code": -32602, "message": "invalid params"}})
             return
         status, payload = self._route_api("POST", self.path, body)
         self._json(status, payload)
+
+    # -- 标准 MCP 协议层(initialize/tools/list/tools/call/resources/*) --------
+
+    def _handle_standard_mcp(self, body: JsonObject) -> None:
+        method = body.get("method")
+        msg_id = body.get("id")
+        params = body.get("params") if isinstance(body.get("params"), dict) else {}
+        if method == "initialize":
+            self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {
+                "protocolVersion": str(params.get("protocolVersion") or "2024-11-05"),
+                "capabilities": {"tools": {"listChanged": False}, "resources": {"listChanged": False}},
+                "serverInfo": {"name": "noetide", "version": MCP_SERVER_VERSION},
+                "instructions": (
+                    "识海 Noetide:本地优先的个人记忆中枢。ask_memory 用自然语言查询用户"
+                    "已确认的记忆(只读、有证据才答、绝不编造);propose_changeset 提议新记忆,"
+                    "由用户在网页上确认后生效;read_resource 读取授权范围内的原始资料。"
+                    "默认使用本地默认能力令牌;限定范围时用 X-Noetide-Capability 请求头"
+                    "指定 capability_id。"
+                ),
+            }})
+            return
+        if method == "ping" or (isinstance(method, str) and method.startswith("notifications/")):
+            self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {}})
+            return
+        if method == "tools/list":
+            self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {"tools": MCP_TOOL_DESCRIPTORS}})
+            return
+        if method == "resources/list":
+            internal = self._standard_call("list_resources", {})
+            resource_ids = ((internal.get("payload") or {}).get("resource_ids") or []) if isinstance(internal.get("payload"), dict) else []
+            self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {
+                "resources": [
+                    {"uri": f"noetide://source/{sid}", "name": str(sid), "mimeType": "text/plain"}
+                    for sid in resource_ids
+                ],
+            }})
+            return
+        if method == "resources/read":
+            uri = str(params.get("uri") or "")
+            prefix = "noetide://source/"
+            if not uri.startswith(prefix):
+                self._json(200, {"jsonrpc": "2.0", "id": msg_id, "error": {"code": -32602, "message": "unknown resource uri"}})
+                return
+            internal = self._standard_call("read_resource", {"resource_id": uri[len(prefix):]})
+            denied = internal.get("result_status") != "ok"
+            text = json.dumps(internal.get("payload"), ensure_ascii=False) if not denied else json.dumps(
+                {"denied": (internal.get("error") or {}).get("code")}, ensure_ascii=False)
+            self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {
+                "contents": [{"uri": uri, "mimeType": "application/json", "text": text}],
+                "isError": denied,
+            }})
+            return
+        if method == "tools/call":
+            name = params.get("name")
+            arguments = params.get("arguments") if isinstance(params.get("arguments"), dict) else {}
+            known = {tool["name"] for tool in MCP_TOOL_DESCRIPTORS}
+            if name not in known:
+                self._json(200, {"jsonrpc": "2.0", "id": msg_id, "error": {"code": -32601, "message": "unknown tool"}})
+                return
+            internal = self._standard_call(str(name), arguments)
+            denied = internal.get("result_status") not in ("ok", "accepted")
+            self._json(200, {"jsonrpc": "2.0", "id": msg_id, "result": {
+                "content": [{"type": "text", "text": json.dumps(internal, ensure_ascii=False)}],
+                "isError": denied,
+            }})
+            return
+        self._json(200, {"jsonrpc": "2.0", "id": msg_id, "error": {"code": -32601, "message": "method not found"}})
+
+    def _standard_call(self, action: str, arguments: Mapping[str, Any]) -> JsonObject:
+        """把标准 MCP 调用翻译为内部能力令牌合同:默认本地默认令牌,
+        或用 X-Noetide-Capability 请求头指定限定范围的令牌。"""
+        app = self.server.app
+        capability_id = self.headers.get("X-Noetide-Capability") or ""
+        if capability_id:
+            capability = next((item for item in app.mcp_capabilities() if item.get("capability_id") == capability_id), None)
+            if capability is None:
+                return {"result_status": "denied", "error": {"code": "unknown_capability", "message": "unknown capability"}, "payload": "withheld"}
+        else:
+            capability = app.default_mcp_capability()
+        scope_ids = list(capability.get("resource_ids") or [])
+        payload: JsonObject = {}
+        if action == "read_resource":
+            scope_ids = [str(arguments.get("resource_id") or "")]
+            payload = {"resource_id": arguments.get("resource_id"), "fields": arguments.get("fields")}
+        elif action == "ask_memory":
+            payload = {"question": arguments.get("question")}
+        elif action == "propose_changeset":
+            payload = {"candidate": arguments.get("candidate")}
+        elif action == "record_source":
+            payload = {"source": arguments.get("source")}
+        idem = arguments.get("idempotency_key")
+        if not isinstance(idem, str) or not idem:
+            # 缺省幂等键按内容哈希派生:网络重试/Agent 重复调用不产生重复写入
+            idem = "std_" + hashlib.sha256(
+                json.dumps({"action": action, "arguments": dict(arguments)}, ensure_ascii=False, sort_keys=True, default=str).encode("utf-8")
+            ).hexdigest()[:16]
+        request = {
+            "contract_version": MCP_CONTRACT_VERSION,
+            "request_id": "mcp_std_" + idem,
+            "caller_ref": capability["actor"],
+            "purpose": capability["purpose"],
+            "capability_ref": capability["capability_id"],
+            "scope": {"resource_ids": scope_ids},
+            "requested_at": utc_now(),
+            "action": action,
+            "idempotency_key": idem,
+        }
+        return app.mcp_handle(request, payload)
 
     def log_message(self, format: str, *args: Any) -> None:
         return

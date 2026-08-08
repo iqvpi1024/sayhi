@@ -132,6 +132,7 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <div class="panel">
 <h2>分析来源</h2>
 <div class="actions"><button class="primary" id="analyzeBtn">运行识灵分析</button><span class="pill" id="analyzeMode">离线规则</span></div>
+<div class="row-sub" id="analyzeProgress" style="margin:6px 0"></div>
 <div id="sourceCheckList"></div>
 </div>
 <div class="panel"><h2>候选</h2><div id="candidateList"></div></div>
@@ -166,6 +167,7 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <div class="row"><div class="row-main"><div class="row-title">自定义授权</div><div class="row-sub"><input id="capabilityResourceIds" placeholder="src_p_xxx, src_p_yyy"></div></div><button class="small" id="createResourceCapabilityBtn">创建</button></div>
 </div>
 <div class="panel"><h2>MCP 授权</h2><div id="capabilityList"></div></div>
+<div class="panel"><h2>Agent 可用工具</h2><div class="row-sub" style="margin-bottom:8px">任何支持 MCP 的 Agent(Claude Code、Codex 等)把上面的 MCP 地址配为 server 即可使用以下工具;提议的记忆在「识灵分析」页由你确认后生效。</div><div id="mcpToolList"></div></div>
 </section>
 
 <section class="view" id="view-export">
@@ -278,6 +280,9 @@ async function loadAnalyze(){
   $('#sourceCheckList').innerHTML=list.map(s=>`<div class="check"><input type="checkbox" value="${esc(s.source_id)}" checked><div class="row-main"><div class="row-title">${esc(s.title||s.source_id)}</div><div class="row-sub">${esc(s.preview||'')}</div></div></div>`).join('')||empty('请先导入资料');
   $('#analyzeMode').textContent=(await api('/api/settings')).settings?.model_mode==='offline'?'离线规则':'外部模型';
   renderCandidates(candidates.candidates||[]);
+  const st=(await api('/api/analyze/status')).data||{};
+  if(st.running)pollAnalysis();
+  else if(st.finished_at)$('#analyzeProgress').textContent=st.error?`上次分析中断:${st.error}`:`上次分析:候选 ${st.candidates||0} 条${st.rejected?`,拒绝 ${st.rejected} 份`:''}`;
 }
 function renderCandidates(items){
   $('#candidateList').innerHTML=items.filter(c=>c.status!=='rejected').map(c=>{
@@ -322,6 +327,7 @@ async function loadAgent(){
   $('#apiToken').textContent=s.api_token||'-';
   const caps=cap.capabilities||[];
   $('#capabilityList').innerHTML=caps.map(c=>row(c.capability_id,c.purpose+' · '+(c.tools||[]).join(', '),pill(c.revoked?'已撤销':'有效'))).join('')||empty('尚未创建授权');
+  $('#mcpToolList').innerHTML=(cap.tools||[]).map(t=>row(t.name,esc(t.description||''),pill('工具'))).join('')||empty('无可用工具');
 }
 async function loadExport(){$('#exportResult').innerHTML=empty('暂无结果');}
 async function loadSettings(){
@@ -397,9 +403,24 @@ $('#analyzeBtn').addEventListener('click',async()=>{
   const ids=$$('#sourceCheckList input:checked').map(i=>i.value);
   if(!ids.length){$('#candidateList').innerHTML=empty('请选择来源');return;}
   const r=await post('/api/analyze',{source_ids:ids});
-  renderCandidates((r.data?.candidates_proposed||[]));
-  if(r.data?.rejected_outputs?.length){$('#candidateList').insertAdjacentHTML('beforeend','<div class="empty">部分模型输出被拒绝</div>');}
+  if(r.data?.started===false){$('#analyzeProgress').textContent='识灵分析正在运行中,请稍候…';pollAnalysis();return;}
+  if(r.data?.started){pollAnalysis();}
 });
+let _analyzeTimer=null;
+async function pollAnalysis(){
+  if(_analyzeTimer)clearTimeout(_analyzeTimer);
+  const r=await api('/api/analyze/status');
+  const d=r.data||{};
+  if(d.running){
+    $('#analyzeProgress').textContent=`识灵分析中 ${d.done||0}/${d.total||0}${d.current?':'+d.current:''}(外部模型每份资料约需一分钟,请不要关闭页面)`;
+    _analyzeTimer=setTimeout(pollAnalysis,2000);
+    return;
+  }
+  if(d.finished_at){
+    $('#analyzeProgress').textContent=d.error?`分析中断:${d.error}`:`分析完成:新增候选 ${d.candidates||0} 条${d.rejected?`,拒绝 ${d.rejected} 份`:''}`;
+    await loadAnalyze();
+  }
+}
 document.addEventListener('click',async e=>{
   const confirmBtn=e.target.closest('[data-confirm]');
   const rejectBtn=e.target.closest('[data-reject]');

@@ -236,9 +236,12 @@ def build_extraction_prompt(source_text: str) -> str:
     return (
         "请从以下材料中提取少量可审核候选,只输出一个 JSON 数组。\n"
         '每个元素格式:{"object_type":"entity|project|commitment|event|assertion",'
-        '"label":"人名/项目名/短语","summary":"一句话说明","evidence_quote":"原文逐字引用"}\n'
+        '"label":"人名/项目名/短语","summary":"说明文字","evidence_quote":"原文逐字引用"}\n'
         "规则:object_type 只能是白名单值;evidence_quote 必须在原文中逐字出现;"
         "不得编造原文没有的事实;没有可提取内容时输出 []。\n"
+        "summary 要求:保留实质内容,不得笼统概括——具体人名、数字、日期、清单、"
+        "口诀、条件、结论等关键信息必须原样写进 summary(可一到三句话);"
+        "禁止只写\"提到了某方法\"而不写方法本身。\n"
         "材料:\n" + source_text
     )
 

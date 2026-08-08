@@ -10,6 +10,7 @@ import ipaddress
 import json
 import re
 import secrets
+import threading
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -128,7 +129,16 @@ class NoetideApp:
         self._store = SemanticStore(self.data_dir / "noetide.sqlite3", check_same_thread=False)
         self._ensure_initialized()
         self._settings = self._load_settings()
-        self._mcp = McpRuntime(self._store, self._now, profile=MCP_PROFILE, policy_available=True)
+        self._mcp = McpRuntime(
+            self._store, self._now, profile=MCP_PROFILE, policy_available=True,
+            ask_handler=self._mcp_ask,
+        )
+        # 识灵分析进度状态:后台线程更新,GET /api/analyze/status 只读透出
+        self._analysis_lock = threading.Lock()
+        self._analysis_progress: JsonObject = {
+            "running": False, "total": 0, "done": 0, "current": None,
+            "finished_at": None, "error": None, "candidates": 0, "rejected": 0,
+        }
 
     def close(self) -> None:
         self._store.close()
@@ -409,7 +419,7 @@ class NoetideApp:
         source = self._store.seeded_source(source_id)
         return dict(source) if source is not None else None
 
-    def analyze_sources(self, source_ids: Iterable[str] | None = None) -> JsonObject:
+    def analyze_sources(self, source_ids: Iterable[str] | None = None, progress: JsonObject | None = None) -> JsonObject:
         if source_ids is None:
             sources = [
                 source for source in self._store.portability_snapshot()["sources"]
@@ -421,12 +431,16 @@ class NoetideApp:
                 source for source in self._store.portability_snapshot()["sources"]
                 if source["source_id"] in ids
             ]
+        if progress is not None:
+            progress.update({"total": len(sources), "done": 0, "current": None})
         candidates: list[JsonObject] = []
         rejected: list[JsonObject] = []
         extraction_stats: JsonObject = {}
         seen_ids = [source["source_id"] for source in sources]
         mode = self._settings.get("model_mode", "offline")
         for source in sources:
+            if progress is not None:
+                progress["current"] = source.get("title") or source_id_title(source)
             if mode == "offline":
                 items = self._offline_items(source)
                 failure = None
@@ -437,11 +451,15 @@ class NoetideApp:
                 extraction_stats[source["source_id"]] = stats
             if failure:
                 rejected.append({"source_id": source["source_id"], "reason": failure})
+                if progress is not None:
+                    progress["done"] += 1
                 continue
             for item in items:
                 candidate = self._persist_candidate(item, source)
                 if candidate is not None:
                     candidates.append(candidate)
+            if progress is not None:
+                progress["done"] += 1
         self._refresh_projection()
         result: JsonObject = {
             "batch_id": "batch_p_" + _sha256(_canonical_json({"mode": mode, "sources": seen_ids}))[:16],
@@ -454,6 +472,39 @@ class NoetideApp:
             # 提取统计(含编造证据丢弃计数)随批次返回,供界面诚实呈现
             result["extraction_stats"] = extraction_stats
         return result
+
+    # -- analysis progress(后台识灵分析 + 进度透出) --------------------------
+
+    def start_analysis(self, source_ids: Iterable[str] | None = None) -> JsonObject:
+        """后台启动识灵分析;已在运行时拒绝重复启动。进度用 analysis_status() 查询。"""
+        with self._analysis_lock:
+            if self._analysis_progress.get("running"):
+                return {"started": False, "reason": "already_running"}
+            self._analysis_progress = {
+                "running": True, "total": 0, "done": 0, "current": None,
+                "finished_at": None, "error": None, "candidates": 0, "rejected": 0,
+            }
+            thread = threading.Thread(
+                target=self._run_analysis, args=(source_ids,),
+                name="noetide-analysis", daemon=True,
+            )
+            thread.start()
+            return {"started": True}
+
+    def _run_analysis(self, source_ids: Iterable[str] | None) -> None:
+        try:
+            result = self.analyze_sources(source_ids, progress=self._analysis_progress)
+            self._analysis_progress["candidates"] = len(result.get("candidates_proposed") or [])
+            self._analysis_progress["rejected"] = len(result.get("rejected_outputs") or [])
+        except Exception as exc:  # 后台线程不得把异常吞掉:诚实透出错误类型
+            self._analysis_progress["error"] = type(exc).__name__
+        finally:
+            self._analysis_progress["running"] = False
+            self._analysis_progress["finished_at"] = utc_now()
+
+    def analysis_status(self) -> JsonObject:
+        with self._analysis_lock:
+            return dict(self._analysis_progress)
 
     def _has_candidates(self, source_id: str) -> bool:
         return any(
@@ -882,10 +933,12 @@ class NoetideApp:
 
     # -- 问识海(只读问答) ---------------------------------------------------
 
-    def ask(self, question: str) -> JsonObject:
+    def ask(self, question: str, source_scope: set[str] | None = None) -> JsonObject:
         """诚实问答:只基于已确认记忆+原文证据,调用 answers.py 语义层逐条核对。
 
         无证据时明确回答"不知道/没有覆盖",绝不编造;本方法是只读操作,零写入。
+        source_scope 非空时(MCP Agent 路径)只看能力令牌授权的资料,
+        红线舱室一律不可见;覆盖度声明如实反映收缩后的范围。
         """
         question = str(question or "").strip()
         if not question:
@@ -894,6 +947,12 @@ class NoetideApp:
         snapshot = self._store.portability_snapshot()
         sources = list(snapshot["sources"])
         canonical = list(snapshot["canonical"])
+        if source_scope is not None:
+            sources = [
+                source for source in sources
+                if source["source_id"] in source_scope
+                and not (set(source.get("compartments") or []) & RED_LINE_COMPARTMENTS)
+            ]
         source_by_id = {source["source_id"]: source for source in sources}
 
         # 产品断言适配为 AnswerEvaluator 合同形状;无法安全适配的一律不参与回答
@@ -901,6 +960,12 @@ class NoetideApp:
             item for item in (self._ask_adapt_assertion(obj) for obj in canonical)
             if item is not None
         ]
+        if source_scope is not None:
+            # 证据全部落在授权范围外的已确认记忆,对 Agent 不可见
+            adapted = [
+                item for item in adapted
+                if any(ref.get("source_id") in source_by_id for ref in item.get("evidence_refs") or [])
+            ]
         evaluator = self._ask_evaluator(adapted, sources, now)
 
         terms, primary_count = _ask_terms(question)
@@ -1201,8 +1266,71 @@ class NoetideApp:
 
     # -- MCP / agent surface -------------------------------------------------
 
+    def _mcp_ask(self, question: str, source_scope: set[str] | None) -> JsonObject:
+        """MCP ask_memory 的只读回调:复用 ask 的诚实语义,范围限能力令牌授权资料。"""
+        return self.ask(question, source_scope=source_scope)
+
     def mcp_handle(self, request: Mapping[str, Any], payload: Mapping[str, Any] | None = None) -> JsonObject:
-        return self._mcp.handle_request(request, payload)
+        result = self._mcp.handle_request(request, payload)
+        # Agent 提议的 changeset 同步落入产品候选队列:用户在网页上确认/拒绝,
+        # 最终确认权始终在用户手里(MCP 层 approve 类工具硬禁用)。
+        if (
+            isinstance(request, Mapping)
+            and request.get("action") == "propose_changeset"
+            and result.get("result_status") == "accepted"
+            and isinstance(payload, Mapping)
+            and isinstance(payload.get("candidate"), Mapping)
+        ):
+            self._persist_mcp_candidate(payload["candidate"], request, result.get("receipt_ref"))
+        return result
+
+    def _persist_mcp_candidate(
+        self,
+        candidate: Mapping[str, Any],
+        request: Mapping[str, Any],
+        receipt_ref: Any,
+    ) -> JsonObject | None:
+        """把 MCP propose_changeset 的候选写入产品候选队列(product_candidate 账本)。
+
+        运行时已完成候选结构/证据范围/红线校验;这里只做队列持久化与幂等去重
+        (同一 material 哈希只入队一次,重复提议返回既有候选)。
+        """
+        kind = candidate.get("candidate_kind")
+        payload = candidate.get("payload")
+        if kind not in CANDIDATE_KINDS or not isinstance(payload, Mapping):
+            return None
+        evidence_refs: list[JsonObject] = []
+        for ref in candidate.get("evidence_refs") or []:
+            if not isinstance(ref, Mapping) or not ref.get("source_id"):
+                continue
+            source = self._store.seeded_source(str(ref["source_id"]))
+            evidence_refs.append({
+                "source_id": str(ref["source_id"]),
+                "locator": dict((source or {}).get("locator") or {}),
+                "stance": "supports",
+                "claim_ref": f"{ref['source_id']}:content",
+            })
+        if not evidence_refs:
+            return None
+        material = {"candidate_kind": kind, "payload": dict(payload), "evidence_refs": evidence_refs}
+        candidate_id = "cand_p_" + _sha256(_canonical_json(material))[:16]
+        existing = self._store.ledger_record(candidate_id)
+        if existing is not None:
+            return existing
+        record: JsonObject = {
+            "candidate_id": candidate_id,
+            "candidate_kind": kind,
+            "payload": dict(payload),
+            "evidence_refs": evidence_refs,
+            "review_status": "unconfirmed",
+            "status": "proposed",
+            "model_or_rule_version": "mcp-agent:" + str(request.get("caller_ref") or "unknown"),
+            "mcp_changeset_id": receipt_ref,
+            "created_at": utc_now(),
+        }
+        self._store.put_ledger_record(candidate_id, "product_candidate", record, revision_id=self._store.current_revision())
+        self._refresh_projection()
+        return record
 
     def create_mcp_capability(self, spec: Mapping[str, Any]) -> JsonObject:
         return self._mcp.create_capability(spec)
@@ -1221,7 +1349,7 @@ class NoetideApp:
             "capability_id": "cap_product_default",
             "actor": "local_user",
             "purpose": "personal_memory_read_and_propose",
-            "tools": ["list_resources", "read_resource", "propose_changeset", "record_source"],
+            "tools": ["list_resources", "read_resource", "ask_memory", "propose_changeset", "record_source"],
             "resource_ids": source_ids,
             "resource_fields": {"read_resource": ["metadata", "content"]},
             "expires_at": "2099-12-31T23:59:59+00:00",
@@ -1236,7 +1364,7 @@ class NoetideApp:
             "capability_id": capability_id,
             "actor": "local_user",
             "purpose": "personal_memory_read_and_propose",
-            "tools": ["list_resources", "read_resource", "propose_changeset", "record_source"],
+            "tools": ["list_resources", "read_resource", "ask_memory", "propose_changeset", "record_source"],
             "resource_ids": ids,
             "resource_fields": {"read_resource": ["metadata", "content"]},
             "expires_at": "2099-12-31T23:59:59+00:00",

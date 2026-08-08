@@ -15,7 +15,7 @@ import json
 import sys
 import threading
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 from .model_capability import RED_LINE_COMPARTMENTS, ProfileRejectedError, canonical_json
 from .store import SemanticStore
@@ -24,7 +24,7 @@ from .store import SemanticStore
 JsonObject = dict[str, Any]
 SUPPORTED_PROFILE = "y2s5_mcp_runtime_v1"
 CONTRACT_VERSION = "y2s5-mcp-runtime-v1"
-READ_TOOLS = {"list_resources", "read_resource"}
+READ_TOOLS = {"list_resources", "read_resource", "ask_memory"}
 MUTATING_TOOLS = {"propose_changeset", "record_source"}
 ENABLED_TOOLS = READ_TOOLS | MUTATING_TOOLS
 DISABLED_IRREVERSIBLE_TOOLS = {
@@ -39,6 +39,93 @@ CANDIDATE_KINDS = {"entity", "episode", "commitment", "assertion"}
 ESCALATION_FIELDS = {"review_status", "confirmed", "auto_publish", "publish", "verified"}
 MAX_SOURCE_BYTES = 65536
 SOURCE_FIELDS = {"metadata", "content"}
+
+# 标准 MCP 协议(tools/list)用的工具描述表:name + description + inputSchema。
+# 与 ENABLED_TOOLS 一一对应;ask_memory 是只读工具(零写入),走能力令牌与红线门。
+TOOL_DESCRIPTORS: list[JsonObject] = [
+    {
+        "name": "list_resources",
+        "description": "列出当前能力令牌授权范围内可读的识海资料(source)与视图。",
+        "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False},
+    },
+    {
+        "name": "read_resource",
+        "description": "读取一份识海资料的元数据与原文内容(限能力令牌授权的 source_id)。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "resource_id": {"type": "string", "description": "list_resources 返回的 source_id"},
+                "fields": {"type": "array", "items": {"type": "string", "enum": ["metadata", "content"]}},
+            },
+            "required": ["resource_id"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "ask_memory",
+        "description": (
+            "用自然语言向识海的已确认记忆提问(只读,零写入)。只基于用户已确认的记忆作答,"
+            "逐条附原文证据;没有证据时诚实回答不知道,绝不编造。范围限能力令牌授权的资料。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {"question": {"type": "string", "description": "自然语言问题"}},
+            "required": ["question"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "propose_changeset",
+        "description": (
+            "提议一条新记忆候选(entity/episode/commitment/assertion),必须附 evidence_refs。"
+            "提议进入用户的候选队列,由用户在网页上确认后才成为正式记忆;Agent 无法自行确认。"
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "candidate": {
+                    "type": "object",
+                    "properties": {
+                        "candidate_kind": {"type": "string", "enum": ["entity", "episode", "commitment", "assertion"]},
+                        "payload": {"type": "object"},
+                        "evidence_refs": {
+                            "type": "array",
+                            "items": {"type": "object", "properties": {"source_id": {"type": "string"}}, "required": ["source_id"]},
+                        },
+                    },
+                    "required": ["candidate_kind", "payload", "evidence_refs"],
+                },
+                "idempotency_key": {"type": "string", "description": "可选;缺省时按内容哈希派生"},
+            },
+            "required": ["candidate"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "record_source",
+        "description": "把一段新资料(<=64KB)追加进识海(追加式,不覆盖),返回存储回执。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "source": {
+                    "type": "object",
+                    "properties": {
+                        "source_id": {"type": "string"},
+                        "content": {"type": "string"},
+                        "source_kind": {"type": "string"},
+                        "locator": {"type": "object"},
+                        "coverage_window": {"type": "object"},
+                        "compartments": {"type": "array", "items": {"type": "string"}},
+                    },
+                    "required": ["source_id", "content", "locator", "coverage_window", "compartments"],
+                },
+                "idempotency_key": {"type": "string", "description": "可选;缺省时按内容哈希派生"},
+            },
+            "required": ["source"],
+            "additionalProperties": False,
+        },
+    },
+]
 
 
 def _sha256(value: str) -> str:
@@ -163,12 +250,16 @@ class McpRuntime:
         clock: str,
         profile: str = SUPPORTED_PROFILE,
         policy_available: bool = True,
+        ask_handler: Callable[[str, set[str] | None], JsonObject] | None = None,
     ) -> None:
         if profile != SUPPORTED_PROFILE:
             raise ProfileRejectedError(profile)
         self._store = store
         self._clock = clock
         self._policy_available = bool(policy_available)
+        # ask_memory 的只读回调:由产品层注入(NoetideApp.ask),签名
+        # (question, source_scope) -> ask 结果;未注入时 ask_memory 返回 ask_unavailable。
+        self._ask_handler = ask_handler
         self._capabilities: dict[str, JsonObject] = {}
 
     # -- capability lifecycle -------------------------------------------------
@@ -366,7 +457,7 @@ class McpRuntime:
             return self._denied(request_id, "tool_not_granted")
 
         resource_ids = list(scope["resource_ids"])
-        if action != "list_resources" and not resource_ids:
+        if action not in ("list_resources", "ask_memory") and not resource_ids:
             return self._denied(request_id, "scope_mismatch")
         if not set(resource_ids) <= set(capability["resource_ids"]):
             return self._denied(request_id, "scope_mismatch")
@@ -379,6 +470,10 @@ class McpRuntime:
         for resource_id in resource_ids:
             if not isinstance(resource_id, str) or not resource_id.startswith("src_"):
                 continue
+            if action == "ask_memory":
+                # ask_memory 不做逐资源预检:ask 层会把红线舱室从范围内过滤,
+                # 诚实回答 no_coverage,而不是整请求拒绝(与 list_resources 同策略)
+                continue
             source = self._store.seeded_source(resource_id)
             if source is not None and set(source.get("compartments", [])) & RED_LINE_COMPARTMENTS:
                 return self._denied(request_id, "red_line_denied")
@@ -388,6 +483,8 @@ class McpRuntime:
                 return self._list_resources(request_id, capability, resource_ids)
             if action == "read_resource":
                 return self._read_resource(request_id, capability, resource_ids, payload)
+            if action == "ask_memory":
+                return self._ask_memory(request_id, capability, payload)
             if action == "propose_changeset":
                 return self._propose_changeset(request_id, request, capability, resource_ids, payload)
             if action == "record_source":
@@ -460,6 +557,29 @@ class McpRuntime:
             missing_evidence=False,
             payload={"redacted": redacted, "fields": sorted(visible_fields), **result},
             authorization="allowed_with_redaction" if redacted else "allowed",
+        )
+
+    def _ask_memory(self, request_id: str, capability: JsonObject, payload: Mapping[str, Any] | None) -> JsonObject:
+        """只读记忆问答:复用产品层 ask 的诚实语义,范围限能力令牌授权的资料。
+
+        零写入:不新增/修改任何 source、canonical 对象或账本业务记录(审计行除外)。
+        """
+        if not isinstance(payload, dict) or not isinstance(payload.get("question"), str) or not payload["question"].strip():
+            raise ValueError("ask_memory payload.question required")
+        if self._ask_handler is None:
+            return self._failed(
+                request_id,
+                "ask_unavailable",
+                authorization="allowed",
+                data_revision=self._store.current_revision(),
+            )
+        result = self._ask_handler(payload["question"].strip(), set(capability["resource_ids"]))
+        return self._ok(
+            request_id,
+            evidence_refs=[],
+            missing_evidence=False,
+            payload=result,
+            extra={"answer_status": result.get("answer_status", "not_applicable")},
         )
 
     def _propose_changeset(

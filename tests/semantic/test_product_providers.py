@@ -213,6 +213,14 @@ class ExtractionParserTests(unittest.TestCase):
         self.assertEqual(entries, [])
         self.assertEqual(stats["dropped_invalid"], 1)
 
+    def test_prompt_requires_substance_in_summary(self) -> None:
+        """2026-08-08 真实用户测试发现:一句话笼统概括会丢实质内容(如方法口诀),
+        提示词必须明确要求 summary 保留具体名字/数字/清单/口诀。"""
+        prompt = llm_providers.build_extraction_prompt("任意材料")
+        self.assertIn("实质内容", prompt)
+        self.assertIn("口诀", prompt)
+        self.assertIn("材料", prompt)
+
 
 class ProductProviderWiringTests(unittest.TestCase):
     def test_settings_provider_roundtrip_and_key_privacy(self) -> None:

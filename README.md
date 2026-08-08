@@ -5,7 +5,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Runtime deps: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen.svg)](pyproject.toml)
-[![Tests: 513 passed / 0 skipped](https://img.shields.io/badge/tests-513%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
+[![Tests: 525 passed / 0 skipped](https://img.shields.io/badge/tests-525%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
 [![Suites: 26 hash-bound](https://img.shields.io/badge/verification%20suites-26%20hash--bound-brightgreen.svg)](docs/testing/README.md)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey.svg)](dist/)
 
@@ -60,7 +60,7 @@
 - **候选确认**:网页里逐条确认/忽略,模型永远没有自动入库的手。
 - **问识海**:对着你的记忆提问。只根据已确认、带证据的记忆作答;没有证据就明确回答"我不知道"——不编造是它的设计,不是缺陷。
 - **记忆管理**:人物、项目、承诺、事件、断言——带证据来源、搜索、时间线,桌面和移动端自适应。
-- **Agent 接入**:MCP(JSON-RPC)+ REST API,令牌鉴权;默认工具集 `list_resources` / `read_resource` / `propose_changeset` / `record_source`。
+- **Agent 接入**:标准 MCP 协议(initialize / tools/list / tools/call / resources)+ REST API,令牌鉴权;工具集 `ask_memory`(只读问记忆)/ `list_resources` / `read_resource` / `propose_changeset` / `record_source`。
 - **导出与备份**:Context Pack 导出/导入(往返一致)、NOBAK2 加密备份(PBKDF2 + HMAC)、恢复前校验。
 - **远程访问**:默认只听回环;显式开启令牌后才可远程,未配置令牌时服务拒绝绑定公网地址。
 
@@ -78,6 +78,24 @@ python noetide_desktop.py --data-dir D:\noetide-data
 ```
 
 更详细的大白话操作说明见 [用户指南](docs/product/PRODUCT_USER_GUIDE.md)。
+
+## 把识海接进你的 Agent(Claude Code / Codex / 任何 MCP 客户端)
+
+识海不抢你的主力工具——它站在后面,做**所有 Agent 共用的记忆中枢**。你换多少个 Agent,记忆都在你自己机器上,不锁死在任何一家厂商手里。
+
+启动识海后,MCP 地址就是 `http://127.0.0.1:8765/mcp`(标准 MCP 协议,HTTP 传输)。以 Claude Code 为例:
+
+```bash
+claude mcp add --transport http noetide http://127.0.0.1:8765/mcp
+```
+
+其他 Agent(Codex、Cursor 或任何支持 MCP 的客户端)同理:把 `/mcp` 地址配为 HTTP MCP server 即可。接好后你的 Agent 可以:
+
+- `ask_memory` —— 用自然语言问你的记忆:"我最近在忙什么?""小米是哪年创立的?"只根据**你已确认的记忆**作答,逐条附原文证据;没有证据就诚实回答不知道,绝不编造。
+- `propose_changeset` —— 对话中发现关于你的新事实时,提议一条记忆候选;**提议进你的网页候选队列,你点确认才生效**——Agent 永远没有自行入库的手。
+- `read_resource` / `list_resources` / `record_source` —— 读授权范围内的原始资料、追加新资料。
+
+安全边界照旧:每个 Agent 只拿得到你签发的**能力令牌**(可用 `X-Noetide-Capability` 请求头指定限定范围的令牌);红线舱室(病历、财务等)对 Agent 永远不可见;不可逆操作(确认、删除、导出)在 MCP 层硬性禁用。
 
 ## 凭什么相信它?——证据链工程
 
