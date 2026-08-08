@@ -4,13 +4,14 @@
   "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/c1-20260808.json",
-  "latest_verification_manifest_sha256": "b3d93689ac956f44a09dac78ba1c6ebfc2e404ebe598225727a4f2dd2e7b66a9",
-  "latest_verification_result_sha256": "bdaa86a36d49a5db84972c24961eb6ae5932746bc65aadf6d0f983f92a68504a",
+  "latest_verification_result_path": "docs/testing/results/c1-revalloc-20260808.json",
+  "latest_verification_manifest_sha256": "01ba279219222dd51130452d9b6caaea9f04930ea75abe0034e3bc69a0b8f8be",
+  "latest_verification_result_sha256": "32886e9be9b155c1203b46a6de21c2de315f4e48b9715d1dd6a574d3b8d79f84",
   "historical_verification_results": [
     {"applicability": "superseded", "path": "docs/testing/results/c1-ws05-21c97a2-20260718.json", "reason": "The C1 manifest did not bind its fixture, oracle, test modules, runner and validator."},
     {"applicability": "superseded", "path": "docs/testing/results/c1-ws12-0452a0c-pyspath-20260718.json", "reason": "The runner did not fail the suite for errors in its unbound C1 integration module."},
-    {"applicability": "superseded", "path": "docs/testing/results/c1-release-8556eea-20260719.json", "reason": "C1 测试物化变更:test_c1_changesets.py 新增 decision 持久化路径(decide/close/set_predicted_outcome 经 publish_revision 落新 revision)覆盖;fixture/oracle 未动。"}
+    {"applicability": "superseded", "path": "docs/testing/results/c1-release-8556eea-20260719.json", "reason": "C1 测试物化变更:test_c1_changesets.py 新增 decision 持久化路径(decide/close/set_predicted_outcome 经 publish_revision 落新 revision)覆盖;fixture/oracle 未动。"},
+    {"applicability": "superseded", "path": "docs/testing/results/c1-20260808.json", "reason": "C1 实现层 Change Control:changesets.py 发布/补偿 revision 由硬编码 rev_011/rev_012 改为事务内 next_revision() 统一分配;fixture 基线 rev_010 下分配结果不变,7/7 同一次 run passed;fixture/oracle/测试模块未动。"}
   ],
   "required_scenario_ids": ["C1-001", "C1-002", "C1-003", "C1-004", "C1-005", "C1-006", "C1-007"],
   "artifacts": [

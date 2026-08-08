@@ -1,0 +1,102 @@
+{
+  "schema_version": "noetide.c1-run-result.v1",
+  "run_id": "c1-7c25a1c3a16f44a4bc63a10b51daea84",
+  "suite_id": "c1_decision_outcome_v1",
+  "manifest_sha256": "01ba279219222dd51130452d9b6caaea9f04930ea75abe0034e3bc69a0b8f8be",
+  "git_commit": "7a1221920a5005b8a8b9c1a23fc79f2100d0e4ba",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_c1_suite",
+    "--output",
+    "docs/testing/results/c1-revalloc-20260808.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "C1-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C1-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/c1_decision_outcome_v1/fixture.json",
+      "sha256": "08888ac9d18fc4fa37b308975a929d51da8e914321e6eb66cb01e526f8aabce0"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/c1_decision_outcome_v1/oracles.json",
+      "sha256": "a5a9107203048b1658d415fd02275f327eea772edbcafc01674f76413f5b7aab"
+    },
+    {
+      "role": "boundary_test_module",
+      "path": "tests/semantic/test_c1_boundaries.py",
+      "sha256": "b8c6def0049b4f6970d900a0a19bbd5b054e21dfc3c878bf62a6990695ad55fc"
+    },
+    {
+      "role": "changeset_test_module",
+      "path": "tests/semantic/test_c1_changesets.py",
+      "sha256": "522affae96ec6cc9e0be11f177b06a3d42ea2c2508ef3c7ee6d168ffea25b76a"
+    },
+    {
+      "role": "integration_test_module",
+      "path": "tests/semantic/test_c1_decision_outcome.py",
+      "sha256": "f1408d859dbe1c00c773dea31640a6283e5f05ee5597dabf60b69498b91a1ff0"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_c1_suite.py",
+      "sha256": "8b5422006df583c7400b096a7e9ec3610ff5a42920bff34368608df74da20e35"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c1_suite.py",
+      "sha256": "9bdad30ed659e777dc6063673983cecf5ad9a3e21eee32b0471f185aae3693a0"
+    }
+  ],
+  "privacy_scan": {
+    "status": "passed",
+    "matched_patterns": []
+  }
+}

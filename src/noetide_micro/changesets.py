@@ -62,7 +62,10 @@ class ChangeSetService:
 
         try:
             with self._store.transaction():
-                self._publish_atomic(changeset, failure_points)
+                # revision 在事务内统一分配(2026-08-08 Change Control:消除硬编码
+                # rev_011;fixture 基线 rev_010 时分配结果仍是 rev_011,合同行为不变)
+                new_revision = self._store.next_revision()
+                self._publish_atomic(changeset, failure_points, new_revision)
                 receipt_id = "receipt_publish_001"
                 receipt = {
                     "receipt_id": receipt_id,
@@ -70,20 +73,20 @@ class ChangeSetService:
                     "publish_attempt_id": attempt_id,
                     "status": "published",
                     "preflight_result": "passed",
-                    "published_revision": "rev_011",
+                    "published_revision": new_revision,
                     "view_results": [],
                 }
                 published = copy.deepcopy(changeset)
                 published.update(
-                    {"status": "published", "published_revision": "rev_011", "receipt_id": receipt_id}
+                    {"status": "published", "published_revision": new_revision, "receipt_id": receipt_id}
                 )
-                self._store.replace_ledger_record(changeset_id, published, "rev_011")
-                self._store.put_ledger_record(receipt_id, "receipt", receipt, "rev_011")
+                self._store.replace_ledger_record(changeset_id, published, new_revision)
+                self._store.put_ledger_record(receipt_id, "receipt", receipt, new_revision)
                 self._store.put_ledger_record(
                     "audit:changeset_micro_001:published",
                     "audit_event",
-                    {"changeset_id": changeset_id, "event_type": "published", "revision": "rev_011"},
-                    "rev_011",
+                    {"changeset_id": changeset_id, "event_type": "published", "revision": new_revision},
+                    new_revision,
                 )
                 self._store.put_ledger_record(
                     binding_id, "idempotency", {"changeset_id": changeset_id, "receipt_id": receipt_id}
@@ -94,9 +97,9 @@ class ChangeSetService:
             )
 
         # L2 projection is rebuildable and intentionally outside the L1 commit boundary.
-        view_results = CoreViewProjector(self._store, self._fixture).project("rev_011", failure_points)
+        view_results = CoreViewProjector(self._store, self._fixture).project(new_revision, failure_points)
         receipt["view_results"] = view_results
-        self._store.replace_ledger_record("receipt_publish_001", receipt, "rev_011")
+        self._store.replace_ledger_record("receipt_publish_001", receipt, new_revision)
         return receipt
 
     def attempts(self, changeset_id: str) -> list[JsonObject]:
@@ -143,60 +146,64 @@ class ChangeSetService:
         changeset = self._drafts.get(changeset_id)
         if changeset["status"] != "published":
             raise RuntimeError("only a published ChangeSet may be reverted")
-        if self._store.current_revision() != "rev_011":
+        published_revision = changeset["published_revision"]
+        if self._store.current_revision() != published_revision:
             raise RuntimeError("compensation requires the published revision as its base")
 
         receipt_id = "receipt_compensation_001"
         compensation = {
             "changeset_id": "changeset_compensation_001",
-            "base_revision": "rev_011",
+            "base_revision": published_revision,
             "retry_of": changeset_id,
             "actor": "user",
             "status": "published",
-            "published_revision": "rev_012",
+            "published_revision": None,  # 占位,事务内分配后回填
             "confirmation_policy": "single_confirmation",
             "proposals": [
                 {"proposal_id": "compensation_remove_001", "operation": "remove", "target_ref": "state_contact_002"},
                 {"proposal_id": "compensation_restore_001", "operation": "correct", "target_ref": "state_contact_001"},
             ],
         }
-        receipt = {
-            "receipt_id": receipt_id,
-            "changeset_id": changeset_id,
-            "compensation_changeset_id": compensation["changeset_id"],
-            "status": "published",
-            "compensation_revision": "rev_012",
-            "published_revision": "rev_012",
-            "view_results": [],
-        }
-        restored = self._fixture_state("state_contact_001")
-        restored["object_revision"] = "rev_012"
-        restored["recorded_at"] = self._now
-        restored["recorded_by"] = "user"
-
         with self._store.transaction():
+            # 补偿 revision 事务内统一分配(fixture 基线 rev_011 时仍为 rev_012)
+            new_revision = self._store.next_revision()
+            compensation["published_revision"] = new_revision
+            receipt = {
+                "receipt_id": receipt_id,
+                "changeset_id": changeset_id,
+                "compensation_changeset_id": compensation["changeset_id"],
+                "status": "published",
+                "compensation_revision": new_revision,
+                "published_revision": new_revision,
+                "view_results": [],
+            }
+            restored = self._fixture_state("state_contact_001")
+            restored["object_revision"] = new_revision
+            restored["recorded_at"] = self._now
+            restored["recorded_by"] = "user"
+
             self._store.delete_canonical_object("state_contact_002")
             self._store.replace_canonical_object("state_contact_001", restored)
             self._store.replace_evidence_refs("state_contact_001", restored["evidence_refs"])
-            self._store.add_revision("rev_012", self._now)
+            self._store.add_revision(new_revision, self._now)
             reverted = copy.deepcopy(changeset)
             reverted["status"] = "reverted"
             reverted["rollback_reference"] = compensation["changeset_id"]
-            self._store.replace_ledger_record(changeset_id, reverted, "rev_012")
-            self._store.put_ledger_record(compensation["changeset_id"], "changeset", compensation, "rev_012")
-            self._store.put_ledger_record(receipt_id, "receipt", receipt, "rev_012")
+            self._store.replace_ledger_record(changeset_id, reverted, new_revision)
+            self._store.put_ledger_record(compensation["changeset_id"], "changeset", compensation, new_revision)
+            self._store.put_ledger_record(receipt_id, "receipt", receipt, new_revision)
             self._store.put_ledger_record(
                 "audit:changeset_micro_001:reverted",
                 "audit_event",
-                {"changeset_id": changeset_id, "event_type": "reverted", "revision": "rev_012"},
-                "rev_012",
+                {"changeset_id": changeset_id, "event_type": "reverted", "revision": new_revision},
+                new_revision,
             )
             self._store.put_ledger_record(
                 binding_id, "idempotency", {"changeset_id": changeset_id, "receipt_id": receipt_id}
             )
 
-        receipt["view_results"] = CoreViewProjector(self._store, self._fixture).project("rev_012", set())
-        self._store.replace_ledger_record(receipt_id, receipt, "rev_012")
+        receipt["view_results"] = CoreViewProjector(self._store, self._fixture).project(new_revision, set())
+        self._store.replace_ledger_record(receipt_id, receipt, new_revision)
         return receipt
 
     def audit_events(self, changeset_id: str) -> list[JsonObject]:
@@ -273,7 +280,7 @@ class ChangeSetService:
         with self._store.transaction():
             self._store.replace_ledger_record(attempt_id, attempt)
 
-    def _publish_atomic(self, changeset: Mapping[str, Any], failure_points: set[str]) -> None:
+    def _publish_atomic(self, changeset: Mapping[str, Any], failure_points: set[str], new_revision: str) -> None:
         if self._store.current_revision() != changeset["base_revision"]:
             raise RuntimeError("stale base revision")
         old_state = changeset["proposals"][0]["after_value"]
@@ -284,7 +291,7 @@ class ChangeSetService:
             raise RuntimeError("injected second proposal failure")
         self._store.add_canonical_object("state_contact_002", new_state)
         self._store.replace_evidence_refs("state_contact_002", new_state["evidence_refs"])
-        self._store.add_revision("rev_011", self._now)
+        self._store.add_revision(new_revision, self._now)
 
     def _terminal_failure(
         self,

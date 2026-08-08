@@ -12,6 +12,7 @@ import urllib.parse
 from pathlib import Path
 from typing import Any, Mapping
 
+from . import __version__ as NOETIDE_VERSION
 from .mcp_runtime import CONTRACT_VERSION as MCP_CONTRACT_VERSION, TOOL_DESCRIPTORS as MCP_TOOL_DESCRIPTORS
 from .product import NoetideApp, utc_now
 
@@ -19,8 +20,9 @@ JsonObject = dict[str, Any]
 APP_HTML_NAME = "webui.html"
 _MAX_BODY_BYTES = 1 << 20  # 请求体上限 1 MiB，防止内存耗尽
 _LOOPBACK_NAMES = frozenset({"localhost"})
-# 标准 MCP 协议 initialize 握手回的 serverInfo 版本(随发布手动同步)
-MCP_SERVER_VERSION = "0.3.3"
+# 标准 MCP 协议 initialize 握手回的 serverInfo 版本:单一来源 = 包 __version__
+# (与 pyproject.toml 同步;2026-08-08 起不再单独手工维护)
+MCP_SERVER_VERSION = NOETIDE_VERSION
 
 
 def _split_host(value: str) -> str:
