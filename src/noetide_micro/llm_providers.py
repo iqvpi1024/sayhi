@@ -119,11 +119,15 @@ def _post_json(url: str, headers: Mapping[str, str], body: JsonObject, timeout: 
         return json.loads(response.read().decode("utf-8"))
 
 
-def _openai_compatible_call(endpoint: str, api_key: str, model: str, messages: list[JsonObject], timeout: float) -> str:
+def _openai_compatible_call(endpoint: str, api_key: str, model: str, messages: list[JsonObject], timeout: float, temperature: float | None = None, max_tokens: int = 4096) -> str:
     headers: JsonObject = {}
     if api_key:
         headers["Authorization"] = "Bearer " + api_key
-    body = {"model": model, "messages": messages, "temperature": 0, "max_tokens": 1024}
+    # temperature 仅在显式配置时发送:部分推理模型(如 kimi-for-coding)只允许 temperature=1,
+    # 硬编码 temperature=0 会被 400 拒绝(2026-08-08 真实 API 实测发现)。
+    body: JsonObject = {"model": model, "messages": messages, "max_tokens": max_tokens}
+    if temperature is not None:
+        body["temperature"] = temperature
     payload = _post_json(endpoint, headers, body, timeout)
     try:
         return str(payload["choices"][0]["message"]["content"])
@@ -131,7 +135,7 @@ def _openai_compatible_call(endpoint: str, api_key: str, model: str, messages: l
         raise ProviderCallError("unexpected_response_shape") from exc
 
 
-def _anthropic_call(endpoint: str, api_key: str, model: str, messages: list[JsonObject], timeout: float) -> str:
+def _anthropic_call(endpoint: str, api_key: str, model: str, messages: list[JsonObject], timeout: float, temperature: float | None = None, max_tokens: int = 4096) -> str:
     headers: JsonObject = {"anthropic-version": "2023-06-01"}
     if api_key:
         headers["x-api-key"] = api_key
@@ -142,7 +146,9 @@ def _anthropic_call(endpoint: str, api_key: str, model: str, messages: list[Json
         for m in messages
         if m.get("role") in ("user", "assistant")
     ]
-    body: JsonObject = {"model": model, "max_tokens": 1024, "messages": chat_messages}
+    body: JsonObject = {"model": model, "max_tokens": max_tokens, "messages": chat_messages}
+    if temperature is not None:
+        body["temperature"] = temperature
     if system_text:
         body["system"] = system_text
     payload = _post_json(endpoint, headers, body, timeout)
@@ -152,7 +158,7 @@ def _anthropic_call(endpoint: str, api_key: str, model: str, messages: list[Json
         raise ProviderCallError("unexpected_response_shape") from exc
 
 
-def _gemini_call(endpoint: str, api_key: str, model: str, messages: list[JsonObject], timeout: float) -> str:
+def _gemini_call(endpoint: str, api_key: str, model: str, messages: list[JsonObject], timeout: float, temperature: float | None = None, max_tokens: int = 4096) -> str:
     url = endpoint.replace("{model}", model) if "{model}" in endpoint else endpoint
     headers: JsonObject = {}
     if api_key:
@@ -163,10 +169,10 @@ def _gemini_call(endpoint: str, api_key: str, model: str, messages: list[JsonObj
         for m in messages
         if m.get("role") in ("user", "assistant")
     ]
-    body: JsonObject = {
-        "contents": contents,
-        "generationConfig": {"temperature": 0, "maxOutputTokens": 1024},
-    }
+    generation_config: JsonObject = {"maxOutputTokens": max_tokens}
+    if temperature is not None:
+        generation_config["temperature"] = temperature
+    body: JsonObject = {"contents": contents, "generationConfig": generation_config}
     if system_text:
         body["system_instruction"] = {"parts": [{"text": system_text}]}
     payload = _post_json(url, headers, body, timeout)
@@ -183,11 +189,15 @@ def chat_completion(
     model: str | None,
     messages: list[JsonObject],
     timeout: float = 15.0,
+    temperature: float | None = None,
+    max_tokens: int = 4096,
 ) -> str:
     """统一入口:按 provider 分发到对应适配器,返回模型文本。
 
     endpoint/model 为空时回落到预置表缺省值;所有异常收敛为 ProviderCallError
     且 message 经 _scrub 脱敏(不含 api_key)。
+    temperature 为 None 时不发送该字段(推理模型兼容性);max_tokens 默认 4096,
+    推理模型的 reasoning tokens 计入该额度(2026-08-08 真实 API 实测)。
     """
     preset = resolve_provider(provider)
     resolved_endpoint = str(endpoint or "").strip() or str(preset.get("endpoint") or "")
@@ -198,10 +208,10 @@ def chat_completion(
     adapter = str(preset.get("adapter") or "openai_compatible")
     try:
         if adapter == "anthropic":
-            return _anthropic_call(resolved_endpoint, key, resolved_model, messages, timeout)
+            return _anthropic_call(resolved_endpoint, key, resolved_model, messages, timeout, temperature, max_tokens)
         if adapter == "gemini":
-            return _gemini_call(resolved_endpoint, key, resolved_model, messages, timeout)
-        return _openai_compatible_call(resolved_endpoint, key, resolved_model, messages, timeout)
+            return _gemini_call(resolved_endpoint, key, resolved_model, messages, timeout, temperature, max_tokens)
+        return _openai_compatible_call(resolved_endpoint, key, resolved_model, messages, timeout, temperature, max_tokens)
     except ProviderCallError as exc:
         raise ProviderCallError(_scrub(str(exc), key)) from exc
     except Exception as exc:

@@ -5,7 +5,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Runtime deps: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen.svg)](pyproject.toml)
-[![Tests: 511 passed / 0 skipped](https://img.shields.io/badge/tests-511%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
+[![Tests: 513 passed / 0 skipped](https://img.shields.io/badge/tests-513%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
 [![Suites: 26 hash-bound](https://img.shields.io/badge/verification%20suites-26%20hash--bound-brightgreen.svg)](docs/testing/README.md)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey.svg)](dist/)
 

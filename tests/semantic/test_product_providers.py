@@ -125,7 +125,7 @@ class ProviderShapeTests(unittest.TestCase):
         self.assertIsNone(_header(request, "Authorization"))
         body = request["body"]
         self.assertEqual(body["model"], "claude-test")
-        self.assertEqual(body["max_tokens"], 1024)
+        self.assertEqual(body["max_tokens"], 4096)
         # system 是顶层字段,messages 里不允许 system 角色
         self.assertEqual(body["system"], "只输出 JSON。")
         self.assertEqual([m["role"] for m in body["messages"]], ["user"])

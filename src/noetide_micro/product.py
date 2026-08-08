@@ -32,6 +32,7 @@ FOLDER_EXTENSIONS = (".md", ".txt", ".json", ".csv", ".docx")
 CANDIDATE_KINDS = ("entity", "assertion", "commitment", "episode")
 SETTINGS_KEYS = (
     "model_mode", "model_provider", "model_endpoint", "model_api_key", "model_name",
+    "model_temperature", "model_max_tokens",
     "remote_access", "remote_host", "port", "api_token", "backup_key", "language",
 )
 # 产品云端通路复用 Y2-S4 CloudGate:授权门 + 红线门 + 预览门 + 审计账本。
@@ -513,7 +514,23 @@ class NoetideApp:
             {"role": "user", "content": llm_providers.build_extraction_prompt(source_text)},
         ]
         try:
-            raw = llm_providers.chat_completion(provider, endpoint, api_key, model, messages, timeout=15)
+            # 可选高级设置:temperature 缺省不发送(部分推理模型只允许 temperature=1);
+            # max_tokens 默认 4096(推理模型的 reasoning tokens 计入额度);
+            # timeout 120s:推理模型单次调用实测 40s+,60s 仍出现 read timeout
+            # (2026-08-08 Kimi kimi-for-coding 真实 API 实测)。
+            temperature_raw = self._settings.get("model_temperature")
+            try:
+                temperature = float(temperature_raw) if temperature_raw not in (None, "") else None
+            except (TypeError, ValueError):
+                temperature = None
+            try:
+                max_tokens = int(self._settings.get("model_max_tokens") or 4096)
+            except (TypeError, ValueError):
+                max_tokens = 4096
+            raw = llm_providers.chat_completion(
+                provider, endpoint, api_key, model, messages,
+                timeout=120, temperature=temperature, max_tokens=max_tokens,
+            )
         except Exception as exc:
             message = str(exc)
             if api_key:
@@ -886,12 +903,14 @@ class NoetideApp:
         ]
         evaluator = self._ask_evaluator(adapted, sources, now)
 
-        terms = _ask_terms(question)
+        terms, primary_count = _ask_terms(question)
+        # 相关性门槛:至少命中 min(2, 主内容词数) 个词才算相关;单词问题退化为 1。
+        threshold = min(2, primary_count)
         scored = sorted(
             ((_ask_score(item, terms), item) for item in adapted),
             key=lambda pair: (-pair[0], str(pair[1]["assertion_id"])),
         )
-        relevant = [item for score, item in scored if score > 0][:8]
+        relevant = [item for score, item in scored if score >= threshold][:8] if threshold else []
 
         verified: list[tuple[JsonObject, JsonObject]] = []
         rejected: list[tuple[JsonObject, JsonObject]] = []
@@ -933,7 +952,7 @@ class NoetideApp:
                 source = source_by_id.get(source_id)
                 evidence.append({
                     "object_id": item["assertion_id"],
-                    "object_type": "assertion",
+                    "object_type": item.get("product_object_type") or "assertion",
                     "text": item["canonical_text"],
                     "source_id": source_id,
                     "source_title": (source.get("title") if source else None) or str(source_id),
@@ -996,7 +1015,13 @@ class NoetideApp:
 
     @staticmethod
     def _ask_adapt_assertion(obj: Mapping[str, Any]) -> JsonObject | None:
-        """把已确认的 canonical 断言适配为 AnswerEvaluator 的 fixture 合同形状。
+        """把已确认的 canonical 对象适配为 AnswerEvaluator 的 fixture 合同形状。
+
+        覆盖 assertion/entity/episode/commitment 四类已确认记忆(2026-08-08 真实
+        用户测试发现:直接事实如"小米2010年创立"存在 entity 上,只答 assertion
+        会导致可答问题答不出)。语义不变:assertion_kind=reported + 查询范围
+        statement_occurrence,即只声称"资料中确实这样记录并经用户确认",不声称
+        世界事实;review_status=confirmed(对象进入 canonical 层的前提)。
 
         关键语义映射(诚实,不改 answers.py):
         - assertion_kind=reported + 查询范围 statement_occurrence:产品断言只声称
@@ -1005,11 +1030,26 @@ class NoetideApp:
         - claim_ref 细化为 source:subject:predicate:同一来源同一主体同一谓词的
           不同取值才会被判为冲突(AS-004),避免不同陈述被误报冲突。
         """
-        if obj.get("object_type") != "assertion":
+        object_type = str(obj.get("object_type") or "")
+        if object_type not in ("assertion", "entity", "episode", "commitment"):
             return None
-        text = str(obj.get("canonical_text") or obj.get("summary") or "").strip()
+        payload = obj.get("payload") if isinstance(obj.get("payload"), Mapping) else {}
+        # 各类型取最能代表其语义的文本:断言用正文,实体用名称+摘要,事件用标题+摘要,承诺用陈述
+        # (存储对象是扁平结构,字段在顶层;payload 兜底仅为健壮性)
+        if object_type == "assertion":
+            text = str(obj.get("canonical_text") or payload.get("canonical_text") or obj.get("summary") or payload.get("summary") or "").strip()
+        elif object_type == "entity":
+            label = str(obj.get("canonical_label") or payload.get("canonical_label") or "").strip()
+            detail = str(obj.get("summary") or payload.get("summary") or "").strip()
+            text = (label + ":" + detail) if label and detail else (label or detail)
+        elif object_type == "episode":
+            title = str(obj.get("title") or payload.get("title") or "").strip()
+            detail = str(obj.get("summary") or payload.get("summary") or "").strip()
+            text = (title + ":" + detail) if title and detail else (title or detail)
+        else:  # commitment
+            text = str(obj.get("statement") or payload.get("statement") or obj.get("summary") or payload.get("summary") or "").strip()
         evidence_refs = [
-            dict(ref) for ref in obj.get("evidence_refs") or []
+            dict(ref) for ref in obj.get("evidence_refs") or payload.get("evidence_refs") or []
             if isinstance(ref, Mapping) and ref.get("source_id")
         ]
         if not text or not evidence_refs:
@@ -1022,6 +1062,7 @@ class NoetideApp:
             ref["claim_ref"] = claim_ref
         return {
             "object_type": "assertion",
+            "product_object_type": object_type,
             "assertion_id": obj.get("object_id"),
             "object_revision": obj.get("object_revision"),
             "subject_ref": subject_ref,
@@ -1314,23 +1355,42 @@ def _ask_reason_text(codes: Iterable[str]) -> str:
     return ";".join(_ASK_REASON_TEXT.get(code, code) for code in codes) or "未通过证据核对"
 
 
-def _ask_terms(question: str) -> list[str]:
-    """确定性分词:英文/数字整词 + 中文整串与 2-gram,去停用词,保序去重。"""
-    terms: list[str] = []
+def _ask_terms(question: str) -> tuple[list[str], int]:
+    """确定性分词。返回 (匹配词表, 主内容词数)。
+
+    中文先按疑问/停用成分切分为内容段(“雷军的血型是什么”→[雷军,血型]),
+    长段再展开 2-gram 提高召回(“哪一年创办小米”→…/办小/小米);英文数字整词。
+    主内容词数用于相关性门槛:只命中主体的记忆不算相关(2026-08-08 真实
+    用户测试发现:“雷军的血型”不能拿“雷军是劳模”来答)。
+    """
+    split_words = (
+        "是不是", "有没有", "为什么", "什么", "怎么", "怎样", "如何", "为何",
+        "多少", "哪些", "哪个", "哪里", "哪儿", "请问", "告诉", "知道",
+        "时候", "一下", "能否", "可否", "谁",
+    )
+    split_chars = "的了是吗呢吧有没在和我你他她它请和跟与"
+    primary: list[str] = []
     for token in re.findall(r"[A-Za-z0-9_]+|[一-鿿]+", question.lower()):
         if re.fullmatch(r"[一-鿿]+", token):
-            if len(token) >= 2:
-                terms.append(token)
-            terms.extend(token[index:index + 2] for index in range(len(token) - 1))
-        elif len(token) >= 2:
-            terms.append(token)
+            for word in split_words:
+                token = token.replace(word, " ")
+            for segment in re.split("[" + split_chars + r"\s]+", token):
+                if len(segment) >= 2:
+                    primary.append(segment)
+        elif len(token) >= 2 and token not in _ASK_STOPWORDS:
+            primary.append(token)
+    terms: list[str] = []
+    for segment in primary:
+        terms.append(segment)
+        if len(segment) > 3:
+            terms.extend(segment[index:index + 2] for index in range(len(segment) - 1))
     seen: set[str] = set()
     unique: list[str] = []
     for term in terms:
         if term not in _ASK_STOPWORDS and term not in seen:
             seen.add(term)
             unique.append(term)
-    return unique
+    return unique, len(primary)
 
 
 def _ask_score(item: Mapping[str, Any], terms: list[str]) -> int:

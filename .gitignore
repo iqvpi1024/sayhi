@@ -45,3 +45,5 @@ Review-report/
 /src/*.egg-info/
 
 /devdata/
+# local real-user test workspace, contains credentials — never commit
+/ces/

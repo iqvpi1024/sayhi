@@ -151,6 +151,32 @@ class ProductAskTests(unittest.TestCase):
                 server.server_close()
                 app.close()
 
+    def test_subject_only_match_is_no_coverage(self) -> None:
+        """2026-08-08 真实用户测试发现:只命中问题主体的记忆不得作为回答依据。
 
-if __name__ == "__main__":
-    unittest.main()
+        “雷军的血型是什么?”不能拿“雷军是劳模”来答——主体相同但谓词无覆盖。
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            app = NoetideApp(tmp)
+            app.ingest_text("雷军被业界公认为劳模,以高强度工作著称。")
+            _confirm_assertions(app)
+            result = app.ask("雷军的血型是什么?")
+            self.assertEqual(result["answer_status"], "no_coverage")
+            self.assertIn("不知道", result["answer_text"])
+            self.assertEqual(result["evidence"], [])
+            app.close()
+
+    def test_entity_memory_can_answer(self) -> None:
+        """问识海覆盖已确认的 entity/episode/commitment,不只 assertion。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            app = NoetideApp(tmp)
+            app.ingest_text("小米集团由雷军于2010年创立,2018年在港股上市。")
+            app.analyze_sources()
+            confirmed = [app.confirm_candidate(c["candidate_id"]) for c in app.list_candidates()]
+            self.assertTrue(confirmed)
+            result = app.ask("小米是哪一年创立的?")
+            self.assertEqual(result["answer_status"], "answered")
+            self.assertIn("2010", result["answer_text"])
+            app.close()
+
+if __name__ == "__main__":    unittest.main()
