@@ -10,15 +10,16 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
-| 当前公开发布 | **`v0.3.0-beta` 已发布（2026-08-08，GitHub prerelease，含审核整改安全修复）；仓库已转公开** |
+| 当前公开发布 | **`v0.3.1-beta` 已发布（2026-08-08，GitHub prerelease，含 LLM 提供商层/问识海/docx/Change Control 尾巴）；仓库已公开** |
 | 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
 | 当前阶段 | `v0.3.0-beta released + repo public`；2026-08-07 全面审核整改已完成（§3 第 75–78 条），README 已为公开发布重写 |
-| 当前公开版本 | `v0.3.0-beta` GitHub prerelease |
-| tag / commit | annotated tag `v0.3.0-beta` -> `0dcc89d`（README 公开发布重写提交）；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
+| 当前公开版本 | `v0.3.1-beta` GitHub prerelease |
+| tag / commit | annotated tag `v0.3.1-beta` -> `5f7c89d`（第二波优化提交）；`v0.3.0-beta` -> `0dcc89d`；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | product-complete recovery tag | annotated tag `product-complete-rp-20260803`（tag object `a64fb89`）-> `9e3875d0c32c7a1aab249a90d6b7cd84911f533d`，已创建并推送 origin |
 | audit-remediation recovery tag | annotated tag `audit-remediation-rp-20260808` -> `8ea83d2`（整改提交，76 文件），已创建并推送 origin |
-| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.0-beta`（仓库已公开，匿名 HTTP 200） |
-| v0.3.0 发布产物 | `Noetide-beta-v0.3.0-win64.zip` SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（从 tag `v0.3.0-beta` 重建，含安全修复；GitHub API 远端 digest 与本地一致）；smoke：初始化、/api/health、/api/overview、Web UI 200、恶意 Origin 403 全部通过 |
+| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.1-beta`（仓库已公开，匿名 HTTP 200） |
+| v0.3.1 发布产物 | `Noetide-beta-v0.3.1-win64.zip` SHA-256 `236f88d12420e6aeb9bfe09ec8d45bf28aec085ca012c1b4c969e9c7945533e0`（从 tag `v0.3.1-beta` 构建；GitHub API 远端 digest 与本地一致）；smoke：初始化、/api/health、/api/overview、/api/ask（no_coverage 诚实回答）、Web UI 200、恶意 Origin 403 全部通过 |
+| v0.3.0 发布产物（历史） | `Noetide-beta-v0.3.0-win64.zip` SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（从 tag `v0.3.0-beta` 构建，含安全修复） |
 | 交付级别 | D1/D2/D3 历史版本已发布；当前完整产品已具备一键安装、Web 管理、MCP/API、识灵大模型分析、导出备份与远程访问 |
 | 分支 | `main`，已推送至 `origin/main` |
 
@@ -238,4 +239,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**v0.3.0-beta 已发布、仓库已公开（2026-08-08）。发布后优化第二波已完成（§3 第 79–81 条）：三个 Change Control 尾巴（scenarios 账本、C5 标签、decision 持久化）、LLM 提供商层（OpenAI/Claude/Gemini/DeepSeek/Kimi/智谱/通义预置 + custom，全过 CloudGate 三门）、结构化提取（编造证据自动丢弃）、docx 导入、问识海 Q&A 页面（无证据即答"我不知道"）；全量回归 511 OK 0 skipped、26 个 suite validator 与 2 个 baseline validator 全 exit 0（2026-08-08 实测，见 §4）。下一步：将第二波优化提交为 recovery point（建议 `post-release-polish-rp-20260808`），随后可评估作为 v0.3.1-beta 发布（需重建发布包并 smoke）；剩余遗留：changesets/episodes 硬编码 rev 命名待 Change Control 评估。**
+**v0.3.1-beta 已发布、仓库已公开（2026-08-08）：第二波优化（§3 第 79–81 条：Change Control 尾巴、LLM 提供商层、结构化提取、docx 导入、问识海 Q&A）已作为 tag `v0.3.1-beta`（-> `5f7c89d`）发布，发布包从 tag 构建、smoke 全过、远端附件 digest 与本地一致；全量回归 511 OK 0 skipped、26 个 suite validator 与 2 个 baseline validator 全 exit 0。下一步：剩余遗留——changesets/episodes 硬编码 rev 命名待 Change Control 评估；真实模型评估（需真实 API 凭据，本轮以 loopback 假服务器验证请求形状）待排期；持续关注公开后的外部反馈与安全问题响应。**
