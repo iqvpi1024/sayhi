@@ -69,6 +69,7 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <div class="brand">识海<small>Noetide</small></div>
 <nav class="nav" id="nav">
 <button data-view="overview" class="active">总览</button>
+<button data-view="ask">问识海</button>
 <button data-view="import">导入</button>
 <button data-view="analyze">识灵分析</button>
 <button data-view="memory">记忆</button>
@@ -95,6 +96,19 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <div class="panel"><h2>最近记忆</h2><div id="recentObjects"></div></div>
 </section>
 
+<section class="view" id="view-ask">
+<div class="panel">
+<h2>问识海</h2>
+<div class="row-sub" style="margin:0 0 8px">只基于已确认的记忆和原文证据回答;没有证据时会明说"不知道",绝不编造。</div>
+<div class="actions" style="margin-top:0"><input id="askInput" placeholder="例如:识海项目的 CEO 是谁?" style="flex:1"><button class="primary" id="askBtn">提问</button></div>
+</div>
+<div class="panel" id="askAnswerPanel" style="display:none"><h2>回答</h2><div id="askAnswer"></div></div>
+<div class="panel" id="askCoveragePanel" style="display:none"><h2>覆盖度声明</h2><div id="askCoverage"></div></div>
+<div class="panel" id="askEvidencePanel" style="display:none"><h2>证据</h2><div id="askEvidence"></div></div>
+<div class="panel" id="askFreshnessPanel" style="display:none"><h2>时效</h2><div id="askFreshness"></div></div>
+<div class="panel" id="askSourcePanel" style="display:none"><h2>来源原文</h2><div id="askSource"></div></div>
+</section>
+
 <section class="view" id="view-import">
 <div class="panel">
 <h2>粘贴文本</h2>
@@ -108,6 +122,7 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <h2>导入文件夹</h2>
 <label for="folderPath">文件夹路径</label>
 <input id="folderPath" placeholder="D:\notes">
+<div class="row-sub" style="margin:4px 0">支持 .md / .txt / .json / .csv / .docx,损坏文件会被跳过并计数</div>
 <div class="actions"><button class="primary" id="importFolderBtn">导入文件夹</button></div>
 </div>
 <div class="panel"><h2>结果</h2><div id="importResult" class="empty">暂无结果</div></div>
@@ -181,12 +196,25 @@ button.small{min-height:30px;padding:3px 8px;font-size:12px}
 <h2>识灵模型</h2>
 <label for="modelMode">模式</label>
 <select id="modelMode"><option value="offline">离线规则</option><option value="local">本地模型</option><option value="cloud">云端模型</option></select>
+<label for="modelProvider">提供商</label>
+<select id="modelProvider">
+<option value="openai_compatible">OpenAI 兼容(通用)</option>
+<option value="openai">OpenAI</option>
+<option value="anthropic">Anthropic</option>
+<option value="gemini">Gemini</option>
+<option value="deepseek">DeepSeek</option>
+<option value="moonshot">Moonshot/Kimi</option>
+<option value="zhipu">智谱</option>
+<option value="qwen">通义</option>
+<option value="ollama_remote">Ollama 远程</option>
+<option value="custom">自定义</option>
+</select>
 <label for="modelEndpoint">接口地址</label>
-<input id="modelEndpoint" placeholder="http://127.0.0.1:11434/v1/chat/completions 或 https://...">
+<input id="modelEndpoint" placeholder="选择提供商后自动填充,可修改">
 <label for="modelApiKey">API 密钥</label>
 <input id="modelApiKey" type="password" placeholder="云端可选">
 <label for="modelName">模型名称</label>
-<input id="modelName" placeholder="offline-rule-v1">
+<input id="modelName" placeholder="留空使用提供商默认模型">
 </div>
 <div class="panel">
 <h2>远程访问</h2>
@@ -299,9 +327,10 @@ async function loadExport(){$('#exportResult').innerHTML=empty('暂无结果');}
 async function loadSettings(){
   const s=(await api('/api/settings')).settings||{};
   $('#modelMode').value=s.model_mode||'offline';
+  $('#modelProvider').value=s.model_provider||'openai_compatible';
   $('#modelEndpoint').value=s.model_endpoint||'';
   $('#modelApiKey').value='';
-  $('#modelName').value=s.model_name||'offline-rule-v1';
+  $('#modelName').value=s.model_name||'';
   $('#remoteAccess').value=String(!!s.remote_access);
   $('#remoteHost').value=s.remote_host||'127.0.0.1';
   $('#remotePort').value=s.port||'8765';
@@ -311,9 +340,42 @@ function switchView(name){
   state.view=name;
   $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
   $$('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));
-  const titles={overview:'总览',import:'导入',analyze:'识灵分析',memory:'记忆',search:'搜索',agent:'Agent 接入',export:'导出备份',settings:'设置'};
+  const titles={overview:'总览',ask:'问识海',import:'导入',analyze:'识灵分析',memory:'记忆',search:'搜索',agent:'Agent 接入',export:'导出备份',settings:'设置'};
   $('#viewTitle').textContent=titles[name]||name;
-  ({overview:loadOverview,import:loadImport,analyze:loadAnalyze,memory:loadMemory,search:loadSearch,agent:loadAgent,export:loadExport,settings:loadSettings}[name])();
+  ({overview:loadOverview,ask:loadAsk,import:loadImport,analyze:loadAnalyze,memory:loadMemory,search:loadSearch,agent:loadAgent,export:loadExport,settings:loadSettings}[name])();
+}
+
+function loadAsk(){/* 问答结果保留在页面上,切换回来不刷新 */}
+async function doAsk(){
+  const q=$('#askInput').value.trim();
+  if(!q)return;
+  setStatus('思考中');
+  const r=await post('/api/ask',{question:q});
+  setStatus('已连接');
+  if(r.status!=='ok'){
+    $('#askAnswerPanel').style.display='';
+    $('#askAnswer').innerHTML=empty(r.reason||'提问失败');
+    return;
+  }
+  renderAsk(r.data||{});
+}
+function renderAsk(d){
+  $('#askAnswerPanel').style.display='';
+  const warn=d.answer_status!=='answered';
+  $('#askAnswer').innerHTML=`<div style="white-space:pre-wrap;${warn?'color:var(--warn);font-weight:700':''}">${esc(d.answer_text||'')}</div><div class="row-sub" style="margin-top:6px">${esc(d.confidence_note||'')}</div>`;
+  const cov=d.coverage||{};
+  const s=cov.searched||{};
+  const covered=(cov.covered||[]).map(t=>`<div class="row-sub">已覆盖:${esc(t)}</div>`).join('');
+  const notc=(cov.not_covered||[]).map(t=>`<div style="color:var(--warn);font-weight:700;font-size:13px;margin-top:4px">没有证据覆盖:${esc(t)}</div>`).join('');
+  $('#askCoverage').innerHTML=covered+notc+`<div class="row-sub" style="margin-top:8px">已检索:已确认断言 ${s.confirmed_assertions??0} 条 · 已确认记忆 ${s.confirmed_objects??0} 条 · 资料 ${s.sources??0} 份</div>`;
+  $('#askCoveragePanel').style.display='';
+  const ev=d.evidence||[];
+  $('#askEvidencePanel').style.display=ev.length?'':'none';
+  $('#askEvidence').innerHTML=ev.map(e=>row(e.text,`${e.object_id||''} · ${e.source_title||e.source_id||''} · ${e.verified_scope||''}`,`${pill('记忆')}<button class="small" data-ask-source="${esc(e.source_id)}">来源</button>`)).join('');
+  const f=d.freshness||{};
+  $('#askFreshness').innerHTML=`<div class="row-sub">${esc(f.note||'')}</div>`+(f.newest_evidence_at?`<div class="row-sub">最新证据:${esc(f.newest_evidence_at)} · 最早证据:${esc(f.oldest_evidence_at)}</div>`:'');
+  $('#askFreshnessPanel').style.display='';
+  $('#askSourcePanel').style.display='none';
 }
 
 $('#nav').addEventListener('click',e=>{const b=e.target.closest('button[data-view]');if(b)switchView(b.dataset.view);});
@@ -347,6 +409,17 @@ document.addEventListener('click',async e=>{
 $$('#view-memory .tab').forEach(t=>t.addEventListener('click',()=>loadMemoryTab(t.dataset.tab)));
 $('#searchBtn').addEventListener('click',doSearch);
 $('#searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+$('#askBtn').addEventListener('click',doAsk);
+$('#askInput').addEventListener('keydown',e=>{if(e.key==='Enter')doAsk();});
+document.addEventListener('click',async e=>{
+  const srcBtn=e.target.closest('[data-ask-source]');
+  if(srcBtn){
+    const r=await api('/api/sources/'+encodeURIComponent(srcBtn.dataset.askSource));
+    const s=r.source||{};
+    $('#askSource').innerHTML=`<div class="row-title">${esc(s.title||s.source_id||'')}</div><div class="row-sub">${esc(s.source_id||'')}</div><div class="code" style="margin-top:8px">${esc(s.content||s.inline_content||'')}</div>`;
+    $('#askSourcePanel').style.display='';
+  }
+});
 $('#createCapabilityBtn').addEventListener('click',async()=>{const r=await post('/api/mcp/capability',{});if(r.status==='ok')await loadAgent();});
 $('#createResourceCapabilityBtn').addEventListener('click',async()=>{const ids=$('#capabilityResourceIds').value.trim().split(/[,，\s]+/).filter(Boolean);const r=await post('/api/mcp/capability',{resource_ids:ids});if(r.status==='ok')await loadAgent();});
 $('#refreshTokenBtn').addEventListener('click',async()=>{await post('/api/settings',{api_token:true});await loadAgent();});
@@ -357,6 +430,7 @@ $('#restoreBtn').addEventListener('click',async()=>{const r=await post('/api/res
 $('#saveSettingsBtn').addEventListener('click',async()=>{
   const r=await post('/api/settings',{
     model_mode:$('#modelMode').value,
+    model_provider:$('#modelProvider').value,
     model_endpoint:$('#modelEndpoint').value.trim(),
     model_name:$('#modelName').value.trim(),
     model_api_key:$('#modelApiKey').value.trim(),
@@ -366,6 +440,26 @@ $('#saveSettingsBtn').addEventListener('click',async()=>{
   });
   $('#settingsResult').innerHTML=r.status==='ok'?row('已保存','重启服务后生效'):empty(r.reason||'保存失败');
   await loadAgent();
+});
+// 提供商预置:选择后自动填默认 endpoint(用户仍可手改);与 llm_providers.PROVIDER_PRESETS 保持一致
+const PROVIDER_DEFAULTS={
+  openai_compatible:{endpoint:'https://api.openai.com/v1/chat/completions',model:'gpt-4o-mini'},
+  openai:{endpoint:'https://api.openai.com/v1/chat/completions',model:'gpt-4o-mini'},
+  anthropic:{endpoint:'https://api.anthropic.com/v1/messages',model:'claude-3-5-sonnet-20241022'},
+  gemini:{endpoint:'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent',model:'gemini-2.0-flash'},
+  deepseek:{endpoint:'https://api.deepseek.com/v1/chat/completions',model:'deepseek-chat'},
+  moonshot:{endpoint:'https://api.moonshot.cn/v1/chat/completions',model:'moonshot-v1-8k'},
+  zhipu:{endpoint:'https://open.bigmodel.cn/api/paas/v4/chat/completions',model:'glm-4-flash'},
+  qwen:{endpoint:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',model:'qwen-turbo'},
+  ollama_remote:{endpoint:'http://127.0.0.1:11434/v1/chat/completions',model:'qwen2.5:7b'},
+  custom:{endpoint:'',model:''},
+};
+$('#modelProvider').addEventListener('change',()=>{
+  const preset=PROVIDER_DEFAULTS[$('#modelProvider').value]||{endpoint:'',model:''};
+  const current=$('#modelEndpoint').value.trim();
+  const knownDefaults=Object.values(PROVIDER_DEFAULTS).map(p=>p.endpoint);
+  if(!current||knownDefaults.includes(current))$('#modelEndpoint').value=preset.endpoint;
+  $('#modelName').placeholder=preset.model?('留空默认 '+preset.model):'留空使用提供商默认模型';
 });
 document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(b){navigator.clipboard?.writeText($('#'+b.dataset.copy).textContent);setStatus('已复制');}});
 switchView('overview');

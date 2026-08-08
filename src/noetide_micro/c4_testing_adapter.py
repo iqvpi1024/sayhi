@@ -71,6 +71,7 @@ class C4ScenarioSystem:
 
     def run_case(self, case: JsonObject) -> JsonObject:
         before = self.layer_snapshot()
+        revisions_before = set(self._store.revision_ids())
         outcomes: list[JsonObject] = []
         selected_kind = "baseline"
         for op in case["ops"]:
@@ -98,7 +99,9 @@ class C4ScenarioSystem:
                 outcomes.append(scenarios.attempt_mark_observed(self._store, scenario_id_for(op.get("scenario_kind", "baseline"))))
             else:
                 raise ValueError(f"unsupported C4 op: {kind}")
-        return self._scenario_result(case["scenario_id"], outcomes, before, self.layer_snapshot(), selected_kind)
+        result = self._scenario_result(case["scenario_id"], outcomes, before, self.layer_snapshot(), selected_kind)
+        result["revisions_added"] = sorted(set(self._store.revision_ids()) - revisions_before)
+        return result
 
     def _scenario_result(self, scenario_id: str, outcomes: list[JsonObject], before: JsonObject, after: JsonObject, selected_kind: str) -> JsonObject:
         sid = scenario_id_for(selected_kind)

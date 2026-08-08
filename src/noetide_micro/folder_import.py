@@ -1,6 +1,7 @@
 """Deterministic local folder text import for the Y2-S1 slice (SPEC-Y2S1-FOLDER-IMPORT-001).
 
-Reads `.md`/`.txt` files from a logical root and appends them to the Source Vault
+Reads `.md`/`.txt` files (and extracts text from `.docx`) from a logical root
+and appends them to the Source Vault
 via the existing append-only write path. No semantic inference, no Canonical writes,
 no wall-clock: every timestamp comes from the injected `now` or file metadata.
 """
@@ -8,8 +9,11 @@ no wall-clock: every timestamp comes from the injected `now` or file metadata.
 from __future__ import annotations
 
 import hashlib
+import io
 import os
 import sqlite3
+import zipfile
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Mapping
@@ -20,9 +24,32 @@ from .store import SemanticStore
 JsonObject = dict[str, Any]
 
 ALLOWED_PROFILES = frozenset({"y2s1_folder_import_v1"})
-DEFAULT_EXTENSIONS = (".md", ".txt")
+DEFAULT_EXTENSIONS = (".md", ".txt", ".docx")
 SOURCE_KIND = "folder_text_import"
 SOURCE_SYSTEM = "folder_importer_v1"
+
+_DOCX_MAIN_PART = "word/document.xml"
+_W_NS = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+
+
+def extract_docx_text(payload: bytes) -> str:
+    """从 docx(OOXML zip)字节中提取正文文本;损坏或非 docx 一律抛 ValueError(fail-closed)。
+
+    只用标准库:zipfile 读 word/document.xml,XML 解析拼接 w:t 文本,按 w:p 分段换行。
+    """
+    try:
+        with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+            xml_bytes = archive.read(_DOCX_MAIN_PART)
+    except (zipfile.BadZipFile, KeyError, OSError) as exc:
+        raise ValueError("docx_unreadable") from exc
+    try:
+        root = ET.fromstring(xml_bytes)
+    except ET.ParseError as exc:
+        raise ValueError("docx_unreadable") from exc
+    paragraphs: list[str] = []
+    for para in root.iter(_W_NS + "p"):
+        paragraphs.append("".join(node.text or "" for node in para.iter(_W_NS + "t")))
+    return "\n".join(paragraphs).strip()
 
 
 class ProfileRejectedError(ValueError):
@@ -156,11 +183,19 @@ class FolderImporter:
         except OSError:
             self._reject(report, relative, "storage_failure")
             return
-        try:
-            text = payload.decode("utf-8")
-        except UnicodeDecodeError:
-            self._reject(report, relative, "invalid_utf8")
-            return
+        if path.suffix.lower() == ".docx":
+            try:
+                text = extract_docx_text(payload)
+            except ValueError:
+                # 损坏 docx:fail-closed 拒绝该文件并计数,不中断整个导入
+                self._reject(report, relative, "docx_unreadable")
+                return
+        else:
+            try:
+                text = payload.decode("utf-8")
+            except UnicodeDecodeError:
+                self._reject(report, relative, "invalid_utf8")
+                return
         digest = hashlib.sha256(payload).hexdigest()
         source_id = f"src_folder_{digest[:16]}"
         existing = self._store.seeded_source(source_id)

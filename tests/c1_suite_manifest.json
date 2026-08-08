@@ -4,19 +4,20 @@
   "flags": {"suite_defined": true, "suite_materialized": true, "suite_executed": true, "suite_passed": true},
   "latest_verification_result": "passed",
   "latest_run_applicability": "current",
-  "latest_verification_result_path": "docs/testing/results/c1-release-8556eea-20260719.json",
-  "latest_verification_manifest_sha256": "b57e08aad6a9fdfd3490a2444edec9e0a328134c1f7831cc5c8d180ef84e108c",
-  "latest_verification_result_sha256": "764b4c8e9caee8506e51f217040c9e6bf30d5ef0b358b105382e06665ab67345",
+  "latest_verification_result_path": "docs/testing/results/c1-20260808.json",
+  "latest_verification_manifest_sha256": "b3d93689ac956f44a09dac78ba1c6ebfc2e404ebe598225727a4f2dd2e7b66a9",
+  "latest_verification_result_sha256": "bdaa86a36d49a5db84972c24961eb6ae5932746bc65aadf6d0f983f92a68504a",
   "historical_verification_results": [
     {"applicability": "superseded", "path": "docs/testing/results/c1-ws05-21c97a2-20260718.json", "reason": "The C1 manifest did not bind its fixture, oracle, test modules, runner and validator."},
-    {"applicability": "superseded", "path": "docs/testing/results/c1-ws12-0452a0c-pyspath-20260718.json", "reason": "The runner did not fail the suite for errors in its unbound C1 integration module."}
+    {"applicability": "superseded", "path": "docs/testing/results/c1-ws12-0452a0c-pyspath-20260718.json", "reason": "The runner did not fail the suite for errors in its unbound C1 integration module."},
+    {"applicability": "superseded", "path": "docs/testing/results/c1-release-8556eea-20260719.json", "reason": "C1 测试物化变更:test_c1_changesets.py 新增 decision 持久化路径(decide/close/set_predicted_outcome 经 publish_revision 落新 revision)覆盖;fixture/oracle 未动。"}
   ],
   "required_scenario_ids": ["C1-001", "C1-002", "C1-003", "C1-004", "C1-005", "C1-006", "C1-007"],
   "artifacts": [
     {"role": "fixture", "path": "tests/fixtures/c1_decision_outcome_v1/fixture.json", "sha256": "08888ac9d18fc4fa37b308975a929d51da8e914321e6eb66cb01e526f8aabce0"},
     {"role": "oracle", "path": "tests/fixtures/c1_decision_outcome_v1/oracles.json", "sha256": "a5a9107203048b1658d415fd02275f327eea772edbcafc01674f76413f5b7aab"},
     {"role": "boundary_test_module", "path": "tests/semantic/test_c1_boundaries.py", "sha256": "b8c6def0049b4f6970d900a0a19bbd5b054e21dfc3c878bf62a6990695ad55fc"},
-    {"role": "changeset_test_module", "path": "tests/semantic/test_c1_changesets.py", "sha256": "ee27661f3f5018bb447bb5c4b82d83671fadd2ea545ba5ea3e15036a8558ebe0"},
+    {"role": "changeset_test_module", "path": "tests/semantic/test_c1_changesets.py", "sha256": "522affae96ec6cc9e0be11f177b06a3d42ea2c2508ef3c7ee6d168ffea25b76a"},
     {"role": "integration_test_module", "path": "tests/semantic/test_c1_decision_outcome.py", "sha256": "f1408d859dbe1c00c773dea31640a6283e5f05ee5597dabf60b69498b91a1ff0"},
     {"role": "offline_runner", "path": "tests/runner/run_c1_suite.py", "sha256": "8b5422006df583c7400b096a7e9ec3610ff5a42920bff34368608df74da20e35"},
     {"role": "suite_preflight_validator", "path": "tools/validate_c1_suite.py", "sha256": "9bdad30ed659e777dc6063673983cecf5ad9a3e21eee32b0471f185aae3693a0"}

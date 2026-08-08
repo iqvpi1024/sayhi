@@ -1,0 +1,115 @@
+{
+  "schema_version": "noetide.c5-run-result.v1",
+  "run_id": "c5-e95f218ad7de418f99889bfa3889550d",
+  "suite_id": "c5_pack_backup_v1",
+  "manifest_sha256": "42c8f89ebd17d21ceff592542a87d2a5d7365edaf517dc73c3d7e041fad84c6c",
+  "git_commit": "0925ec952d2957b44b64882c237c8011ac95045d",
+  "applicability": "current",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.8",
+    "sqlite": "3.45.3",
+    "network": "blocked",
+    "dependencies": "stdlib_only"
+  },
+  "command": [
+    "python",
+    "-m",
+    "tests.runner.run_c5_suite",
+    "--adapter",
+    "noetide_micro.c5_testing_adapter",
+    "--output",
+    "docs/testing/results/c5-20260808.json"
+  ],
+  "exit_code": 0,
+  "run_result": "passed",
+  "required_results": [
+    {
+      "test_id": "C5-001",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-002",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-003",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-004",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-005",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-006",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-007",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-008",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-009",
+      "individual_test_result": "passed",
+      "detail": ""
+    },
+    {
+      "test_id": "C5-010",
+      "individual_test_result": "passed",
+      "detail": ""
+    }
+  ],
+  "bound_artifacts": [
+    {
+      "role": "fixture",
+      "path": "tests/fixtures/c5_pack_backup_v1/fixture.json",
+      "sha256": "5def59beb4d1d32dcb5c913d26536be8cb1d620e7dcdeca7f0dd008d5cae75c4"
+    },
+    {
+      "role": "oracle",
+      "path": "tests/fixtures/c5_pack_backup_v1/oracles.json",
+      "sha256": "34e36754f5d7f6ae8f32c9105974b6f09296c14539343207ffea10c6e6d670cc"
+    },
+    {
+      "role": "scenario_plan",
+      "path": "tests/integration/c5_pack_scenarios.json",
+      "sha256": "760f3133e949428e3d5665a4cac7d820772a7b596b15c127c50ce2a2005f484a"
+    },
+    {
+      "role": "adapter_protocol",
+      "path": "tests/runner/c5_pack_adapter_protocol.py",
+      "sha256": "18095f2e587e33e4f53ee37bff23ab88fcefd51bbd4c8f4506af5770546f7754"
+    },
+    {
+      "role": "business_test_module",
+      "path": "tests/semantic/test_c5_pack_contract.py",
+      "sha256": "6be71bbd80910eba5b6318336bf7beb31a6dd1894f2a8650f6c9dc7310e846a1"
+    },
+    {
+      "role": "offline_runner",
+      "path": "tests/runner/run_c5_suite.py",
+      "sha256": "4a3fff08a276cb6a25edc1b29b6b2b056c91a7a4c9689fba1315e4e5b2f1b526"
+    },
+    {
+      "role": "suite_preflight_validator",
+      "path": "tools/validate_c5_suite.py",
+      "sha256": "56f8650dfc21902cfff8a50a5b09967fc9767d6d4ee2585b11bb3d1c3713eef5"
+    }
+  ]
+}

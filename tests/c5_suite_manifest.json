@@ -45,7 +45,7 @@
     {
       "role": "oracle",
       "path": "tests/fixtures/c5_pack_backup_v1/oracles.json",
-      "sha256": "6bb2056efd2864663d42aa6ddcd6a8b45a9735c3adfb25c8202eba6fa8ae64aa"
+      "sha256": "34e36754f5d7f6ae8f32c9105974b6f09296c14539343207ffea10c6e6d670cc"
     },
     {
       "role": "scenario_plan",
@@ -73,7 +73,14 @@
       "sha256": "56f8650dfc21902cfff8a50a5b09967fc9767d6d4ee2585b11bb3d1c3713eef5"
     }
   ],
-  "latest_verification_result_path": "docs/testing/results/c5-20260726.json",
-  "latest_verification_result_sha256": "fa7af0a75b68b1f97d80ab4b58ed998fc3d16c4ca1a1b3236dc542c8135e8fea",
-  "latest_verification_manifest_sha256": "a8c6d86e4562098f5ca9afc5959ca95ff38383eaa963453035c14164b67c4d41"
+  "latest_verification_result_path": "docs/testing/results/c5-20260808.json",
+  "latest_verification_result_sha256": "16fe8bf12f2f250fb46e3d8ae98a3f722980ee79bf00ac9f9feffa550ac2b98a",
+  "latest_verification_manifest_sha256": "42c8f89ebd17d21ceff592542a87d2a5d7365edaf517dc73c3d7e041fad84c6c",
+  "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/c5-20260726.json",
+      "reason": "C5 oracle 修正:ENCRYPTION_LABEL 由 stdlib_deterministic_v1 更名为 nobak2_pbkdf2_hmac_v1,与实际 NOBAK2 构造一致(fixture 未动,SPEC-C5-PACK-001 升 v0.2)。"
+    }
+  ]
 }

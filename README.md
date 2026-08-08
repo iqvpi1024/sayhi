@@ -5,7 +5,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Runtime deps: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen.svg)](pyproject.toml)
-[![Tests: 485 passed / 0 skipped](https://img.shields.io/badge/tests-485%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
+[![Tests: 511 passed / 0 skipped](https://img.shields.io/badge/tests-511%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
 [![Suites: 26 hash-bound](https://img.shields.io/badge/verification%20suites-26%20hash--bound-brightgreen.svg)](docs/testing/README.md)
 [![Platform: Windows](https://img.shields.io/badge/platform-Windows%2010%2F11-lightgrey.svg)](dist/)
 
@@ -54,9 +54,11 @@
 
 ## 它现在能做什么
 
-- **导入**:粘贴文本,或整个文件夹的 `.md/.txt/.json/.csv` 一次导入(含文件夹监视)。
-- **识灵分析**:离线规则(不联网)、本地模型(Ollama 等 OpenAI 兼容接口)、云端模型(三门管控),三种后端。
+- **导入**:粘贴文本,或整个文件夹的 `.md/.txt/.json/.csv/.docx` 一次导入(含文件夹监视)。
+- **识灵分析**:离线规则(不联网)、本地模型(Ollama 等 OpenAI 兼容接口)、云端官方 API——内置 **OpenAI / Anthropic Claude / Google Gemini / DeepSeek / Moonshot(Kimi)/ 智谱 / 通义千问** 预置,任何 OpenAI 兼容服务选 `custom` 即可接入;云端调用全部经授权/红线/预览三门。
+- **结构化提取**:模型输出必须是带原文证据引用的 JSON;**编造证据的候选会被自动丢弃并计数**,诚实透出在分析结果里。
 - **候选确认**:网页里逐条确认/忽略,模型永远没有自动入库的手。
+- **问识海**:对着你的记忆提问。只根据已确认、带证据的记忆作答;没有证据就明确回答"我不知道"——不编造是它的设计,不是缺陷。
 - **记忆管理**:人物、项目、承诺、事件、断言——带证据来源、搜索、时间线,桌面和移动端自适应。
 - **Agent 接入**:MCP(JSON-RPC)+ REST API,令牌鉴权;默认工具集 `list_resources` / `read_resource` / `propose_changeset` / `record_source`。
 - **导出与备份**:Context Pack 导出/导入(往返一致)、NOBAK2 加密备份(PBKDF2 + HMAC)、恢复前校验。
@@ -64,7 +66,7 @@
 
 ## 一分钟启动(Windows)
 
-1. 到 [Releases](https://github.com/iqvpi1024/sayhi/releases) 下载 `Noetide-beta-v0.3.0-win64.zip` 并解压(校验值见同页的 `SHA256SUMS`)。
+1. 到 [Releases](https://github.com/iqvpi1024/sayhi/releases) 下载最新版 `Noetide-beta-v0.3.1-win64.zip` 并解压(校验值见同页的 `SHA256SUMS`)。
 2. 双击 `scripts/Noetide Setup.cmd`,选一个你自己的数据文件夹。
 3. 双击 `scripts/Noetide Start.cmd`。
 4. 浏览器打开 `http://127.0.0.1:8765`。

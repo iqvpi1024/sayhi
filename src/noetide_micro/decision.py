@@ -1,8 +1,10 @@
 """Decision object for MVP-C C1.
 
-注意:``decide``/``close``/``set_predicted_outcome`` 仅内存语义——它们返回
-新的 Decision 字典但不写库。持久化只经 c1.py 的 add-only ChangeSet 路径
-(``C1ChangeSetService.publish``);要保存状态变化,请构造新对象走该路径。
+``decide``/``close``/``set_predicted_outcome`` 是纯内存转换(不写库),用于
+构造待发布对象;持久化走 ``*_persisted`` 变体——它们复用同一校验,然后经
+c1.py 的 add-only ChangeSet 语义(``C1ChangeSetService.publish_revision``)
+把状态变更落成新 revision 的 Canonical 对象:只追加新 revision/changeset
+账本行与 payload 内 revision_history,不改写历史。
 """
 
 from __future__ import annotations
@@ -10,11 +12,13 @@ from __future__ import annotations
 import copy
 from typing import Any, Mapping
 
+from .c1 import C1ChangeSetService
+
 JsonObject = dict[str, Any]
 
 
 class DecisionService:
-    """Create and read Decision objects without writing Canonical directly."""
+    """Create and transition Decision objects; persistence goes through the C1 ChangeSet path."""
 
     def __init__(self, store: Any, fixture: Mapping[str, Any], now: str) -> None:
         self._store = store
@@ -88,3 +92,39 @@ class DecisionService:
         updated = copy.deepcopy(decision)
         updated["predicted_outcome"] = predicted
         return updated
+
+    def _load_persisted(self, decision_id: str) -> JsonObject:
+        current = self._store.canonical_object_or_none(decision_id)
+        if current is None or current.get("object_type") != "decision":
+            raise ValueError("c1_decision_not_persisted")
+        return current
+
+    def _persist_transition(self, current: JsonObject, updated: JsonObject, change: str, actor: str) -> JsonObject:
+        history = list(current.get("revision_history", []))
+        history.append({
+            "object_revision": current["object_revision"],
+            "status": current["status"],
+            "at": self._now,
+            "change": change,
+        })
+        updated["revision_history"] = history
+        writer = C1ChangeSetService(self._store, self._now)
+        return writer.publish_revision(current["decision_id"], updated, actor, "correct")
+
+    def decide_persisted(self, decision_id: str, choice: str, actor: str = "user") -> JsonObject:
+        """Persisted variant of ``decide``: appends a new revision via C1 ChangeSet."""
+        current = self._load_persisted(decision_id)
+        updated = self.decide(current, choice)
+        return self._persist_transition(current, updated, "decide", actor)
+
+    def close_persisted(self, decision_id: str, actor: str = "user") -> JsonObject:
+        """Persisted variant of ``close``: appends a new revision via C1 ChangeSet."""
+        current = self._load_persisted(decision_id)
+        updated = self.close(current)
+        return self._persist_transition(current, updated, "close", actor)
+
+    def set_predicted_outcome_persisted(self, decision_id: str, predicted: str, actor: str = "user") -> JsonObject:
+        """Persisted variant of ``set_predicted_outcome``: appends a new revision via C1 ChangeSet."""
+        current = self._load_persisted(decision_id)
+        updated = self.set_predicted_outcome(current, predicted)
+        return self._persist_transition(current, updated, "set_predicted_outcome", actor)

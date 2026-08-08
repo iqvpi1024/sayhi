@@ -12,7 +12,7 @@
 
 - **本地 HTTP/Web 服务**（`product_server`、`local_web`）：默认仅绑定回环地址，校验 `Host`/`Origin` 头以阻断恶意网页的跨域读写；绑定非回环地址必须在设置中开启 `remote_access` 并配置 `api_token`，否则拒绝启动。远程访问模式下所有 API 要求 Bearer/Token 认证（恒定时间比较）。
 - **真实数据导入**（文本/文件夹 ingest）：导入路径由本机用户显式指定；服务不主动扫描工作区外的个人数据。
-- **本地加密备份**（`pack_backup`）：零依赖（仅标准库）约束下的 PBKDF2-HMAC-SHA256 派生 + HMAC 认证构造（格式标记 `NOBAK2`），**不是生产级加密**，receipt 恒定标注 `stdlib_deterministic_v1`（该标签由 C5 测试合同哈希绑定）。请使用高强度备份密钥。旧版无版本标记的备份一律拒绝恢复。生产级 AEAD/KDF 选型属 D2/D3 决策项。
+- **本地加密备份**（`pack_backup`）：零依赖（仅标准库）约束下的 PBKDF2-HMAC-SHA256 派生 + HMAC 认证构造（格式标记 `NOBAK2`），**不是生产级加密**，receipt 恒定标注 `nobak2_pbkdf2_hmac_v1`（该标签由 C5 测试合同哈希绑定）。请使用高强度备份密钥。旧版无版本标记的备份一律拒绝恢复。生产级 AEAD/KDF 选型属 D2/D3 决策项。
 - **MCP / 远程 Agent 接入**：能力（capability）按资源范围授权，默认离线模式；配置云端模型端点（`model_mode=cloud`）意味着数据会离开本机，属于用户显式选择，请自行评估端点可信度。
 
 不在安全承诺范围内：多租户部署、公开分享、跨设备同步，以及把回环服务直接暴露到不可信网络而未开启 `remote_access` + token 的用法。

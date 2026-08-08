@@ -10,17 +10,20 @@
           "pessimistic": "infeasible"
         },
         "all_predicted": true,
-        "scenario_count": 3
+        "scenario_count": 3,
+        "revisions_added": [
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
-        "decision_layer",
-        "revision_ledger"
+        "decision_layer"
       ]
     },
     "C4-002": {
       "result": {
         "outcome": "rejected",
-        "scenario_count": 0
+        "scenario_count": 0,
+        "revisions_added": []
       },
       "forbidden_mutations": [
         "decision_layer",
@@ -35,13 +38,15 @@
         "upgrade_outcome": "rejected",
         "assertion_kind": "predicted",
         "is_fact": false,
-        "object_revision": 1
+        "object_revision": 1,
+        "revisions_added": [
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
         "decision_layer",
         "followup_layer",
-        "receipts_ledger",
-        "revision_ledger"
+        "receipts_ledger"
       ]
     },
     "C4-004": {
@@ -49,12 +54,14 @@
         "select_outcome": "applied",
         "selection_receipts": 1,
         "decision_unchanged": true,
-        "scenario_unchanged": true
+        "scenario_unchanged": true,
+        "revisions_added": [
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
         "decision_layer",
-        "followup_layer",
-        "revision_ledger"
+        "followup_layer"
       ]
     },
     "C4-005": {
@@ -62,11 +69,14 @@
         "create_outcome": "applied",
         "follow_up_count": 3,
         "all_open": true,
-        "refs_correct": true
+        "refs_correct": true,
+        "revisions_added": [
+          "rev_c4_follow_ups_SCN-DC-SYN-C4-001-baseline",
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
-        "decision_layer",
-        "revision_ledger"
+        "decision_layer"
       ]
     },
     "C4-006": {
@@ -76,11 +86,15 @@
         "object_revision": 2,
         "history_entries": 1,
         "transition_receipts": 1,
-        "others_unchanged": true
+        "others_unchanged": true,
+        "revisions_added": [
+          "rev_c4_FU-SYN-C4-003_r002",
+          "rev_c4_follow_ups_SCN-DC-SYN-C4-001-baseline",
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
-        "decision_layer",
-        "revision_ledger"
+        "decision_layer"
       ]
     },
     "C4-007": {
@@ -90,11 +104,15 @@
           "FU-SYN-C4-002": "open",
           "FU-SYN-C4-003": "done"
         },
-        "canonical_unchanged_by_view": true
+        "canonical_unchanged_by_view": true,
+        "revisions_added": [
+          "rev_c4_FU-SYN-C4-003_r002",
+          "rev_c4_follow_ups_SCN-DC-SYN-C4-001-baseline",
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
-        "decision_layer",
-        "revision_ledger"
+        "decision_layer"
       ]
     },
     "C4-008": {
@@ -110,13 +128,15 @@
           "pessimistic": "infeasible"
         },
         "identical": true,
-        "pessimistic_infeasible": true
+        "pessimistic_infeasible": true,
+        "revisions_added": [
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
         "decision_layer",
         "followup_layer",
-        "receipts_ledger",
-        "revision_ledger"
+        "receipts_ledger"
       ]
     },
     "C4-009": {
@@ -124,11 +144,15 @@
         "all_is_fact_false": true,
         "all_not_professional_advice": true,
         "no_advice_fields": true,
-        "scenarios_not_in_fact_evidence": true
+        "scenarios_not_in_fact_evidence": true,
+        "revisions_added": [
+          "rev_c4_FU-SYN-C4-003_r002",
+          "rev_c4_follow_ups_SCN-DC-SYN-C4-001-baseline",
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
-        "decision_layer",
-        "revision_ledger"
+        "decision_layer"
       ]
     },
     "C4-010": {
@@ -138,11 +162,15 @@
         "out_of_profile_complete_outcome": "rejected",
         "unconfirmed_followups_outcome": "rejected",
         "unrelated_unchanged": true,
-        "auto_transitions": 0
+        "auto_transitions": 0,
+        "revisions_added": [
+          "rev_c4_FU-SYN-C4-003_r002",
+          "rev_c4_follow_ups_SCN-DC-SYN-C4-001-baseline",
+          "rev_c4_scenario_set_DC-SYN-C4-001"
+        ]
       },
       "forbidden_mutations": [
-        "decision_layer",
-        "revision_ledger"
+        "decision_layer"
       ]
     }
   }

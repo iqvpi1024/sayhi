@@ -16,7 +16,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+from . import llm_providers
+from .answers import AnswerEvaluator
 from .cloud_model import CloudGate
+from .folder_import import extract_docx_text
 from .mcp_runtime import McpRuntime, SUPPORTED_PROFILE as MCP_PROFILE
 from .model_capability import RED_LINE_COMPARTMENTS
 from .pack_backup import create_backup, export_markdown_pack, restore_backup
@@ -25,10 +28,10 @@ from .store import SemanticStore
 
 JsonObject = dict[str, Any]
 MAX_SOURCE_BYTES = 1_000_000
-FOLDER_EXTENSIONS = (".md", ".txt", ".json", ".csv")
+FOLDER_EXTENSIONS = (".md", ".txt", ".json", ".csv", ".docx")
 CANDIDATE_KINDS = ("entity", "assertion", "commitment", "episode")
 SETTINGS_KEYS = (
-    "model_mode", "model_endpoint", "model_api_key", "model_name",
+    "model_mode", "model_provider", "model_endpoint", "model_api_key", "model_name",
     "remote_access", "remote_host", "port", "api_token", "backup_key", "language",
 )
 # 产品云端通路复用 Y2-S4 CloudGate:授权门 + 红线门 + 预览门 + 审计账本。
@@ -189,9 +192,10 @@ class NoetideApp:
     def _default_settings(self) -> JsonObject:
         return {
             "model_mode": "offline",
+            "model_provider": "openai_compatible",
             "model_endpoint": "",
             "model_api_key": "",
-            "model_name": "offline-rule-v1",
+            "model_name": "",
             "remote_access": False,
             "remote_host": "127.0.0.1",
             "port": 8765,
@@ -352,12 +356,21 @@ class NoetideApp:
                 report["skipped"] += 1
                 report["skipped_paths"].append(relative)
                 continue
-            try:
-                text = candidate.read_text(encoding="utf-8")
-            except (OSError, UnicodeDecodeError):
-                report["rejected"] += 1
-                report["rejections"].append({"entry": relative, "failure": "unreadable_or_invalid_utf8"})
-                continue
+            if candidate.suffix.lower() == ".docx":
+                try:
+                    text = extract_docx_text(candidate.read_bytes())
+                except (OSError, ValueError):
+                    # 损坏或非 docx 内容:fail-closed 拒绝该文件并计数,不中断整个导入
+                    report["rejected"] += 1
+                    report["rejections"].append({"entry": relative, "failure": "docx_unreadable"})
+                    continue
+            else:
+                try:
+                    text = candidate.read_text(encoding="utf-8")
+                except (OSError, UnicodeDecodeError):
+                    report["rejected"] += 1
+                    report["rejections"].append({"entry": relative, "failure": "unreadable_or_invalid_utf8"})
+                    continue
             digest = _sha256(text)
             source_id = "src_p_" + digest[:16]
             existing = self._store.seeded_source(source_id)
@@ -409,14 +422,18 @@ class NoetideApp:
             ]
         candidates: list[JsonObject] = []
         rejected: list[JsonObject] = []
+        extraction_stats: JsonObject = {}
         seen_ids = [source["source_id"] for source in sources]
         mode = self._settings.get("model_mode", "offline")
         for source in sources:
             if mode == "offline":
                 items = self._offline_items(source)
                 failure = None
+                stats: JsonObject = {}
             else:
-                items, failure = self._model_items(source)
+                items, failure, stats = self._model_items(source)
+            if stats:
+                extraction_stats[source["source_id"]] = stats
             if failure:
                 rejected.append({"source_id": source["source_id"], "reason": failure})
                 continue
@@ -425,13 +442,17 @@ class NoetideApp:
                 if candidate is not None:
                     candidates.append(candidate)
         self._refresh_projection()
-        return {
+        result: JsonObject = {
             "batch_id": "batch_p_" + _sha256(_canonical_json({"mode": mode, "sources": seen_ids}))[:16],
             "mode": mode,
             "sources_seen": seen_ids,
             "candidates_proposed": candidates,
             "rejected_outputs": rejected,
         }
+        if extraction_stats:
+            # 提取统计(含编造证据丢弃计数)随批次返回,供界面诚实呈现
+            result["extraction_stats"] = extraction_stats
+        return result
 
     def _has_candidates(self, source_id: str) -> bool:
         return any(
@@ -447,6 +468,11 @@ class NoetideApp:
                 items.append({"candidate_kind": "entity", "payload": {"entity_kind": "person", "canonical_label": label, "aliases": [label], "summary": sentence}})
             for label in _find_projects(sentence):
                 items.append({"candidate_kind": "entity", "payload": {"entity_kind": "project", "canonical_label": label, "aliases": [label], "summary": sentence}})
+            for person, org, role in _find_role_relations(sentence):
+                # 人物-项目关系("X 是 Y 的 CEO/创始人/CTO"):人物、项目各一条实体,关系一条断言
+                items.append({"candidate_kind": "entity", "payload": {"entity_kind": "person", "canonical_label": person, "aliases": [person], "summary": sentence}})
+                items.append({"candidate_kind": "entity", "payload": {"entity_kind": "project", "canonical_label": org, "aliases": [org], "summary": sentence}})
+                items.append({"candidate_kind": "assertion", "payload": {"assertion_kind": "personal_statement", "canonical_text": sentence, "subject_ref": person, "predicate": role, "object_ref": org, "summary": sentence}})
             if _is_commitment(sentence):
                 items.append({"candidate_kind": "commitment", "payload": {"commitment_kind": "personal_commitment", "statement": sentence, "due_text": _find_due_text(sentence), "responsible_ref": "local_user"}})
             if _is_episode(sentence):
@@ -457,76 +483,80 @@ class NoetideApp:
                 break
         return items
 
-    def _model_items(self, source: Mapping[str, Any]) -> tuple[list[JsonObject], str | None]:
-        endpoint = str(self._settings.get("model_endpoint") or "").strip()
+    def _model_items(self, source: Mapping[str, Any]) -> tuple[list[JsonObject], str | None, JsonObject]:
+        provider = str(self._settings.get("model_provider") or "openai_compatible").strip()
+        # endpoint 为空时回落到提供商预置缺省端点(如 anthropic/gemini 官方地址)
+        endpoint = str(self._settings.get("model_endpoint") or "").strip() or llm_providers.default_endpoint(provider)
         if not endpoint:
-            return [], "model_endpoint_missing"
+            return [], "model_endpoint_missing", {}
         parsed = urllib.parse.urlparse(endpoint)
         mode = self._settings.get("model_mode")
         if mode == "local":
             if parsed.scheme != "http":
-                return [], "local_endpoint_must_be_http"
+                return [], "local_endpoint_must_be_http", {}
             if not _is_loopback_host(parsed.hostname):
-                return [], "local_endpoint_must_be_loopback"
+                return [], "local_endpoint_must_be_loopback", {}
         if mode == "cloud" and parsed.scheme != "https":
-            return [], "cloud_endpoint_must_be_https"
+            return [], "cloud_endpoint_must_be_https", {}
         gate: CloudGate | None = None
         grant_ref = ""
         preview_id: str | None = None
         if mode == "cloud":
             gate, grant_ref, preview_id, failure = self._cloud_authorize(source, endpoint)
             if failure is not None:
-                return [], failure
-        prompt = (
-            "你是识海识灵。请从材料中提取少量可审核候选，只输出 JSON。\n"
-            '格式：{"candidates":[{"candidate_kind":"entity|assertion|commitment|episode",'
-            '"payload":{"canonical_label":"...","summary":"..."}}]}\n'
-            "不要包含确认、自动发布等字段。材料：\n" + _source_content(source)
-        )
-        body = {
-            "model": str(self._settings.get("model_name") or "noetide-shiling"),
-            "messages": [
-                {"role": "system", "content": "You are a conservative personal memory curator. Return JSON only."},
-                {"role": "user", "content": prompt},
-            ],
-            "temperature": 0,
-            "max_tokens": 1024,
-        }
-        headers = {"Content-Type": "application/json"}
+                return [], failure, {}
+        source_text = _source_content(source)
         api_key = str(self._settings.get("model_api_key") or "").strip()
-        if api_key:
-            headers["Authorization"] = "Bearer " + api_key
-        request = urllib.request.Request(endpoint, data=json.dumps(body, ensure_ascii=False).encode("utf-8"), headers=headers, method="POST")
+        model = str(self._settings.get("model_name") or "").strip()
+        messages = [
+            {"role": "system", "content": llm_providers.EXTRACTION_SYSTEM_PROMPT},
+            {"role": "user", "content": llm_providers.build_extraction_prompt(source_text)},
+        ]
         try:
-            with urllib.request.urlopen(request, timeout=15) as response:
-                response_payload = json.loads(response.read().decode("utf-8"))
-            raw = response_payload["choices"][0]["message"]["content"]
+            raw = llm_providers.chat_completion(provider, endpoint, api_key, model, messages, timeout=15)
         except Exception as exc:
+            message = str(exc)
+            if api_key:
+                # 双保险:适配层已脱敏,这里再确保 api_key 不进失败原因/审计
+                message = message.replace(api_key, "***")
             if gate is not None:
                 self._cloud_audit_send(gate, "send_failed", source, grant_ref, preview_id, "transport_failed")
-            return [], "model_call_failed:" + str(exc)
-        raw = str(raw).strip()
-        if raw.startswith("```"):
-            raw = re.sub(r"^```(?:json)?\s*", "", raw).removesuffix("```").strip()
-        try:
-            parsed_obj = json.loads(raw)
-        except json.JSONDecodeError:
+            return [], "model_call_failed:" + message, {}
+        entries, stats = llm_providers.parse_extraction_output(raw, source_text)
+        if stats.get("error"):
             if gate is not None:
                 self._cloud_audit_send(gate, "send_failed", source, grant_ref, preview_id, "invalid_output")
-            return [], "invalid_model_json"
-        items = parsed_obj.get("candidates") if isinstance(parsed_obj, dict) else parsed_obj
-        if not isinstance(items, list):
-            if gate is not None:
-                self._cloud_audit_send(gate, "send_failed", source, grant_ref, preview_id, "invalid_output")
-            return [], "invalid_candidates_shape"
-        valid: list[JsonObject] = []
-        for item in items:
-            if not isinstance(item, dict) or item.get("candidate_kind") not in CANDIDATE_KINDS or not isinstance(item.get("payload"), dict):
-                continue
-            valid.append({"candidate_kind": item["candidate_kind"], "payload": item["payload"]})
+            return [], "invalid_model_output:" + str(stats["error"]), stats
+        valid = [self._candidate_from_extraction(entry) for entry in entries]
         if gate is not None:
             self._cloud_audit_send(gate, "send_succeeded", source, grant_ref, preview_id, None)
-        return valid, None
+        return valid, None, stats
+
+    @staticmethod
+    def _candidate_from_extraction(entry: Mapping[str, Any]) -> JsonObject:
+        """把结构化提取条目映射为既有候选结构(candidate_kind + payload,propose-only)。"""
+        object_type = str(entry.get("object_type"))
+        label = str(entry.get("label") or "").strip()
+        summary = str(entry.get("summary") or "").strip() or label
+        quote = str(entry.get("evidence_quote") or "").strip()
+        if object_type == "project":
+            kind = "entity"
+            payload: JsonObject = {"entity_kind": "project", "canonical_label": label or summary[:60], "aliases": [label] if label else [], "summary": summary}
+        elif object_type == "commitment":
+            kind = "commitment"
+            payload = {"commitment_kind": "personal_commitment", "statement": summary, "due_text": "", "responsible_ref": "local_user", "summary": summary}
+        elif object_type == "event":
+            kind = "episode"
+            payload = {"episode_kind": "personal_event", "title": (label or summary)[:60], "summary": summary, "valid_time": {"kind": "unknown", "value": None}}
+        elif object_type == "assertion":
+            kind = "assertion"
+            payload = {"assertion_kind": "personal_statement", "canonical_text": summary, "subject_ref": None, "predicate": None, "object_ref": None, "summary": summary}
+        else:
+            kind = "entity"
+            payload = {"entity_kind": "person", "canonical_label": label or summary[:60], "aliases": [label] if label else [], "summary": summary}
+        # evidence_quote 已通过原文子串校验,随 payload 留存供人审核(不改变候选结构)
+        payload["evidence_quote"] = quote
+        return {"candidate_kind": kind, "payload": payload}
 
     def _cloud_authorize(
         self, source: Mapping[str, Any], endpoint: str
@@ -631,11 +661,20 @@ class NoetideApp:
             "evidence_refs": evidence_refs,
             "review_status": "unconfirmed",
             "status": "proposed",
-            "model_or_rule_version": self._settings.get("model_name", "offline-rule-v1"),
+            "model_or_rule_version": self._model_version_label(),
             "created_at": self._now,
         }
         self._store.put_ledger_record(candidate_id, "product_candidate", candidate, revision_id=self._store.current_revision())
         return candidate
+
+    def _model_version_label(self) -> str:
+        """候选 provenance 用的版本标签:显式 model_name 优先,其次离线规则/提供商缺省模型。"""
+        configured = str(self._settings.get("model_name") or "").strip()
+        if configured:
+            return configured
+        if self._settings.get("model_mode") == "offline":
+            return "offline-rule-v1"
+        return llm_providers.default_model(str(self._settings.get("model_provider") or "")) or "provider-default"
 
     def list_candidates(self, status: str | None = None) -> list[JsonObject]:
         candidates = self._store.ledger_records_of_type("product_candidate")
@@ -824,6 +863,236 @@ class NoetideApp:
         events.sort(key=lambda item: str(item["at"]), reverse=True)
         return events[:limit]
 
+    # -- 问识海(只读问答) ---------------------------------------------------
+
+    def ask(self, question: str) -> JsonObject:
+        """诚实问答:只基于已确认记忆+原文证据,调用 answers.py 语义层逐条核对。
+
+        无证据时明确回答"不知道/没有覆盖",绝不编造;本方法是只读操作,零写入。
+        """
+        question = str(question or "").strip()
+        if not question:
+            raise ValueError("empty_question")
+        now = utc_now()
+        snapshot = self._store.portability_snapshot()
+        sources = list(snapshot["sources"])
+        canonical = list(snapshot["canonical"])
+        source_by_id = {source["source_id"]: source for source in sources}
+
+        # 产品断言适配为 AnswerEvaluator 合同形状;无法安全适配的一律不参与回答
+        adapted = [
+            item for item in (self._ask_adapt_assertion(obj) for obj in canonical)
+            if item is not None
+        ]
+        evaluator = self._ask_evaluator(adapted, sources, now)
+
+        terms = _ask_terms(question)
+        scored = sorted(
+            ((_ask_score(item, terms), item) for item in adapted),
+            key=lambda pair: (-pair[0], str(pair[1]["assertion_id"])),
+        )
+        relevant = [item for score, item in scored if score > 0][:8]
+
+        verified: list[tuple[JsonObject, JsonObject]] = []
+        rejected: list[tuple[JsonObject, JsonObject]] = []
+        for item in relevant:
+            answer = evaluator.evaluate(self._ask_query(item, question))
+            if answer.get("answer_status") == "verified":
+                verified.append((item, answer))
+            else:
+                rejected.append((item, answer))
+
+        # 负向探针:没有可核对的陈述时,让语义层给出诚实的拒绝原因(如 AS-008 仅派生证据)
+        probe = None
+        if not verified:
+            probe = evaluator.evaluate({
+                "query_id": "ask_probe_" + _sha256(question)[:16],
+                "claim_ref": "product.free_text:" + _sha256(question)[:12],
+                "subject_ref": "local_user",
+                "predicate": "product.free_text_query",
+                "verification_scope": "statement_occurrence",
+                "valid_time": "current",
+                "coverage_window_refs": [],
+            })
+
+        reason_codes: set[str] = set()
+        for _, answer in verified + rejected:
+            reason_codes.update(answer.get("reason_codes") or [])
+        if probe is not None:
+            reason_codes.update(probe.get("reason_codes") or [])
+
+        evidence: list[JsonObject] = []
+        seen_evidence: set[tuple[str, str]] = set()
+        for item, answer in verified:
+            for ref in answer.get("evidence_refs") or []:
+                source_id = ref.get("source_id")
+                key = (str(item["assertion_id"]), str(source_id))
+                if key in seen_evidence:
+                    continue
+                seen_evidence.add(key)
+                source = source_by_id.get(source_id)
+                evidence.append({
+                    "object_id": item["assertion_id"],
+                    "object_type": "assertion",
+                    "text": item["canonical_text"],
+                    "source_id": source_id,
+                    "source_title": (source.get("title") if source else None) or str(source_id),
+                    "claim_ref": item["evidence_refs"][0].get("claim_ref"),
+                    "verified_scope": answer.get("verification_scope"),
+                })
+
+        covered = [item["canonical_text"] for item, _ in verified]
+        not_covered: list[str] = []
+        for item, answer in rejected:
+            codes = answer.get("reason_codes") or []
+            not_covered.append(
+                "相关记忆「" + item["canonical_text"][:40] + "」未作为回答依据:"
+                + _ask_reason_text(codes)
+            )
+        if probe is not None:
+            not_covered.extend(_ask_reason_text([code]) for code in (probe.get("reason_codes") or []))
+        if not verified:
+            # 原始资料命中但未经确认的内容不算证据,只提示数量,不展示内容
+            unconfirmed_hits = sum(
+                1 for source in sources
+                if any(term in _source_content(source).lower() for term in terms)
+            )
+            if unconfirmed_hits:
+                not_covered.append(f"{unconfirmed_hits} 份原始资料含有相关文本,但尚未确认,未作为回答依据")
+        not_covered.append("本次回答不覆盖:未确认的候选、未导入识海的内容")
+
+        if verified:
+            lines = "\n".join(f"{index}. {text}" for index, text in enumerate(covered, 1))
+            answer_text = "根据你已确认的记忆(仅核对“资料中确实这样记录”,不代表内容必然为真):\n" + lines
+            answer_status = "answered"
+        else:
+            answer_text = "我不知道。已确认的记忆中没有证据覆盖这个问题,识海不会编造回答。"
+            answer_status = "no_coverage"
+
+        return {
+            "question": question,
+            "answer_status": answer_status,
+            "answer_text": answer_text,
+            "coverage": {
+                "covered": covered,
+                "not_covered": not_covered,
+                "searched": {
+                    "confirmed_assertions": len(adapted),
+                    "confirmed_objects": len(canonical),
+                    "sources": len(sources),
+                },
+                "reason_codes": sorted(reason_codes),
+            },
+            "evidence": evidence,
+            "freshness": self._ask_freshness(evidence, source_by_id),
+            "confidence_note": (
+                f"回答基于 {len(verified)} 条已确认记忆、{len(evidence)} 条原文证据;"
+                "核对范围为陈述发生(statement_occurrence),不代表识海核实了内容真实性。"
+                if verified else
+                "未找到证据时识海固定回答不知道;未确认的资料与派生视图不作为回答依据。"
+            ),
+            "evaluated_at": now,
+        }
+
+    @staticmethod
+    def _ask_adapt_assertion(obj: Mapping[str, Any]) -> JsonObject | None:
+        """把已确认的 canonical 断言适配为 AnswerEvaluator 的 fixture 合同形状。
+
+        关键语义映射(诚实,不改 answers.py):
+        - assertion_kind=reported + 查询范围 statement_occurrence:产品断言只声称
+          "资料中确实出现过这条陈述",不声称它是世界事实;
+        - review_status=confirmed:对象能进入 canonical 层,前提就是候选已被用户确认;
+        - claim_ref 细化为 source:subject:predicate:同一来源同一主体同一谓词的
+          不同取值才会被判为冲突(AS-004),避免不同陈述被误报冲突。
+        """
+        if obj.get("object_type") != "assertion":
+            return None
+        text = str(obj.get("canonical_text") or obj.get("summary") or "").strip()
+        evidence_refs = [
+            dict(ref) for ref in obj.get("evidence_refs") or []
+            if isinstance(ref, Mapping) and ref.get("source_id")
+        ]
+        if not text or not evidence_refs:
+            return None
+        subject_ref = str(obj.get("subject_ref") or "local_user")
+        predicate = str(obj.get("predicate") or ("product.statement:" + str(obj.get("object_id"))))
+        source_id = str(evidence_refs[0]["source_id"])
+        claim_ref = f"{source_id}:{subject_ref}:{predicate}"
+        for ref in evidence_refs:
+            ref["claim_ref"] = claim_ref
+        return {
+            "object_type": "assertion",
+            "assertion_id": obj.get("object_id"),
+            "object_revision": obj.get("object_revision"),
+            "subject_ref": subject_ref,
+            "predicate": predicate,
+            "value": text,
+            "assertion_kind": "reported",
+            "review_status": "confirmed",
+            "perspective_ref": subject_ref,
+            "valid_time": {
+                "start": _ask_z_time(obj.get("recorded_at") or obj.get("created_at")),
+                "end": "unbounded",
+                "bounds": "[)",
+            },
+            "evidence_refs": evidence_refs,
+            "canonical_text": text,
+            "object_ref": obj.get("object_ref"),
+            "summary": obj.get("summary") or text,
+        }
+
+    def _ask_evaluator(self, adapted: list[JsonObject], sources: list[JsonObject], now: str) -> AnswerEvaluator:
+        # 产品库的 Derived 投影映射为 derived_inputs:仅派生证据时语义层拒绝回答(AS-008);
+        # 产品不按谓词维护覆盖窗口,coverage_window_refs 恒为空,覆盖度声明由产品侧自行给出
+        initial = {
+            "data_revision": self._store.current_revision(),
+            "canonical_objects": adapted,
+            "coverage_windows": [],
+            "source_records": [
+                {"source_id": source["source_id"], "source_created_at": source.get("source_created_at")}
+                for source in sources
+            ],
+            "derived_inputs": [
+                {"projection_ref": record["view_name"]}
+                for record in self._store.projection_records()
+            ],
+            "candidates": [],
+            "freshness_policies": [],
+        }
+        return AnswerEvaluator(self._store, {"initial_state": initial}, now)
+
+    @staticmethod
+    def _ask_query(item: Mapping[str, Any], question: str) -> JsonObject:
+        return {
+            "query_id": "ask_" + _sha256(question + str(item["assertion_id"]))[:16],
+            "claim_ref": str(item["evidence_refs"][0]["claim_ref"]),
+            "subject_ref": str(item["subject_ref"]),
+            "predicate": str(item["predicate"]),
+            "verification_scope": "statement_occurrence",
+            "valid_time": "current",
+            "coverage_window_refs": [],
+        }
+
+    @staticmethod
+    def _ask_freshness(evidence: list[JsonObject], source_by_id: Mapping[str, Any]) -> JsonObject:
+        """时效诚实声明:只报告证据时间,不发明过期政策替你下判断。"""
+        if not evidence:
+            return {"status": "not_applicable", "newest_evidence_at": None, "oldest_evidence_at": None,
+                    "note": "没有证据,无所谓时效"}
+        times = []
+        for entry in evidence:
+            source = source_by_id.get(entry.get("source_id"))
+            if not source:
+                continue
+            stamp = _ask_z_time(source.get("source_created_at")) or _ask_z_time(source.get("ingested_at"))
+            if stamp:
+                times.append(stamp)
+        if not times:
+            return {"status": "unknown", "newest_evidence_at": None, "oldest_evidence_at": None,
+                    "note": "证据缺少可解析的时间,时效未知"}
+        return {"status": "current", "newest_evidence_at": max(times), "oldest_evidence_at": min(times),
+                "note": "识海只报告证据时间,不替你判断内容是否过期"}
+
     # -- export / import -----------------------------------------------------
 
     def export_pack(self, destination: str | Path | None = None) -> JsonObject:
@@ -970,6 +1239,17 @@ def _find_projects(text: str) -> list[str]:
     return found[:6]
 
 
+def _find_role_relations(text: str) -> list[tuple[str, str, str]]:
+    """人物-项目关系模式:"X 是 Y 的(CEO|创始人|联合创始人|CTO)" -> (人, 组织, 角色)。"""
+    found: list[tuple[str, str, str]] = []
+    pattern = r"([A-Za-z一-鿿]{2,12})是([^，。;；\n]{1,24}?)的(联合创始人|创始人|CEO|CTO)"
+    for match in re.finditer(pattern, text):
+        person, org, role = match.group(1).strip(), match.group(2).strip(" ，。、"), match.group(3)
+        if org and (person, org, role) not in found:
+            found.append((person, org, role))
+    return found
+
+
 def _is_commitment(text: str) -> bool:
     return bool(re.search(r"(答应|承诺|保证|约好|决定|会尽快|稍后|明天|下周|月底|本周|后天|周五|周一)", text))
 
@@ -984,7 +1264,8 @@ def _is_episode(text: str) -> bool:
 
 
 def _find_time(text: str) -> JsonObject:
-    match = re.search(r"([0-9]{4}年[0-9]{1,2}月[0-9]{1,2}日|[0-9]{4}-[0-9]{2}-[0-9]{2}|今天|昨天|上周|明天)", text)
+    # 裸年份("X 在 2020 年")也算事件时间,排在完整日期之后避免截断长匹配
+    match = re.search(r"([0-9]{4}年[0-9]{1,2}月[0-9]{1,2}日|[0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{4}年|今天|昨天|上周|明天)", text)
     return {"kind": "unknown", "value": match.group(1) if match else None}
 
 
@@ -1002,3 +1283,72 @@ def _assertion_subject(text: str) -> str | None:
 def _assertion_predicate(text: str) -> str:
     match = re.search(r"(认为|觉得|决定|发现|确认|很重要|不同意|同意)", text)
     return match.group(1) if match else "陈述"
+
+
+# -- 问识海辅助 -------------------------------------------------------------
+
+# 问题里的通用疑问成分不参与证据匹配
+_ASK_STOPWORDS = frozenset({
+    "什么", "怎么", "怎样", "如何", "为什么", "为何", "多少", "哪些", "哪个", "谁",
+    "哪里", "哪儿", "吗", "呢", "吧", "的", "了", "是", "有", "没有", "是不是",
+    "有没有", "我", "我们", "你", "您", "他", "她", "它", "在", "和", "跟", "与",
+    "请", "请问", "一下", "告诉", "告诉我", "知道", "时候", "能否", "可否",
+})
+
+# answers.py reason_code 的中文诚实说明(未列出的原样展示,不粉饰)
+_ASK_REASON_TEXT = {
+    "unresolved_conflict": "存在相互冲突的陈述,识海不替你裁决",
+    "evidence_outside_freshness_window": "证据超出时效窗口",
+    "derived_evidence_forbidden": "仅有派生视图(投影)相关内容,派生证据不足为凭",
+    "fictional_evidence_excluded": "虚构内容不作为证据",
+    "unreviewed_candidate_present": "相关候选尚未确认,不作为证据",
+    "world_claim_not_verified": "识海只核对记录中是否这样写过,不验证其是否为真",
+    "no_matching_assertion": "已确认记忆中没有可核对的陈述",
+    "coverage_sufficient_no_safe_conclusion": "覆盖充分但得不出安全结论",
+    "claim_ref_mismatch": "证据与问题对不上",
+    "no_coverage_window": "没有覆盖窗口信息",
+}
+
+
+def _ask_reason_text(codes: Iterable[str]) -> str:
+    return ";".join(_ASK_REASON_TEXT.get(code, code) for code in codes) or "未通过证据核对"
+
+
+def _ask_terms(question: str) -> list[str]:
+    """确定性分词:英文/数字整词 + 中文整串与 2-gram,去停用词,保序去重。"""
+    terms: list[str] = []
+    for token in re.findall(r"[A-Za-z0-9_]+|[一-鿿]+", question.lower()):
+        if re.fullmatch(r"[一-鿿]+", token):
+            if len(token) >= 2:
+                terms.append(token)
+            terms.extend(token[index:index + 2] for index in range(len(token) - 1))
+        elif len(token) >= 2:
+            terms.append(token)
+    seen: set[str] = set()
+    unique: list[str] = []
+    for term in terms:
+        if term not in _ASK_STOPWORDS and term not in seen:
+            seen.add(term)
+            unique.append(term)
+    return unique
+
+
+def _ask_score(item: Mapping[str, Any], terms: list[str]) -> int:
+    haystack = " ".join(
+        str(item.get(key) or "")
+        for key in ("canonical_text", "summary", "subject_ref", "object_ref", "predicate")
+    ).lower()
+    return sum(1 for term in terms if term in haystack)
+
+
+def _ask_z_time(value: Any) -> str:
+    """把 ISO 时间规范为 answers.py 冲突检测可解析的 '%Y-%m-%dT%H:%M:%SZ';失败返回 'unbounded'。"""
+    if not isinstance(value, str) or not value:
+        return "unbounded"
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return "unbounded"
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")

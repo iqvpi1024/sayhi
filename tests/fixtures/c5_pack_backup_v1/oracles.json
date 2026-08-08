@@ -57,7 +57,7 @@
         "backup_outcome": "created",
         "ciphertext_differs": true,
         "receipt_has_hashes": true,
-        "encryption_label": "stdlib_deterministic_v1",
+        "encryption_label": "nobak2_pbkdf2_hmac_v1",
         "store_digest_unchanged": true
       },
       "forbidden_mutations": [

@@ -21,9 +21,9 @@ from .store import SemanticStore
 
 
 JsonObject = dict[str, Any]
-# receipt 标签被 C5-005 oracle 哈希绑定，暂保持 stdlib_deterministic_v1；
-# 实际构造已升级为 NOBAK2（见模块 docstring），标签更名需走 Change Control。
-ENCRYPTION_LABEL = "stdlib_deterministic_v1"
+# receipt 标签与实际构造一致:NOBAK2(PBKDF2-HMAC-SHA256 20 万轮派生 + HMAC-SHA256
+# 认证),仍非生产级加密;由 C5-005 oracle 哈希绑定。
+ENCRYPTION_LABEL = "nobak2_pbkdf2_hmac_v1"
 _BACKUP_MAGIC = b"NOBAK2"  # 备份格式版本标记：PBKDF2 派生 + HMAC 认证
 _KDF_ITERATIONS = 200_000
 _SALT_LEN = 16

@@ -1,9 +1,8 @@
 """C4 scenario trio and action follow-ups: predicted scenarios with deterministic feasibility and confirmed-only writes.
 
-合同缺口(需 Change Control):本模块的 Canonical 写入不登记 canonical_revisions
-revision 与 changeset 账本行。c4 oracle 的 forbidden_mutations 锁定
-revision_ledger(revision_ids 摘要)不变,补齐 revision/changeset 语义必须先
-变更 c4 合同;当前仅以事务保证多语句写入的原子性,可观察输出保持不变。
+每次 Canonical 写入在事务内完成:canonical_revisions revision 行 + Canonical
+对象 + changeset 账本行(noetide.changeset.v1)同事务提交,风格与
+hypotheses.py 一致。选择/视图不产生 Canonical 写入,不登记 revision。
 """
 
 from __future__ import annotations
@@ -16,7 +15,36 @@ from .store import SemanticStore
 JsonObject = dict[str, Any]
 SELECTION_RECORD_TYPE = "scenario_selection"
 FOLLOWUP_TRANSITION_RECORD_TYPE = "follow_up_transition"
+CHANGESET_RECORD_TYPE = "changeset"
 SCENARIO_KINDS = ("baseline", "optimistic", "pessimistic")
+
+
+def _write_changeset(
+    store: SemanticStore,
+    changeset_id: str,
+    proposals: list[JsonObject],
+    base_revision: str,
+    revision_id: str,
+    at: str,
+) -> None:
+    """登记 ChangeSet 账本行:每次 Canonical 写入对应一条 noetide.changeset.v1 记录。"""
+    store.put_ledger_record(
+        changeset_id,
+        CHANGESET_RECORD_TYPE,
+        {
+            "changeset_id": changeset_id,
+            "schema_version": "noetide.changeset.v1",
+            "base_revision": base_revision,
+            "actor": "synthetic_user",
+            "requested_at": at,
+            "confirmation_policy": "single_confirmation",
+            "status": "published",
+            "published_revision": revision_id,
+            "reversibility": "reversible",
+            "proposals": proposals,
+        },
+        revision_id=revision_id,
+    )
 
 
 def evaluate_feasibility(constraints: Mapping[str, Sequence[str]]) -> str:
@@ -61,8 +89,12 @@ def create_scenario_set(
     for kind in SCENARIO_KINDS:
         if specs.get(kind) is None:
             return {"outcome": "rejected", "reason": f"missing spec for {kind}"}
-    # 三件套装入一个事务:任一写入失败即整体回滚,不留半套 scenario
+    # 三件套装入一个事务:revision 行 + 三个 Canonical 对象 + changeset 账本行原子提交
+    revision_id = f"rev_c4_scenario_set_{decision_ref}"
+    base_revision = store.current_revision()
+    proposals: list[JsonObject] = []
     with store.transaction():
+        store.add_revision(revision_id, at)
         for kind in SCENARIO_KINDS:
             spec = specs[kind]
             scenario_id = f"SCN-{decision_ref}-{kind}"
@@ -84,6 +116,12 @@ def create_scenario_set(
             }
             store.add_canonical_object(scenario_id, payload)
             created[kind] = payload
+            proposals.append({
+                "proposal_id": f"proposal_c4_{scenario_id}",
+                "operation": "add",
+                "target_ref": {"object_type": "assertion", "object_id": scenario_id},
+            })
+        _write_changeset(store, f"changeset_c4_scenario_set_{decision_ref}", proposals, base_revision, revision_id, at)
     return {"outcome": "applied", "scenarios": created}
 
 
@@ -125,8 +163,12 @@ def create_follow_ups(
     if not _selected(store, scenario_id):
         return {"outcome": "rejected", "reason": "scenario not selected"}
     created: list[JsonObject] = []
-    # 全部 follow-up 装入一个事务,避免部分创建
+    # 全部 follow-up 装入一个事务:revision 行 + Canonical 对象 + changeset 账本行原子提交
+    revision_id = f"rev_c4_follow_ups_{scenario_id}"
+    base_revision = store.current_revision()
+    proposals: list[JsonObject] = []
     with store.transaction():
+        store.add_revision(revision_id, at)
         for action in actions:
             payload: JsonObject = {
                 "object_type": "commitment",
@@ -143,6 +185,12 @@ def create_follow_ups(
             }
             store.add_canonical_object(action["follow_up_id"], payload)
             created.append(payload)
+            proposals.append({
+                "proposal_id": f"proposal_c4_{action['follow_up_id']}",
+                "operation": "add",
+                "target_ref": {"object_type": "commitment", "object_id": action["follow_up_id"]},
+            })
+        _write_changeset(store, f"changeset_c4_follow_ups_{scenario_id}", proposals, base_revision, revision_id, at)
     return {"outcome": "applied", "follow_ups": created}
 
 
@@ -162,8 +210,11 @@ def complete_follow_up(store: SemanticStore, follow_up_id: str, confirmed: bool,
     updated["status"] = "done"
     updated["object_revision"] = payload["object_revision"] + 1
     updated["completed_at"] = at
-    # 对象替换与账本回执是一个原子单元
+    # 对象替换、revision 行、changeset 账本行与迁移回执是一个原子单元
+    revision_id = f"rev_c4_{follow_up_id}_r{updated['object_revision']:03d}"
+    base_revision = store.current_revision()
     with store.transaction():
+        store.add_revision(revision_id, at)
         store.replace_canonical_object(follow_up_id, updated)
         record_id = f"followup-transition:{follow_up_id}:r{updated['object_revision']}"
         store.put_ledger_record(record_id, FOLLOWUP_TRANSITION_RECORD_TYPE, {
@@ -173,6 +224,11 @@ def complete_follow_up(store: SemanticStore, follow_up_id: str, confirmed: bool,
             "to_status": "done",
             "at": at,
         })
+        _write_changeset(store, f"changeset_c4_{follow_up_id}_r{updated['object_revision']:03d}", [{
+            "proposal_id": f"proposal_c4_{follow_up_id}_r{updated['object_revision']:03d}",
+            "operation": "replace",
+            "target_ref": {"object_type": "commitment", "object_id": follow_up_id},
+        }], base_revision, revision_id, at)
     return {"outcome": "applied", "follow_up": updated}
 
 

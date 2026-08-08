@@ -5,7 +5,7 @@
 | 字段 | 值 |
 |---|---|
 | Contract ID | `SPEC-C5-PACK-001` |
-| 版本 | `0.1` |
+| 版本 | `0.2` |
 | 状态 | `Approved for C5 slice` |
 | 产品基线 | `PRDv05.md` v0.5 |
 | 产品决定 | `DEC-MVP-C-PACK-001` |
@@ -13,6 +13,8 @@
 | 适用范围 | `SLICE-MVP-C-PACK-001`，仅固定合成数据 |
 
 > v0.6 适用性注记（2026-08-07）：本合同基于 PRDv05 验证；PRDv06 为纯增量并入，v0.6 适用性复核结论见 `docs/reviews/PRD_V06_SPEC_COMPATIBILITY_REVIEW.md` §5，本切片结果继续有效。
+>
+> v0.2 修订（2026-08-08）：§2.2 receipt 的 `encryption` 标签由 `stdlib_deterministic_v1` 更名为 `nobak2_pbkdf2_hmac_v1`，使标签与实际构造（NOBAK2：PBKDF2-HMAC-SHA256 20 万轮 + HMAC-SHA256 认证）一致；加密构造、状态机与不变量均未变化，非生产标注语义不变。C5 oracle/runner result 已同步重跑并 rebind，旧结果 `c5-20260726.json` 转 superseded。
 
 ## 1. 目标与非目标
 
@@ -37,10 +39,10 @@ checksums.sha256: 全部条目（含 markdown）逐行 sha256
 ### 2.2 EncryptedBackup（本地加密备份，非生产构造）
 
 ```yaml
-backup_file: <name>.nobak          # 密文：nonce(16B) + XOR(plaintext, sha256 密钥流)
+backup_file: <name>.nobak          # 密文：NOBAK2 = magic(6B) + salt(16B) + nonce(16B) + HMAC tag(32B) + XOR(plaintext, sha256 密钥流)
 backup_receipt:
   backup_id / source_db_sha256 / backup_sha256 / created_at（fixture clock）
-  encryption: stdlib_deterministic_v1   # 明确标注非生产；禁止宣称生产安全
+  encryption: nobak2_pbkdf2_hmac_v1   # 明确标注非生产；禁止宣称生产安全
   key_hint: 不含密钥本体的固定合成标签
 ```
 

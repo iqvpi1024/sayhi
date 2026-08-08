@@ -45,7 +45,7 @@
     {
       "role": "oracle",
       "path": "tests/fixtures/c4_scenario_action_v1/oracles.json",
-      "sha256": "2a741ea667bf20c4507afb4f2e1edf6b9a887e8629ef2868a2423d5d5b391dce"
+      "sha256": "3674d87ca3b29996fa7e13b2dd016de37103419ccdd041fc0825aff8464bb695"
     },
     {
       "role": "scenario_plan",
@@ -73,7 +73,14 @@
       "sha256": "085e128efac2e0bbd00bcc3fcc54f963be932371e8746bcd0c13026d35ba77d8"
     }
   ],
-  "latest_verification_result_path": "docs/testing/results/c4-20260726.json",
-  "latest_verification_result_sha256": "5838392ef8f8e018fc2f22a86d2d49b11dab5386628cd7a41e58e5888679a7da",
-  "latest_verification_manifest_sha256": "7066e93c47de65cb5d18cd2f965c8ecab42f7c84109e7b5a08b00febffce8a17"
+  "latest_verification_result_path": "docs/testing/results/c4-20260808.json",
+  "latest_verification_result_sha256": "8b2cb2b1e179f4771c93a3a54e764cbe5bd8470f39ba3000262c6ff613884228",
+  "latest_verification_manifest_sha256": "77b954bab7ab36d16e96b6cdbad95f40fb2807cc06b98e9bee9bbc88ee0b3710",
+  "historical_verification_results": [
+    {
+      "applicability": "superseded",
+      "path": "docs/testing/results/c4-20260726.json",
+      "reason": "C4 oracle 修正:scenarios.py 补齐 canonical revision/changeset 账本后,revision_ledger 由 forbidden_mutation 改为 revisions_added 精确断言(fixture 未动)。"
+    }
+  ]
 }

@@ -160,6 +160,10 @@ class ProductHttpHandler(http.server.BaseHTTPRequestHandler):
                     source_ids = body.get("source_ids") if isinstance(body, dict) else None
                     result = app.analyze_sources(source_ids)
                     return 200, {"status": "ok", "data": result}
+                if path_only == "/api/ask":
+                    if not isinstance(body, dict) or not isinstance(body.get("question"), str) or not body["question"].strip():
+                        return 400, {"status": "rejected", "reason": "question_required"}
+                    return 200, {"status": "ok", "data": app.ask(body["question"])}
                 if path_only == "/api/export":
                     return 200, {"status": "ok", "data": app.export_pack()}
                 if path_only == "/api/backup":

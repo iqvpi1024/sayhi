@@ -60,7 +60,7 @@ class PackBackupTask001Tests(unittest.TestCase):
         result = pack_backup.create_backup(self.db_path, KEY, backup, CLOCK)
         self.assertEqual(result["outcome"], "created")
         self.assertNotEqual(backup.read_bytes(), self.db_path.read_bytes())
-        self.assertEqual(result["receipt"]["encryption"], "stdlib_deterministic_v1")
+        self.assertEqual(result["receipt"]["encryption"], "nobak2_pbkdf2_hmac_v1")
         restored = Path(self._tmpdir) / "restored.sqlite3"
         outcome = pack_backup.restore_backup(backup, KEY, restored)
         self.assertEqual(outcome["outcome"], "restored")
