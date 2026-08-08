@@ -66,7 +66,7 @@
 
 ## 一分钟启动(Windows)
 
-1. 到 [Releases](https://github.com/iqvpi1024/sayhi/releases) 下载最新版 `Noetide-beta-v0.3.1-win64.zip` 并解压(校验值见同页的 `SHA256SUMS`)。
+1. 到 [Releases](https://github.com/iqvpi1024/sayhi/releases) 下载最新版 `Noetide-beta-v0.3.2-win64.zip` 并解压(校验值见同页的 `SHA256SUMS`)。
 2. 双击 `scripts/Noetide Setup.cmd`,选一个你自己的数据文件夹。
 3. 双击 `scripts/Noetide Start.cmd`。
 4. 浏览器打开 `http://127.0.0.1:8765`。
