@@ -5,7 +5,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Runtime deps: 0](https://img.shields.io/badge/runtime%20dependencies-0-brightgreen.svg)](pyproject.toml)
-[![Tests: 529 passed / 0 skipped](https://img.shields.io/badge/tests-529%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
+[![Tests: 530 passed / 0 skipped](https://img.shields.io/badge/tests-530%20passed%20%2F%200%20skipped-brightgreen.svg)](docs/PROJECT_STATE.md)
 [![Suites: 26 hash-bound](https://img.shields.io/badge/verification%20suites-26%20hash--bound-brightgreen.svg)](docs/testing/README.md)
 [![Platform: Win/mac/Linux](https://img.shields.io/badge/platform-Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-lightgrey.svg)](dist/)
 
@@ -76,7 +76,7 @@
 
 **Windows**:
 
-1. 到 [Releases](https://github.com/iqvpi1024/sayhi/releases) 下载最新版 `sayhi-beta-v0.3.4-win64.zip` 并解压(校验值见同页的 `SHA256SUMS`)。
+1. 到 [Releases](https://github.com/iqvpi1024/sayhi/releases) 下载最新版 `sayhi-beta-v0.3.5-win64.zip` 并解压(校验值见同页的 `SHA256SUMS`)。
 2. 双击 `scripts/sayhi Setup.cmd`,选一个你自己的数据文件夹。
 3. 双击 `scripts/sayhi Start.cmd`。
 4. 浏览器打开 `http://127.0.0.1:8765`。
@@ -84,7 +84,7 @@
 **macOS / Linux**(需要 Python 3.12+):
 
 ```bash
-tar xzf sayhi-0.3.4-src.tar.gz && cd sayhi-0.3.4-src
+tar xzf sayhi-0.3.5-src.tar.gz && cd sayhi-0.3.5-src
 scripts/portable/setup-noetide.sh    # 选数据目录并初始化
 scripts/portable/start-noetide.sh    # 启动,浏览器打开 http://127.0.0.1:8765
 ```
@@ -123,7 +123,7 @@ claude mcp add --transport http sayhi http://127.0.0.1:8765/mcp
 
 今天的状态,任何人都可以独立复核:
 
-- **529 项语义回归,0 跳过**,全绿;
+- **530 项语义回归,0 跳过**,全绿;
 - **26 个验证套件**,每个的 fixture、oracle、结果文件哈希绑定可逐字节重算;
 - **PRD 基线哈希链**:v04 → v05 → v06 三代产品需求文档逐字锚定,历史版本永久只读;
 - **49 个 git tag**,每个 recovery tag 都指向一组可复现的验证记录;
@@ -156,7 +156,7 @@ claude mcp add --transport http sayhi http://127.0.0.1:8765/mcp
 - **Red-line compartments.** Health, finance, intimacy — marked content is invisible to agents and can never leave the machine. Every cloud call passes red-line + grant + preview gates with a full audit ledger.
 - **History is never overwritten.** Bitemporal storage: corrections, contradictions and reversals are all preserved. Derived views can never become evidence.
 
-**Evidence-chain engineering.** Every slice ships with hash-bound fixtures, oracles and runner outputs: 529 green regression tests (0 skipped), 26 verification suites, a hash-chained PRD lineage, 49 recovery tags. The MCP layer was verified against the official TypeScript and Python SDKs — not just "should work". Don't trust it — audit it.
+**Evidence-chain engineering.** Every slice ships with hash-bound fixtures, oracles and runner outputs: 530 green regression tests (0 skipped), 26 verification suites, a hash-chained PRD lineage, 49 recovery tags. The MCP layer was verified against the official TypeScript and Python SDKs — not just "should work". Don't trust it — audit it.
 
 **Honest limits:** single-user; unsigned Windows package (macOS/Linux via source tarball, Python 3.12+); backup crypto is a stdlib-only construction (PBKDF2 200k rounds + HMAC-SHA256), not production-grade; MCP is read + propose-only, no SSE sessions; vector recall is local-model only.
 
