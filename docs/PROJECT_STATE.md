@@ -10,16 +10,16 @@
 |---|---|
 | 项目 | 识海 Noetide |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
-| 当前公开发布 | **`v0.3.1-beta` 已发布（2026-08-08，GitHub prerelease，含 LLM 提供商层/问识海/docx/Change Control 尾巴）；仓库已公开** |
+| 当前公开发布 | **`v0.3.2-beta` 已发布（2026-08-08，GitHub prerelease，补丁版：推理模型兼容性 + 问识海诚实性修复）；仓库已公开** |
 | 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
-| 当前阶段 | `v0.3.0-beta released + repo public`；2026-08-07 全面审核整改已完成（§3 第 75–78 条），README 已为公开发布重写 |
-| 当前公开版本 | `v0.3.1-beta` GitHub prerelease |
-| tag / commit | annotated tag `v0.3.1-beta` -> `5f7c89d`（第二波优化提交）；`v0.3.0-beta` -> `0dcc89d`；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
+| 当前阶段 | `v0.3.2-beta released + repo public`；2026-08-07 全面审核整改已完成（§3 第 75–78 条），README 已为公开发布重写 |
+| 当前公开版本 | `v0.3.2-beta` GitHub prerelease |
+| tag / commit | annotated tag `v0.3.2-beta` -> `2d9602e`（0.3.2 版本号提交，修复在 `16e9e16`）；`v0.3.1-beta` -> `5f7c89d`；`v0.3.0-beta` -> `0dcc89d`；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | product-complete recovery tag | annotated tag `product-complete-rp-20260803`（tag object `a64fb89`）-> `9e3875d0c32c7a1aab249a90d6b7cd84911f533d`，已创建并推送 origin |
 | audit-remediation recovery tag | annotated tag `audit-remediation-rp-20260808` -> `8ea83d2`（整改提交，76 文件），已创建并推送 origin |
-| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.1-beta`（仓库已公开，匿名 HTTP 200） |
-| v0.3.1 发布产物 | `Noetide-beta-v0.3.1-win64.zip` SHA-256 `236f88d12420e6aeb9bfe09ec8d45bf28aec085ca012c1b4c969e9c7945533e0`（从 tag `v0.3.1-beta` 构建；GitHub API 远端 digest 与本地一致）；smoke：初始化、/api/health、/api/overview、/api/ask（no_coverage 诚实回答）、Web UI 200、恶意 Origin 403 全部通过 |
-| v0.3.0 发布产物（历史） | `Noetide-beta-v0.3.0-win64.zip` SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（从 tag `v0.3.0-beta` 构建，含安全修复） |
+| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.2-beta`（仓库已公开，匿名 HTTP 200） |
+| v0.3.2 发布产物 | `Noetide-beta-v0.3.2-win64.zip` SHA-256 `c89165a6abc7ece2f4151919d569ae39582334bb8f3e7b578cdf7cbeb29048b1`（从 tag `v0.3.2-beta` 构建；GitHub API 远端 digest 与本地一致，SHA256SUMS 文件 digest `47a602ad…59ad8` 亦一致）；smoke：product-init exit 0、/api/health 200、/api/ask 空库诚实 no_coverage、Web UI 200、恶意 Origin 403 全部通过 |
+| 历史发布产物 | v0.3.1 zip SHA-256 `236f88d12420e6aeb9bfe09ec8d45bf28aec085ca012c1b4c969e9c7945533e0`（tag `v0.3.1-beta`）；v0.3.0 zip SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（tag `v0.3.0-beta`） |
 | 交付级别 | D1/D2/D3 历史版本已发布；当前完整产品已具备一键安装、Web 管理、MCP/API、识灵大模型分析、导出备份与远程访问 |
 | 分支 | `main`，已推送至 `origin/main` |
 
@@ -230,6 +230,7 @@
 | Change Control 后 validator 复扫（2026-08-08） | 26 个 suite validator 全部 exit 0 |
 | 真人模拟测试（2026-08-08） | 7 轮端到端实测（真实 Kimi API + 10 份用户语料，`ces/` 独立数据目录）：10/10 导入、54 候选、确认 48/拒绝 6、红线门拦截敏感记录、反编造门丢弃 2 条假证据、备份恢复 42/42 保真、3 并发 MCP Agent 零冲突；报告 `ces/测试报告-2026-08-08.md`（未入库） |
 | 模拟测试修复后全量回归（2026-08-08，最终树） | `PYTHONPATH=src` + 21 adapter 环境变量 + `python -m unittest discover -s tests -t .`：exit 0，**Ran 513 tests，OK，0 skipped**（511 + ask 新增 2 回归用例）；`test_product_ask.py` 8/8、`test_product_providers.py` 17/17、`test_product_app.py` 5/5 |
+| v0.3.2-beta 发布核验（2026-08-08） | GitHub API 附件 digest：zip = `sha256:c89165a6abc7ece2f4151919d569ae39582334bb8f3e7b578cdf7cbeb29048b1`、SHA256SUMS = `sha256:47a602ad11b69fd05686b8014fc4ba57787650338d563fc3e600b8b820859ad8`，与本地 `dist/` 复核一致；发布包从 tag `v0.3.2-beta` 构建；smoke 实测：product-init exit 0、/api/health 200、/api/ask 空库诚实 no_coverage、Web UI 200、恶意 Origin 403；prerelease 已发布，tag 已推送远端 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -242,4 +243,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**v0.3.1-beta 已发布、仓库已公开（2026-08-08）：真人模拟测试（§3 第 82 条）已完成并修复推理模型兼容性 + ask 诚实漏洞，全量回归 513 OK 0 skipped。下一步：模拟测试遗留改进点排期——MCP propose_changeset 提议接入产品候选队列（网页可确认）、MCP 合同可发现性、提取摘要保实质、长任务进度提示；其余遗留——changesets/episodes 硬编码 rev 命名待 Change Control 评估；持续关注公开后的外部反馈与安全问题响应。**
+**v0.3.2-beta 已发布（2026-08-08）：真人模拟测试修复（§3 第 82 条：推理模型兼容性 + ask 诚实漏洞）已作为 tag `v0.3.2-beta`（-> `2d9602e`）发布，发布包从 tag 构建、smoke 全过、远端附件 digest 与本地一致；全量回归 513 OK 0 skipped。下一步：模拟测试遗留改进点排期——MCP propose_changeset 提议接入产品候选队列（网页可确认）、MCP 合同可发现性、提取摘要保实质、长任务进度提示；其余遗留——changesets/episodes 硬编码 rev 命名待 Change Control 评估；持续关注公开后的外部反馈与安全问题响应。**
