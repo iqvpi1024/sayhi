@@ -10,16 +10,16 @@
 |---|---|
 | 项目 | 识海 sayhi（原名 Noetide；代码内部标识保留 `noetide_micro`） |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
-| 当前公开发布 | **`v0.3.4-beta` 已发布（2026-08-09，GitHub prerelease，首个 sayhi 品牌版：九项优化 + MCP 协议加固 + Windows setup P0 修复）；仓库已公开** |
+| 当前公开发布 | **`v0.3.5-beta` 已发布（2026-08-09，GitHub prerelease，修复版：cloud 并行分析竞态 + 备份恢复父目录两缺陷修复）；仓库已公开** |
 | 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
-| 当前阶段 | `v0.3.4-beta released + repo public`；cloud 提取评测 + 第二轮真人模拟已完成（§3 第 86 条），并行竞态/备份恢复两缺陷已修未发布（待 v0.3.5） |
-| 当前公开版本 | `v0.3.4-beta` GitHub prerelease |
-| tag / commit | annotated tag `v0.3.4-beta` -> `3b89df6`（九项优化 + 改名提交）；`v0.3.3-beta` -> `5c4ea0c`；`v0.3.2-beta` -> `2d9602e`；`v0.3.1-beta` -> `5f7c89d`；`v0.3.0-beta` -> `0dcc89d`；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
+| 当前阶段 | `v0.3.5-beta released + repo public`；cloud 提取评测 + 第二轮真人模拟已完成（§3 第 86 条），两个实测缺陷已随 v0.3.5 发布 |
+| 当前公开版本 | `v0.3.5-beta` GitHub prerelease |
+| tag / commit | annotated tag `v0.3.5-beta` -> `bb870f2`（0.3.5 版本号提交，修复在 `0799bf2`）；`v0.3.4-beta` -> `3b89df6`；`v0.3.3-beta` -> `5c4ea0c`；`v0.3.2-beta` -> `2d9602e`；`v0.3.1-beta` -> `5f7c89d`；`v0.3.0-beta` -> `0dcc89d`；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | product-complete recovery tag | annotated tag `product-complete-rp-20260803`（tag object `a64fb89`）-> `9e3875d0c32c7a1aab249a90d6b7cd84911f533d`，已创建并推送 origin |
 | audit-remediation recovery tag | annotated tag `audit-remediation-rp-20260808` -> `8ea83d2`（整改提交，76 文件），已创建并推送 origin |
-| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.4-beta`（仓库已公开） |
-| v0.3.4 发布产物 | `sayhi-beta-v0.3.4-win64.zip` SHA-256 `d94b96cade4534aa2ba157e862df49505b007166ca231a223c2a57c431641c70`、`sayhi-0.3.4-src.tar.gz` SHA-256 `0c3b46fbb553833540946d5cd424d7490566317f62ef7238fb91c4eee9ed7f5d`（均从 tag `v0.3.4-beta` 构建；GitHub API 远端 digest 与本地一致）；smoke 14/14：setup exit 0（P0 修复实测）、/api/health 200、中文导入、异步分析 done、9 候选提议+确认、标准 MCP initialize（serverInfo sayhi 0.3.4）/tools/list 五工具/ask_memory、恶意 Origin 403、Web UI 200 |
-| 历史发布产物 | v0.3.3 zip SHA-256 `2d1d2a30fbc2d9a86033c5c6c7d103c5ed12b0dfe7f6ef893e32ba68ca97d27c`（tag `v0.3.3-beta`）；v0.3.2 zip SHA-256 `c89165a6abc7ece2f4151919d569ae39582334bb8f3e7b578cdf7cbeb29048b1`（tag `v0.3.2-beta`）；v0.3.1 zip SHA-256 `236f88d12420e6aeb9bfe09ec8d45bf28aec085ca012c1b4c969e9c7945533e0`（tag `v0.3.1-beta`）；v0.3.0 zip SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（tag `v0.3.0-beta`） |
+| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.5-beta`（仓库已公开） |
+| v0.3.5 发布产物 | `sayhi-beta-v0.3.5-win64.zip` SHA-256 `b4b578aca520421233f54f56f037d2bf5f5da9a2b524e675dbe6268bae67c31a`、`sayhi-0.3.5-src.tar.gz` SHA-256 `1bec2850e3898f490cd313bbdcb7bcaeaccb57d60b8d9239ac355a2fe558b743`（均从 tag `v0.3.5-beta` 构建；GitHub API 远端 digest 与本地一致）；smoke：setup exit 0、4 份中文语料云端并行分析 4/4 无竞态错误、正确 key 恢复 restored + 错误 key rejected、MCP initialize（serverInfo sayhi 0.3.5）、恶意 Origin 403、Web UI 200 通过；发布前 smoke 时测试 key 已吊销，云端提取作答质量以同日第二轮真人模拟（§3 第 86 条）为准 |
+| 历史发布产物 | v0.3.4 zip SHA-256 `d94b96cade4534aa2ba157e862df49505b007166ca231a223c2a57c431641c70` + src tar `0c3b46fbb553833540946d5cd424d7490566317f62ef7238fb91c4eee9ed7f5d`（tag `v0.3.4-beta`，含两缺陷，建议升级）；v0.3.3 zip SHA-256 `2d1d2a30fbc2d9a86033c5c6c7d103c5ed12b0dfe7f6ef893e32ba68ca97d27c`（tag `v0.3.3-beta`）；v0.3.2 zip SHA-256 `c89165a6abc7ece2f4151919d569ae39582334bb8f3e7b578cdf7cbeb29048b1`（tag `v0.3.2-beta`）；v0.3.1 zip SHA-256 `236f88d12420e6aeb9bfe09ec8d45bf28aec085ca012c1b4c969e9c7945533e0`（tag `v0.3.1-beta`）；v0.3.0 zip SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（tag `v0.3.0-beta`） |
 | 交付级别 | D1/D2/D3 历史版本已发布；当前完整产品已具备一键安装、Web 管理、MCP/API、识灵大模型分析、导出备份与远程访问 |
 | 分支 | `main`，已推送至 `origin/main` |
 
@@ -248,6 +248,7 @@
 | cloud 提取评测（2026-08-09） | `tools/eval_extraction.py --mode cloud`（Kimi `kimi-for-coding` 真实 API，key 经 `NOETIDE_EVAL_API_KEY` 环境变量、报告三道脱敏）exit 0：`docs/testing/results/extraction-eval-cloud-kimi-20260809.json`，fact_recall **0.8462**（22/26）、verbatim_retention 0.6667（10/15）、6/6 parse 成功、编造证据丢弃符合预期 |
 | 第二轮真人模拟测试（2026-08-09） | 新 Kimi key + 10 份雷军语料（`ces/` gitignore）：云端设置 key 不明文回显、10/10 导入、并行分析 10/10 完成 36 候选 3 红线拒发、确认 31/拒绝 5、问识海带证据作答 + 无证据诚实 no_coverage、备份恢复 byte_identical 19 表一致、错误 key 拒绝；实测发现并修复并行竞态与恢复父目录两个缺陷（§3 第 86 条） |
 | 二轮模拟修复后全量回归（2026-08-09，最终树） | `PYTHONPATH=src` + 21 adapter 环境变量（模块名形式）+ `python -m unittest discover -s tests -t .`：exit 0，**Ran 530 tests，OK，0 skipped**（529 + 并行竞态回归 1；备份恢复断言并入既有用例）；26 个 suite validator 全部 exit 0 |
+| v0.3.5-beta 发布核验（2026-08-09） | GitHub API 附件 digest：zip = `sha256:b4b578aca520421233f54f56f037d2bf5f5da9a2b524e675dbe6268bae67c31a`、src tar = `sha256:1bec2850e3898f490cd313bbdcb7bcaeaccb57d60b8d9239ac355a2fe558b743`，与本地 `dist/` 复核一致；发布包从 tag `v0.3.5-beta` 构建；smoke：setup exit 0、云端设置 key 不明文回显、4 份中文语料云端并行分析 4/4 完成 error null（竞态修复实测）、MCP initialize serverInfo sayhi 0.3.5、恶意 Origin 403、Web UI 200、包内运行时正确 key 恢复 restored + 错误 key rejected（父目录修复实测）；smoke 期间 API key 已被吊销，云端提取失败按 fail-closed 正确拒绝（非产品缺陷），提取作答质量以同日第二轮真人模拟为准；prerelease 已发布，tag 已推送远端 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -260,4 +261,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**v0.3.4-beta 已发布；cloud 提取评测（recall 0.8462）与第二轮真人模拟已完成，实测修复并行分析 sqlite 竞态与备份恢复父目录两个真实缺陷（全量回归 530 OK）。注意：v0.3.4-beta 发布包含这两个缺陷，下一步唯一建议动作：发 v0.3.5-beta 修复版（版本号升 0.3.5、构建、smoke 重点复测 cloud 并行分析与备份恢复、发布核验）；mac/linux 真机实测待补；持续关注公开后的外部反馈。**
+**v0.3.5-beta 已发布（修复版：cloud 并行分析竞态 + 备份恢复父目录，远端 digest 核验一致，smoke 两个修复点实测通过）。下一步：mac/linux 真机安装实测待补；如获新 API 凭据可补一次发布包内云端提取端到端 smoke（本次因 key 吊销以开发树实测替代）；持续关注公开后的外部反馈与安全问题响应。**
