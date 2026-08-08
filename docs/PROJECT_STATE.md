@@ -8,18 +8,18 @@
 
 | 字段 | 值 |
 |---|---|
-| 项目 | 识海 Noetide |
+| 项目 | 识海 sayhi（原名 Noetide；代码内部标识保留 `noetide_micro`） |
 | 当前产品基线 | `PRDv06.md` v0.6 Approved，canonical LF SHA-256 `4513B26860A334190AF8B8656A2A506D27224D78F88B567B37BB08DF423BCAD8` |
-| 当前公开发布 | **`v0.3.3-beta` 已发布（2026-08-08，GitHub prerelease，Agent 记忆中枢版：标准 MCP 协议 + ask_memory + 提议落候选队列）；仓库已公开** |
+| 当前公开发布 | **`v0.3.4-beta` 已发布（2026-08-09，GitHub prerelease，首个 sayhi 品牌版：九项优化 + MCP 协议加固 + Windows setup P0 修复）；仓库已公开** |
 | 当前工作切片 | 完整产品已实现（NoetideApp/product_server/webui）；本地安装、Web 管理、识灵分析、MCP/API、导出备份、远程访问全部可运行 |
-| 当前阶段 | `v0.3.3-beta released + repo public`；2026-08-07 全面审核整改已完成（§3 第 75–78 条），README 已为公开发布重写 |
-| 当前公开版本 | `v0.3.3-beta` GitHub prerelease |
-| tag / commit | annotated tag `v0.3.3-beta` -> `5c4ea0c`（0.3.3 版本号提交，功能在 `f76b6df`）；`v0.3.2-beta` -> `2d9602e`；`v0.3.1-beta` -> `5f7c89d`；`v0.3.0-beta` -> `0dcc89d`；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
+| 当前阶段 | `v0.3.4-beta released + repo public`；九项优化 + 品牌改名 sayhi 已完成（§3 第 85 条），smoke 14/14 通过 |
+| 当前公开版本 | `v0.3.4-beta` GitHub prerelease |
+| tag / commit | annotated tag `v0.3.4-beta` -> `3b89df6`（九项优化 + 改名提交）；`v0.3.3-beta` -> `5c4ea0c`；`v0.3.2-beta` -> `2d9602e`；`v0.3.1-beta` -> `5f7c89d`；`v0.3.0-beta` -> `0dcc89d`；历史 `v0.2.0-beta` -> `08095cc4aca88adad6469ffe3bedc9f25bdabaf7` |
 | product-complete recovery tag | annotated tag `product-complete-rp-20260803`（tag object `a64fb89`）-> `9e3875d0c32c7a1aab249a90d6b7cd84911f533d`，已创建并推送 origin |
 | audit-remediation recovery tag | annotated tag `audit-remediation-rp-20260808` -> `8ea83d2`（整改提交，76 文件），已创建并推送 origin |
-| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.3-beta`（仓库已公开，匿名 HTTP 200） |
-| v0.3.3 发布产物 | `Noetide-beta-v0.3.3-win64.zip` SHA-256 `2d1d2a30fbc2d9a86033c5c6c7d103c5ed12b0dfe7f6ef893e32ba68ca97d27c`（从 tag `v0.3.3-beta` 构建；GitHub API 远端 digest 与本地一致，SHA256SUMS 文件 digest `ee4d4921…b89c` 亦一致）；smoke：product-init exit 0、/api/health 200、异步分析进度 done 1/1、候选确认、标准 MCP initialize（serverInfo noetide 0.3.3）/tools/list 五工具/ask_memory、恶意 Origin 403、Web UI 200 全部通过 |
-| 历史发布产物 | v0.3.2 zip SHA-256 `c89165a6abc7ece2f4151919d569ae39582334bb8f3e7b578cdf7cbeb29048b1`（tag `v0.3.2-beta`）；v0.3.1 zip SHA-256 `236f88d12420e6aeb9bfe09ec8d45bf28aec085ca012c1b4c969e9c7945533e0`（tag `v0.3.1-beta`）；v0.3.0 zip SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（tag `v0.3.0-beta`） |
+| GitHub Release | `https://github.com/iqvpi1024/sayhi/releases/tag/v0.3.4-beta`（仓库已公开） |
+| v0.3.4 发布产物 | `sayhi-beta-v0.3.4-win64.zip` SHA-256 `d94b96cade4534aa2ba157e862df49505b007166ca231a223c2a57c431641c70`、`sayhi-0.3.4-src.tar.gz` SHA-256 `0c3b46fbb553833540946d5cd424d7490566317f62ef7238fb91c4eee9ed7f5d`（均从 tag `v0.3.4-beta` 构建；GitHub API 远端 digest 与本地一致）；smoke 14/14：setup exit 0（P0 修复实测）、/api/health 200、中文导入、异步分析 done、9 候选提议+确认、标准 MCP initialize（serverInfo sayhi 0.3.4）/tools/list 五工具/ask_memory、恶意 Origin 403、Web UI 200 |
+| 历史发布产物 | v0.3.3 zip SHA-256 `2d1d2a30fbc2d9a86033c5c6c7d103c5ed12b0dfe7f6ef893e32ba68ca97d27c`（tag `v0.3.3-beta`）；v0.3.2 zip SHA-256 `c89165a6abc7ece2f4151919d569ae39582334bb8f3e7b578cdf7cbeb29048b1`（tag `v0.3.2-beta`）；v0.3.1 zip SHA-256 `236f88d12420e6aeb9bfe09ec8d45bf28aec085ca012c1b4c969e9c7945533e0`（tag `v0.3.1-beta`）；v0.3.0 zip SHA-256 `f702908b4256b46e7ab9e78b483cd5a6a38d58e81314ef44b7bffb9bc974f014`（tag `v0.3.0-beta`） |
 | 交付级别 | D1/D2/D3 历史版本已发布；当前完整产品已具备一键安装、Web 管理、MCP/API、识灵大模型分析、导出备份与远程访问 |
 | 分支 | `main`，已推送至 `origin/main` |
 
@@ -243,6 +243,7 @@
 | Windows setup P0 复现与修复（2026-08-08） | 实测复现：`product-init` 后 `python -m noetide_micro status` 对产库报 SeedConflictError exit 1 → `setup-noetide.ps1` 末步必失败；修复为 NoetideApp 健康检查 |
 | 提取评测 offline 基线（2026-08-08） | `tools/eval_extraction.py --mode offline` exit 0，`docs/testing/results/extraction-eval-offline-20260808.json`:fact_recall 0.7692(20/26)、verbatim_retention 0.6667(10/15)、fabricated_dropped 0;cloud 模式无凭据 not_executed |
 | 九项优化后全量回归（2026-08-08，最终树） | `PYTHONPATH=src` + 21 adapter 环境变量 + `python -m unittest discover -s tests -t .`：exit 0，**Ran 529 tests，OK，0 skipped**（525 + embedding 3 + 并行 1）；26 个 suite validator 全部 exit 0 |
+| v0.3.4-beta 发布核验（2026-08-09） | GitHub API 附件 digest：zip = `sha256:d94b96cade4534aa2ba157e862df49505b007166ca231a223c2a57c431641c70`、src tar = `sha256:0c3b46fbb553833540946d5cd424d7490566317f62ef7238fb91c4eee9ed7f5d`，与本地 `dist/` 复核一致；发布包从 tag `v0.3.4-beta` 构建；smoke 14/14 通过：`setup-noetide.ps1 -Yes` exit 0（P0 修复实测确认）、/api/health 200、中文文本导入、异步分析 started→done 无错误、9 候选提议 + 确认 confirmed、标准 MCP initialize（serverInfo sayhi 0.3.4）/tools/list 五工具/tools/call ask_memory 正常、恶意 Origin 403、Web UI 200；prerelease 已发布，tag 已推送远端 |
 
 
 完整命令、环境、哈希和限制见 `docs/releases/PUBLIC_PREVIEW_V0.1.3_VERIFICATION.md`。静态校验不被表述为业务测试通过；历史失败运行结果仍保留在 `docs/testing/results/`。
@@ -255,4 +256,4 @@
 
 ## 6. 下一步唯一建议动作
 
-**v0.3.3-beta 已发布；九项优化 + 品牌改名 sayhi（§3 第 85 条）已完成：全量回归 529 OK 0 skipped、26 validator 全 exit 0、官方双 MCP SDK 实测通过、提取评测 offline 基线已跑。下一步：发 v0.3.4-beta（首个 sayhi 品牌包，含 win64 zip 与 mac/linux 源码包）；cloud 模式提取评测待真实 API 凭据排期；mac/linux 真机实测待补；持续关注公开后的外部反馈与安全问题响应。**
+**v0.3.4-beta 已发布（首个 sayhi 品牌版，win64 zip + mac/linux 源码包，远端 digest 核验一致，smoke 14/14）。下一步：cloud 模式提取评测（`tools/eval_extraction.py --mode cloud`）待真实 API 凭据排期；mac/linux 真机安装实测待补；持续关注公开后的外部反馈与安全问题响应。**
